@@ -45,7 +45,7 @@ using performance_manager::priority::Vote;
 using performance_manager::priority::VotingChannel;
 
 constexpr char kKeepsCallOrPictureInPicture[] =
-    "Ardia keeps calls and picture in picture at full speed.";
+    "Solstice keeps calls and picture in picture at full speed.";
 
 struct Counts {
   std::atomic<int> throttled{0};

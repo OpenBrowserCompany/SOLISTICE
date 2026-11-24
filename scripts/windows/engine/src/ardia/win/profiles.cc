@@ -16,7 +16,7 @@ namespace ardia_win {
 
 namespace {
 
-constexpr char kDirectoryPrefix[] = "Ardia ";
+constexpr char kDirectoryPrefix[] = "Solstice ";
 
 constexpr char kEscape = '_';
 constexpr char kHexDigits[] = "0123456789abcdef";

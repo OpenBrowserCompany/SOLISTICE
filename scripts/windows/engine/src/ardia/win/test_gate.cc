@@ -138,7 +138,7 @@ std::wstring RealFolderClash(const base::FilePath& data_dir) {
     }
     canonical.push_back(*resolved);
   }
-  return RealFolderClashOf(canonical, {L"Ardia", L"Ardia WebUI"});
+  return RealFolderClashOf(canonical, {L"Solstice", L"Solstice WebUI"});
 }
 
 std::vector<HANDLE>& HeldFolders() {
@@ -253,7 +253,7 @@ std::wstring HoldScratchFolders(const std::wstring& data_dir,
     return L"Chromium would open its folder by another path than the one "
            L"held (a junction, a short name or a mapped drive in the way)";
   }
-  return RealFolderClashOf(canonical, {L"Ardia", L"Ardia WebUI"});
+  return RealFolderClashOf(canonical, {L"Solstice", L"Solstice WebUI"});
 }
 
 bool SameFolder(const std::wstring& a, const std::wstring& b) {
@@ -285,7 +285,7 @@ std::vector<std::optional<std::wstring>> ReactNativeFolders() {
       folders.push_back(std::nullopt);
       continue;
     }
-    const base::FilePath root = base_folder.Append(FILE_PATH_LITERAL("Ardia"));
+    const base::FilePath root = base_folder.Append(FILE_PATH_LITERAL("Solstice"));
     folders.push_back(CanonicalPath(root));
     folders.push_back(CanonicalPath(root.Append(FILE_PATH_LITERAL("User Data"))));
   }
