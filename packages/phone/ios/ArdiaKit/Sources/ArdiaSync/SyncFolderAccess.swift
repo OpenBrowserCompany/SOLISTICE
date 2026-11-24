@@ -30,7 +30,7 @@ public final class SyncFolderGrant: @unchecked Sendable {
 }
 
 public enum SyncFolderAccess {
-  public static let folderNames = ["Ardia Sync", "Netnyahoo Sync"]
+  public static let folderNames = ["Solstice Sync", "Netnyahoo Sync"]
 
   public static func grant(picked url: URL) throws -> (SyncFolderGrant, SyncFolderLocation) {
     let accessing = url.startAccessingSecurityScopedResource()

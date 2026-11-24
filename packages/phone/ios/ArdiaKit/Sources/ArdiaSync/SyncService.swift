@@ -37,9 +37,9 @@ public enum ConnectResult: Equatable, Sendable {
     case .invalidPhrase(let message): message
     case .mismatch: "This recovery phrase doesn’t match the synced data in this folder. Check the phrase, or choose the folder your other devices sync to."
     case .noSyncData: "There’s no synced data in this folder yet. Choose the folder your other devices sync to, or wait for it to finish downloading."
-    case .folderUnavailable: "Ardia can’t open this folder. Choose the Ardia Sync folder in iCloud Drive."
+    case .folderUnavailable: "Solstice can’t open this folder. Choose the Solstice Sync folder in iCloud Drive."
     case .keychainFailed: "Couldn’t save the sync key in your Keychain."
-    case .busy: "Ardia is still turning off sync. Try again in a moment."
+    case .busy: "Solstice is still turning off sync. Try again in a moment."
     }
   }
 }
@@ -47,7 +47,7 @@ public enum ConnectResult: Equatable, Sendable {
 @MainActor
 @Observable
 public final class SyncService {
-  public static let backgroundTaskIdentifier = "com.ardia.browser.ios.sync"
+  public static let backgroundTaskIdentifier = "com.openbrowsercompany.solstice.ios.sync"
   nonisolated public static let wordCount = RecoveryPhrase.wordCount
 
   public private(set) var phase: SyncPhase = .off
@@ -153,7 +153,7 @@ public final class SyncService {
 
   public init(
     directory: URL = SyncService.defaultDirectory,
-    keyStore: any SyncKeyStore = KeychainKeyStore(service: "Ardia Sync Key"),
+    keyStore: any SyncKeyStore = KeychainKeyStore(service: "Solstice Sync Key"),
     coordinationTimeout: TimeInterval = SyncFolderAccess.defaultTimeout,
     now: @escaping @Sendable () -> Date = Date.init
   ) {
@@ -180,7 +180,7 @@ public final class SyncService {
     self.snapshot = snapshot
     phase = .updated
     isEnabled = true
-    folderName = "Ardia Sync"
+    folderName = "Solstice Sync"
     lastSynced = .now
   }
 
@@ -842,11 +842,11 @@ public final class SyncService {
     }
   }
 
-  static let stalledMessage = "Ardia couldn’t read or write the sync folder. It will try again."
-  static let unavailableMessage = "Ardia can’t read its sync data right now. It will try again."
-  static let localNotReadyMessage = "Ardia is still moving your tabs and history. Sync starts when it’s done."
-  static let localDataMessage = "Ardia couldn’t read this phone’s tabs and history. It will try again."
-  static let localWriteMessage = "Ardia couldn’t save what your other devices sent. It will try again."
+  static let stalledMessage = "Solstice couldn’t read or write the sync folder. It will try again."
+  static let unavailableMessage = "Solstice can’t read its sync data right now. It will try again."
+  static let localNotReadyMessage = "Solstice is still moving your tabs and history. Sync starts when it’s done."
+  static let localDataMessage = "Solstice couldn’t read this phone’s tabs and history. It will try again."
+  static let localWriteMessage = "Solstice couldn’t save what your other devices sent. It will try again."
 
   private static let relative: RelativeDateTimeFormatter = {
     let formatter = RelativeDateTimeFormatter()
