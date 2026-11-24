@@ -60,7 +60,7 @@ test("the gate reads every row by name, pooled, and calls a round with samples l
 
 const idle = { total: { cpu: 0.3, wakeups: 6 }, kinds: { browser: { cpu: 0.1, wakeups: 1.5 } } };
 const win = { window: 50, firstPaint: 100, firstFrame: 80 };
-const complete = (app = "/dist/0.2.48/export/Ardia.app", source = { version: "0.2.48", build: "139", cdhash: "ab12" }) => ({
+const complete = (app = "/dist/0.2.48/export/Solstice.app", source = { version: "0.2.48", build: "139", cdhash: "ab12" }) => ({
   meta: { only: ["launch", "session", "windows"], app, source, bundleSha: "b0" + source.cdhash },
   launch: Array.from({ length: 6 }, () => ({ window: 1, withContent: 1, js: 1, firstPaint: 1, firstFrame: 1 })),
   session: Array.from({ length: 2 }, () => ({ tabSwitch: Array(16).fill(7), newTab: Array(5).fill(80), newTabFrame: Array(5).fill(60), newWindow: Array(3).fill(win), idle: { tabs1: idle, tabs20: idle }, memory: Object.fromEntries(["tabs1", "tabs10", "tabs20", "closed"].map((m) => [m, { totalMB: 300, kinds: { browser: 130 } }])) })),
@@ -95,11 +95,11 @@ test("a missing phase, run or idle window, a part-only session, or too few launc
 });
 
 test("every round must have measured the same two apps, so a retry can't score an earlier build", () => {
-  const ok = { control: complete("/dist/0.2.47/export/Ardia.app"), candidate: complete() };
+  const ok = { control: complete("/dist/0.2.47/export/Solstice.app"), candidate: complete() };
   assert.deepEqual(roundsProblems([ok, ok]), []);
-  const other = { control: ok.control, candidate: complete("/dist/0.2.49-rc/export/Ardia.app") };
+  const other = { control: ok.control, candidate: complete("/dist/0.2.49-rc/export/Solstice.app") };
   assert.match(roundsProblems([ok, other]).join(), /the candidate's app differs between rounds/);
-  const prepared = (from) => ({ ...complete("/out/rc/app/Ardia.app"), meta: { ...complete().meta, app: "/out/rc/app/Ardia.app", preparedFrom: { app: from } } });
+  const prepared = (from) => ({ ...complete("/out/rc/app/Solstice.app"), meta: { ...complete().meta, app: "/out/rc/app/Solstice.app", preparedFrom: { app: from } } });
   assert.match(roundsProblems([{ control: ok.control, candidate: prepared("/dist/a") }, { control: ok.control, candidate: prepared("/dist/b") }]).join(), /differs between rounds/);
 });
 
@@ -118,10 +118,10 @@ test("the judged rows are exactly the 19 the 0.2.47 and 0.2.48 gates' pooled tab
 });
 
 test("rounds of the same path but another build or code signature are refused", () => {
-  const control = complete("/dist/0.2.47/export/Ardia.app", { version: "0.2.47", build: "127", cdhash: "cc" });
+  const control = complete("/dist/0.2.47/export/Solstice.app", { version: "0.2.47", build: "127", cdhash: "cc" });
   const a = { control, candidate: complete() };
-  const rebuilt = { control, candidate: complete("/dist/0.2.48/export/Ardia.app", { version: "0.2.48", build: "140", cdhash: "ab12" }) };
-  const resigned = { control, candidate: complete("/dist/0.2.48/export/Ardia.app", { version: "0.2.48", build: "139", cdhash: "ff99" }) };
+  const rebuilt = { control, candidate: complete("/dist/0.2.48/export/Solstice.app", { version: "0.2.48", build: "140", cdhash: "ab12" }) };
+  const resigned = { control, candidate: complete("/dist/0.2.48/export/Solstice.app", { version: "0.2.48", build: "139", cdhash: "ff99" }) };
   assert.deepEqual(roundsProblems([a, a]), []);
   assert.match(roundsProblems([a, rebuilt]).join(), /the candidate's build differs between rounds \(0\.2\.48 \(139\) ab12, 0\.2\.48 \(140\) ab12\)/);
   assert.match(roundsProblems([a, resigned]).join(), /build differs between rounds/);
@@ -156,9 +156,9 @@ test("the CLI checks every round before it prints a row: an incomplete or empty 
     };
     const short = complete();
     short.session[0].tabSwitch = [7];
-    const noMemory = complete("/dist/0.2.47/export/Ardia.app", { version: "0.2.47", build: "127", cdhash: "cc" });
+    const noMemory = complete("/dist/0.2.47/export/Solstice.app", { version: "0.2.47", build: "127", cdhash: "cc" });
     delete noMemory.session[0].memory;
-    write("r1", "0.2.47", complete("/dist/0.2.47/export/Ardia.app", { version: "0.2.47", build: "127", cdhash: "cc" }));
+    write("r1", "0.2.47", complete("/dist/0.2.47/export/Solstice.app", { version: "0.2.47", build: "127", cdhash: "cc" }));
     write("r1", "rc", short);
     write("r2", "0.2.47", noMemory);
     write("r2", "rc", {});
@@ -177,10 +177,10 @@ test("the CLI checks every round before it prints a row: an incomplete or empty 
 
 test("a build identity of nulls or empty strings is no identity", () => {
   for (const source of [{ version: null, build: null, cdhash: null }, { version: "0.2.48", build: "", cdhash: "ab12" }, { version: "0.2.48", build: 139, cdhash: "ab12" }]) {
-    const r = complete("/dist/0.2.48/export/Ardia.app", source);
+    const r = complete("/dist/0.2.48/export/Solstice.app", source);
     assert.match(roundProblems(r).join(), /its build identity has no/);
   }
-  const nulls = complete("/dist/0.2.48/export/Ardia.app", { version: null, build: null, cdhash: null });
+  const nulls = complete("/dist/0.2.48/export/Solstice.app", { version: null, build: null, cdhash: null });
   assert.notDeepEqual(roundsProblems([{ control: nulls, candidate: nulls }, { control: nulls, candidate: nulls }]), []);
 });
 
@@ -209,7 +209,7 @@ test("malformed runs (session: [null], session: {}, a string, results that aren'
       r.session = session;
       for (const label of ["0.2.47", "rc"]) {
         mkdirSync(join(dir, `r${i}`, label), { recursive: true });
-        writeFileSync(join(dir, `r${i}`, label, "results.json"), JSON.stringify(label === "rc" ? r : complete("/dist/0.2.47/export/Ardia.app", { version: "0.2.47", build: "127", cdhash: "cc" })));
+        writeFileSync(join(dir, `r${i}`, label, "results.json"), JSON.stringify(label === "rc" ? r : complete("/dist/0.2.47/export/Solstice.app", { version: "0.2.47", build: "127", cdhash: "cc" })));
       }
     }
     const cli = spawnSync(process.execPath, [join(dirname(fileURLToPath(import.meta.url)), "gate-verdict.mjs"), "--control", "0.2.47", "--candidate", "rc", join(dir, "r0"), join(dir, "r1")], { encoding: "utf8" });
@@ -223,7 +223,7 @@ test("malformed runs (session: [null], session: {}, a string, results that aren'
 });
 
 test("rounds that measured different bench bundles don't pool, and a round without the bundle's hash is invalid", () => {
-  const control = complete("/dist/0.2.47/export/Ardia.app", { version: "0.2.47", build: "127", cdhash: "cc" });
+  const control = complete("/dist/0.2.47/export/Solstice.app", { version: "0.2.47", build: "127", cdhash: "cc" });
   const a = { control, candidate: complete() };
   const otherBundle = complete();
   otherBundle.meta.bundleSha = "f00d";

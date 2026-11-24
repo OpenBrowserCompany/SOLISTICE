@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Real-world energy: Ardia against Helium and Dia on public, logged-out websites, in the window states a user's day
+// Real-world energy: Solstice against Helium and Dia on public, logged-out websites, in the window states a user's day
 // has. Every browser gets the same tabs, window size, fresh copy of a template profile and phases, one instance at a
 // time, browsers interleaved and rotated each round, holding the perflab lock for a round and giving it back after.
 //
@@ -14,7 +14,7 @@
 //     --env <name>=K=V     repeatable: extra environment for one browser
 //     --args <name>=<sw>   repeatable: one extra switch for one browser
 //     --video-only <name>  repeatable: that browser runs only the video phase (no hidden launch)
-//     --setting <name>=K=V repeatable: an Ardia setting in each run's session.json (V is JSON: videoUpscaling=false)
+//     --setting <name>=K=V repeatable: an Solstice setting in each run's session.json (V is JSON: videoUpscaling=false)
 //     --rounds <n>         default 3
 //     --launches <a,b>     visible,hidden (default both). visible: idle in view, scroll, switch, video; hidden: minimized
 //     --idle <secs>        each idle phase (default 180)
@@ -29,7 +29,7 @@
 //     --allow-focus        record a browser making itself the frontmost app instead of stopping (only when the owner
 //                          agreed to it for this run)
 //
-// Window states: visible launches run every browser as if in view whatever covers it (Ardia's background mode with
+// Window states: visible launches run every browser as if in view whatever covers it (Solstice's background mode with
 // its forced visibility; Helium and Dia with --disable-backgrounding-occluded-windows), hidden launches let occlusion
 // act (ARDIA_INSTANCE allowOcclusion; no switch) and minimize the window through CDP. All get --mute-audio.
 // Metrics per process, summed per kind: CPU time, idle + interrupt wakeups, ri_energy_nj (macOS's per-process energy
@@ -105,7 +105,7 @@ const IDLE_TAB = "canvas";
 const SCROLL_TAB = "verge";
 
 const BROWSERS = {
-  ardia: { name: "Ardia", bundle: "ardia/Ardia.app" },
+  ardia: { name: "Solstice", bundle: "ardia/Solstice.app" },
   helium: { name: "Helium", bundle: "helium-bg/Helium.app" },
   dia: { name: "Dia", bundle: "dia/Dia.app", guardPrefs: true },
 };
