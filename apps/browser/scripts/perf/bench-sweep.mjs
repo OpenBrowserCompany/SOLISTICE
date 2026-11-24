@@ -7,7 +7,7 @@
 // `open` starts an app outside every process group, so no signal to a bench reaches it. Every instance a bench or the
 // smoke test launches gets ARDIA_DATA_DIR (or, for carryover, HOME) in its environment, and Chromium's helpers inherit
 // the browser's environment. A process is this gate's only when that variable names a path inside one of the --under
-// folders (gate.sh passes its own scratch folder and its --out). The owner's Ardia, or any other agent's, never has
+// folders (gate.sh passes its own scratch folder and its --out). The owner's Solstice, or any other agent's, never has
 // one, so it is never signalled. A --under that is shallower than two folders, a shared temporary folder, or the
 // home folder or one above it is refused (exit 64): it could hold someone else's instances. The environment is read again just before every signal (SIGTERM, then SIGKILL after
 // --quit-secs, default 15), and this process and its ancestors are never candidates. Exit 0 once none is left, 1 when

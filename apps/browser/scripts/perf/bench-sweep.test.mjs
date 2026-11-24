@@ -70,7 +70,7 @@ test("a marker folder that could hold someone else's instances is refused", () =
   assert.equal(markerProblem("/tmp/ac-gate.ABCDEF"), null);
 });
 
-test("stop signals only marked processes: the owner's Ardia (same executable, its own data dir) never gets a signal", withDir(async (dir, started) => {
+test("stop signals only marked processes: the owner's Solstice (same executable, its own data dir) never gets a signal", withDir(async (dir, started) => {
   const marked = join(dir, "gate");
   mkdirSync(marked);
   const owner = launchLikeOpen(dir, "owner", { ARDIA_DATA_DIR: join(dir, "owner-data"), HOME: homedir() });
