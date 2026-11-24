@@ -42,7 +42,7 @@ test("the warning asks only on Windows, with the setting on, and never on a hidd
 test("the warning uses the Mac's words and its don't-ask-again", () => {
   const mac = readFileSync(new URL("../../../../../packages/shell/ios/QuitFlow.swift", import.meta.url), "utf8");
   assert.match(mac, /Are you sure you want to quit \\\(ProcessInfo\.processInfo\.processName\)\?/);
-  assert.equal(QUIT_WARNING.title, "Are you sure you want to quit Ardia?");
+  assert.equal(QUIT_WARNING.title, "Are you sure you want to quit Solstice?");
   assert.ok(mac.includes(`"${QUIT_WARNING.message}"`));
   assert.ok(mac.includes(`addButton(withTitle: "${QUIT_WARNING.confirmTitle}")`));
   assert.ok(mac.includes(`"${QUIT_WARNING.suppression.replace("’", "'")}"`));
@@ -63,7 +63,7 @@ test("on the Mac closing a window never shows the quit warning", async () => {
   const { isWindowClosing } = await import("./closingWindows.ts");
   const small = useBrowser.getState().createWindow({ url: "https://b.com", kind: "small" });
   closeLittleArdia(small);
-  assert.equal(isWindowClosing(small) || !useBrowser.getState().windows[small], true, "Little Ardia still starts closing at once");
+  assert.equal(isWindowClosing(small) || !useBrowser.getState().windows[small], true, "Little Solstice still starts closing at once");
   assert.equal(asked, 0);
 });
 
@@ -74,7 +74,7 @@ test("only Windows quits when its last window closes", () => {
 });
 
 
-test("an open pop-up keeps Ardia running: closing the last browser window neither asks nor quits, and closing the last pop-up does", () => {
+test("an open pop-up keeps Solstice running: closing the last browser window neither asks nor quits, and closing the last pop-up does", () => {
   assert.deepEqual(staying(["w1", "popup:a1"], ["w1"]), ["popup:a1"], "a pop-up window stays open after the last browser window closes");
   assert.equal(asksBeforeQuit({ ...asking, staysOpen: staying(["w1", "popup:a1"], ["w1"]) }), false, "so closing the last browser window asks nothing");
   const lastPopup = windowsStayingOpen(["popup:a1"], "popup:a1", new Set(), () => false);
