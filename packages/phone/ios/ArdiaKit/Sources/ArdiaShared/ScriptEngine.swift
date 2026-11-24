@@ -54,7 +54,7 @@ public final class ScriptEngine {
   @discardableResult
   public func evaluate(_ source: String, name: String = "eval.js") throws -> JSValue? {
     lastException = nil
-    let value = context.evaluateScript(source, withSourceURL: URL(string: "ardia://\(name)"))
+    let value = context.evaluateScript(source, withSourceURL: URL(string: "solstice://\(name)"))
     if let lastException { throw ScriptError(message: lastException) }
     return value
   }

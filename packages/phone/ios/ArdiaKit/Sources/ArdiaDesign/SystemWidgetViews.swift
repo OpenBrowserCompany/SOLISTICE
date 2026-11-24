@@ -53,7 +53,7 @@ public struct SearchWidgetContent: View {
           .shadow(color: .black.opacity(onBackdrop ? 0.12 : 0.08), radius: 6, y: 3)
         Spacer(minLength: 0)
         if size != .small {
-          Text("Ardia")
+          Text("Solstice")
             .font(.system(.subheadline, design: .rounded, weight: .bold))
             .foregroundStyle(onBackdrop ? AnyShapeStyle(ink.opacity(0.85)) : AnyShapeStyle(SystemPalette.widgetAccent))
             .widgetAccentable()
@@ -161,7 +161,7 @@ public struct MacTabsWidgetContent: View {
     if !snapshot.isSyncEnabled {
       MacTabsEmptyView(
         title: "Sync With Your Mac",
-        message: "See the tabs you have open in Ardia on your Mac.",
+        message: "See the tabs you have open in Solstice on your Mac.",
         symbol: "laptopcomputer.and.iphone",
         size: size
       )
@@ -169,7 +169,7 @@ public struct MacTabsWidgetContent: View {
     } else if snapshot.macTabs.allSatisfy(\.tabs.isEmpty) {
       MacTabsEmptyView(
         title: "No Tabs Open on Your Mac",
-        message: "Tabs you open in Ardia on your Mac show up here.",
+        message: "Tabs you open in Solstice on your Mac show up here.",
         symbol: "laptopcomputer",
         size: size
       )
@@ -345,7 +345,7 @@ public struct SearchLockScreenRectangular: View {
         .frame(width: 38, height: 38)
         .background(.fill.secondary, in: .circle)
       VStack(alignment: .leading, spacing: 0) {
-        Text("Ardia")
+        Text("Solstice")
           .font(.headline)
           .widgetAccentable()
         Text("Search the Web")
@@ -363,7 +363,7 @@ public struct SearchLockScreenInline: View {
   public init() {}
 
   public var body: some View {
-    Label("Search with Ardia", systemImage: "magnifyingglass")
+    Label("Search with Solstice", systemImage: "magnifyingglass")
       .widgetURL(SystemLink.search(query: nil).url)
   }
 }
