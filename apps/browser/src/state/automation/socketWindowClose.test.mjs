@@ -29,7 +29,7 @@ const withTabs = (windowId) => {
   S().newTab(windowId, { url: "https://c.example/", background: true });
 };
 
-test("windows.close refuses when Ardia would have to ask and nobody can see the question", async () => {
+test("windows.close refuses when Solstice would have to ask and nobody can see the question", async () => {
   const { windowId } = await freshWindow();
   S().createWindow({ url: "https://other.example/" });
   withTabs(windowId);
@@ -86,9 +86,9 @@ test("littleArdia.close answers only once its quit prompt is answered, and refus
   answerWith({ confirmed: false, suppressed: false });
   try {
     const reply = await call("littleArdia.close", { window: little });
-    assert.equal(asked.length, 1, "Ardia asked before quitting");
+    assert.equal(asked.length, 1, "Solstice asked before quitting");
     assert.equal(reply.error?.code, "refused", "Cancel leaves it open, so the reply can't say ok");
-    assert.ok(S().windows[little], "Little Ardia stayed open");
+    assert.ok(S().windows[little], "Little Solstice stayed open");
     answerWith({ confirmed: true, suppressed: false });
     const closed = await call("littleArdia.close", { window: little });
     assert.ok(!closed.error, JSON.stringify(closed.error));

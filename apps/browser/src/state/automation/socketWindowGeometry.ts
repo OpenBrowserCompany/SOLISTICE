@@ -12,7 +12,7 @@ const FULL_SCREEN_WAIT_MS = 4000;
 const FULL_SCREEN_LIMIT_S = 6;
 
 function geometryWindow(id: unknown, kinds: Parameters<typeof windowOf>[1] = ["normal", "little"]) {
-  if (!PLATFORM_FEATURES.windowGeometry) throw new OpError("refused", "Ardia can't move or resize its windows from the ardia command on this platform yet.");
+  if (!PLATFORM_FEATURES.windowGeometry) throw new OpError("refused", "Solstice can't move or resize its windows from the ardia command on this platform yet.");
   return windowOf(id, kinds);
 }
 
@@ -83,11 +83,11 @@ async function changeFullScreen(id: string, on: boolean, call: SocketCall) {
   const after = await nativeGeometry(id, setWindowFullScreen(id, on));
   if (after.transition === "busy") throw new OpError("refused", `Window ${id} is still finishing an earlier full-screen change; try again once it ends.`);
   if (after.transition === "timeout") {
-    throw new OpError("failed", `Timed out: macOS hadn't finished window ${id}'s full-screen change after ${FULL_SCREEN_LIMIT_S} s; Ardia takes no other full-screen change for it until that one ends.`);
+    throw new OpError("failed", `Timed out: macOS hadn't finished window ${id}'s full-screen change after ${FULL_SCREEN_LIMIT_S} s; Solstice takes no other full-screen change for it until that one ends.`);
   }
   if (after.fullScreen !== on) {
     if (after.pageFullScreen) throw new OpError("refused", `A page in window ${id} is full screen; the page leaves it first (Escape).`);
-    throw new OpError("failed", `Ardia didn't do that: the window didn't ${on ? "enter" : "leave"} full screen.`);
+    throw new OpError("failed", `Solstice didn't do that: the window didn't ${on ? "enter" : "leave"} full screen.`);
   }
   if (!(await storeFullScreen(id, on))) throw new OpError("failed", `Window ${id} ${on ? "entered" : "left"} full screen, but its windows row didn't follow.`);
   return answer(id, after);

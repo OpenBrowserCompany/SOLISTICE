@@ -49,5 +49,5 @@ export function page<T, R = T>(items: readonly T[], params: Record<string, unkno
 }
 
 export function expect(ok: boolean, message: string) {
-  if (!ok) throw new OpError("failed", `Ardia didn't do that: ${message}`);
+  if (!ok) throw new OpError("failed", `Solstice didn't do that: ${message}`);
 }
