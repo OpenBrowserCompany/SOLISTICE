@@ -1,4 +1,4 @@
-// Copyright 2026 Ardia. Apache-2.0.
+// Copyright 2026 Solstice. Apache-2.0.
 
 #include "ardia/core/ac_devtools_call.h"
 
@@ -44,7 +44,7 @@ class DevToolsCaller : public content::DevToolsAgentHostClient,
             std::optional<base::TimeDelta> timeout,
             DevToolsReply reply) {
     if (method == "Page.captureScreenshot" && InAheadBlank(&GetWebContents())) {
-      Answer(std::move(reply), std::nullopt, "the tab shows only Ardia's blank page");
+      Answer(std::move(reply), std::nullopt, "the tab shows only Solstice's blank page");
       return;
     }
     EndAheadBlank(&GetWebContents());
