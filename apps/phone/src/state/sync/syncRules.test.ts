@@ -69,7 +69,7 @@ test("every connect result has the Compose wording, and a cancelled pick says no
   assert.match(connectMessage({ result: "noSyncData" })!, /no synced data in this folder yet/);
   assert.match(connectMessage({ result: "folderUnavailable" })!, /can’t open this folder/);
   assert.equal(connectMessage({ result: "keyStoreFailed" }), "Couldn’t save the sync key on this phone.");
-  assert.equal(connectMessage({ result: "busy" }), "Ardia is still turning off sync. Try again in a moment.");
+  assert.equal(connectMessage({ result: "busy" }), "Solstice is still turning off sync. Try again in a moment.");
 });
 
 test("the phrase footer shows the problem, the all-clear, or where to find the words", () => {
@@ -217,8 +217,8 @@ test("the Mac's search engine carries over", () => {
 test("a set-aside inbox shows the module's message and that Sync Now tries again", () => {
   assert.equal(inboxNotice(status()), null);
   assert.equal(inboxNotice(status({ inboxProblem: "  " })), null);
-  assert.deepEqual(inboxNotice(status({ inboxProblem: "Ardia set aside some tabs and history changes from your Mac it couldn’t read." })), {
-    message: "Ardia set aside some tabs and history changes from your Mac it couldn’t read.",
+  assert.deepEqual(inboxNotice(status({ inboxProblem: "Solstice set aside some tabs and history changes from your Mac it couldn’t read." })), {
+    message: "Solstice set aside some tabs and history changes from your Mac it couldn’t read.",
     footer: "Sync couldn’t read some changes your Mac sent and set that file aside. Sync Now tries again.",
   });
 });

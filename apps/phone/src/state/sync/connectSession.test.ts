@@ -24,7 +24,7 @@ function fakeApi(picks: (FolderPick | null)[]) {
   return { api, calls, forgotten };
 }
 
-const A = { folder: "content://a", name: "Ardia Sync" };
+const A = { folder: "content://a", name: "Solstice Sync" };
 const B = { folder: "content://b", name: "Other" };
 
 test("a wrong phrase keeps the picked folder, so fixing the words connects without asking for the folder again", async () => {

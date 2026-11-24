@@ -77,7 +77,7 @@ export function connectMessage(result: ConnectResult): string | null {
     case "keyStoreFailed":
       return copy().keySaveFailed;
     case "busy":
-      return "Ardia is still turning off sync. Try again in a moment.";
+      return "Solstice is still turning off sync. Try again in a moment.";
   }
 }
 
@@ -198,7 +198,7 @@ export function inboxNotice(status: SyncStatus): { message: string; footer: stri
   return { message: problem, footer: INBOX_RETRY };
 }
 
-export const SCAN_REJECTED = "Not an Ardia sync code.";
+export const SCAN_REJECTED = "Not an Solstice sync code.";
 
 export type ScanVerdict = { kind: "accept"; phrase: string } | { kind: "reject" } | { kind: "repeat" };
 
