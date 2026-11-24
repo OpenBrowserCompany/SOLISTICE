@@ -16,7 +16,7 @@ if (!unavailable) {
     unavailable = error.message;
   }
 }
-assert.ok(HIDING_CLEANUP, "ubo.sh still holds the hiding cleanup Ardia's compiler runs");
+assert.ok(HIDING_CLEANUP, "ubo.sh still holds the hiding cleanup Solstice's compiler runs");
 
 const PARSER_OPTIONS = { trustedSource: true, nativeCssHas: true, maxTokenLength: 7, trustedTokens: new Set() };
 const ENV = ["chromium", "ublock", "native_css_has"];
@@ -171,7 +171,7 @@ const cssTakes = (filters) =>
     }
   }), filters);
 
-test("the pinned uBlock compiles every rule the picker can save, after Ardia's cleanup, to one plain cosmetic record or refuses it", { skip: unavailable, timeout: 60_000 }, async (t) => {
+test("the pinned uBlock compiles every rule the picker can save, after Solstice's cleanup, to one plain cosmetic record or refuses it", { skip: unavailable, timeout: 60_000 }, async (t) => {
   const browser = await launchChromium();
   t.after(() => browser.close());
   page = await browser.newPage();

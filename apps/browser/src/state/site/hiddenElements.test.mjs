@@ -8,7 +8,7 @@ test("a page's hiding host is its http(s) hostname without www.", () => {
   assert.equal(hidingHost("http://news.Example.com:8080/"), "news.example.com");
   assert.equal(hidingHost("https://xn--bcher-kva.example/"), "xn--bcher-kva.example");
   assert.equal(hidingHost("file:///Users/me/a.html"), null);
-  assert.equal(hidingHost("ardia://settings"), null);
+  assert.equal(hidingHost("solstice://settings"), null);
   assert.equal(hidingHost("http://[::1]/"), null);
   assert.equal(hidingHost(""), null);
 });

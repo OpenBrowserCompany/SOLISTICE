@@ -82,12 +82,12 @@ test("sharing a page, a link or a tab sends the address without trackers, and a 
   const tab = { url: tracked, title: "Item", customTitle: null, windowId: "w1" };
   await shareFromPage(tab, { kind: "page" });
   await shareFromPage(tab, { kind: "link", url: "https://news.example/a?gclid=1&page=2", title: "A" });
-  await shareFromPage(tab, { kind: "image", url: "https://cdn.example/i.png?utm_medium=x", fileUrl: "file:///tmp/Ardia%20Shared%20Images/i.png?utm_source=x" });
+  await shareFromPage(tab, { kind: "image", url: "https://cdn.example/i.png?utm_medium=x", fileUrl: "file:///tmp/Solstice%20Shared%20Images/i.png?utm_source=x" });
   await shareTab(tab, "w1", "com.apple.share.Mail.compose");
   assert.deepEqual(shared, [
     [clean, "Item"],
     ["https://news.example/a?page=2", "A"],
-    ["file:///tmp/Ardia%20Shared%20Images/i.png?utm_source=x", null],
+    ["file:///tmp/Solstice%20Shared%20Images/i.png?utm_source=x", null],
     ["com.apple.share.Mail.compose", clean, "Item"],
   ]);
 });
