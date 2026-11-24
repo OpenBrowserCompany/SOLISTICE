@@ -18,7 +18,7 @@ function windows(url) {
 }
 
 for (const pressedIn of ["page", "window"]) {
-  test(`Escape pressed in the ${pressedIn} closes a Little Ardia window and leaves the main window alone`, () => {
+  test(`Escape pressed in the ${pressedIn} closes a Little Solstice window and leaves the main window alone`, () => {
     const { main, small, mainTab, smallTab } = windows("https://little.example/");
     escapePressed(mainTab, pressedIn);
     assert.equal(gone(main), false);
@@ -29,7 +29,7 @@ for (const pressedIn of ["page", "window"]) {
   });
 }
 
-test("Escape closes the address bar of a Little Ardia page first, and the window on the next press", () => {
+test("Escape closes the address bar of a Little Solstice page first, and the window on the next press", () => {
   const { small, smallTab } = windows("https://little.example/");
   S().openPanel(small, "https://little.example/");
   escapePressed(smallTab, "window");
@@ -41,7 +41,7 @@ test("Escape closes the address bar of a Little Ardia page first, and the window
   assert.equal(gone(small), true);
 });
 
-test("Escape in a blank Little Ardia's address bar closes the window, and never a main window's", () => {
+test("Escape in a blank Little Solstice's address bar closes the window, and never a main window's", () => {
   const { main, small } = windows(undefined);
   S().openPanel(small, "");
   assert.equal(closeBlankLittleArdiaOnEscape(main), false);
@@ -50,7 +50,7 @@ test("Escape in a blank Little Ardia's address bar closes the window, and never 
   assert.equal(gone(small), true);
 });
 
-test("a page opening another app closes the Little Ardia window it was in, and never a main window", () => {
+test("a page opening another app closes the Little Solstice window it was in, and never a main window", () => {
   const { main, small } = windows("https://zoom.example/j/1");
   closeLittleArdiaForAppLink(main);
   closeLittleArdiaForAppLink(null);
