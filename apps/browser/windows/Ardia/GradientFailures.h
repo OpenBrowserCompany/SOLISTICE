@@ -7,7 +7,7 @@
 #include "Events.h"
 #include "MaterialSupport.h"
 
-namespace Ardia::Materials {
+namespace Solstice::Materials {
 
 struct GradientFailureSink {
   std::mutex lock;

@@ -14,7 +14,7 @@
 #include "MaterialSupport.h"
 #include "MaterialViewParts.h"
 
-namespace Ardia {
+namespace Solstice {
 
 namespace GradientParts {
 

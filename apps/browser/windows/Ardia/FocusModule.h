@@ -11,7 +11,7 @@
 
 #pragma comment(lib, "user32.lib")
 
-namespace Ardia {
+namespace Solstice {
 
 struct SwitcherPointer {
   std::mutex lock;
