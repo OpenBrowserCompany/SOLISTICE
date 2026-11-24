@@ -1,4 +1,4 @@
-package com.ardia.browser
+package com.openbrowsercompany.solstice
 
 import java.io.BufferedReader
 import java.io.InputStreamReader
