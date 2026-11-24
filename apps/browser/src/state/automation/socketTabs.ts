@@ -62,7 +62,7 @@ function navigate(params: Record<string, unknown>) {
   const url = openableUrl(params.url as string);
   if (typeof url !== "string") throw new OpError("refused", url.error);
   refuseSyncedLinkChange(t.id, "loading another page");
-  now().navigate(t.id, url || "ardia://newtab", { userInitiated: true });
+  now().navigate(t.id, url || "solstice://newtab", { userInitiated: true });
   return tabRow(now(), t.id);
 }
 
@@ -167,14 +167,14 @@ export const TAB_METHODS: MethodSpec[] = [
   {
     name: "tabs.hold",
     mutates: false,
-    description: `Keep tabs an ardia command session is using loaded: Ardia's own tab budget doesn't put them to sleep and their profile isn't unloaded as idle for the next seconds (default ${CLI_HOLD_DEFAULT_S}, at most ${CLI_HOLD_MAX_S}); on macOS Chromium's own discarding keeps them too, and elsewhere only while a debugger is attached. Each call replaces the session's held tabs; call again before the time ends to keep holding, and tabs.release ends it sooner`,
+    description: `Keep tabs an ardia command session is using loaded: Solstice's own tab budget doesn't put them to sleep and their profile isn't unloaded as idle for the next seconds (default ${CLI_HOLD_DEFAULT_S}, at most ${CLI_HOLD_MAX_S}); on macOS Chromium's own discarding keeps them too, and elsewhere only while a debugger is attached. Each call replaces the session's held tabs; call again before the time ends to keep holding, and tabs.release ends it sooner`,
     params: obj({ session: HOLD_SESSION, tabs: ids("Tab ids from windows or tabs.list; they replace what this session held", CLI_HOLD_MAX_TABS), seconds: int("How long to hold them", 1, CLI_HOLD_MAX_S) }, ["session", "tabs"]),
     result: "{held, gone, seconds, engineKeeps?}",
     run: holdTabs,
   },
   { name: "tabs.release", mutates: false, description: "Let the tabs a session held with tabs.hold sleep again as Memory Saver decides", params: obj({ session: HOLD_SESSION }, ["session"]), result: "{released}", run: releaseTabs },
   { name: "tabs.get", mutates: false, description: "One tab", params: obj({ tab: TAB }, ["tab"]), result: "tab", run: (p) => tabRow(now(), tabOf(p.tab).id) },
-  { name: "tabs.navigate", mutates: true, description: "Load a URL in a tab, as typing it in the address bar does", params: obj({ tab: TAB, url: text("http, https or file URL, about:blank or ardia://history, bookmarks, downloads, newtab") }, ["tab", "url"]), result: "tab", run: navigate },
+  { name: "tabs.navigate", mutates: true, description: "Load a URL in a tab, as typing it in the address bar does", params: obj({ tab: TAB, url: text("http, https or file URL, about:blank or solstice://history, bookmarks, downloads, newtab") }, ["tab", "url"]), result: "tab", run: navigate },
   { name: "tabs.reload", mutates: true, description: "Reload a tab's page", params: obj({ tab: TAB, bypassCache: bool("Reload without the cache") }, ["tab"]), result: "{ok}", run: reload },
   { name: "tabs.back", mutates: true, description: "Go back in a tab's history; when that leaves a page with unsaved changes, the reply waits for the user's answer", params: obj({ tab: TAB }, ["tab"]), result: "{ok}", run: back },
   { name: "tabs.forward", mutates: true, description: "Go forward in a tab's history", params: obj({ tab: TAB }, ["tab"]), result: "{ok}", run: forward },

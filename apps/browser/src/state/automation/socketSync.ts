@@ -26,7 +26,7 @@ export function settles(check: () => boolean, ms = SETTLE_MS): Promise<boolean> 
 
 function syncing(what: string) {
   const s = useSync.getState();
-  if (s.status === "unavailable") throw new OpError("refused", "Sync isn't available in this build of Ardia.");
+  if (s.status === "unavailable") throw new OpError("refused", "Sync isn't available in this build of Solstice.");
   if (!s.enabled) throw new OpError("refused", `Sync is off; turn it on in Settings › General before ${what}.`);
   if (s.status === "locked") throw new OpError("refused", "Sync is locked; enter the recovery phrase in Settings › General first.");
   return s;

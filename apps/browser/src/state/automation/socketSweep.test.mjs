@@ -79,7 +79,7 @@ async function fixture() {
   const closedId = (await ok("closed.list", {}).catch(() => null))?.items?.[0]?.id ?? S().closedTabs?.[0]?.id ?? "none";
   const profileId = S().groups[shared].profileId;
   const key = pinKeyOf(S().groups[shared]);
-  bindFolder(profileId, key, "/scratch/Ardia Shared/Team", { device: 1, inode: 9 });
+  bindFolder(profileId, key, "/scratch/Solstice Shared/Team", { device: 1, inode: 9 });
   bound = [profileId, key];
   return { windowId, w2, p2, little, spareA, spareB, one, two, homed, mate, loose, other, tileA, tileB, peekFrom, shared, inner, split, tileFolder, liveFolder, liveItem: "pr1", bookmark, bookmarkFolder, rule, search, closedId, profileId };
 }
