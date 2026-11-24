@@ -94,7 +94,7 @@ test("the original start page keeps its logo and its deck bar, and none of the r
   unmount(root);
 });
 
-test("the redesigned start page has no deck bar and only the Ardia mark in the middle; its own bar holds round Tabs and Settings circles and a 77 by 48 plus pill, centred 11 points above the safe bottom on iPhone and where the browsing bar sits on Android, 24 in from the sides", () => {
+test("the redesigned start page has no deck bar and only the Solstice mark in the middle; its own bar holds round Tabs and Settings circles and a 77 by 48 plus pill, centred 11 points above the safe bottom on iPhone and where the browsing bar sits on Android, 24 in from the sides", () => {
   const root = start();
   expect(root.root.findAll((node) => node.type === AppIcon && node.props.side === 128)).toHaveLength(1);
   expect(host(root, "appIcon")).toBeDefined();

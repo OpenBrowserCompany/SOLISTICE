@@ -93,7 +93,7 @@ onAndroid("Android's Settings groups its rows as iPhone's do, General, Search, T
   const sections = headers.filter((title) => ["General", "Search", "Tabs", "Privacy", "Experimental", "About"].includes(title));
   expect(sections.filter((title) => title !== "Experimental")).toEqual(["General", "Search", "Tabs", "Privacy", "About"]);
   const text = textOf(root);
-  const order = ["Site Settings", "Default Browser", "Open App Links In", "Search Engine", "Search Suggestions", "Auto-Open Keyboard", "Archive Inactive Tabs", "Export Open Tabs", "Clear Browsing Data", PHONE_SHARING_COPY.whatsSent, "Show Onboarding", "About Ardia"];
+  const order = ["Site Settings", "Default Browser", "Open App Links In", "Search Engine", "Search Suggestions", "Auto-Open Keyboard", "Archive Inactive Tabs", "Export Open Tabs", "Clear Browsing Data", PHONE_SHARING_COPY.whatsSent, "Show Onboarding", "About Solstice"];
   const at = order.map((title) => text.indexOf(title));
   expect(at.every((index) => index >= 0)).toBe(true);
   expect([...at].sort((a, b) => a - b)).toEqual(at);
