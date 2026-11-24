@@ -450,7 +450,7 @@ extern "C" __declspec(dllexport) int ArdiaAppStart(const ArdiaEngineApi* engine)
   window_class.hCursor = ::LoadCursorW(nullptr, IDC_ARROW);
   window_class.lpszClassName = kWindowClass;
   ::RegisterClassExW(&window_class);
-  g_window = ::CreateWindowExW(0, kWindowClass, L"Ardia engine probe",
+  g_window = ::CreateWindowExW(0, kWindowClass, L"Solstice engine probe",
                                WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN, 80, 60,
                                1100, 760, nullptr, nullptr, instance, nullptr);
   if (!g_window) {

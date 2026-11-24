@@ -225,7 +225,7 @@ void PrivateSessions::Overdue(base::WeakPtr<Profile> profile) {
     }
   }
   session->overdue = true;
-  LOG(ERROR) << "Ardia: a private session has not ended "
+  LOG(ERROR) << "Solstice: a private session has not ended "
              << kEndingLimit.InSeconds()
              << " s after its last release; private windows of its profile "
                 "are refused until it does";

@@ -204,7 +204,7 @@ void KeepRealProfileClosed(base::CommandLine* command_line) {
   }
   ::SetEnvironmentVariableW(L"SSLKEYLOGFILE", nullptr);
   if (::GetEnvironmentVariableW(L"SSLKEYLOGFILE", nullptr, 0) != 0) {
-    LOG(ERROR) << "Ardia engine: SSLKEYLOGFILE could not be cleared outside "
+    LOG(ERROR) << "Solstice engine: SSLKEYLOGFILE could not be cleared outside "
                   "a test instance; not starting";
     base::Process::TerminateCurrentProcessImmediately(1);
   }
@@ -331,7 +331,7 @@ void NoteLaunchGuard() {
                  std::to_string(facts.predecessor_wait_ms < 0
                                     ? 0
                                     : facts.predecessor_wait_ms) +
-                 " ms for a previous Ardia, " +
+                 " ms for a previous Solstice, " +
                  std::to_string(facts.unfinished_starts_before) +
                  " unfinished starts before this one, restore state " +
                  (facts.recovered_to.empty() ? "kept" : "set aside"));
@@ -354,7 +354,7 @@ void NoteTestGate() {
           : "test gate: ARDIA_REMOTE_DEBUGGING_PORT, ARDIA_TEST and "
             "ARDIA_TRACE ignored: not a test instance (" +
                 gate.refusal + ")" + facts;
-  LOG(WARNING) << "Ardia engine " << line;
+  LOG(WARNING) << "Solstice engine " << line;
   WriteLaunchLog(line);
 }
 
@@ -426,13 +426,13 @@ bool Background() {
 void ShowStartFailureAndQuit(const std::wstring& reason) {
   if (!Background()) {
     const std::wstring log = LaunchLogPath();
-    std::wstring text = L"Ardia couldn't start.\n\n" + reason +
-                        L"\n\nInstalling Ardia again from ardia.dev usually "
+    std::wstring text = L"Solstice couldn't start.\n\n" + reason +
+                        L"\n\nInstalling Solstice again from ardia.dev usually "
                         L"fixes this.";
     if (!log.empty()) {
       text += L" The details are in " + log + L".";
     }
-    ::MessageBoxW(nullptr, text.c_str(), L"Ardia",
+    ::MessageBoxW(nullptr, text.c_str(), L"Solstice",
                   MB_OK | MB_ICONERROR | MB_SETFOREGROUND | MB_TASKMODAL |
                       MB_TOPMOST);
   }
@@ -441,7 +441,7 @@ void ShowStartFailureAndQuit(const std::wstring& reason) {
 
 void FailStart(const std::wstring& reason) {
   MarkStartSettled();
-  LOG(ERROR) << "Ardia: the app did not start: " << base::WideToUTF8(reason);
+  LOG(ERROR) << "Solstice: the app did not start: " << base::WideToUTF8(reason);
   WriteLaunchLog("app start failed: " + base::WideToUTF8(reason));
   base::SequencedTaskRunner::GetCurrentDefault()->PostTask(
       FROM_HERE, base::BindOnce(&ShowStartFailureAndQuit, reason));
@@ -461,11 +461,11 @@ void ShowRecoveryNotice(const std::wstring& folder) {
     return;
   }
   const std::wstring text =
-      L"Ardia didn't finish starting the last few times, so it opened "
+      L"Solstice didn't finish starting the last few times, so it opened "
       L"without your last session.\n\nYour bookmarks, history and "
       L"passwords are untouched. The session it set aside is in " +
       folder + L".";
-  ::MessageBoxW(nullptr, text.c_str(), L"Ardia",
+  ::MessageBoxW(nullptr, text.c_str(), L"Solstice",
                 MB_OK | MB_ICONINFORMATION | MB_SETFOREGROUND | MB_TOPMOST);
 }
 
@@ -487,9 +487,9 @@ bool StartApp() {
   if (!app.module) {
     const DWORD error = ::GetLastError();
     FailStart(error == ERROR_MOD_NOT_FOUND
-                  ? L"A file Ardia needs is missing from its folder "
+                  ? L"A file Solstice needs is missing from its folder "
                     L"(Windows error 126)."
-                  : L"Ardia's app library could not be loaded (Windows "
+                  : L"Solstice's app library could not be loaded (Windows "
                     L"error " +
                         std::to_wstring(error) + L").");
     return false;
@@ -501,7 +501,7 @@ bool StartApp() {
   app.stop = reinterpret_cast<ArdiaAppStopFunction>(
       ::GetProcAddress(app.module, "ArdiaAppStop"));
   if (!start) {
-    FailStart(L"Ardia's app library doesn't match its engine.");
+    FailStart(L"Solstice's app library doesn't match its engine.");
     return false;
   }
   std::wstring traced = Environment(L"ARDIA_INPUT_TRACE");
@@ -645,7 +645,7 @@ void RefuseReactNativeFolders(const std::wstring& app_data,
   if (clash.empty()) {
     return;
   }
-  LOG(ERROR) << "Ardia engine: " << base::WideToUTF8(clash)
+  LOG(ERROR) << "Solstice engine: " << base::WideToUTF8(clash)
              << "; the WebUI shell is not starting";
   base::Process::TerminateCurrentProcessImmediately(1);
 }
@@ -657,7 +657,7 @@ void RefuseShellModeDisagreement(bool webui) {
   if (webui == early && reparsed == early) {
     return;
   }
-  LOG(ERROR) << "Ardia engine: install_static read the shell mode as "
+  LOG(ERROR) << "Solstice engine: install_static read the shell mode as "
              << (early ? "webui" : "default") << " and Chromium as "
              << (webui ? "webui" : "default") << "; not starting";
   base::Process::TerminateCurrentProcessImmediately(1);
@@ -680,7 +680,7 @@ void RelaunchIntoWebUIProfile() {
   }
   relaunch.SetProgram(program);
   if (relaunch.HasSwitch(kWebUIRelaunchedSwitch)) {
-    LOG(ERROR) << "Ardia engine: the WebUI shell's profile folder was not "
+    LOG(ERROR) << "Solstice engine: the WebUI shell's profile folder was not "
                   "taken after a relaunch; not starting";
     base::Process::TerminateCurrentProcessImmediately(1);
   }
@@ -698,7 +698,7 @@ void BeforeWebUIChromeMain(base::CommandLine* command_line) {
   const std::wstring app_data = WebUIAppData();
   const std::wstring user_data = WebUIUserDataDirectory(app_data);
   if (user_data.empty() || !SameFolder(user_data, ChromiumUserDataDir())) {
-    LOG(ERROR) << "Ardia engine: the WebUI shell has no profile folder of its "
+    LOG(ERROR) << "Solstice engine: the WebUI shell has no profile folder of its "
                   "own; not starting";
     base::Process::TerminateCurrentProcessImmediately(1);
   }
