@@ -1,6 +1,6 @@
 Every unpacked load (UnpackedInstaller::Load: install, reload, Chromium-triggered reloads; LoadFromCommandLine:
 --load-extension) asks g_ardia_unpacked_path_allowed with the path it was given and the path it resolved to,
-before it reads the extension. //chrome/browser/ardia (ac_scripts_policy.cc) sets it: a load that names the Ardia
+before it reads the extension. //chrome/browser/ardia (ac_scripts_policy.cc) sets it: a load that names the Solstice
 Scripts folder must resolve to exactly that real folder, so swapping it for a symlink can't load another
 extension under its name.
 
