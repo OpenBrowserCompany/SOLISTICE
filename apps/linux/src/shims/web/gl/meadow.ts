@@ -74,7 +74,7 @@ function element<K extends keyof HTMLElementTagNameMap>(tag: K, className: strin
 function heroTitle() {
   const line = (inner: HTMLElement) => element("span", "line", { display: "block" }, [inner]);
   const icon = element("span", "icon", { display: "block", width: "96px", height: "96px" });
-  const wordmark = element("span", "wordmark", { display: "block", fontSize: "64px", fontWeight: "200", letterSpacing: "-1.5px" }, [document.createTextNode("Ardia")]);
+  const wordmark = element("span", "wordmark", { display: "block", fontSize: "64px", fontWeight: "200", letterSpacing: "-1.5px" }, [document.createTextNode("Solstice")]);
   const tagline = element("span", "tagline", { display: "block", fontSize: "17px", fontWeight: "300" }, [document.createTextNode("Your new home on the internet")]);
   return element(
     "div",

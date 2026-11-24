@@ -74,7 +74,7 @@ const HostTabWebView = forwardRef<WebViewHandle, WebViewProps>(function HostTabW
       if (property === "nativeTag") return () => null;
       return async (...args: unknown[]) => {
         const current = tab.current;
-        if (!current) throw new Error("Ardia tab is not mounted");
+        if (!current) throw new Error("Solstice tab is not mounted");
         if (property === "loadUrl") {
           args[0] = toEngineUrl(args[0] as string);
           if (current.repeatsCreate(args[0] as string)) return undefined;

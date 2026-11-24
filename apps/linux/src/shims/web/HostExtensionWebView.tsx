@@ -92,7 +92,7 @@ export const HostExtensionWebView = forwardRef<WebViewHandle, HostExtensionWebVi
       if (property === "nativeTag") return () => null;
       return async (...args: unknown[]) => {
         const current = view.current;
-        if (!current) throw new Error("Ardia extension view is not mounted");
+        if (!current) throw new Error("Solstice extension view is not mounted");
         if (property === "evaluate") return extensionViewEvaluate(args[0], sizes.current);
         if (property !== "focus") throw new Error(`Extension views do not support ${property}`);
         return current.command(property, args);
