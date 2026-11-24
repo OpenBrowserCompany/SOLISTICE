@@ -20,7 +20,7 @@ int main() {
   assert(*refused([](auto& t) { t.private_session = true; }) == "Private tabs can't go off-screen on Linux.");
   assert(*refused([](auto& t) { t.presented = true; }) == "That tab is shown in a window, so it can't go off-screen.");
   assert(*refused([](auto& t) { t.shown_before = true; }) == "That tab is shown in a window, so it can't go off-screen.");
-  assert(*refused([](auto& t) { t.in_strip = false; }) == "Ardia couldn't take that tab off-screen.");
+  assert(*refused([](auto& t) { t.in_strip = false; }) == "Solstice couldn't take that tab off-screen.");
 
   offscreen::TargetGenerations generations;
   assert(generations.Record("a", std::nullopt) == 0);

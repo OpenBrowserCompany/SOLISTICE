@@ -54,7 +54,7 @@ void ConfigureArdiaPageWorld() {
   blink::WebIsolatedWorldInfo info;
   info.security_origin = blink::WebSecurityOrigin(url::Origin());
   info.content_security_policy = blink::WebString::FromUtf8(kArdiaPageWorldPolicy);
-  info.human_readable_name = blink::WebString::FromUtf8("Ardia");
+  info.human_readable_name = blink::WebString::FromUtf8("Solstice");
   blink::SetIsolatedWorldInfo(ISOLATED_WORLD_ID_ARDIA_PAGE, info);
 }
 
@@ -133,7 +133,7 @@ class LinuxPageAgent : public content::RenderFrameObserver,
     base::WeakPtr<LinuxPageAgent> alive = weak_factory_.GetWeakPtr();
     v8::Local<v8::Value> install = frame->ExecuteScriptInIsolatedWorldAndReturnValue(
         ISOLATED_WORLD_ID_ARDIA_PAGE,
-        blink::WebScriptSource(blink::WebString::FromUtf8(kArdiaLinuxPageScript), blink::WebURL(GURL("ardia://page-script"))),
+        blink::WebScriptSource(blink::WebString::FromUtf8(kArdiaLinuxPageScript), blink::WebURL(GURL("solstice://page-script"))),
         blink::BackForwardCacheAware::kAllow);
     if (!alive || install.IsEmpty() || !install->IsFunction()) return;
     v8::Local<v8::Context> context = frame->GetScriptContextFromWorldId(isolate, ISOLATED_WORLD_ID_ARDIA_PAGE);
