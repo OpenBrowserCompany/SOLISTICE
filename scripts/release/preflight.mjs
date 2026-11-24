@@ -36,6 +36,7 @@ network request (the published appcast):
                      already_released: nightly-newest when a dry run let a released
                      nightly at this build through, else none)
   --allow-no-feed    a feed URL that answers 404 means no feed yet, not a failure
+  --allow-version-reset  accept a stable below the feed latest (a new product with a fresh version line)
   --github           also print GitHub Actions ::error:: and ::warning:: lines`;
 
 const ROOT = fileURLToPath(new URL("../..", import.meta.url));
@@ -178,7 +179,7 @@ function archFacts(root, version) {
   }
 }
 
-export async function preflight({ version, mode = "release", feed, feedOut, valuesOut, allowNoFeed = false, root = ROOT, fetchImpl = globalThis.fetch }) {
+export async function preflight({ version, mode = "release", feed, feedOut, valuesOut, allowNoFeed = false, allowVersionReset = false, root = ROOT, fetchImpl = globalThis.fetch }) {
   const results = [];
   const soft = mode !== "release";
   const pass = (message) => results.push({ level: "pass", message });
@@ -282,8 +283,9 @@ export async function preflight({ version, mode = "release", feed, feedOut, valu
         fail(`the build number (${releaseBuild}) must be above every build in the feed, nightly or stable (newest: ${facts.newestOther}): bump CURRENT_PROJECT_VERSION`);
       }
       if (channel === "stable" && facts.latestStable && compareVersions(version, facts.latestStable) <= 0) {
-        const message = `${version} isn't above the latest stable release in the feed (${facts.latestStable}): publish.sh refuses it, publishing it as latest would move every download and feed backward`;
-        if (mode === "candidate") results.push({ level: "warn", message });
+        const message = `${version} isn't above the latest stable release in the feed (${facts.latestStable}): publishing it as latest would move every download and feed backward`;
+        if (allowVersionReset) note(`${message}; allowed by --allow-version-reset (new product version line)`);
+        else if (mode === "candidate") results.push({ level: "warn", message });
         else fail(message);
       }
       if (facts.listed) {
@@ -307,7 +309,7 @@ export async function preflight({ version, mode = "release", feed, feedOut, valu
 }
 
 function parseArgs(argv) {
-  const options = { mode: "release", github: false, allowNoFeed: false };
+  const options = { mode: "release", github: false, allowNoFeed: false, allowVersionReset: false };
   const positional = [];
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
@@ -321,6 +323,7 @@ function parseArgs(argv) {
     else if (arg === "--feed-out") options.feedOut = value();
     else if (arg === "--values-out") options.valuesOut = value();
     else if (arg === "--allow-no-feed") options.allowNoFeed = true;
+    else if (arg === "--allow-version-reset") options.allowVersionReset = true;
     else if (arg === "--github") options.github = true;
     else if (arg.startsWith("-")) throw new Error(`unknown option ${arg}`);
     else positional.push(arg);
