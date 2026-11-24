@@ -31,7 +31,7 @@ export const pageWords = {
 } as const;
 
 export const tabWords = {
-  notSaved: "Your latest tab changes aren't saved yet. Ardia keeps trying.",
+  notSaved: "Your latest tab changes aren't saved yet. Solstice keeps trying.",
 } as const;
 
 export const dismissWords = {
