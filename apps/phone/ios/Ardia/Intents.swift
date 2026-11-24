@@ -7,8 +7,8 @@ import Foundation
 import PhoneSync
 
 struct SearchWithArdiaIntent: AppIntent {
-  static let title: LocalizedStringResource = "Search with Ardia"
-  static let description = IntentDescription("Searches the web in Ardia, or opens Ardia ready to type.")
+  static let title: LocalizedStringResource = "Search with Solstice"
+  static let description = IntentDescription("Searches the web in Solstice, or opens Solstice ready to type.")
   static let supportedModes: IntentModes = .foreground
 
   @Parameter(title: "Search", requestValueDialog: "What do you want to search for?")
@@ -27,7 +27,7 @@ struct SearchWithArdiaIntent: AppIntent {
 
 struct VoiceSearchIntent: AppIntent {
   static let title: LocalizedStringResource = "Voice Search"
-  static let description = IntentDescription("Opens Ardia and starts listening for your search.")
+  static let description = IntentDescription("Opens Solstice and starts listening for your search.")
   static let supportedModes: IntentModes = .foreground
 
   @MainActor
@@ -50,15 +50,15 @@ struct NewIncognitoTabIntent: AppIntent {
 }
 
 struct OpenURLInArdiaIntent: AppIntent {
-  static let title: LocalizedStringResource = "Open in Ardia"
-  static let description = IntentDescription("Opens a web page in a new tab in Ardia.")
+  static let title: LocalizedStringResource = "Open in Solstice"
+  static let description = IntentDescription("Opens a web page in a new tab in Solstice.")
   static let supportedModes: IntentModes = .foreground
 
   @Parameter(title: "URL")
   var url: URL
 
   static var parameterSummary: some ParameterSummary {
-    Summary("Open \(\.$url) in Ardia")
+    Summary("Open \(\.$url) in Solstice")
   }
 
   @MainActor
@@ -73,7 +73,7 @@ struct OpenURLInArdiaIntent: AppIntent {
 
 struct OpenMacTabsIntent: AppIntent {
   static let title: LocalizedStringResource = "Open Synced Tabs"
-  static let description = IntentDescription("Shows the tabs, pinned tabs and Spaces synced from Ardia on your computer.")
+  static let description = IntentDescription("Shows the tabs, pinned tabs and Spaces synced from Solstice on your computer.")
   static let supportedModes: IntentModes = .foreground
 
   @MainActor
@@ -125,7 +125,7 @@ enum IntentFailure: Error, CustomLocalizedStringResourceConvertible {
 
   var localizedStringResource: LocalizedStringResource {
     switch self {
-    case .notWebPage: "Ardia opens web pages that start with http or https."
+    case .notWebPage: "Solstice opens web pages that start with http or https."
     case .tabGone: "That tab isn’t open anymore."
     }
   }
@@ -314,7 +314,7 @@ struct TabEntityQuery: EntityStringQuery {
 
 struct OpenTabIntent: OpenIntent {
   static let title: LocalizedStringResource = "Open Tab"
-  static let description = IntentDescription("Switches to one of your tabs in Ardia, or brings an archived tab back.")
+  static let description = IntentDescription("Switches to one of your tabs in Solstice, or brings an archived tab back.")
   static let supportedModes: IntentModes = .foreground
 
   @Parameter(title: "Tab")

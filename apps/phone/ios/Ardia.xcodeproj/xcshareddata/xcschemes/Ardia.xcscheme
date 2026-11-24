@@ -16,8 +16,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "DD52C294A990971E005E6738"
-               BuildableName = "Ardia.app"
-               BlueprintName = "Ardia"
+               BuildableName = "Solstice.app"
+               BlueprintName = "Solstice"
                ReferencedContainer = "container:Ardia.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -33,8 +33,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "DD52C294A990971E005E6738"
-            BuildableName = "Ardia.app"
-            BlueprintName = "Ardia"
+            BuildableName = "Solstice.app"
+            BlueprintName = "Solstice"
             ReferencedContainer = "container:Ardia.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -56,8 +56,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "DD52C294A990971E005E6738"
-            BuildableName = "Ardia.app"
-            BlueprintName = "Ardia"
+            BuildableName = "Solstice.app"
+            BlueprintName = "Solstice"
             ReferencedContainer = "container:Ardia.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -75,8 +75,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "DD52C294A990971E005E6738"
-            BuildableName = "Ardia.app"
-            BlueprintName = "Ardia"
+            BuildableName = "Solstice.app"
+            BlueprintName = "Solstice"
             ReferencedContainer = "container:Ardia.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
