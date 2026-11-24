@@ -49,7 +49,7 @@ onIos("on iPhone Settings groups its rows as General, Search, Tabs, Privacy, Exp
     PHONE_SHARING_COPY.toggle,
     PHONE_SHARING_COPY.whatsSent,
     "Show Onboarding",
-    "About Ardia",
+    "About Solstice",
   ]);
   const sections = ["General", "Search", "Tabs", "Privacy", "Experimental", "About"];
   const titled = stackOf(root).findAll((node) => typeof node.type === "string" && typeof node.props.title === "string" && sections.includes(node.props.title as string) && !("systemImage" in node.props));

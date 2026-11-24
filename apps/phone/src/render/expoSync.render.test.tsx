@@ -48,11 +48,11 @@ onIos("on iPhone Sync With Mac is main's page on Expo UI: off, it shows the hero
 
 onIos("connected, it has Sync Now, the Mac under Devices, this phone's name, the folder, and Stop Syncing behind main's confirmation", async () => {
   const stop = jest.spyOn(syncActions, "stopSyncing").mockResolvedValue(undefined);
-  useSync.setState((state) => ({ ...state, status: { ...OFF_STATUS, isEnabled: true, phase: "updated", deviceName: "Test Phone", folderName: "Ardia Sync" }, view: { ...EMPTY_VIEW, devices: [MAC] } as never }));
+  useSync.setState((state) => ({ ...state, status: { ...OFF_STATUS, isEnabled: true, phase: "updated", deviceName: "Test Phone", folderName: "Solstice Sync" }, view: { ...EMPTY_VIEW, devices: [MAC] } as never }));
   openSettings({ page: "sync" });
   const root = renderSurface(<SettingsView />);
   await act(async () => undefined);
-  expect(texts(page(root))).toEqual(expect.arrayContaining(["Sync Now", "Ardia Sync", "Stop Syncing…", "To sync again, you’ll need your Mac’s code or your recovery phrase."]));
+  expect(texts(page(root))).toEqual(expect.arrayContaining(["Sync Now", "Solstice Sync", "Stop Syncing…", "To sync again, you’ll need your Mac’s code or your recovery phrase."]));
   expect(titles(page(root))).toEqual(expect.arrayContaining(["Devices", "Sync Folder", "MacBook Pro", "Stop Syncing This Device?"]));
   expect(labels(page(root))).toEqual(expect.arrayContaining(["Change Folder…", "Folder", "Stop Syncing"]));
   expect(texts(page(root))).not.toContain("What You Get");
