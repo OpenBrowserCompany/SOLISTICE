@@ -779,7 +779,7 @@ bool ValidUtilityPlacement(const base::DictValue* placement) {
 }
 
 base::FilePath DocumentDirectory(Profile* profile) {
-  return profile->GetPath().AppendASCII("Ardia");
+  return profile->GetPath().AppendASCII("Solstice");
 }
 
 bool PrepareDocuments(const base::FilePath& directory) {
@@ -3323,7 +3323,7 @@ bool ShellHostView::Trusted(content::WebUI* ui) const {
 }
 
 base::DictValue ShellHostView::Bootstrap() const {
-  base::DictValue info = base::DictValue().Set("appName", "Ardia")
+  base::DictValue info = base::DictValue().Set("appName", "Solstice")
       .Set("appVersion", ardiacore::LinuxAppVersion())
       .Set("appBuild", "linux-host")
       .Set("bundleId", "dev.ardia.linux")
@@ -3659,7 +3659,7 @@ std::optional<std::string> ShellHostView::MoveTabOffscreen(TabBinding* binding) 
   };
   if (const auto refused = ardiacore::linux_automation_window::OffscreenRefusal(tab)) return std::string(*refused);
   BrowserWindowInterface* window = ardiacore::LinuxAutomationWindowFor(ProfileOf(contents->GetBrowserContext()));
-  if (!window) return std::string("Ardia couldn't take that tab off-screen.");
+  if (!window) return std::string("Solstice couldn't take that tab off-screen.");
   const int id = TabId(contents);
   auto weak = GetWeakPtr();
   app_operation_ = true;
@@ -3670,10 +3670,10 @@ std::optional<std::string> ShellHostView::MoveTabOffscreen(TabBinding* binding) 
   CheckPlayerSource();
   offscreen_released_.insert(id);
   std::unique_ptr<content::WebContents> detached = model->DetachWebContentsAtForInsertion(index);
-  if (!weak) return std::string("Ardia couldn't take that tab off-screen, and closed it.");
+  if (!weak) return std::string("Solstice couldn't take that tab off-screen, and closed it.");
   app_operation_ = false;
   if (!ardiacore::InsertIntoLinuxAutomationWindow(window, std::move(detached))) {
-    return std::string("Ardia couldn't take that tab off-screen, and closed it.");
+    return std::string("Solstice couldn't take that tab off-screen, and closed it.");
   }
   QueueTransaction(std::nullopt);
   return std::nullopt;
@@ -3817,7 +3817,7 @@ void ShellHostView::OnKeyEvent(ui::KeyEvent* event) {
   const ui::Accelerator accelerator = KeyAccelerator(*event);
   if (base::CommandLine::ForCurrentProcess()->HasSwitch("ardia-keyboard-diagnostics") &&
       (event->IsControlDown() || shortcuts_.contains(accelerator))) {
-    LOG(INFO) << "Ardia key window=" << window_id_
+    LOG(INFO) << "Solstice key window=" << window_id_
               << " key=" << event->key_code() << " code=" << static_cast<int>(event->code())
               << " flags=" << event->flags()
               << " view=" << static_cast<bool>(focus_manager_->GetFocusedView())
@@ -5611,7 +5611,7 @@ void ShellHostView::EngineEvent(std::string_view topic,
     }
   }
   const std::string domain(name.substr(0, name.find('.')));
-  std::string module = "Ardia" + domain;
+  std::string module = "Solstice" + domain;
   module[5] = base::ToUpperASCII(module[5]);
   Event(module, domain, base::Value(base::DictValue().Set("name", name).Set("data", std::move(translated))));
 }
@@ -5885,7 +5885,7 @@ void ShellHostView::CreateTabIn(
   }
   TabStripModel* model = member->GetTabStripModel();
   std::string text = String(args, "url");
-  if (text.starts_with("ardia://")) text.replace(0, 8, "chrome://");
+  if (text.starts_with("solstice://")) text.replace(0, 8, "chrome://");
   const GURL url(text.empty() ? "about:blank" : text);
   if (!url.is_valid() || url.SchemeIs("javascript") ||
       (url.SchemeIs("chrome") && url.host() == "ardia")) {
@@ -6125,7 +6125,7 @@ void ShellHostView::TabCommand(
   }
   if (command == "loadUrl") {
     std::string text = ArgumentString(values, 0);
-    if (text.starts_with("ardia://")) text.replace(0, 8, "chrome://");
+    if (text.starts_with("solstice://")) text.replace(0, 8, "chrome://");
     const GURL url(text);
     if (!url.is_valid() || url.SchemeIs("javascript") ||
         (url.SchemeIs("chrome") && url.host() == "ardia")) {
@@ -6169,7 +6169,7 @@ void ShellHostView::TabCommand(
                           bool refused, std::optional<std::string> result) {
           if (refused) {
             return std::move(done).Run(false, base::Value(base::DictValue()
-                .Set("code", "ERR_PAGE_EVALUATION_REFUSED").Set("message", "Ardia runs only its own page operations")));
+                .Set("code", "ERR_PAGE_EVALUATION_REFUSED").Set("message", "Solstice runs only its own page operations")));
           }
           std::move(done).Run(true, result && request.Valid() ? base::Value(std::move(*result)) : base::Value());
         }, std::move(*request), std::move(done)));
@@ -8445,7 +8445,7 @@ class HostRegistry : public BrowserCollectionObserver,
       if (!app_profile || app_profile->GetPath() != profile_path_ ||
           !(utility ? browser->GetProfile() == app_profile
                     : ardiacore::LinuxProfileHosts(requested->second.page_profile, browser->GetProfile()))) {
-        LOG(WARNING) << "Ardia Linux host refused a window whose profile no longer matches its request";
+        LOG(WARNING) << "Solstice Linux host refused a window whose profile no longer matches its request";
         return RefuseRequestedWindow(browser.get(), requested);
       }
     } else {
@@ -8459,7 +8459,7 @@ class HostRegistry : public BrowserCollectionObserver,
     }
     BrowserView* view = BrowserView::GetBrowserViewForBrowser(browser.get());
     if (!view || !view->GetWidget()) {
-      LOG(WARNING) << "Ardia Linux host could not attach to a Chrome BrowserView";
+      LOG(WARNING) << "Solstice Linux host could not attach to a Chrome BrowserView";
       return;
     }
     auto overlay = std::make_unique<ShellHostView>(browser.get(), view, startup, app_profile);
@@ -8693,7 +8693,7 @@ void StartLinuxHost() {
     for (const auto& [id, host] : Hosts()) {
       if (host->OpenPrivateLink(contents, url)) return true;
     }
-    LOG(WARNING) << "[ardia] off-the-record link refused: the window's active tab has no live Ardia page";
+    LOG(WARNING) << "[ardia] off-the-record link refused: the window's active tab has no live Solstice page";
     return true;
   };
   g_ardia_linux_devtools_opened_tab = [](content::WebContents* inspected, content::WebContents* opened, const GURL& url) {
@@ -8705,12 +8705,12 @@ void StartLinuxHost() {
       if (host->BindsTab(opened)) return;
     }
     if (ShellHostView* host = DevToolsLinkWindow(opened->GetBrowserContext(), opened)) return host->AdoptDevToolsTab(opened, url);
-    LOG(WARNING) << "[ardia] DevTools link refused: no Ardia window of its profile can show it";
+    LOG(WARNING) << "[ardia] DevTools link refused: no Solstice window of its profile can show it";
     CloseDevToolsTab(opened);
   };
   g_ardia_linux_devtools_open_url = [](Profile* profile, const GURL& url) {
     if (ShellHostView* host = DevToolsLinkWindow(profile, nullptr)) return host->OpenDevToolsLink(profile, url);
-    LOG(WARNING) << "[ardia] DevTools link refused: no Ardia window of its profile can show it";
+    LOG(WARNING) << "[ardia] DevTools link refused: no Solstice window of its profile can show it";
   };
   ardiacore::InstallLinuxAutoplayPolicy();
   ardiacore::InstallLinuxWebStore(
