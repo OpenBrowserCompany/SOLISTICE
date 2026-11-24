@@ -328,7 +328,7 @@ test("a batch close whose topmost row is a split goes above that split before ta
   assert.equal(shown(first.w), "c", "nothing above: the split's surviving pane");
 });
 
-test("closes Ardia makes by itself, like a finished sign-in tab, keep today's pick in Tab above mode", () => {
+test("closes Solstice makes by itself, like a finished sign-in tab, keep today's pick in Tab above mode", () => {
   const { w, ids: [a, , c] } = windowWith("tabAbove", "a", "b", "c", "d");
   S().activate(a);
   S().activate(c);
@@ -485,7 +485,7 @@ test("closing or deleting the group in front goes through Tab above and never sh
     S().activate(g1);
     S().updateGroup(hidden, { collapsed: true });
     S()[action](g, user ? userClose(S().groups[g].tabIds, you()) : undefined);
-    assert.equal(shown(w), expected, `${action} ${user ? "by you" : "by Ardia"}`);
+    assert.equal(shown(w), expected, `${action} ${user ? "by you" : "by Solstice"}`);
   }
 });
 
@@ -612,7 +612,7 @@ test("moving the group in front to the Bookmarks Bar goes through Tab above and 
     S().activate(g1);
     S().updateGroup(hidden, { collapsed: true });
     S().moveGroupToBookmarksBar(g, user ? userClose(S().groups[g].tabIds, you()) : undefined);
-    assert.equal(shown(w), expected, user ? "from the group menu" : "by Ardia");
+    assert.equal(shown(w), expected, user ? "from the group menu" : "by Solstice");
   }
 });
 
@@ -703,7 +703,7 @@ test("Delete Group from the menu decides Tab above before the shared-folder conf
   S().activate(g1);
   const profileId = S().groups[g].profileId;
   const key = pinKeyOf(S().groups[g]);
-  bindFolder(profileId, key, "/scratch/Ardia Shared/Team", { device: 1, inode: 9 });
+  bindFolder(profileId, key, "/scratch/Solstice Shared/Team", { device: 1, inode: 9 });
   menus.showMenu = () => Promise.resolve("delete");
   dialogs.confirm = async () => (S().updateSettings({ afterClosingTab: "previouslyActive" }), { confirmed: true, suppressed: false });
   try {

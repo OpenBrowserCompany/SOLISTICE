@@ -52,7 +52,7 @@ test("the sidebar's New Tab row, a group's New Tab and a new window open it too"
   assert.equal(S().tabs[id].url, "https://start.example.org/home", "a group's New Tab");
 });
 
-test("links, typed addresses and Little Ardia keep their own address", () => {
+test("links, typed addresses and Little Solstice keep their own address", () => {
   reset({ newTabUrl: "example.com" });
   const w = S().createWindow({ url: "https://a.com/" });
   const id = S().newTab(w, { url: "https://b.com/", newTabCommand: true });
@@ -65,8 +65,8 @@ test("links, typed addresses and Little Ardia keep their own address", () => {
   assert.equal(S().tabs[blank].url, "", "a tab made by the app, not by New Tab, stays empty");
 });
 
-test("an address that isn't one, or Ardia's own New Tab or Settings, falls back to the New Tab page", () => {
-  for (const newTabUrl of ["", "   ", "hello world", "javascript:alert(1)", "ardia://newtab", "ardia://settings/tabs"]) {
+test("an address that isn't one, or Solstice's own New Tab or Settings, falls back to the New Tab page", () => {
+  for (const newTabUrl of ["", "   ", "hello world", "javascript:alert(1)", "solstice://newtab", "solstice://settings/tabs"]) {
     reset({ newTabUrl });
     assert.equal(customNewTabUrl(S().settings), undefined, newTabUrl);
     const w = S().createWindow({ url: "https://a.com/" });
@@ -75,14 +75,14 @@ test("an address that isn't one, or Ardia's own New Tab or Settings, falls back 
   }
 });
 
-test("only web addresses and Ardia's own pages open as the New Tab page: Chrome's debug and internal pages and app links fall back", () => {
-  for (const newTabUrl of ["chrome://quit", "chrome://restart", "chrome://inducebrowsercrashforrealz", "chrome://crash", "chrome://kill", "chrome://hang", "chrome://flags", "chrome://settings", "chrome://newtab", "about:quit", "about:crash", "ardia://quit", "view-source:https://a.com/", "mailto:me@example.com", "tel:123", "slack://open", "facetime:me@example.com", "file:///etc/hosts", "data:text/html,hi", "ftp://example.com/"]) {
+test("only web addresses and Solstice's own pages open as the New Tab page: Chrome's debug and internal pages and app links fall back", () => {
+  for (const newTabUrl of ["chrome://quit", "chrome://restart", "chrome://inducebrowsercrashforrealz", "chrome://crash", "chrome://kill", "chrome://hang", "chrome://flags", "chrome://settings", "chrome://newtab", "about:quit", "about:crash", "solstice://quit", "view-source:https://a.com/", "mailto:me@example.com", "tel:123", "slack://open", "facetime:me@example.com", "file:///etc/hosts", "data:text/html,hi", "ftp://example.com/"]) {
     reset({ newTabUrl });
     assert.equal(customNewTabUrl(S().settings), undefined, newTabUrl);
     const w = S().createWindow();
     assert.equal(shownUrl(w), "", newTabUrl);
   }
-  for (const [newTabUrl, url] of [["example.com", "https://example.com"], ["http://127.0.0.1:8765/opener.html", "http://127.0.0.1:8765/opener.html"], ["ardia://history", "ardia://history"], ["chrome://bookmarks", "ardia://bookmarks"], ["about:blank", "about:blank"]]) {
+  for (const [newTabUrl, url] of [["example.com", "https://example.com"], ["http://127.0.0.1:8765/opener.html", "http://127.0.0.1:8765/opener.html"], ["solstice://history", "solstice://history"], ["chrome://bookmarks", "solstice://bookmarks"], ["about:blank", "about:blank"]]) {
     reset({ newTabUrl });
     assert.equal(customNewTabUrl(S().settings), url, newTabUrl);
   }
