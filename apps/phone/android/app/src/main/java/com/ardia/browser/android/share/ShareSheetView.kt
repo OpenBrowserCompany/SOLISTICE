@@ -1,4 +1,4 @@
-package com.ardia.browser.android.share
+package com.openbrowsercompany.solstice.android.share
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
@@ -53,8 +53,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.ardia.browser.android.R
-import com.ardia.browser.android.system.SystemDevice
+import com.openbrowsercompany.solstice.android.R
+import com.openbrowsercompany.solstice.android.system.SystemDevice
 import com.ardia.design.ArdiaLogoMark
 import com.ardia.design.ArdiaSymbols
 import com.ardia.design.ArdiaThemeState

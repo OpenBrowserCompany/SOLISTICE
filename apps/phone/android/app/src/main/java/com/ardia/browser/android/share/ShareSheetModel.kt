@@ -1,4 +1,4 @@
-package com.ardia.browser.android.share
+package com.openbrowsercompany.solstice.android.share
 
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -6,9 +6,9 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.ardia.appmodel.SystemLink
-import com.ardia.browser.android.system.SystemDevice
-import com.ardia.browser.android.system.SystemSnapshot
-import com.ardia.browser.android.system.SystemTab
+import com.openbrowsercompany.solstice.android.system.SystemDevice
+import com.openbrowsercompany.solstice.android.system.SystemSnapshot
+import com.openbrowsercompany.solstice.android.system.SystemTab
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package com.ardia.browser.android.share
+package com.openbrowsercompany.solstice.android.share
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
@@ -12,9 +12,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.ardia.browser.android.MainActivity
-import com.ardia.browser.android.system.SystemDevice
-import com.ardia.browser.android.system.SystemStore
+import com.openbrowsercompany.solstice.android.MainActivity
+import com.openbrowsercompany.solstice.android.system.SystemDevice
+import com.openbrowsercompany.solstice.android.system.SystemStore
 import com.ardia.design.ArdiaTheme
 import com.ardia.phone.PhoneBrowsingSource
 import com.ardia.phone.ShareSends
