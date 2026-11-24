@@ -15,7 +15,7 @@
 #include "LaunchConfig.h"
 #include "Paths.h"
 
-namespace Ardia {
+namespace Solstice {
 
 REACT_STRUCT(FileDropAreaFrame)
 struct FileDropAreaFrame {

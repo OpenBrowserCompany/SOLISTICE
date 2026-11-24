@@ -15,7 +15,7 @@
 #include "Paths.h"
 #include "WindowManager.h"
 
-namespace Ardia::Menus {
+namespace Solstice::Menus {
 
 struct FocusHold {
   static constexpr size_t kCapacity = 64;

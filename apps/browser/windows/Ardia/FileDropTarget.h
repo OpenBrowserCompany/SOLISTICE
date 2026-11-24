@@ -23,7 +23,7 @@
 #pragma comment(lib, "comctl32.lib")
 #pragma comment(lib, "ole32.lib")
 
-namespace Ardia::FileDropParts {
+namespace Solstice::FileDropParts {
 
 struct DropArea {
   std::string key;
