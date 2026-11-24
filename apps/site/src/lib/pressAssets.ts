@@ -1,42 +1,17 @@
 import { readFileSync } from "node:fs";
 import sharp from "sharp";
-import { COLOURS, FACTS, LONG, SHORT, SHOTS, SITE, ZIP_NAME, colour } from "../data/press";
+import { COLOURS, FACTS, LONG, SHORT, SHOTS, SITE, ZIP_NAME } from "../data/press";
 import { zip } from "./zip";
 
-const repoRoot = `${process.cwd()}/../..`;
 const siteRoot = process.cwd();
 
-const markSource = readFileSync(`${siteRoot}/src/assets/ardia-mark.svg`, "utf8");
-const markBox = markSource.match(/viewBox="([^"]+)"/)![1]!;
-const markPath = (id: string) => markSource.match(new RegExp(`<path id="${id}" d="([^"]+)"`))![1]!;
-
-const oneColourMark = (fill: string) => {
-  const [x, y, width, height] = markBox.split(" ");
-  const seam = `<mask id="seam" maskUnits="userSpaceOnUse" x="${x}" y="${y}" width="${width}" height="${height}"><rect x="${x}" y="${y}" width="${width}" height="${height}" fill="#fff"/><path d="${markPath("front")}" fill="#000" stroke="#000" stroke-width="44" stroke-linejoin="round"/></mask>`;
-  return markSource
-    .replace(/<path id="back" d="([^"]+)" fill="[^"]+"\/>/, `<defs>${seam}</defs><path id="back" d="$1" fill="${fill}" mask="url(#seam)"/>`)
-    .replace(/fill="#[0-9A-Fa-f]{6}"/g, `fill="${fill}"`);
-};
-
-export const MARK_SVGS: Record<string, string> = {
-  "mark-colour": markSource,
-  "mark-black": oneColourMark(colour("Ink")),
-  "mark-white": oneColourMark("#FFFFFF"),
-};
-
-const svgToPng = (svg: string) => sharp(Buffer.from(svg), { density: 144 }).resize({ width: 2048 }).png({ compressionLevel: 9 }).toBuffer();
-
 const builders: Record<string, () => Promise<Buffer> | Buffer> = {
-  "ardia-app-icon.png": () =>
-    readFileSync(`${repoRoot}/apps/browser/macos/Ardia-macOS/Assets.xcassets/AppIcon.appiconset/icon_512x512_2x.png`),
+  "ardia-app-icon.png": () => readFileSync(`${siteRoot}/src/assets/app-icon.png`),
   "ardia-mark-painted.png": () =>
     sharp(`${siteRoot}/src/assets/ardia-mark.png`).trim({ threshold: 16 }).png({ compressionLevel: 9 }).toBuffer(),
-  ...Object.fromEntries(
-    Object.entries(MARK_SVGS).flatMap(([id, svg]) => [
-      [`ardia-${id}.svg`, () => Buffer.from(svg)],
-      [`ardia-${id}.png`, () => svgToPng(svg)],
-    ]),
-  ),
+  "ardia-mark-colour.png": () => readFileSync(`${siteRoot}/src/assets/mark-colour.png`),
+  "ardia-mark-black.png": () => readFileSync(`${siteRoot}/src/assets/mark-black.png`),
+  "ardia-mark-white.png": () => readFileSync(`${siteRoot}/src/assets/mark-white.png`),
   ...Object.fromEntries(
     SHOTS.map(({ id }) => [
       `ardia-screenshot-${id}.jpg`,
@@ -55,7 +30,7 @@ export const pressFile = (name: string) => {
 
 const readme = () =>
   [
-    "Ardia press kit",
+    "The Open Browser Company press kit",
     "",
     SHORT,
     "",
@@ -66,8 +41,8 @@ const readme = () =>
     "Colors",
     ...COLOURS.map((c) => `${c.name} ${c.hex}: ${c.use}`),
     "",
-    "Use the logos as they are: no redrawing, recoloring, stretching or effects.",
-    "Ardia isn’t affiliated with Google or The Browser Company. Arc, Dia and Chrome are their trademarks.",
+    "Use the marks as they are: no redrawing, recoloring, stretching or effects.",
+    "The Open Browser Company isn’t affiliated with Google or The Browser Company. Arc, Dia and Chrome are their trademarks.",
     `More at https://${SITE}/press`,
     "",
   ].join("\n");

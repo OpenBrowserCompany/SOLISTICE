@@ -38,7 +38,7 @@ export const VOICES: Voice[] = [
   },
   {
     id: "jsmasterypro",
-    quote: "Just switched over from Arc to Ardia browser and I'm loving it so far!",
+    quote: "Just switched over from Arc to Solstice browser and I'm loving it so far!",
     name: "JavaScript Mastery",
     handle: "@jsmasterypro",
     source: "x",
@@ -59,7 +59,7 @@ export const VOICES: Voice[] = [
   {
     id: "itsomsarraf",
     quote:
-      "Just switched to Ardia, it's so cool. Onboarding was top notch, really polished product",
+      "Just switched to Solstice, it's so cool. Onboarding was top notch, really polished product",
     name: "Om Sarraf",
     handle: "@itsOmSarraf_",
     source: "x",
@@ -70,7 +70,7 @@ export const VOICES: Voice[] = [
   {
     id: "sprice",
     quote:
-      "Ardia is the most beautiful software experience I’ve had in ages. Such a delightful export/transition from Dia.",
+      "Solstice is the most beautiful software experience I’ve had in ages. Such a delightful export/transition from Dia.",
     name: "Shawn Price",
     handle: "@sprice",
     source: "x",
