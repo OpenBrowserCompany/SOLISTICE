@@ -29,7 +29,7 @@ const tick = "M3 13.5c2.2 1.4 4.3 3.6 6.4 6.6C13 13 17.6 7.4 25 2.6";
           <div class="bb-title">
             <p class="label kicker">Measured before every release</p>
             <Title class="poster bb-heading" id="bench-title" data-reveal>
-              {page && <span class="visually-hidden">Ardia vs Dia vs Helium: </span>}Benchmarks.
+              {page && <span class="visually-hidden">Solstice vs Dia vs Helium: </span>}Benchmarks.
             </Title>
             {bench.sample && <p class="label sample">Sample numbers. Not measured. Dev only.</p>}
           </div>
@@ -46,7 +46,7 @@ const tick = "M3 13.5c2.2 1.4 4.3 3.6 6.4 6.6C13 13 17.6 7.4 25 2.6";
                     {c.stamp}
                   </p>
                 ) : c.outcome === "win" ? (
-                  <svg class="tick" viewBox="0 0 28 24" width="24" height="21" role="img" aria-label="Ardia wins">
+                  <svg class="tick" viewBox="0 0 28 24" width="24" height="21" role="img" aria-label="Solstice wins">
                     <path d={tick} />
                   </svg>
                 ) : (
