@@ -54,7 +54,7 @@ const tableCell = (value) => String(value).replace(/\|/g, "\\|").replace(/[\r\n]
 export function issueFor(report, dashboardUrl) {
   const version = report.source === "cli"
     ? `CLI ${report.cli_version}${report.app_version ? ` (app ${report.app_version})` : ""}`
-    : `Ardia ${report.app_version}${report.app_build ? ` (${report.app_build})` : ""}${report.channel ? ` ${report.channel}` : ""}`;
+    : `Solstice ${report.app_version}${report.app_build ? ` (${report.app_build})` : ""}${report.channel ? ` ${report.channel}` : ""}`;
   const rows = [["Kind", report.kind], ["Version", version], ["macOS", report.os_version ?? "unknown"], ["Reference", report.id]];
   const body = [
     scrubForIssue(report.description),
@@ -147,7 +147,7 @@ export function createService({ store: rawStore, events: rawEvents, issues: rawI
 
   const surfaceOf = (req) => {
     const surface = SURFACE_BY_KEY.get(req.headers["x-ardia-key"]);
-    if (!surface) throw new HttpError(403, "bad_key", "X-Ardia-Key is missing or unknown");
+    if (!surface) throw new HttpError(403, "bad_key", "X-Solstice-Key is missing or unknown");
     return surface;
   };
 

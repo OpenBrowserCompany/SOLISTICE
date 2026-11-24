@@ -133,7 +133,7 @@ export function otlpEvents(host, port = 4318) {
     async send(id, ingest, body) {
       const res = await fetch(`http://${host}:${port}/v1/logs`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", "X-Ardia-Ingest": ingest },
+        headers: { "Content-Type": "application/json", "X-Solstice-Ingest": ingest },
         body: JSON.stringify(body),
         signal: AbortSignal.timeout(10_000),
       });

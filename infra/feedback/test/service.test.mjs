@@ -48,7 +48,7 @@ const report = (over = {}) => ({
 const post = (url, body, { key = APP_INGEST_KEY, token, type = "application/json" } = {}) =>
   fetch(url, {
     method: "POST",
-    headers: { ...(type ? { "Content-Type": type } : {}), ...(key ? { "X-Ardia-Key": key } : {}), ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+    headers: { ...(type ? { "Content-Type": type } : {}), ...(key ? { "X-Solstice-Key": key } : {}), ...(token ? { Authorization: `Bearer ${token}` } : {}) },
     body: typeof body === "string" ? body : JSON.stringify(body),
   });
 const put = (url, token, body, headers = {}) => fetch(url, { method: "PUT", headers: { Authorization: `Bearer ${token}`, ...headers }, body });
