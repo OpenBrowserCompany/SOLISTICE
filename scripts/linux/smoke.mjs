@@ -13,9 +13,9 @@ import { connectCdp, evaluate } from "../../apps/linux/scripts/acceptance/lib/cd
 import { errorText, js, nonce, until, withDeadline } from "../../apps/linux/scripts/acceptance/lib/util.mjs";
 import { selfieKeys } from "./ubo-seed.mjs";
 
-export const USAGE = `Usage: node scripts/linux/smoke.mjs --package <Ardia-*linux-x64*.tar.xz|.deb|.AppImage> --results <dir> [--timeout-ms N] [--keep] [--allow-old-engine]
+export const USAGE = `Usage: node scripts/linux/smoke.mjs --package <Solstice-*linux-x64*.tar.xz|.deb|.AppImage> --results <dir> [--timeout-ms N] [--keep] [--allow-old-engine]
 
-Strict smoke gate for a packaged Ardia Linux build. It extracts the tarball into
+Strict smoke gate for a packaged Solstice Linux build. It extracts the tarball into
 a temporary folder, launches ardia/bin/ardia headless (ozone headless, SwiftShader,
 ARDIA_BACKGROUND=1, a throwaway profile and HOME, the sandbox on) without
 --ardia-ui-dir, and checks:
@@ -110,7 +110,7 @@ const CLI_CONTROL_CAPABILITIES = ["engine.setCliControl", "ArdiaCli.install", "A
 export const USER_SCRIPTS_CAPABILITIES = ["ArdiaUserScripts.watch", "ArdiaUserScripts.read", "ArdiaUserScripts.readStatus", "ArdiaUserScripts.writeStatus"];
 export const WINDOW_STATE_CAPABILITIES = ["ArdiaShell.windowButtonLayout", "ArdiaShell.windowState"];
 export const UNKNOWN_WINDOW_ERROR = "No such native window";
-export const SCRIPT_NAME = "Ardia smoke script";
+export const SCRIPT_NAME = "Solstice smoke script";
 export const SCRIPT_TITLE_PREFIX = "Scripted: ";
 
 export function userScriptSource() {
@@ -472,7 +472,7 @@ export function pngInk(buffer) {
 }
 
 export function fixturePage(token) {
-  return `<!doctype html><html><head><meta charset="utf-8"><title>Ardia smoke ${token}</title></head><body style="margin:0;background:#fff"><h1 id="smoke-marker" style="font:48px sans-serif;margin:40px">Ardia smoke ${token}</h1></body></html>`;
+  return `<!doctype html><html><head><meta charset="utf-8"><title>Solstice smoke ${token}</title></head><body style="margin:0;background:#fff"><h1 id="smoke-marker" style="font:48px sans-serif;margin:40px">Solstice smoke ${token}</h1></body></html>`;
 }
 
 function run(command, args, { timeout = 60000, env, cwd } = {}) {
@@ -674,7 +674,7 @@ class Smoke {
           problems.push(`the tab's screenshot could not be read: ${errorText(error)}`);
         }
       } else problems.push(`Page.captureScreenshot failed: ${shot.error}`);
-      if (page.text !== `Ardia smoke ${this.fixture.token}`) problems.push(`the marker reads ${JSON.stringify(page.text)}`);
+      if (page.text !== `Solstice smoke ${this.fixture.token}`) problems.push(`the marker reads ${JSON.stringify(page.text)}`);
       if (page.host !== "undefined") problems.push(`typeof window.__ardiaHost is ${page.host} in the web page`);
       if (!(page.rect?.width > 0 && page.rect?.height > 0)) problems.push(`the marker has no size: ${JSON.stringify(page.rect)}`);
       if (!this.fixture.requests.some((r) => r.url?.startsWith("/smoke"))) problems.push("the fixture server saw no request");
@@ -734,14 +734,14 @@ class Smoke {
 
   async quit(app, shell) {
     await shell.command("quit");
-    await until(() => app.exited, { timeout: 30000, label: "Ardia to quit after the quit command" }).catch(async (error) => {
+    await until(() => app.exited, { timeout: 30000, label: "Solstice to quit after the quit command" }).catch(async (error) => {
       const log = await app.logText();
       const prompt = log.split("\n").filter((line) => line.includes("[ardiacore] dialog (background run")).slice(-2);
       throw new Error(`${error.message}${prompt.length ? `; ${prompt.join(" | ")}` : ""}`);
     });
     const code = app.exitCode;
     await this.stopApp(app);
-    if (code !== 0) throw new Error(`Ardia exited with ${code} after the quit command`);
+    if (code !== 0) throw new Error(`Solstice exited with ${code} after the quit command`);
     return code;
   }
 
@@ -759,7 +759,7 @@ class Smoke {
     } finally {
       await session.close().catch(() => {});
     }
-    if (text !== `Ardia smoke ${this.fixture.token}`) throw new Error(`the restored tab reads ${JSON.stringify(text)}`);
+    if (text !== `Solstice smoke ${this.fixture.token}`) throw new Error(`the restored tab reads ${JSON.stringify(text)}`);
     return { app, shell, detail: { exitCode, restoredTab: tab.id, sameTab: tab.id === first.tabId, text, reloaded: this.fixture.requests.length > before } };
   }
 
@@ -998,7 +998,7 @@ class Smoke {
       let last = null;
       await until(async () => (last = await windows()).code === 0, { timeout: 30000, interval: 500, label: "ardia windows to succeed once control is on", abort }).catch((error) => { throw new Error(`${error.message}; last ${JSON.stringify(last && brief(last))}`); });
       steps.push({ step: "windows once control is on", ...brief(last) });
-      const fixtureTitle = `Ardia smoke ${this.fixture.token}`;
+      const fixtureTitle = `Solstice smoke ${this.fixture.token}`;
       const opened = await this.browse(profile, "smoke", ["open", this.fixture.url]);
       steps.push({ step: "browse open", ...brief(opened) });
       if (opened.code !== 0) throw new Error(`ardia browse open exited ${opened.code} and printed ${JSON.stringify(brief(opened).out)}`);
@@ -1027,7 +1027,7 @@ class Smoke {
     if (!this.cliBin) throw new Error("cli-install didn't leave a working ardia to install a script with");
     const steps = [];
     const brief = (result) => ({ code: result.code, out: (result.stdout + result.stderr).trim().slice(-400) });
-    const fixtureTitle = `Ardia smoke ${this.fixture.token}`;
+    const fixtureTitle = `Solstice smoke ${this.fixture.token}`;
     const scriptedTitle = `${SCRIPT_TITLE_PREFIX}${fixtureTitle}`;
     const script = join(this.work, "smoke.user.js");
     await writeFile(script, userScriptSource());
@@ -1052,7 +1052,7 @@ class Smoke {
       if (install.code !== 0 || !/: loaded$/m.test(install.stdout)) throw new Error(`ardia scripts install exited ${install.code} and printed ${JSON.stringify(brief(install).out)}, not a loaded profile`);
       const listed = await this.ardia(["scripts", "list", "--data-dir", profile], { timeout: 30000 });
       steps.push({ step: "scripts list", ...brief(listed) });
-      if (listed.code !== 0 || !listed.stdout.includes(SCRIPT_NAME) || !/reported by Ardia/.test(listed.stdout)) throw new Error(`ardia scripts list exited ${listed.code} and printed ${JSON.stringify(brief(listed).out)}, not the reported script`);
+      if (listed.code !== 0 || !listed.stdout.includes(SCRIPT_NAME) || !/reported by Solstice/.test(listed.stdout)) throw new Error(`ardia scripts list exited ${listed.code} and printed ${JSON.stringify(brief(listed).out)}, not the reported script`);
       let seen = await title("title with the script installed");
       if (seen !== scriptedTitle) throw new Error(`the fixture's title reads ${JSON.stringify(seen)} with the script installed, not ${JSON.stringify(scriptedTitle)}`);
       const removed = await this.ardia(["scripts", "uninstall", SCRIPT_NAME, "--data-dir", profile], { timeout: 90000 });
@@ -1097,7 +1097,7 @@ class Smoke {
       return this.shellUi(shell);
     }, { timeout: 120000 });
     if (!first) {
-      for (const name of [...ASSERTIONS.slice(2, 7), "app-version", "window-state"]) this.skip(name, `Ardia did not start: ${launched.detail.error}`);
+      for (const name of [...ASSERTIONS.slice(2, 7), "app-version", "window-state"]) this.skip(name, `Solstice did not start: ${launched.detail.error}`);
     } else {
       await this.record("bootstrap", () => this.bootstrap(first.shell));
       this.capabilities = await first.shell.eval("globalThis.__ardiaHost?.bootstrap?.capabilities ?? []").catch(() => null);
@@ -1120,9 +1120,9 @@ class Smoke {
     }
     await this.record("staged-install", () => this.stagedInstall(), { timeout: 150000 });
     await this.record("cli-install", () => this.cliInstall(), { timeout: 240000 });
-    if (!first && this.hasCli) this.skip("cli-control", `Ardia did not start: ${launched.detail.error}`);
+    if (!first && this.hasCli) this.skip("cli-control", `Solstice did not start: ${launched.detail.error}`);
     else await this.record("cli-control", () => this.cliControl(), { timeout: 240000 });
-    if (!first && this.hasCli) this.skip("cli-scripts", `Ardia did not start: ${launched.detail.error}`);
+    if (!first && this.hasCli) this.skip("cli-scripts", `Solstice did not start: ${launched.detail.error}`);
     else await this.record("cli-scripts", () => this.cliScripts(), { timeout: 300000 });
   }
 

@@ -29,7 +29,7 @@ function keyPair(dir, name = "key") {
 function packages(dir, version = VERSION, formats = ["deb", "tar.xz", "AppImage"]) {
   const files = {};
   for (const extension of formats) {
-    const name = `Ardia-${version}-linux-x64.${extension}`;
+    const name = `Solstice-${version}-linux-x64.${extension}`;
     const bytes = Buffer.from(`package ${extension} ${"x".repeat(extension.length * 100)}`);
     writeFileSync(join(dir, name), bytes);
     files[extension] = { name, bytes, digest: createHash("sha256").update(bytes).digest("hex") };
@@ -54,7 +54,7 @@ test("the CLI writes the exact manifest and a signature openssl pkeyutl -rawin v
   const keys = keyPair(dir);
   const files = packages(dir);
   const output = execFileSync("node", [SCRIPT, "--key", keys.privatePath, "--public-key", keys.publicPath, "--dir", dir, "--version", VERSION], { encoding: "utf8" });
-  const manifestPath = join(dir, `Ardia-${VERSION}-linux-update.txt`);
+  const manifestPath = join(dir, `Solstice-${VERSION}-linux-update.txt`);
   const signaturePath = `${manifestPath}.sig`;
   assert.deepEqual(output.trim().split("\n"), [manifestPath, signaturePath]);
   assert.equal(
@@ -87,7 +87,7 @@ test("a format missing from the folder has no line, and an empty folder is refus
   const manifest = (await buildManifest(dir, "1.2.3")).toString("ascii");
   assert.equal(manifest.split("\n")[2], `tarball ${files["tar.xz"].name} ${files["tar.xz"].digest} ${files["tar.xz"].bytes.length}`);
   assert.doesNotMatch(manifest, /^deb /m);
-  await assert.rejects(buildManifest(dir, "1.2.4"), /no Ardia-1\.2\.4-linux-x64/);
+  await assert.rejects(buildManifest(dir, "1.2.4"), /no Solstice-1\.2\.4-linux-x64/);
 });
 
 test("bad versions, symlinked packages and stale .sha256 files are refused", async (t) => {
@@ -96,11 +96,11 @@ test("bad versions, symlinked packages and stale .sha256 files are refused", asy
   for (const bad of ["0.2.48-beta.1", "0.2", "../0.2.48", "0.2.48 ", "0.2.48\nversion 9.9.9"]) {
     await assert.rejects(buildManifest(dir, bad), /bad version/, bad);
   }
-  writeFileSync(join(dir, `Ardia-${VERSION}-linux-x64.deb.sha256`), `${"0".repeat(64)}  Ardia-${VERSION}-linux-x64.deb\n`);
+  writeFileSync(join(dir, `Solstice-${VERSION}-linux-x64.deb.sha256`), `${"0".repeat(64)}  Solstice-${VERSION}-linux-x64.deb\n`);
   await assert.rejects(buildManifest(dir, VERSION), /says otherwise/);
-  rmSync(join(dir, `Ardia-${VERSION}-linux-x64.deb.sha256`));
-  rmSync(join(dir, `Ardia-${VERSION}-linux-x64.deb`));
-  symlinkSync(join(dir, `Ardia-${VERSION}-linux-x64.AppImage`), join(dir, `Ardia-${VERSION}-linux-x64.deb`));
+  rmSync(join(dir, `Solstice-${VERSION}-linux-x64.deb.sha256`));
+  rmSync(join(dir, `Solstice-${VERSION}-linux-x64.deb`));
+  symlinkSync(join(dir, `Solstice-${VERSION}-linux-x64.AppImage`), join(dir, `Solstice-${VERSION}-linux-x64.deb`));
   await assert.rejects(buildManifest(dir, VERSION), /not a regular file/);
 });
 
@@ -111,18 +111,18 @@ test("a key that isn't the installs' key is refused and writes nothing", async (
   const other = keyPair(dir, "other");
   await assert.rejects(writeUpdate({ dir, version: VERSION, keyPath: keys.privatePath, publicKeyPath: other.publicPath }), /doesn't match/);
   await assert.rejects(writeUpdate({ dir, version: VERSION, keyPath: keys.privatePath }), /doesn't match/);
-  assert.equal(existsSync(join(dir, `Ardia-${VERSION}-linux-update.txt`)), false);
-  assert.equal(existsSync(join(dir, `Ardia-${VERSION}-linux-update.txt.sig`)), false);
+  assert.equal(existsSync(join(dir, `Solstice-${VERSION}-linux-update.txt`)), false);
+  assert.equal(existsSync(join(dir, `Solstice-${VERSION}-linux-update.txt.sig`)), false);
 });
 
 test("--unsigned writes only the manifest and clears an old signature", async (t) => {
   const dir = scratch(t);
   packages(dir);
-  writeFileSync(join(dir, `Ardia-${VERSION}-linux-update.txt.sig`), "stale");
+  writeFileSync(join(dir, `Solstice-${VERSION}-linux-update.txt.sig`), "stale");
   const written = await writeUpdate({ dir, version: VERSION, unsigned: true });
   assert.equal(written.signaturePath, null);
   assert.ok(existsSync(written.manifestPath));
-  assert.equal(existsSync(join(dir, `Ardia-${VERSION}-linux-update.txt.sig`)), false);
+  assert.equal(existsSync(join(dir, `Solstice-${VERSION}-linux-update.txt.sig`)), false);
 });
 
 test("arguments need a folder, a version and exactly one of --key and --unsigned", () => {

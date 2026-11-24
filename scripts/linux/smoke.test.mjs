@@ -101,7 +101,7 @@ test("the packaged uBlock Origin saves its engine soon after a launch and waits 
 
 test("the packaged uBlock Origin carries a seed that its start sequence loads", () => {
   const start = "µb.isReadyPromise = (async function start() {\n    try {\n        await ardiaSeedFromPackage();\n";
-  const keys = ["Main", "NetFilteringEngine", "ExtFilteringEngine"].map((component) => `cache/selfie/staticArdia2${component}`);
+  const keys = ["Main", "NetFilteringEngine", "ExtFilteringEngine"].map((component) => `cache/selfie/staticSolstice-2${component}`);
   const storageSource = keys.map((key) => `io.toCache('${key.slice("cache/".length)}', {});`).join("\n");
   const base = { version: "1.76.4.29", selectedFilterLists: ["user-filters", "easylist"] };
   const seed = JSON.stringify({ storage: { ...base, ...Object.fromEntries(keys.map((key) => [key, "saved"])) } });
@@ -112,10 +112,10 @@ test("the packaged uBlock Origin carries a seed that its start sequence loads", 
 });
 
 test("the gate takes a tarball, a .deb or an AppImage and refuses anything else", () => {
-  assert.equal(packageFormat("/x/Ardia-0.2.47-linux-x64.tar.xz"), "tar");
-  assert.equal(packageFormat("/x/Ardia-0.2.47-linux-x64.deb"), "deb");
-  assert.equal(packageFormat("/x/Ardia-0.2.47-linux-x64.AppImage"), "appimage");
-  assert.equal(packageFormat("/x/Ardia.zip"), null);
+  assert.equal(packageFormat("/x/Solstice-0.2.47-linux-x64.tar.xz"), "tar");
+  assert.equal(packageFormat("/x/Solstice-0.2.47-linux-x64.deb"), "deb");
+  assert.equal(packageFormat("/x/Solstice-0.2.47-linux-x64.AppImage"), "appimage");
+  assert.equal(packageFormat("/x/Solstice.zip"), null);
   assert.equal(parseArgs(["--package", "a", "--results", "b"]).format, undefined);
   assert.equal(parseArgs(["--package", "a.deb", "--results", "b"]).format, "deb");
 });
