@@ -50,6 +50,6 @@ test("focusIfUnfocused gives the page the keyboard unless a shell field has it, 
   assert.equal(await focusPageIfShellUnfocused(focusPage, null), true);
   assert.deepEqual(focused, ["page", "page"]);
   assert.deepEqual(requests, ["request", "request"]);
-  assert.equal(await focusPageIfShellUnfocused(() => Promise.reject(new Error("Ardia tab is not mounted")), body), false, "a failed focus answers false instead of rejecting");
+  assert.equal(await focusPageIfShellUnfocused(() => Promise.reject(new Error("Solstice tab is not mounted")), body), false, "a failed focus answers false instead of rejecting");
   stop();
 });

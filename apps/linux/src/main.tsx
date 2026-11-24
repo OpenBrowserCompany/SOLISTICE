@@ -106,7 +106,7 @@ function FirstWindowCommitted({ typeahead }: { typeahead: boolean }) {
 
 async function start() {
   setSharedCommands((command) => Object.hasOwn(COMMANDS, command) && !LINUX_APP_COMMANDS.has(command));
-  if (!ardiaHost) throw new Error("The Linux desktop UI requires an Ardia native host");
+  if (!ardiaHost) throw new Error("The Linux desktop UI requires an Solstice native host");
   setNewTabPrewarm(false);
   const { windowId, profileId } = ardiaHost.bootstrap;
   const utility = isLinuxUtility(windowId);
@@ -203,6 +203,6 @@ void start().catch((error) => {
   const root = document.getElementById("root");
   if (root) {
     root.setAttribute("role", "alert");
-    root.textContent = `Ardia could not start: ${error instanceof Error ? error.message : String(error)}`;
+    root.textContent = `Solstice could not start: ${error instanceof Error ? error.message : String(error)}`;
   }
 });
