@@ -345,7 +345,7 @@ void OpenSystemPanel(NSView *page, void (^done)(NSDictionary *result)) {
 }
 
 + (NSString *)otpauthHandlerName {
-  return AppName(VerificationCodeHandler([NSURL URLWithString:@"otpauth://totp/Ardia?secret=A"]));
+  return AppName(VerificationCodeHandler([NSURL URLWithString:@"otpauth://totp/Solstice?secret=A"]));
 }
 
 + (void)noteFieldFocus:(NSString *)field sequence:(double)sequence generation:(double)generation query:(NSString *)query owner:(id)owner {
