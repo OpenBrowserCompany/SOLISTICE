@@ -14,7 +14,7 @@ finger events with phases, then ~1.2 s of momentum, at 120 events/s) made in the
 (CGEvent → NSEvent → -[NSApplication sendEvent:], so they take AppKit's path, the swipe monitor included, without
 needing the event-posting permission that acperf postscroll does), over the sidebar or the top tab strip.
 
-  node apps/browser/scripts/perf/swipe-bench.mjs <Debug or Release Ardia.app> <scratch dir> --side <label>=<main.jsbundle> [--side …]
+  node apps/browser/scripts/perf/swipe-bench.mjs <Debug or Release Solstice.app> <scratch dir> --side <label>=<main.jsbundle> [--side …]
        [--profiles 1,2] [--tabs 30,100] [--layouts sidebar,top] [--cases sb-fwd,sb-back,top-back,top-fwd] [--reps 5]
        [--settle 1500] [--port 9621] [--out FILE.json]
 

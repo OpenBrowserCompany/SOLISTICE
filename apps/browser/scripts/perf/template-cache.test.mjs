@@ -83,17 +83,17 @@ test("store then look up: a hit copies the very template back, and a new build, 
 }));
 
 test("templates of a release build live with it in dist; anything else in the bench's out dir", () => {
-  assert.equal(defaultCacheDir("/r/dist/0.2.48/export/Ardia.app", "/o"), "/r/dist/0.2.48/bench/templates");
-  assert.equal(defaultCacheDir("/r/dist/0.2.49-rc/export/Ardia.app", "/o"), "/r/dist/0.2.49-rc/bench/templates");
-  assert.equal(defaultCacheDir("/tmp/dl/Ardia.app", "/o"), "/o/.templates");
-  assert.equal(defaultCacheDir("/r/build/export/Ardia.app", "/o"), "/o/.templates");
+  assert.equal(defaultCacheDir("/r/dist/0.2.48/export/Solstice.app", "/o"), "/r/dist/0.2.48/bench/templates");
+  assert.equal(defaultCacheDir("/r/dist/0.2.49-rc/export/Solstice.app", "/o"), "/r/dist/0.2.49-rc/bench/templates");
+  assert.equal(defaultCacheDir("/tmp/dl/Solstice.app", "/o"), "/o/.templates");
+  assert.equal(defaultCacheDir("/r/build/export/Solstice.app", "/o"), "/o/.templates");
 });
 
 test("uBO's version comes from the bundled extension's manifest", withDir((dir) => {
-  assert.equal(uboVersion(join(dir, "Ardia.app")), null);
-  mkdirSync(join(dir, "Ardia.app/Contents/Resources/Extensions/ublock"), { recursive: true });
-  writeFileSync(join(dir, "Ardia.app/Contents/Resources/Extensions/ublock/manifest.json"), JSON.stringify({ version: "1.62.0" }));
-  assert.equal(uboVersion(join(dir, "Ardia.app")), "1.62.0");
+  assert.equal(uboVersion(join(dir, "Solstice.app")), null);
+  mkdirSync(join(dir, "Solstice.app/Contents/Resources/Extensions/ublock"), { recursive: true });
+  writeFileSync(join(dir, "Solstice.app/Contents/Resources/Extensions/ublock/manifest.json"), JSON.stringify({ version: "1.62.0" }));
+  assert.equal(uboVersion(join(dir, "Solstice.app")), "1.62.0");
 }));
 
 test("the two sides' templates must carry the same startup component versions", () => {
