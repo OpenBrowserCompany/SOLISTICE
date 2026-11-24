@@ -10,7 +10,7 @@
 
 #pragma comment(lib, "dbghelp.lib")
 
-namespace Ardia {
+namespace Solstice {
 
 struct CrashLog {
   static void Install() noexcept {

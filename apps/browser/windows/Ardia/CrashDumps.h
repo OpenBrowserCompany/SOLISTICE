@@ -15,7 +15,7 @@
 #include <utility>
 #include <vector>
 
-namespace Ardia {
+namespace Solstice {
 namespace CrashDumps {
 
 constexpr uint32_t kSignature = 0x504d444d;
