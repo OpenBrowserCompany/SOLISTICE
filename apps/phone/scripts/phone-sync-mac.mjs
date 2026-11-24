@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// The Mac half of a sync test for an Android phone that has no Mac: a hidden Ardia for Mac on this Mac, syncing to
+// The Mac half of a sync test for an Android phone that has no Mac: a hidden Solstice for Mac on this Mac, syncing to
 // a folder here. phone-sync-relay.mjs, on the machine the phone is plugged into, mirrors that folder to the phone.
 //
 //   node apps/phone/scripts/phone-sync-mac.mjs start  [--work DIR] [--app APP] [--metro-port PORT] [--seed PROFILE_COPY]
@@ -32,7 +32,7 @@ import { fileURLToPath } from "node:url";
 import { attach, isAlive, launch, listenerPids, sleep } from "../../../scripts/lib/instance.mjs";
 
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
-const defaultApp = path.join(repo, "apps/browser/build-phone-sync-mac/Build/Products/Debug/Ardia.app");
+const defaultApp = path.join(repo, "apps/browser/build-phone-sync-mac/Build/Products/Debug/Solstice.app");
 
 function options(argv) {
   const found = { command: argv[0], work: "/tmp/ardia-phone-sync-mac", app: defaultApp, metroPort: 8099, keep: false, rest: [] };
@@ -64,7 +64,7 @@ export function appProblems(app, files = { source: nativeApiSource, js: nativeAp
   const wanted = /export const NATIVE_API_VERSION = (\d+);/.exec(fs.readFileSync(files.js, "utf8"))?.[1];
   const declared = /Constant\("apiVersion"\)\s*\{\s*\(\)\s*->\s*Int\s+in\s+(\d+)\s*\}/.exec(fs.readFileSync(files.source, "utf8"))?.[1];
   if (!fs.existsSync(app)) return [`no app at ${app}`];
-  const binaries = ["Contents/MacOS/Ardia.debug.dylib", "Contents/MacOS/Ardia"].map((name) => path.join(app, name)).filter((file) => fs.existsSync(file));
+  const binaries = ["Contents/MacOS/Solstice.debug.dylib", "Contents/MacOS/Solstice"].map((name) => path.join(app, name)).filter((file) => fs.existsSync(file));
   const builtAt = Math.max(0, ...binaries.map((file) => fs.statSync(file).mtimeMs));
   const changedAt = fs.statSync(files.source).mtimeMs;
   if (builtAt < changedAt) {

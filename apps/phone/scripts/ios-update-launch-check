@@ -10,7 +10,7 @@ Check that the Expo iPhone app starts React Native when it updates the SwiftUI a
 Installs the SwiftUI build on a booted simulator, launches it and sends it to the background so iOS
 saves its scene session, installs the Expo build over it, launches it and waits up to 30 s for
 Documents/SQLite/browser.db, which only React Native writes. Exits 0 when it appears, 1 when it
-doesn't, 2 when a step fails. The simulator's Ardia data is replaced. A simulator outside the default set, such as a
+doesn't, 2 when a step fails. The simulator's Solstice data is replaced. A simulator outside the default set, such as a
 Simlock lease, is reached with ARDIA_SIM_SET=<device set path> (for Simlock: ~/.simlock/devices/ios).
 EOF
 }
@@ -23,7 +23,7 @@ fi
 SIM=$1
 SWIFTUI=$2
 EXPO=$3
-ID=com.ardia.browser.ios
+ID=com.openbrowsercompany.solstice.ios
 simctl() { xcrun simctl ${ARDIA_SIM_SET:+--set "$ARDIA_SIM_SET"} "$@"; }
 
 simctl terminate "$SIM" "$ID" >/dev/null 2>&1

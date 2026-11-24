@@ -8,7 +8,7 @@
 //   node phone-sync-relay.mjs stop   [--serial SERIAL]
 //   node phone-sync-relay.mjs type-phrase [--serial SERIAL]
 //
-// start remembers the options, creates the phone folder (default /sdcard/Documents/Ardia Sync) and runs a pass
+// start remembers the options, creates the phone folder (default /sdcard/Documents/Solstice Sync) and runs a pass
 // every --every seconds (default 3) in the background, logging each copy and deletion. sync runs one pass now and
 // prints it; both remember the options, so later commands need only --serial, and both first write, read back, list
 // and delete a probe file on the phone, so a phone that doesn't behave fails before anything is copied. status says
@@ -289,7 +289,7 @@ function options(argv) {
   const savedFile = path.join(found.work, "relay.json");
   const saved = fs.existsSync(savedFile) ? JSON.parse(fs.readFileSync(savedFile, "utf8")) : {};
   const merged = { ...saved, ...Object.fromEntries(Object.entries(found).filter(([, v]) => v !== undefined)) };
-  return { ...merged, every: merged.every ?? 3, adb: merged.adb ?? "adb", phoneFolder: merged.phoneFolder ?? "/sdcard/Documents/Ardia Sync" };
+  return { ...merged, every: merged.every ?? 3, adb: merged.adb ?? "adb", phoneFolder: merged.phoneFolder ?? "/sdcard/Documents/Solstice Sync" };
 }
 
 const alive = (pid) => {
