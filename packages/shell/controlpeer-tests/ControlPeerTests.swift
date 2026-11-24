@@ -68,8 +68,8 @@ final class ControlPeerTests: XCTestCase {
 
   func testPolicy() {
     let now = Date(timeIntervalSince1970: 1_000_000)
-    let ours = ControlPeer(pid: 1, path: "/a/ardia", identifier: "ardia", signer: .team("U5L5T3NGVV"), developer: "Ardia", cdhash: "aa", hardened: true)
-    let oursSoft = ControlPeer(pid: 1, path: "/a/ardia", identifier: "ardia", signer: .team("U5L5T3NGVV"), developer: "Ardia", cdhash: "aa", hardened: false)
+    let ours = ControlPeer(pid: 1, path: "/a/ardia", identifier: "ardia", signer: .team("U5L5T3NGVV"), developer: "Solstice", cdhash: "aa", hardened: true)
+    let oursSoft = ControlPeer(pid: 1, path: "/a/ardia", identifier: "ardia", signer: .team("U5L5T3NGVV"), developer: "Solstice", cdhash: "aa", hardened: false)
     let other = ControlPeer(pid: 2, path: "/b/tool", identifier: "com.x.tool", signer: .team("XXXXXXXXXX"), developer: "X", cdhash: "bb", hardened: true)
     let unsigned = ControlPeer(pid: 3, path: "/c/tool", identifier: nil, signer: .other, developer: nil, cdhash: nil, hardened: false)
     let policy = ControlPeerPolicy(ownTeam: "U5L5T3NGVV", sameUserIsEnough: false)

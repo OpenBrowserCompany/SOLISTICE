@@ -49,7 +49,7 @@ enum AppIcons {
     let custom = id == "default" ? nil : image(id, size: 512)
     NSApp.applicationIconImage = custom
     if !ApplicationIconName.register(custom ?? bundleImageBeforeAnyOverride) {
-      NSLog("Ardia: couldn't name the \(id) app icon \(ApplicationIconName.name); Chromium's Dock tile draws the bundle icon")
+      NSLog("Solstice: couldn't name the \(id) app icon \(ApplicationIconName.name); Chromium's Dock tile draws the bundle icon")
     }
   }
 
