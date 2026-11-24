@@ -1,4 +1,4 @@
-package com.ardia.browser
+package com.openbrowsercompany.solstice
 
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
