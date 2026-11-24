@@ -117,7 +117,7 @@ export function validateModuleDomain(name, domain) {
   }
   if (!isRecord(domain.modules) || Object.keys(domain.modules).length === 0) fail("modules lists at least one Expo module by its native name");
   for (const [module, entry] of Object.entries(domain.modules)) {
-    if (!MODULE_NAME.test(module)) fail(`module ${module} is an Expo module name, Solstice followed by UpperCamelCase letters`);
+    if (!MODULE_NAME.test(module)) fail(`module ${module} is an Expo module name, Ardia followed by UpperCamelCase letters`);
     declare(nativeTypeOf(module), "module");
     if (!isRecord(entry) || !isRecord(entry.functions) || !isRecord(entry.events)) fail(`module ${module} is { functions, events }`);
     if (entry.constants !== undefined && !isRecord(entry.constants)) fail(`module ${module}'s constants map names to { type, mac, desktop, windows }`);

@@ -436,11 +436,11 @@ test("a module function's or event's bindings are never implied, and args, resul
   assert.throws(() => validateModuleDomain("demo", event({ payload: " " })), /payload type/);
 });
 
-test("a module domain names a real package, Expo modules by their Solstice names, types it may import, and no name twice", () => {
+test("a module domain names a real package, Expo modules by their Ardia names, types it may import, and no name twice", () => {
   assert.throws(() => validateModuleDomain("demo", moduleDomain(undefined, { package: "apps/browser" })), /packages\/<name>/);
   assert.throws(() => validateModuleDomain("demo", moduleDomain(undefined, { package: "packages/nowhere" })), /no package\.json/);
   assert.throws(() => validateModuleDomain("demo", moduleDomain({})), /at least one Expo module/);
-  assert.throws(() => validateModuleDomain("demo", moduleDomain({ Demo: { functions: {}, events: {} } })), /Solstice followed by UpperCamelCase/);
+  assert.throws(() => validateModuleDomain("demo", moduleDomain({ Demo: { functions: {}, events: {} } })), /Ardia followed by UpperCamelCase/);
   assert.throws(() => validateModuleDomain("demo", moduleDomain({ ArdiaDemo: { functions: {} } })), /\{ functions, events \}/);
   assert.throws(() => validateModuleDomain("demo", moduleDomain(undefined, { imports: { "@ardia/shell": ["Thing"] } })), /packages\/shaders\/package\.json depends on/);
   assert.doesNotThrow(() => validateModuleDomain("demo", moduleDomain(undefined, { imports: { "@ardia/core": ["ThemeTexture"], "../meadowPage/config": ["Tone"] } })));
