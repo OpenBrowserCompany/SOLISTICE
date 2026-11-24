@@ -1,5 +1,5 @@
 export const INTRO_COPY = {
-  tagline: "Your new home on the internet",
+  tagline: "A Web with freedom.",
   skip: "Skip",
   skipHint: "Button that skips the onboarding intro animation",
   mute: "Mute intro music",

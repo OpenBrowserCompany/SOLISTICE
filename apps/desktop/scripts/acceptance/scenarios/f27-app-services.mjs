@@ -5,7 +5,7 @@ import { restartBrowser, startBrowser } from "../lib/flows.mjs";
 import { documentDirectory, sessionSeed } from "../lib/seed.mjs";
 import { pause, until } from "../lib/util.mjs";
 
-const INTRO_MARK = "Your new home on the internet";
+const INTRO_MARK = "A Web with freedom.";
 const ONBOARDING_MARKS = [INTRO_MARK, "Where are you coming from?", "Where's the address bar?", "Where do your tabs go?"];
 const showsOnboarding = async (shell) => {
   const text = await shell.text();

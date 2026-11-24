@@ -5,6 +5,7 @@
 <h1 align="center">Solstice</h1>
 
 <p align="center">
+  A Web with freedom.<br>
   Arc's sidebar and Dia's polish on real Chromium.<br>
   Free and open source. Ads and trackers stay out.
 </p>
