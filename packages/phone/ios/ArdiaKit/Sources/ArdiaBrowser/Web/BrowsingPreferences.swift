@@ -42,7 +42,7 @@ public enum AppLinkPreference: String, Codable, Sendable, CaseIterable, Identifi
 
   public var title: String {
     switch self {
-    case .ardia: String(localized: "Ardia")
+    case .ardia: String(localized: "Solstice")
     case .app: String(localized: "App")
     }
   }

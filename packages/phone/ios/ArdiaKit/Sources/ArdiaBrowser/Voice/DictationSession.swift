@@ -95,7 +95,7 @@ public final class DictationSession {
     recorder = nil
     level = 0
     if state == .listening {
-      state = transcript.isEmpty ? .unavailable(String(localized: "Ardia couldn’t hear anything. Try again.")) : .finished
+      state = transcript.isEmpty ? .unavailable(String(localized: "Solstice couldn’t hear anything. Try again.")) : .finished
     } else if state == .requesting {
       state = .idle
     }
