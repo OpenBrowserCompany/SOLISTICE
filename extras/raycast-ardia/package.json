@@ -1,8 +1,8 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "ardia",
-  "title": "Ardia",
-  "description": "Search and switch Ardia's tabs and profiles, and open new tabs and windows",
+  "title": "Solstice",
+  "description": "Search and switch Solstice's tabs and profiles, and open new tabs and windows",
   "icon": "icon.png",
   "author": "mantrakp04",
   "contributors": [
@@ -19,22 +19,22 @@
     {
       "name": "search-tabs",
       "title": "Search Tabs",
-      "subtitle": "Ardia",
-      "description": "Search your open tabs in Ardia and switch to one",
+      "subtitle": "Solstice",
+      "description": "Search your open tabs in Solstice and switch to one",
       "mode": "view"
     },
     {
       "name": "search-profiles",
       "title": "Search Profiles",
-      "subtitle": "Ardia",
-      "description": "Search your Ardia profiles and show one in the front window or a new one",
+      "subtitle": "Solstice",
+      "description": "Search your Solstice profiles and show one in the front window or a new one",
       "mode": "view"
     },
     {
       "name": "new-tab",
       "title": "New Tab",
-      "subtitle": "Ardia",
-      "description": "Open a new tab in Ardia's front window, with a URL or a search read as its command bar reads it",
+      "subtitle": "Solstice",
+      "description": "Open a new tab in Solstice's front window, with a URL or a search read as its command bar reads it",
       "mode": "no-view",
       "arguments": [
         {
@@ -48,8 +48,8 @@
     {
       "name": "new-window",
       "title": "New Window",
-      "subtitle": "Ardia",
-      "description": "Open a new Ardia window in the profile you name, or in the default profile",
+      "subtitle": "Solstice",
+      "description": "Open a new Solstice window in the profile you name, or in the default profile",
       "mode": "no-view",
       "arguments": [
         {
@@ -63,8 +63,8 @@
     {
       "name": "new-incognito-window",
       "title": "New Incognito Window",
-      "subtitle": "Ardia",
-      "description": "Open a new incognito window in Ardia",
+      "subtitle": "Solstice",
+      "description": "Open a new incognito window in Solstice",
       "mode": "no-view"
     }
   ],

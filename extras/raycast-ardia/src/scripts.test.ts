@@ -21,7 +21,7 @@ test("quotes ids and targets the app by bundle id", () => {
   assert.equal(quote('a"b\\c'), '"a\\"b\\\\c"');
   assert.equal(
     focusTabScript({ windowId: "w-1", tabId: "tab-2" }),
-    'tell application id "com.ardia.browser" to focus (tab id "tab-2" of window id "w-1")',
+    'tell application id "com.openbrowsercompany.solstice" to focus (tab id "tab-2" of window id "w-1")',
   );
   assert.equal(
     closeTabScript({ windowId: "w-1", tabId: "tab-2" }, "current application"),
@@ -51,7 +51,7 @@ test("finds a profile by its name, or by a start no other profile shares", () =>
   assert.equal(profileNamed(profiles, "work a").id, "p-1");
   assert.throws(() => profileNamed(profiles, " wo "), { message: "“wo” matches Work Archive, Work." });
   assert.throws(() => profileNamed(profiles, "School"), {
-    message: "No profile is named “School”. Ardia has Work Archive, Work, Personal.",
+    message: "No profile is named “School”. Solstice has Work Archive, Work, Personal.",
   });
   const twins = parseProfiles(`p-1${fs}Work${fs}0${fs}false${rs}p-2${fs}work${fs}0${fs}false${rs}`);
   assert.throws(() => profileNamed(twins, "Work"), { message: "“Work” matches Work, work." });
@@ -71,7 +71,7 @@ end tell`,
 });
 
 test("makes windows in a profile or incognito", () => {
-  assert.equal(newWindowScript(), 'tell application id "com.ardia.browser" to make new window');
+  assert.equal(newWindowScript(), 'tell application id "com.openbrowsercompany.solstice" to make new window');
   assert.equal(
     newWindowScript({ incognito: true }, "current application"),
     "tell current application to make new window with properties {incognito:true}",
@@ -83,7 +83,7 @@ test("makes windows in a profile or incognito", () => {
 });
 
 test("makes a tab with what was typed, or an empty one", () => {
-  assert.equal(newTabScript("  "), 'tell application id "com.ardia.browser" to make new tab');
+  assert.equal(newTabScript("  "), 'tell application id "com.openbrowsercompany.solstice" to make new tab');
   assert.equal(
     newTabScript(" ardia.dev ", "current application"),
     'tell current application to make new tab with properties {URL:"ardia.dev"}',
