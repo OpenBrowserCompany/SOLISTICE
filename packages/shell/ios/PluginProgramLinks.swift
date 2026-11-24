@@ -79,7 +79,7 @@ enum PluginProgramLinks {
       guard let program = entry["name"] as? String, let path = entry["path"] as? String else { return nil }
       return PluginProgram(name: program, path: path)
     }
-    guard let folders = PluginFolders.current() else { return ["ok": false, "reason": "Ardia has no data folder"] }
+    guard let folders = PluginFolders.current() else { return ["ok": false, "reason": "Solstice has no data folder"] }
     let pin = PluginFolders.officialPin()
     let legacy = folderId == PluginFolders.legacyId
     let copy = legacy ? nil : folders.officialCopy(name, folderId: folderId, pin: pin, fresh: true)
@@ -131,7 +131,7 @@ enum PluginProgramLinks {
     if !clean, let copy {
       let source = TrustedProgramCopy(version: spec["version"] as? String, approved: approved, digest: copy.payloadDigest)
       check = PluginPrograms.dropCurrentUnlessTrusted(plugin: name, programs: programs, places: places, trusted: [source], bundledDigests: pin?.entry(name)?.bundledDigests ?? [])
-      if check == .stuck { return ["ok": false, "reason": "its programs on PATH don't match the copy Ardia checked, and couldn't be taken off PATH"] }
+      if check == .stuck { return ["ok": false, "reason": "its programs on PATH don't match the copy Solstice checked, and couldn't be taken off PATH"] }
     }
     switch result {
     case .failure(let refusal):

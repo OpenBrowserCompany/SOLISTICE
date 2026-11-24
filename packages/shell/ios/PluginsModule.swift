@@ -144,7 +144,7 @@ public class PluginsModule: Module {
   }
 
   private static func readPluginFile(_ name: String, folderId: String, approved: String, path: String) -> [String: Any] {
-    guard let folders = PluginFolders.current() else { return ["ok": false, "reason": "Ardia has no data folder"] }
+    guard let folders = PluginFolders.current() else { return ["ok": false, "reason": "Solstice has no data folder"] }
     let folder: OpenedFolder
     switch folders.approvedFolder(name, folderId: folderId, approved: approved) {
     case .success(let opened): folder = opened
