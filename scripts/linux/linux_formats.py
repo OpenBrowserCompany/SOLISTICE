@@ -19,7 +19,7 @@ APPIMAGE_TOOLS = {
     'folder': 'appimage-tools-runtime-20251108',
 }
 APPIMAGE_MAGIC = b'AI\x02'
-DEB_MAINTAINER = 'Ardia <hello@ardia.dev>'
+DEB_MAINTAINER = 'Solstice <hello@ardia.dev>'
 DEB_SOURCE = 'https://github.com/ardia-browser/ardia'
 DEB_RELEASE_NOTES = 'https://ardia.dev/release-notes'
 DEB_VERSION = re.compile(r'^[0-9]+\.[0-9]+\.[0-9]+(-[a-z]+\.[0-9]+)?$')
@@ -128,14 +128,14 @@ def deb_docs(usr, version, date):
     docs = usr / 'share/doc/ardia'
     docs.mkdir(parents=True)
     (docs / 'copyright').write_text(f'''Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: Ardia
+Upstream-Name: Solstice
 Source: {DEB_SOURCE}
 
 Files: *
 Copyright: 2026 Mantra Patel
 License: GPL-3
- Ardia as distributed, with its Chromium engine built with Helium's patches, is
- licensed under the GNU General Public License, version 3. Ardia's own source
+ Solstice as distributed, with its Chromium engine built with Helium's patches, is
+ licensed under the GNU General Public License, version 3. Solstice's own source
  files are also available under the Apache License, Version 2.0, and the
  engine includes Chromium (BSD-3-Clause and others, see chrome://credits),
  Helium (GPL-3.0) and uBlock Origin (GPL-3.0). Corresponding Source: the
@@ -146,7 +146,7 @@ License: GPL-3
 ''')
     changelog = f'''ardia ({deb_version(version)}) stable; urgency=medium
 
-  * Ardia {version}: {DEB_RELEASE_NOTES}#{version}
+  * Solstice {version}: {DEB_RELEASE_NOTES}#{version}
 
  -- {DEB_MAINTAINER}  {email.utils.format_datetime(date)}
 '''
@@ -208,7 +208,7 @@ def build_deb(root, destination, version):
             'Section: web',
             'Priority: optional',
             'Homepage: https://ardia.dev',
-            'Description: The Ardia web browser',
+            'Description: The Solstice web browser',
             ' Dia\'s polish and Arc\'s sidebar on Chromium with Helium\'s patches.',
             '',
         ]))

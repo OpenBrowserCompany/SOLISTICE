@@ -5,14 +5,14 @@ usage() {
   cat <<'USAGE'
 Usage: install.sh [--prefix DIR] [--destdir DIR]
 
-Installs an extracted Ardia Linux package.
+Installs an extracted Solstice Linux package.
 
   --prefix DIR   absolute install prefix (default /usr)
   --destdir DIR  staging root for distribution packages (default none)
 
-Ardia goes under PREFIX/lib/ardia with PREFIX/bin/ardia, its desktop entry
+Solstice goes under PREFIX/lib/ardia with PREFIX/bin/ardia, its desktop entry
 and icon. The new lib/ardia is copied beside the old one and swapped in with
-renames (one atomic exchange where mv has --exchange), so a running Ardia keeps
+renames (one atomic exchange where mv has --exchange), so a running Solstice keeps
 the files it has open and a failed copy leaves the old install whole. Run as root without --destdir, it makes lib/ardia/chrome-sandbox
 setuid root, Chromium's sandbox where user namespaces are unavailable. The polkit policy always goes to DESTDIR/usr/share/polkit-1/actions,
 the only directory polkit reads actions from, whatever the prefix; its update
@@ -57,7 +57,7 @@ fi
 source_root=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)
 for required in lib/ardia/chrome share/polkit-1/actions/dev.ardia.linux.policy share/applications/ardia.desktop share/apparmor.d/ardia; do
   if [[ ! -e "$source_root/$required" ]]; then
-    echo "install.sh: $source_root is not an extracted Ardia package (missing $required)" >&2
+    echo "install.sh: $source_root is not an extracted Solstice package (missing $required)" >&2
     exit 1
   fi
 done
@@ -142,7 +142,7 @@ if update_action_is_safe; then
   sed "s|>/usr/lib/ardia/ardia-update<|>$prefix/lib/ardia/ardia-update<|" \
     "$source_root/share/polkit-1/actions/dev.ardia.linux.policy" > "$launcher"
 else
-  echo "install.sh: $prefix/lib/ardia or a folder above it isn't root-owned and writable only by root, so Ardia won't update itself there" >&2
+  echo "install.sh: $prefix/lib/ardia or a folder above it isn't root-owned and writable only by root, so Solstice won't update itself there" >&2
   sed '/<action id="dev.ardia.linux.update">/,/<\/action>/d' \
     "$source_root/share/polkit-1/actions/dev.ardia.linux.policy" > "$launcher"
 fi

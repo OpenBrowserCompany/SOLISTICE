@@ -2,7 +2,7 @@
 set -euo pipefail
 usage='usage: scripts/linux/fetch-ubo.sh
 
-Prepares the uBlock Origin build Ardia ships as its content blocker by running
+Prepares the uBlock Origin build Solstice ships as its content blocker by running
 packages/ardiacore/scripts/ubo.sh with Linux stand-ins for lockf and shasum,
 then prints the prepared extension directory for scripts/linux/package.py
 --content-blocker.'
