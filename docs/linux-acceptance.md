@@ -1,7 +1,7 @@
 # Linux acceptance suite
 
-`apps/linux/scripts/acceptance` runs headless acceptance scenarios against a packaged Linux Ardia. Each scenario
-launches Ardia with throwaway profiles and checks a feature through the shell, the page and CDP. The suite prints one
+`apps/linux/scripts/acceptance` runs headless acceptance scenarios against a packaged Linux Solstice. Each scenario
+launches Solstice with throwaway profiles and checks a feature through the shell, the page and CDP. The suite prints one
 result per scenario as JSON:
 
 - `pass`: every check passed;
@@ -32,7 +32,7 @@ Results go to stdout and to `<results>/results.json`. Each scenario writes its c
 `<results>/<id>/`. A failing scenario keeps its scratch profiles, including the browser log and `*-command.json` with
 the exact command line.
 
-`pnpm --filter @ardia/linux acceptance:self-test` tests the harness without an Ardia build: the CDP client against a
+`pnpm --filter @ardia/linux acceptance:self-test` tests the harness without an Solstice build: the CDP client against a
 mock peer, the launch plumbing and shell driver against a mock host, the runner and its report, the classifiers, the
 fixture servers and certificates, and `scripts/linux/smoke.mjs`. When `/usr/bin/chromium` (or
 `ARDIA_ACCEPTANCE_CHROMIUM`) is installed, it also checks SPKI trust, resolver mapping, gated downloads, synthesized

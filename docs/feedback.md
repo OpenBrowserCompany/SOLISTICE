@@ -1,6 +1,6 @@
 # Feedback and telemetry
 
-How Ardia (app and CLI) knows who hit a problem, what they saw, and whether the fix held. This is the
+How Solstice (app and CLI) knows who hit a problem, what they saw, and whether the fix held. This is the
 contract the app, the CLI, the feedback service and the dashboard build against. Change it here first.
 
 ## Identity
@@ -20,7 +20,7 @@ contract the app, the CLI, the feedback service and the dashboard build against.
 ## Events
 
 - Every app event: `$session_id`, plus the existing common properties. CLI: the same.
-- Ingest key: every POST to `/otel/v1/logs` and `/api/feedback` sends `X-Ardia-Key`. Keys are public
+- Ingest key: every POST to `/otel/v1/logs` and `/api/feedback` sends `X-Solstice-Key`. Keys are public
   constants, one per surface (app, CLI, site), bundled in the code; they are not secrets. nginx rejects an
   unknown key with 403. A missing key on `/otel/v1/logs` is still accepted while builds without one are in
   the field and is recorded as `ingest_key=missing`; `/api/feedback` requires one.
@@ -46,7 +46,7 @@ contract the app, the CLI, the feedback service and the dashboard build against.
 
 ## Feedback service (`infra/feedback`, behind nginx at `/api/feedback`)
 
-1. `POST /api/feedback` with `X-Ardia-Key`, JSON:
+1. `POST /api/feedback` with `X-Solstice-Key`, JSON:
    `kind` (`bug` | `slow` | `idea` | `other`), `title` (1–67 characters, trimmed), `description`
    (1–4000), `source` (`app` | `cli`), `install_id` (when sharing is on or a watch is chosen; otherwise a
    one-time UUID), `session_id`, `app_version`, `app_build`, `channel`, `os_version`, `arch`,
@@ -94,7 +94,7 @@ ARDIA_FEEDBACK_URL=http://127.0.0.1:4319                          # in the app's
 - Options: `--port <n>` (default `$PORT`, else 4319), `--host <addr>` (default 127.0.0.1), `--rate-limits` (off
   in local mode). `FEEDBACK_UPLOAD_SECRET` is optional there; without it a secret is made once and kept in
   `<dir>/.upload-secret`, so tokens survive a restart. `--help` lists the production env.
-- It checks everything production checks, `X-Ardia-Key` included (the app key with `source: app`, the CLI key
+- It checks everything production checks, `X-Solstice-Key` included (the app key with `source: app`, the CLI key
   with `source: cli`; keys in `packages/core/src/ingestKeys.ts`).
 - `upload_urls` is an object, attachment name → absolute URL to PUT. Every PUT must send exactly the declared
   `bytes` (else 400 or 413). The token lasts 24 hours and only works for its own report.
@@ -126,7 +126,7 @@ Record Performance Issue; Copy Diagnostics stays.
   stays enabled while the draft is incomplete: pressing it outlines each missing field in red with its hint ("Add a
   title to send", "Say what happened to send"), which clears as the field is filled, and counts `report_send_blocked`
   (`reason`: the first problem, `problems`, `kind`).
-- Recording: Ardia's windows only, 60 s max, web page areas blacked out in every frame unless included,
+- Recording: Solstice's windows only, 60 s max, web page areas blacked out in every frame unless included,
   watched before sending.
 - Sent screen: the reference, the GitHub issue link, "You appear to us as <name>", and the watch end date.
 
