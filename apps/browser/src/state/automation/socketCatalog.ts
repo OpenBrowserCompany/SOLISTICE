@@ -5,7 +5,7 @@ import { obj, schemaProblem } from "./socketSchema";
 import { OpError } from "./workspaceTargets";
 import { isFields, ownValue } from "../../lib/decode";
 
-export const STOPPED = "Control was turned off before Ardia made the change, so nothing changed.";
+export const STOPPED = "Control was turned off before Solstice made the change, so nothing changed.";
 
 type SocketBody = { result: unknown } | { error: MethodError };
 
@@ -101,9 +101,9 @@ const CORE_METHODS: MethodSpec[] = [
       ["events"],
     ),
   ),
-  core("answer", true, "Answer a decide hook; Ardia acts on the answer", "{ok}", obj({ decide: { type: "string", description: "The decide request's id" }, answer: { description: "An object, a list or null; anything else makes Ardia use its default" } }, ["decide"])),
+  core("answer", true, "Answer a decide hook; Solstice acts on the answer", "{ok}", obj({ decide: { type: "string", description: "The decide request's id" }, answer: { description: "An object, a list or null; anything else makes Solstice use its default" } }, ["decide"])),
   core("plugins", false, "Installed plugins", "[{name, title, version, enabled, active, tools, …}]"),
-  core("plugins.official", false, "The official plugins Ardia offers", "[…]"),
+  core("plugins.official", false, "The official plugins Solstice offers", "[…]"),
   core("plugins.enable", true, "Ask the user to turn a plugin on (shows its consent sheet)", "{ok} | {waiting}", PLUGIN_NAME),
   core("plugins.disable", true, "Turn a plugin off", "{ok}", PLUGIN_NAME),
   core("plugins.remove", true, "Remove a plugin", "{ok}", PLUGIN_NAME),

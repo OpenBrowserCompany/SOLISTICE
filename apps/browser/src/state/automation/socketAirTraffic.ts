@@ -137,7 +137,7 @@ function setFallback(params: Record<string, unknown>) {
 function testLink(params: Record<string, unknown>) {
   const from = params.from as { name?: string; bundleId?: string } | undefined;
   const preview = previewLink(params.url as string, from ? { bundleId: from.bundleId ?? null, appName: from.name ?? null } : null);
-  if (!preview.ok) throw new OpError("bad_request", `${String(params.url)} isn't a link Ardia can open.`);
+  if (!preview.ok) throw new OpError("bad_request", `${String(params.url)} isn't a link Solstice can open.`);
   const { trace: _trace, opening: _opening, ...shown } = preview;
   return shown;
 }
@@ -152,7 +152,7 @@ const WHEN: JsonSchema = {
 };
 const TARGET: Record<string, JsonSchema> = {
   profile: { type: ["string", "null"], description: "A profile id from profiles.list; null for the profile used last" },
-  open: oneOf(OPEN_AS, "Open as a tab, a new window or in Little Ardia"),
+  open: oneOf(OPEN_AS, "Open as a tab, a new window or in Little Solstice"),
   group: { type: ["string", "null"], description: "A group key from airTraffic.rules; only when open is tab" },
 };
 const RULE = { from: APP, when: WHEN, ...TARGET, enabled: bool("On or off") };
@@ -167,7 +167,7 @@ export const AIR_TRAFFIC_METHODS: MethodSpec[] = [
   {
     name: "airTraffic.setFallback",
     mutates: true,
-    description: "Where links no rule matches go (Everything Else); open: null puts them back to Ardia's usual choice",
+    description: "Where links no rule matches go (Everything Else); open: null puts them back to Solstice's usual choice",
     params: obj({ ...TARGET, open: { type: ["string", "null"], enum: [...OPEN_AS, null], description: "tab, window or littleArdia; null clears it" } }, ["open"]),
     result: "{fallback}",
     run: setFallback,
