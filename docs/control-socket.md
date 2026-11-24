@@ -1,13 +1,13 @@
 # The control socket
 
-The `ardia` command (github.com/ardia-browser/plugins, `plugins/cli`) drives Ardia through one Unix socket,
+The `ardia` command (github.com/ardia-browser/plugins, `plugins/cli`) drives Solstice through one Unix socket,
 `<data dir>/ArdiaControl.sock`: newline-delimited JSON, one request per line (`{"id", "method", "params"}`), one reply
 per request (`{"id", "result"}` or `{"id", "error": {"code", "message"}}`), and events on subscribed connections
-(`{"event", "time", "data"}`). The socket exists only while **Let the ardia command control Ardia** (`cliControl`) is
+(`{"event", "time", "data"}`). The socket exists only while **Let the ardia command control Solstice** (`cliControl`) is
 on; with it off every request answers `failed` "Control is off." (`state/automation/controlSocket.ts`). The contract
 with the command (protocol numbers, `hello`) is in `docs/cli.md` › The contract.
 
-On macOS a client that isn't the bundled `ardia` (or another hardened program signed with Ardia's Team ID) is held
+On macOS a client that isn't the bundled `ardia` (or another hardened program signed with Solstice's Team ID) is held
 before its first line is read until the user allows it in the doorbell; a client that's refused reads one line,
 `{"id": null, "error": {"code": "refused", "message": …}}`, and the socket closes. Who gets in, how approvals are kept
 and revoked, and the test-instance rule are in `docs/automation.md` › Who the program is. Every admitted connection is
@@ -16,8 +16,8 @@ the owner: the methods below don't vary by client. `usage_counts.cli_socket_door
 `unsaved`) count the doorbells and how they ended. A program the socket admitted can ask it for the engine's DevTools
 token (`control.devtoolsEndpoint`, › The DevTools token) instead of reading `ArdiaControl.json`.
 
-This page is the map of the whole profile against the socket: every data point Ardia keeps, where it lives, and which
-methods read and change it. The goal is full control: anything a person can see or change in Ardia, the command can
+This page is the map of the whole profile against the socket: every data point Solstice keeps, where it lives, and which
+methods read and change it. The goal is full control: anything a person can see or change in Solstice, the command can
 read and change, through the same store actions the UI calls, so every invariant, sync write, undo, saved document and
 UI update still happens.
 
@@ -38,7 +38,7 @@ UI update still happens.
 - **Control off means no more writes.** Consent is checked when a request arrives and again before every write that
   follows an `await` in a handler (a lookup, a confirmation, a settings read): handlers get a `SocketCall` and call
   `stillServing()` first, as `apply` does between ops. Turning control off mid-call answers `failed` "Control was
-  turned off before Ardia made the change, so nothing changed." for a change it stopped before its first write; an
+  turned off before Solstice made the change, so nothing changed." for a change it stopped before its first write; an
   `apply` batch keeps the ops it already ran (no rollback) and reports them in `results` and `applied`, so read those
   before retrying. The check also runs inside the shared actions the
   socket calls, through a `may…` callback they take: after `profiles.delete`'s and `extensions.uninstall`'s
@@ -46,7 +46,7 @@ UI update still happens.
   window's native close has started, AppKit has already ordered the window out, so the store close always finishes,
   whatever happens to control meanwhile: a close started before control was revoked completes. Turning control off
   closes the connection, so the client sees the stream end rather than a reply and has to treat the outcome as
-  unknown); in Little Ardia's close after its quit prompt; in `tabs.reload`,
+  unknown); in Little Solstice's close after its quit prompt; in `tabs.reload`,
   `tabs.back` and `tabs.forward` after a shared page is handed over, and in cross-engine back after its unsaved-work
   check; in `downloads.open` before it reveals an opened archive; in `history.clear` before the cache write (the engine
   clear already ran, and the cache reconciles from the engine's own events); in `offscreen` after its ownership read;
@@ -66,7 +66,7 @@ UI update still happens.
   `controlSocket.ts`). A connection counts as gone the moment its peer stops writing: at read EOF the native side tells
   JS at once (`onPeerFinished`, sent as the connection's close) while it goes on writing the replies already queued,
   so a search or `apply` still running on it is abandoned then, not when the drain ends. A client that leaves while a confirmation it caused is up takes that question away (by key, `dismissShownOnly`) and
-  frees the window's close guard, as turning control off does. Ardia uses dismissal only where the platform's dialogs
+  frees the window's close guard, as turning control off does. Solstice uses dismissal only where the platform's dialogs
   module says it can (`dismissesShownOnly: true`, native API 84 and later on macOS; Linux's bridge answers every
   method, so a callable is no proof), and the request lets go only once the dismissal succeeded: if it rejects, or
   the platform can't dismiss, the guard holds until the dialog is answered and is freed when it closes. After every await, a request whose connection
@@ -82,7 +82,7 @@ UI update still happens.
   dismissal or a user's answer given at the same moment lands first. Either way the client doesn't see it: turning
   control off closes its connection, so it sees the stream end, and the outcome is unknown to it. A window close the
   user had already authorized before control went off still finishes its animation and commits. Left as they are: `run` checks once, as a menu command's own async work belongs to the UI it runs (a command
-  that would ask or open a picker is refused up front in a background instance, see below); and an `answer` to a decide hook is checked when it arrives, and Ardia acts on it at
+  that would ask or open a picker is refused up front in a background instance, see below); and an `answer` to a decide hook is checked when it arrives, and Solstice acts on it at
   once.
 - **The UI's path, not a shortcut.** Where the UI does more than one store call, the socket does the same:
   `windows.close` goes through the window close guard (it asks first when the user set **Ask before closing a window
@@ -92,8 +92,8 @@ UI update still happens.
   present, so two closes at once keep exactly one window to reopen. A close that is cancelled or refused (a tab arrived during the animation, or nobody could see the question) drops
   any last-window marker while a regular window is open, so the marker only ever sits on
   the true last regular window. Every confirmation the socket can cause (`windows.close`, `profiles.delete`, `extensions.uninstall`, `tabs.back`
-  across page engines) is asked with `confirm({onlyIfShown})` (`socketAsk.ts`, `DialogsModule.swift`): when Ardia would
-  have to ask and nobody could see the question (no window of it is visible, or Ardia runs as a background instance), it
+  across page engines) is asked with `confirm({onlyIfShown})` (`socketAsk.ts`, `DialogsModule.swift`): when Solstice would
+  have to ask and nobody could see the question (no window of it is visible, or Solstice runs as a background instance), it
   answers `refused` instead of waiting on a dialog nobody can answer, and it never falls back to an app-modal alert. The
   reply comes only after the user answers. `run` keeps its contract (the reply comes at dispatch, and a prompt the
   command shows belongs to the UI it runs), so a background instance runs no command at all: `run` answers `refused` "run isn't available in background
@@ -106,7 +106,7 @@ UI update still happens.
   `downloads.open` is refused too ("opening a download needs the person"), since it launches another app, and so is
   `downloads.reveal` ("revealing a download needs the person"): a background instance only logs a reveal, so it
   can't claim Finder showed the file. `runCommand` resolves its target in one place, `commandTarget` (`state/commands/commandTarget.ts`). Linux and Windows
-  ignore `onlyIfShown` for now and ask as before. `littleArdia.close` and `windows.close` on a Little Ardia reply
+  ignore `onlyIfShown` for now and ask as before. `littleArdia.close` and `windows.close` on a Little Solstice reply
   only once the window is closed, so a Cancel on its quit prompt answers `refused`, `profiles.update
   {syncTabs: false}` retires the open-tab records as the Settings switch does (`setOpenTabsSynced`), `settings.set
   {tabLayout}` and `settings.reset {keys: ["tabLayout"]}` move open windows as Settings does (`chooseTabLayout`), even
@@ -115,7 +115,7 @@ UI update still happens.
 - **Store actions only.** Writes call the domain's own actions (`storeAction(…)` on `useBrowser`, or the domain's
   exported functions for the stores outside it). Nothing calls `setState` on another domain's store.
 - **Irreversible data loss asks the user.** `profiles.delete` and `extensions.uninstall` call the same actions the UI
-  does, which show Ardia's confirmation on the last focused window; the reply waits for the answer (`{deleted}` /
+  does, which show Solstice's confirmation on the last focused window; the reply waits for the answer (`{deleted}` /
   `{removed}`), and is `refused` when nobody can see the question.
 - **Private stays private.** Private windows, incognito profiles and Peek's own tabs are invisible and untouchable, as
   in `windows` and `workspace` (`eligibleKind`, `isEligibleTab`).
@@ -123,7 +123,7 @@ UI update still happens.
   (`tabId`, `windowId`, `profileId`, …); `profile` may be omitted where the default profile (or the window's) is meant.
 - **Errors** come from `automationMethods.ts`: `bad_request` (params don't match the schema, or a value is wrong),
   `unknown_method`, `no_window` (no such window, tab, profile, group, split, bookmark or download the command may use),
-  `refused` (Ardia won't do that, with the reason), `failed` (it tried and it didn't happen), `password_manager_plugin`
+  `refused` (Solstice won't do that, with the reason), `failed` (it tried and it didn't happen), `password_manager_plugin`
   (the profile's passwords are kept by a password-manager plugin, see Secrets). A new code needs a new protocol number
   unless only methods new in the same release answer it: `password_manager_plugin` comes only from `passwords.list` and
   `passwords.remove`, which are new here, so the protocol stays 4. A request `id` is a safe integer or a well-formed string (no lone surrogate) of at most 256 UTF-8
@@ -161,12 +161,12 @@ UI update still happens.
   20,000-page window it says `reason: "window"`. A follow-up with `nextOffset` works inside both; nothing past the
   budget can be paged to until the engine query takes a starting point (an `engine/` change). Without a query or time range it reads only `offset + limit + 1` pages; with one it reads the
   window and filters it. `truncated: true` means history goes past the window (pages older than the newest 20,000
-  aren't searched or paged to: an `offset` past it returns no items). `total` is exact only when Ardia read all of
+  aren't searched or paged to: an `offset` past it returns no items). `total` is exact only when Solstice read all of
   history: `null` when it read just enough for this page and one more, or when the window was cut off. `nextOffset`
   is `null` at the end of the results or of the window. The engine's query takes a page cap but still loads every
   visit before applying it (`ac_history.cc`); pushing the cap into the query is an `engine/` change, due with the next
   engine build.
-- **The 1 MiB line.** Every line Ardia writes on the socket is at most 1 MiB (1,048,576 bytes), measured as sent: the
+- **The 1 MiB line.** Every line Solstice writes on the socket is at most 1 MiB (1,048,576 bytes), measured as sent: the
   escaped JSON, its envelope and the newline. That is the limit every shipped command reads (`MAX_LINE` in the
   command's `control.py` and `control.rs`; a longer line drops the connection) (`socketWire.ts`):
   - a read whose reply wouldn't fit answers `failed` "The reply would be over 1 MiB, the most a line can carry; ask for
@@ -177,7 +177,7 @@ UI update still happens.
     `changed` (as counts if the ids don't fit);
   - an event keeps 64 bytes free for the `dropped` marker; one that wouldn't fit goes out with its scalar fields, each
     list as `{count}` and `truncated: true`;
-  - a decide request that wouldn't fit isn't sent: Ardia goes on as if nobody answered (its default);
+  - a decide request that wouldn't fit isn't sent: Solstice goes on as if nobody answered (its default);
   - an error message is cut to 4 KiB.
 - **The native queue** (`ControlOutput.swift`, `ControlConnection.swift`) holds three kinds of line per connection:
   - replies, and decide messages (requests and cancels, any line starting `{"decide":`): never dropped;
@@ -189,12 +189,12 @@ UI update still happens.
   - The queue checks the line limit again: an event over 1 MiB is dropped and counted, and a reply over it is replaced
     with a `failed` error for the same id.
   - A connection is closed only when its own unread replies and decide messages fill the 34 MiB, it sends more than 32
-    requests without reading, a request line passes 1 MiB or stalls for 30 s, or control is turned off. Ardia doesn't
+    requests without reading, a request line passes 1 MiB or stalls for 30 s, or control is turned off. Solstice doesn't
     close it in the middle of a line by choice: it drops what was queued after that line (the replies are reported
     unwritten), stops reading, finishes the line within 5 s and then closes. A peer that reads nothing for those 5 s
     can see a cut line before the end of the stream; every shipped command reads an end of stream in the middle of a
     line as a dropped connection whose outcome is unknown, which is what it is. A write error closes at once.
-  - A peer that closes only its writing side (it sent its requests and waits) gets only its replies: Ardia stops
+  - A peer that closes only its writing side (it sent its requests and waits) gets only its replies: Solstice stops
     reading, drops the events and decide messages still queued (finishing a line only if at least one byte of it was written:
     a head that met a full socket with nothing written is dropped too), sends no new ones,
     and writes the replies queued and those still being worked out until all are written or 5 s pass, then closes.
@@ -214,7 +214,7 @@ UI update still happens.
   `cli_socket_call_failures` when it answers an error: counts only, never which method's params
   (`state/telemetry/cliCounts.ts`).
 - **Protocol.** Adding methods doesn't change the protocol: an older command never calls them, a newer command finds
-  them in `methods` and gets `unknown_method` from an older Ardia. The protocol stays 4.
+  them in `methods` and gets `unknown_method` from an older Solstice. The protocol stays 4.
 
 ## Inventory
 
@@ -230,7 +230,7 @@ changes it today, 🔍 read only, 🗺️ designed below, ⛔ deliberately not e
 | Spaces (profiles) | name, colour, icon, theme, shared data, Top Apps sharing, open-tab sync, order, default | `session.json` (`profiles`, `profileOrder`, `settings.defaultProfileId`), Chrome profile dirs | ✅ `profiles.*` |
 | Splits | panes, orientation, sizes, stacks | `session.json` (`splits`) | ✅ `splits.*` |
 | Peek | the page peeked from each tab | memory | ✅ `peek.*` |
-| Little Ardia | small windows and their profile | `session.json` (`windows` of kind `small`) | ✅ `littleArdia.*` |
+| Little Solstice | small windows and their profile | `session.json` (`windows` of kind `small`) | ✅ `littleArdia.*` |
 | Recently closed | closed tabs, windows, groups, deleted groups, cleaned-up tabs | `session.json` | ✅ `closed.*` |
 | Bookmarks | folders, links, bar order, favicons | Chrome's Bookmarks file per profile (`bookmarks-cache.json` mirror) | ✅ `bookmarks.*` |
 | History | url, title, visits, last visit, visit times | Chrome's History database per profile | ✅ `history.*` |
@@ -257,7 +257,7 @@ changes it today, 🔍 read only, 🗺️ designed below, ⛔ deliberately not e
 | Air traffic (link routing rules) | rules per source app, Everything Else | `air-traffic.json` | ✅ `airTraffic.*` |
 | Hooks, config, approvals | hook rules, config.json, approvals | `hooks.json`, `config.json`, `automation-approvals.json` | files the user edits; ⛔ approvals |
 | Prompts on screen | permission, save password, save address or card prompts per tab | memory (`state/tabs/pageState.ts`) | ✅ `permissions.*`, `passwords.prompts`/`respond`, `autofill.prompts`/`respond` |
-| Native menus | page context menus a hidden Ardia captures, the menu bar's static catalog | `OpenSurfaces.swift`, `MenuCatalog` | ✅ `menus.open`, `menus.bar`, `menus.runBar`; menus on screen (`<select>` popups, live context menus, Ardia's menus, WebKit's) aren't socket-visible; 🗺️ the color popup, payment and WebAuthn sheets; ⛔ macOS's own sheets |
+| Native menus | page context menus a hidden Solstice captures, the menu bar's static catalog | `OpenSurfaces.swift`, `MenuCatalog` | ✅ `menus.open`, `menus.bar`, `menus.runBar`; menus on screen (`<select>` popups, live context menus, Solstice's menus, WebKit's) aren't socket-visible; 🗺️ the color popup, payment and WebAuthn sheets; ⛔ macOS's own sheets |
 | Telemetry, reports, onboarding, release notes | the app's own bookkeeping | their documents | ⛔ not profile data |
 
 ## Methods
@@ -279,17 +279,17 @@ changes it today, 🔍 read only, 🗺️ designed below, ⛔ deliberately not e
 | `run` | yes | Runs a menu command in a window or on a tab |
 | `offscreen` | yes | Moves a tab the command opened off-screen |
 | `subscribe` | yes | Events and decide hooks this connection serves: `{events, fullUrls?, idle?, hooks?}` |
-| `answer` | yes | Answers a decide hook: `{decide, answer?}`; Ardia acts on the answer |
+| `answer` | yes | Answers a decide hook: `{decide, answer?}`; Solstice acts on the answer |
 | `plugins`, `plugins.official`, `plugins.enable`, `plugins.disable`, `plugins.remove`, `plugins.call` | mixed | Plugins |
 
 ### Added here
 
 | Area | Read | Write |
 | --- | --- | --- |
-| tabs | `tabs.list {window?, profile?}`, `tabs.get {tab}` | `tabs.navigate {tab, url}`, `tabs.reload`, `tabs.back`, `tabs.forward`, `tabs.duplicate`, `tabs.setPinnedUrl {tab, url?}`, `tabs.returnToPinnedUrl`, `tabs.hold {session, tabs, seconds?}` → `{held, gone, seconds, engineKeeps?}` and `tabs.release {session}`: a session keeps the tabs it drives loaded (Memory Saver's `cliSession` veto, and their profile isn't unloaded). On macOS Chromium's own discards keep them too: the app hands the engine each held tab with the wall-clock time its hold ends (`until`, in ms), which the engine turns into its own deadline when the update arrives (so time an update spends queued never lengthens a hold; at most 300 s), on every change and every 10 s while any hold lasts (`engine.setCliHeldTabs {tabs: [{tabId, until}]}`, an empty list when the socket stops), `tabs.hold` answers only once the engine has them and `tabs.release` only once the engine has let them go, with `engineKeeps: true` only when the engine marked every held tab and the hold is still running when the answer goes out (false when it didn't answer within 3 s, refused, found no page for a tab, or the hold had already ended) (only Ardia's own budget keeps the tabs then; macOS only), and the engine's discard veto keeps a tab with kept-by code 103 until that deadline (so a hold the app forgets, for example across a JS reload, still ends) through Memory Saver's timer, urgent and frozen-memory discards and a queued idle-profile unload, while the tab menu's Sleep Tab still puts one to sleep. On Linux and Windows Chromium keeps them only while a debugger is attached. Each call replaces that session's list and lasts at most 300 s on the app's own clock, so the session renews while it works. One session's release never ends another's hold, at most 4 sessions hold at once, a hold nobody renews runs out, and the socket stopping ends them all |
+| tabs | `tabs.list {window?, profile?}`, `tabs.get {tab}` | `tabs.navigate {tab, url}`, `tabs.reload`, `tabs.back`, `tabs.forward`, `tabs.duplicate`, `tabs.setPinnedUrl {tab, url?}`, `tabs.returnToPinnedUrl`, `tabs.hold {session, tabs, seconds?}` → `{held, gone, seconds, engineKeeps?}` and `tabs.release {session}`: a session keeps the tabs it drives loaded (Memory Saver's `cliSession` veto, and their profile isn't unloaded). On macOS Chromium's own discards keep them too: the app hands the engine each held tab with the wall-clock time its hold ends (`until`, in ms), which the engine turns into its own deadline when the update arrives (so time an update spends queued never lengthens a hold; at most 300 s), on every change and every 10 s while any hold lasts (`engine.setCliHeldTabs {tabs: [{tabId, until}]}`, an empty list when the socket stops), `tabs.hold` answers only once the engine has them and `tabs.release` only once the engine has let them go, with `engineKeeps: true` only when the engine marked every held tab and the hold is still running when the answer goes out (false when it didn't answer within 3 s, refused, found no page for a tab, or the hold had already ended) (only Solstice's own budget keeps the tabs then; macOS only), and the engine's discard veto keeps a tab with kept-by code 103 until that deadline (so a hold the app forgets, for example across a JS reload, still ends) through Memory Saver's timer, urgent and frozen-memory discards and a queued idle-profile unload, while the tab menu's Sleep Tab still puts one to sleep. On Linux and Windows Chromium keeps them only while a debugger is attached. Each call replaces that session's list and lasts at most 300 s on the app's own clock, so the session renews while it works. One session's release never ends another's hold, at most 4 sessions hold at once, a hold nobody renews runs out, and the socket stopping ends them all |
 | windows | `windows.get {window}`, `windows.geometry {window}` | `windows.create {profile?, url?, layout?}`, `windows.close`, `windows.focus`, `windows.setLayout {window, layout?, tabsShown?}`, `windows.switchProfile`, `windows.merge`, `windows.setFrame {window, frame}`, `windows.setMaximized {window, on}`, `windows.setFullScreen {window, on}` |
 | closed | `closed.list {window?}` | `closed.restore {id, window?}`, `closed.clear {window?}` → `{cleared}`; both act on the window's profile, the last focused main window when `window` is left out, and answer `no_window` when there's none |
-| profiles | `profiles.list` | `profiles.create`, `profiles.update`, `profiles.setLook`, `profiles.reorder`, `profiles.setDefault`, `profiles.delete {profile}` (Ardia asks the user first) |
+| profiles | `profiles.list` | `profiles.create`, `profiles.update`, `profiles.setLook`, `profiles.reorder`, `profiles.setDefault`, `profiles.delete {profile}` (Solstice asks the user first) |
 | splits | `splits.list {window?}` | `splits.create {tabs, orientation?}`, `splits.separate`, `splits.removeTab`, `splits.resize {split, sizes}`, `splits.flip`, `splits.setOrientation` |
 | peek | `peek.list` | `peek.open {tab, url}`, `peek.close {tab}`, `peek.toTab {window}` |
 | littleArdia | (in `windows`) | `littleArdia.open {url?, profile?}`, `littleArdia.close`, `littleArdia.toMain` |
@@ -298,8 +298,8 @@ changes it today, 🔍 read only, 🗺️ designed below, ⛔ deliberately not e
 | downloads | `downloads.list {profile?, state?, limit?, offset?}` (live progress for running downloads), `downloads.settings {profile?}` | `downloads.pause`, `downloads.resume`, `downloads.cancel`, `downloads.keep`, `downloads.open`, `downloads.reveal`, `downloads.remove`, `downloads.clear`, `downloads.setSettings` |
 | settings | `settings.get {keys?}`, `settings.schema` | `settings.set {values}`, `settings.reset {keys}` |
 | search | `search.engines` (`default` is the engine searches use, an extension's when one controls it, with `controlledBy`) | `search.setDefault {id}` (`refused` while an extension controls it, as Settings disables the picker; so is `settings.set {searchEngine}`), `search.add`, `search.update`, `search.remove` |
-| sites | `sites.origins {profile?}`, `sites.get {origin, profile?}`, `sites.zoomLevels {profile?}`, `sites.adBlocker` → `{enabled, allowedSites}` | `sites.set {origin, type, value}`, `sites.reset {origin}`, `sites.setZoom {host, zoom}`, `sites.clearData {site}`, `sites.allowAds {site}` → `{site, trusted, covers, enabled, allowedSites}` and `sites.blockAds {site}` → `{site, removed, trusted, coveredBy?, enabled, allowedSites}`: the built-in uBlock Origin's trusted sites, the list Site Controls' Block Ads & Trackers switch edits (shared by every profile, from the next load). `allowAds` trusts the site and its subdomains, as the switch does (`covers` says so); the site can't be a public suffix (Chromium's list, private section included) or an IP address, so `co.uk`, `github.io` and `s3.amazonaws.com` are refused, while a name under a top-level domain the list doesn't know, like `wiki.intranet.corp`, counts as one site, as Chromium counts it. `blockAds` takes out exactly that entry (`contentBlocker.removeAllowed`): never a broader entry or one uBlock ships with; it answers `removed`, and `trusted` with `coveredBy` when a broader entry still lets the site through, and is refused naming the broader entry when the site itself isn't listed. An Ardia whose host lacks these calls (Linux until its engine has them) refuses both with `refused` |
-| extensions | `extensions.list {profile?}` | `extensions.install {profile?, webStore}` (the user adds it on the store page; `folder` is refused), `extensions.configure {id, siteAccess \| incognito \| userScripts}` (exactly one; `specificSites` is refused), `extensions.setEnabled {id, enabled}`, `extensions.setPinned`, `extensions.reload`, `extensions.uninstall` (Ardia asks the user first) |
+| sites | `sites.origins {profile?}`, `sites.get {origin, profile?}`, `sites.zoomLevels {profile?}`, `sites.adBlocker` → `{enabled, allowedSites}` | `sites.set {origin, type, value}`, `sites.reset {origin}`, `sites.setZoom {host, zoom}`, `sites.clearData {site}`, `sites.allowAds {site}` → `{site, trusted, covers, enabled, allowedSites}` and `sites.blockAds {site}` → `{site, removed, trusted, coveredBy?, enabled, allowedSites}`: the built-in uBlock Origin's trusted sites, the list Site Controls' Block Ads & Trackers switch edits (shared by every profile, from the next load). `allowAds` trusts the site and its subdomains, as the switch does (`covers` says so); the site can't be a public suffix (Chromium's list, private section included) or an IP address, so `co.uk`, `github.io` and `s3.amazonaws.com` are refused, while a name under a top-level domain the list doesn't know, like `wiki.intranet.corp`, counts as one site, as Chromium counts it. `blockAds` takes out exactly that entry (`contentBlocker.removeAllowed`): never a broader entry or one uBlock ships with; it answers `removed`, and `trusted` with `coveredBy` when a broader entry still lets the site through, and is refused naming the broader entry when the site itself isn't listed. An Solstice whose host lacks these calls (Linux until its engine has them) refuses both with `refused` |
+| extensions | `extensions.list {profile?}` | `extensions.install {profile?, webStore}` (the user adds it on the store page; `folder` is refused), `extensions.configure {id, siteAccess \| incognito \| userScripts}` (exactly one; `specificSites` is refused), `extensions.setEnabled {id, enabled}`, `extensions.setPinned`, `extensions.reload`, `extensions.uninstall` (Solstice asks the user first) |
 | media | `media.list` | `media.control {tab, action, seconds?}` |
 | sync | `sync.status`, `sync.devices {profile?}` | `sync.now`, `sync.setType {type, on}`, `sync.setProfile {profile, on}`, `sync.setOpenTabs {profile, on}`, `sync.sendTab {tab, device}` |
 | passwords, autofill | `passwords.list {profile?}`, `autofill.list {profile?}` | `passwords.remove {origin, username}` |
@@ -325,8 +325,8 @@ Five keys `config.json` can't take are set here with the checks their Settings r
 | `pageEngine` | `chromium` or `webkit`; `webkit` only where WebKit ships (macOS). The same write the pop-up in Settings › Advanced makes |
 | `websiteEngines` | `{site: engine}`, each site typed as the Add Rule sheet takes it (`netflix.com` or a full address) and stored as its scheme, host and port; a value that isn't a website address is `bad_request`. The whole map is replaced, as each sheet edit replaces one rule |
 | `protectedVideoInWebKit` | A boolean, the Streaming sites row; macOS only |
-| `newTabUrl` | Empty (Ardia's New Tab), or an `http(s)` address, `about:blank` or an Ardia page: the address Settings marks invalid is refused here, not saved. Stored trimmed |
-| `customSearchUrl` | The legacy one-URL engine that `search.engines` lists as `custom`: empty clears it (and if it was the default, the default goes back to Ardia's, as removing an engine does, unless the same call chooses `searchEngine`); otherwise an `http(s)` URL with `%s`, and only while no other engine uses the keyword `custom` |
+| `newTabUrl` | Empty (Solstice's New Tab), or an `http(s)` address, `about:blank` or an Solstice page: the address Settings marks invalid is refused here, not saved. Stored trimmed |
+| `customSearchUrl` | The legacy one-URL engine that `search.engines` lists as `custom`: empty clears it (and if it was the default, the default goes back to Solstice's, as removing an engine does, unless the same call chooses `searchEngine`); otherwise an `http(s)` URL with `%s`, and only while no other engine uses the keyword `custom` |
 
 One `settings.set` is checked as the settings would end up: adding `customSearchUrl` and choosing `searchEngine:
 "custom"` together works, clearing it while choosing `custom` is `bad_request`, and a `searchEngine` named in the
@@ -418,7 +418,7 @@ Each area is its own file: `socketPins.ts`, `socketFavicons.ts`, `socketSharedFo
   `equals` with `text`) checked as the Settings pane checks it, `profile` null for the profile used last, `group` a key
   from `airTraffic.rules` and only with `open: "tab"`. `moveRule` takes the new index and saves the new order in one
   write; `setFallback {open: null}`
-  puts Everything Else back to Ardia's usual choice; `test` is the pane's link tester.
+  puts Everything Else back to Solstice's usual choice; `test` is the pane's link tester.
 
 ### Events
 
@@ -472,7 +472,7 @@ since Chromium rereads an unpacked extension's folder by path, so only an engine
 The install sheet that Settings and Web Store prompts show keys each request, so its Add button and Return confirm
 that request only. Once Add is pressed the sheet shows Adding… with Cancel greyed out, and nothing else replaces it:
 a Web Store prompt that arrives meanwhile waits and shows after, in its own window if that can still show a sheet and
-isn't private, otherwise in another open main window or Little Ardia window (both host the install sheet) that isn't closing
+isn't private, otherwise in another open main window or Little Solstice window (both host the install sheet) that isn't closing
 (mid-animation or marked for close), or it is declined. If the window under a sheet closes before Chromium
 answers a failed add, no error sheet is left behind for it.
 
@@ -550,7 +550,7 @@ Plugins must never reach these store methods: a plugin acts through the mediated
 user or stays inside what the plugin was granted. Today the socket can't tell a plugin from the owner's `ardia`
 command: both connect to the same socket as the same user, and a plugin flag a client sends is only its own claim.
 
-**Design (not built):** when Ardia starts a plugin activity, it mints a random per-activity credential and hands it to
+**Design (not built):** when Solstice starts a plugin activity, it mints a random per-activity credential and hands it to
 the plugin's CLI child on an inherited file descriptor (never an environment variable, a file, or
 `ArdiaControl.json`, which every process of the user can read). The child sends it in `hello` as `session`; the socket
 looks it up, marks the connection `plugin`, and drops the credential when the activity ends or the connection closes.
@@ -565,7 +565,7 @@ connection, before params are even checked. Until the credential exists every co
 `control.devtoolsEndpoint` takes nothing and answers `{port, token, generation}`: the loopback port, the token and the
 generation of the engine's token connection, the one `ardia browse` speaks CDP over (`docs/cli.md`). It's how the
 command gets the token without reading `ArdiaControl.json`, so the token reaches only programs the socket let in: the
-bundled `ardia` and Ardia's other signed code, programs you allowed in the doorbell, and, in test instances, any
+bundled `ardia` and Solstice's other signed code, programs you allowed in the doorbell, and, in test instances, any
 process of the user, as for every method. The engine's server restarting moves `generation`; a client keeps the
 generation it was given and asks again when a connection is refused.
 
@@ -576,7 +576,7 @@ generation it was given and asks again when a connection is refused.
   starting each line, native checks the approval, so a line queued behind a slow reader never starts after it ends; a line already being written then is finished, as for every reply, and the token in it was
   given while the approval held.
 - **A token outlives the approval.** The engine checks only the token, not the doorbell, so a program that got it
-  (even one allowed once) can use it until the token connection restarts: control off and on, or Ardia quitting.
+  (even one allowed once) can use it until the token connection restarts: control off and on, or Solstice quitting.
   Removing a program's approval stops it asking again; it doesn't take back a token it already has.
 - **Control off** answers `failed` "Control is off.", when the request arrives and again when the read comes back.
   Turning it off first cuts native off, synchronously and before the rest of the stop (`ArdiaAutomation.cutOff`): from
@@ -594,8 +594,8 @@ generation it was given and asks again when a connection is refused.
   that stops just after the read leaves a token that opens nothing; the next connection fails and the client asks
   again.
 - **Errors.** `failed` when the token connection isn't running, the token can't be read, or the server restarted
-  while Ardia read it (ask again). Where the socket has no doorbell (Linux and Windows today) the method isn't listed
-  and answers `unknown_method`, as an Ardia older than it does. A command that reads the token from here should fall
+  while Solstice read it (ask again). Where the socket has no doorbell (Linux and Windows today) the method isn't listed
+  and answers `unknown_method`, as an Solstice older than it does. A command that reads the token from here should fall
   back to the file only on an `unknown_method` reply carrying its own request's `id`; a `refused` line with `id: null`
   is the doorbell turning the program away, and the file isn't a way around that.
 - **Containment.** In JS the token is a `Secret` of kind `devtoolsToken` from the moment it crosses from native
@@ -613,23 +613,23 @@ generation it was given and asks again when a connection is refused.
 network, last four and expiry), and removes a saved login, behind the same consent as every other method. It never returns a password, a full card number or a cookie value. When the profile's password manager is a plugin
 (Settings › Profiles › Passwords, `currentManagerPlugin` in `state/site/passwordManager.ts`, following profiles that
 share data and private windows' own profile), `passwords.list` and `passwords.remove` answer `password_manager_plugin`
-"This profile's passwords are kept by <plugin>; Ardia's own password store isn't used.": Ardia's store is empty or
+"This profile's passwords are kept by <plugin>; Solstice's own password store isn't used.": Solstice's store is empty or
 stale then, so an empty list would mislead. `cli_socket_password_manager_refusals` counts those refusals (never which
 plugin or profile).
 
 **Why:** "every single data point" covers knowing what is saved and cleaning it up, and those reads carry nothing an
-attacker could log in with. Revealing a password in Ardia's own UI asks macOS for the user's password or Touch ID
+attacker could log in with. Revealing a password in Solstice's own UI asks macOS for the user's password or Touch ID
 (`unlockPasswordsFor`); a socket method that did the same would put that system prompt on screen with no context of
 which program asked, and anything that can reach the socket (every process of the user) could ask. Cookie values are
-the user's live sessions on every site. Both are a different consent than "control Ardia".
+the user's live sessions on every site. Both are a different consent than "control Solstice".
 
 **Next, if the owner wants it:** `passwords.reveal {origin, username}` behind its own switch in Settings › Advanced
-(off by default) and the macOS re-auth on every call, with Ardia's own sheet naming the program first. It follows the
+(off by default) and the macOS re-auth on every call, with Solstice's own sheet naming the program first. It follows the
 same rule: a profile whose passwords a plugin keeps answers `password_manager_plugin`, naming the plugin.
 
 ## Native UI: prompts and menus
 
-Some of what a person answers in Ardia isn't a page and isn't in a store: a permission prompt already on screen, a
+Some of what a person answers in Solstice isn't a page and isn't in a store: a permission prompt already on screen, a
 `<select>` popup, a context menu, the menu bar. DevTools can't answer them (issue #2812, rows 3, 14,
 16 and 17), so the socket does, through the same decision path the native UI uses. Every method here is in `methods`
 with its schema, refuses plugin sessions at the dispatcher check point, stops writing when control is turned off, and
@@ -641,7 +641,7 @@ took 83, #2811 takes 84 and #2816 takes 85, merging in that order before this on
 Until the engine items listed under "Needs engine code" land, the socket **lists** prompts and captured page menus but
 **doesn't answer** permission or password prompts or **pick** from a captured menu: those methods answer `refused`
 with a message naming the engine work. Only captured background menus are listed; a menu on screen (a `<select>`
-popup, a live context menu, Ardia's or WebKit's) isn't socket-visible at all. The menu bar is reached through its
+popup, a live context menu, Solstice's or WebKit's) isn't socket-visible at all. The menu bar is reached through its
 static catalog and is refused while any private window is open. Autofill prompts and the menu bar otherwise are
 answered as described below.
 
@@ -649,15 +649,15 @@ answered as described below.
 | --- | --- | --- |
 | `permissions.prompts` | no | The prompt each tab shows (`{id, window, tab, origin, permissions, queued}`); `queued` counts the prompts waiting behind it |
 | `permissions.respond {id, decision}` | yes | **Refused for now**, for every decision, with a message naming the engine work: the engine reports nothing about what an answer did (an answered prompt posts no dismissal; embedded-prompt dismiss branches, policy, embargo, storage-access scoping and omitted kinds can all differ from what was asked), and a setting read back can't tell an answer from a setting that already matched. Needs a resolve result and a one-time grant (`ac_permissions.mm`, below). `no_window` for a prompt not on screen. The prompt on screen answers as before |
-| `passwords.prompts` | no | Save and update password prompts: `id` (Ardia's, new for every prompt a tab shows), origin, state, username, at most 20 of the usernames an update offers as `{id, name}` and `usernameCount`; never the password or its length. A username's `id` is a token of the prompt's id and that username (`u-` and 16 hex digits), never a position, so it can't name a username of another prompt; `name` is cut to 256 characters |
+| `passwords.prompts` | no | Save and update password prompts: `id` (Solstice's, new for every prompt a tab shows), origin, state, username, at most 20 of the usernames an update offers as `{id, name}` and `usernameCount`; never the password or its length. A username's `id` is a token of the prompt's id and that username (`u-` and 16 hex digits), never a position, so it can't name a username of another prompt; `name` is cut to 256 characters |
 | `passwords.respond {tab, id, decision, usernameId?}` | yes | **Refused for now**, with a message naming the engine work: the engine names no offer and doesn't say whether an answer took, and an app-side number can outlive its offer (Chromium's manual-save fallback replaces the form without a new bubble, and a queued Save can follow a Dismiss). Needs an offer id and a resolve result (`ac_password_prompt.mm`, below). `no_window` when the tab shows no prompt or another one. The prompt on screen answers as before |
-| `autofill.prompts` | no | Save address, update address and save card prompts: the engine's `id`, origin, `kind`, `fields` (for an update: which of name, address, email, phone, other change) and a `description` Ardia writes from those. Never the engine's text (an update's summary holds the name and street), the address lines or the card |
+| `autofill.prompts` | no | Save address, update address and save card prompts: the engine's `id`, origin, `kind`, `fields` (for an update: which of name, address, email, phone, other change) and a `description` Solstice writes from those. Never the engine's text (an update's summary holds the name and street), the address lines or the card |
 | `autofill.respond {tab, id, decision}` | yes | `accept`, `decline`, `dismiss`. `no_window` when the tab now shows another prompt or its page is gone; `failed` when the engine's prompt id no longer matches or it stays open after the answer |
-| `menus.open` | no | **Captured page menus only**: a page's context menu that a hidden Ardia captured as data (`kind: "page"`, `captured: true`), with the tab and window it came from, recorded when it was captured, and its items (`path`, `title`, `enabled`, `checked`, `separator`, `submenu`). It is listed only when that window and tab are ones the ardia command may use. Nothing else is socket-visible: a menu on screen (a page's context menu, a `<select>` popup, Ardia's own menus, a WebKit context menu, a tracking menu bar, any menu whose items target a class the app doesn't know) has no proven source, so it gets no id, no entry and no event. The menu bar is reached only through the static catalog in `menus.bar` |
+| `menus.open` | no | **Captured page menus only**: a page's context menu that a hidden Solstice captured as data (`kind: "page"`, `captured: true`), with the tab and window it came from, recorded when it was captured, and its items (`path`, `title`, `enabled`, `checked`, `separator`, `submenu`). It is listed only when that window and tab are ones the ardia command may use. Nothing else is socket-visible: a menu on screen (a page's context menu, a `<select>` popup, Solstice's own menus, a WebKit context menu, a tracking menu bar, any menu whose items target a class the app doesn't know) has no proven source, so it gets no id, no entry and no event. The menu bar is reached only through the static catalog in `menus.bar` |
 | `menus.choose {menu, path, ref?}` | yes | **Hidden from `methods`** (its spec is `hidden`); the handler stays for older clients, with its schema and consent checks. A captured page menu answers `refused` until the engine runs a captured item for its own frame. Any other id, whether it names a menu on screen or nothing at all, answers exactly as an unknown id: `no_window`, "There's no open menu with that id", by the same path. To run a menu bar item, use `menus.runBar` with a row from `menus.bar` |
 | `menus.dismiss {menu}` | yes | Drops a captured page menu from the list and sends clients nothing (nothing on screen closed). Any other id answers exactly as an unknown id does |
-| `menus.bar` | no | A **static catalog** of the menu bar, generated from its definition, never from the live `NSMenu`: `MainMenu.build()` hands its freshly built tree to `MenuCatalog.capture` before anything state-driven fills it, and before it assigns `NSApp.windowsMenu` (AppKit copies the open windows' rows into a new Window menu at that moment, so a rebuild with a private window open would otherwise capture its title); the capture also drops any row whose target or represented object is a window. The catalog is kept from then on. Each row has its path in that definition, `ref`, the static title it was built with, its default shortcut (`key`), and its `command` and `arg` when `run` takes it or its AppKit `action`; no enabled, checked or hidden state and no page-derived titles. Menus built from open windows, profiles, pages or history (Services, Share, Move to Profile, Move to Window, Add Bookmark to Folder, Profiles, New Little Ardia Window in Profile, History, Extensions) are one row each with `dynamic: true` and no items; Bookmarks and Window list their static items followed by one `dynamic` row for their saved bookmarks and open windows. So the catalog is the same bytes whatever is focused, open or private. Still refused while any private window is open |
-| `menus.runBar {path, ref, window?}` | yes | Runs a row of `menus.bar`, found by its `ref` (its `path` must match). A `dynamic` row, a submenu or a separator doesn't run. An Ardia command goes straight to `runMethod`, exactly as `run`: it first refuses everything in a background Ardia (#2811), then applies the command policy (`needsPerson` and the rest) before it resolves the named window, and then runs against that window's store state, with no menu validation (`validateMenuItem` and the cached menu state never decide), so the automation policy applies (`automationCommands.ts`: no Quit, no engine switch, no Allow JavaScript from Apple Events, no command that needs the person, the settings `config.json` can't set). **In a background Ardia `menus.runBar` runs nothing**: `run` refuses every command there (#2811), and every native item is refused too. Any other item is a native one, dispatched with no validation step to an explicit target the catalog recorded: the named window itself when it is the key window, or, for Minimize All and Arrange in Front, the app or the item's own `MenuTarget` handler; the target's own handler decides. With no key window every native item is refused; an item that only works along the responder chain (Undo, Copy, Paste, Select All, spelling and substitutions, Keep Window on Top) is refused, and so is everything off the `MenuBarAction` allowlist (Quit, Hide, Close Window, Check for Updates, system input, Check Document Now, Show Substitutions…). Everything is refused while any private window is open, checked in JS right before `run` with no await in between and natively in the turn that dispatches |
+| `menus.bar` | no | A **static catalog** of the menu bar, generated from its definition, never from the live `NSMenu`: `MainMenu.build()` hands its freshly built tree to `MenuCatalog.capture` before anything state-driven fills it, and before it assigns `NSApp.windowsMenu` (AppKit copies the open windows' rows into a new Window menu at that moment, so a rebuild with a private window open would otherwise capture its title); the capture also drops any row whose target or represented object is a window. The catalog is kept from then on. Each row has its path in that definition, `ref`, the static title it was built with, its default shortcut (`key`), and its `command` and `arg` when `run` takes it or its AppKit `action`; no enabled, checked or hidden state and no page-derived titles. Menus built from open windows, profiles, pages or history (Services, Share, Move to Profile, Move to Window, Add Bookmark to Folder, Profiles, New Little Solstice Window in Profile, History, Extensions) are one row each with `dynamic: true` and no items; Bookmarks and Window list their static items followed by one `dynamic` row for their saved bookmarks and open windows. So the catalog is the same bytes whatever is focused, open or private. Still refused while any private window is open |
+| `menus.runBar {path, ref, window?}` | yes | Runs a row of `menus.bar`, found by its `ref` (its `path` must match). A `dynamic` row, a submenu or a separator doesn't run. An Solstice command goes straight to `runMethod`, exactly as `run`: it first refuses everything in a background Solstice (#2811), then applies the command policy (`needsPerson` and the rest) before it resolves the named window, and then runs against that window's store state, with no menu validation (`validateMenuItem` and the cached menu state never decide), so the automation policy applies (`automationCommands.ts`: no Quit, no engine switch, no Allow JavaScript from Apple Events, no command that needs the person, the settings `config.json` can't set). **In a background Solstice `menus.runBar` runs nothing**: `run` refuses every command there (#2811), and every native item is refused too. Any other item is a native one, dispatched with no validation step to an explicit target the catalog recorded: the named window itself when it is the key window, or, for Minimize All and Arrange in Front, the app or the item's own `MenuTarget` handler; the target's own handler decides. With no key window every native item is refused; an item that only works along the responder chain (Undo, Copy, Paste, Select All, spelling and substitutions, Keep Window on Top) is refused, and so is everything off the `MenuBarAction` allowlist (Quit, Hide, Close Window, Check for Updates, system input, Check Document Now, Show Substitutions…). Everything is refused while any private window is open, checked in JS right before `run` with no await in between and natively in the turn that dispatches |
 
 **Events:** `permission.prompted` (`{id, windowId, tabId, origin, permissions, queued}`), `password.prompted`
 (`{id, windowId, tabId, origin, state, username, usernames, usernameCount}`, the same capped list; named only, not in `"*"`), `menu.opened` (`{id, kind, windowId, tabId, items}`, `items` being a count). There is no close event: a captured menu never shows on screen, and its drop sends nothing. None of
@@ -683,14 +683,14 @@ URLs (`file:///…` and `file://localhost/…` both pass `openableUrl`; there is
 design: it loads a file the caller named, in a tab, and opens no picker. `downloads.open`, which hands a download to an
 external app, lives in `socketDownloads.ts` (#2811).
 
-**What `run` already covered.** `run` and the `commands` catalogue cover every Ardia command in the menu bar; what was
+**What `run` already covered.** `run` and the `commands` catalogue cover every Solstice command in the menu bar; what was
 missing was the menu as data (which items exist, under which menus, with which shortcuts) and the menu items that
-aren't Ardia commands (Window). `menus.bar` and `menus.runBar` add only those, from the static catalog.
+aren't Solstice commands (Window). `menus.bar` and `menus.runBar` add only those, from the static catalog.
 
-**How it works.** `OpenSurfaces.swift` (in `packages/shell`) keeps only what a hidden Ardia captures: the engine hands a
+**How it works.** `OpenSurfaces.swift` (in `packages/shell`) keeps only what a hidden Solstice captures: the engine hands a
 page's context menu to the app (`-tab:runContextMenu:`), and the app records it with the tab and window it came from.
 It doesn't watch AppKit menu tracking at all, so a menu on screen, whoever shows it (Chromium's `MenuControllerCocoa`
-or `WebMenuRunner`, WebKit's `WKMenuTarget`, Ardia's own menus, the menu bar), never gets an id or an event: none of
+or `WebMenuRunner`, WebKit's `WKMenuTarget`, Solstice's own menus, the menu bar), never gets an id or an event: none of
 them says which tab and window it belongs to, and a guess from the key window could credit it to the wrong one. The
 menu bar is the static catalog in `menus.bar`, and `menus.runBar` runs from it.
 
@@ -746,7 +746,7 @@ page never reaches it on desktop: `WebContentsDelegate::OpenColorChooser` is com
 (`content/public/browser/web_contents_delegate.h`), and nothing on the browser side calls `ColorPanelHost`, so
 `color_panel_bridge.mm` is unused. Clicking `<input type=color>` opens Blink's own HTML picker
 (`ColorChooserPopupUIController`, `color_picker.js`) in a page popup window, measured in a hidden instance as a new
-230×248 window owned by Ardia. That popup isn't a DevTools target and its layout is Blink's private HTML, so the app
+230×248 window owned by Solstice. That popup isn't a DevTools target and its layout is Blink's private HTML, so the app
 can't choose in it reliably by synthesizing clicks. **Designed, needs engine code (joins #2808 or a later key):** a
 hook where `RenderWidgetHostImpl` shows the page popup for a color input (`g_ardia_page_popup_shown`) that hands the
 app the popup's widget, plus `ac_color_popup_set_value(widget, rgb)` calling the popup's own
@@ -758,16 +758,16 @@ hex value into it) wasn't measured here; row 14's run found no keyboard path for
 
 | Sheet | Who shows it | Socket |
 | --- | --- | --- |
-| Save or update password, save address or card | Ardia (`Prompts.tsx`, from `ac_password_prompt.mm` and `ac_autofill_prompt.mm`) | ✅ listed and answered above |
-| Payment sheet (`PaymentRequest.show()`) | Chromium's views dialog (`PaymentRequestDialogView`, from `ChromePaymentRequestDelegate::ShowDialog`), not Ardia | 🗺️ needs engine code |
+| Save or update password, save address or card | Solstice (`Prompts.tsx`, from `ac_password_prompt.mm` and `ac_autofill_prompt.mm`) | ✅ listed and answered above |
+| Payment sheet (`PaymentRequest.show()`) | Chromium's views dialog (`PaymentRequestDialogView`, from `ChromePaymentRequestDelegate::ShowDialog`), not Solstice | 🗺️ needs engine code |
 | Chrome's WebAuthn sheet (choose a passkey, phone, security key) | Chromium's views dialog (`AuthenticatorRequestDialogView`) | 🗺️ needs engine code |
 | iCloud Keychain passkey sheet, Touch ID, the macOS password prompt | macOS (`ASAuthorizationController`, `LAContext`) | ⛔ macOS owns it; the socket can't list or answer it |
 | Print preview | Chrome's `chrome://print` dialog (`PrintPreviewDialogController`) | CLI: attach to the `chrome://print` target once #2808 opens `chrome://` targets |
 
-**Payment sheet, designed.** Ardia doesn't own it today: `ChromePaymentRequestDelegate::ShowDialog` builds Chromium's
+**Payment sheet, designed.** Solstice doesn't own it today: `ChromePaymentRequestDelegate::ShowDialog` builds Chromium's
 views dialog over the page. To answer it the engine needs a hook beside `g_ardia_create_permission_prompt`
 (`g_ardia_payment_dialog`) that hands the sheet's state to the app: merchant origin, total and its label, the payment
-apps on offer (by name, never their instruments). The app then shows Ardia's own sheet, and the socket gets
+apps on offer (by name, never their instruments). The app then shows Solstice's own sheet, and the socket gets
 `payments.sheets` and `payments.respond {id, decision: pay|cancel, app?}`. Paying with an installed payment app only
 starts that app (its window asks for anything secret); the socket never sees card data. This is engine work and joins
 #2808's build (or a later engine key); it is not in this change. Until then `PaymentRequest.show()` behaves as Chromium
@@ -775,10 +775,10 @@ does, and the test page's `https://127.0.0.1/pay` method has no app, so it rejec
 sheet.
 
 **Passkeys, designed.** Chrome's own WebAuthn sheet is views UI and needs the same kind of engine hook
-(`g_ardia_authenticator_dialog`) before Ardia can list its steps (choose a passkey, use a phone, a security key) and the
+(`g_ardia_authenticator_dialog`) before Solstice can list its steps (choose a passkey, use a phone, a security key) and the
 socket can pick one. Creating or using a passkey then goes to macOS: the iCloud Keychain sheet and Touch ID belong to
 macOS, can't be answered by any app, and shouldn't be: they are the proof that the owner is present. So the socket stops
-at listing Ardia's own step, and the owner touches the sensor. A virtual authenticator (`WebAuthn.addVirtualAuthenticator`
+at listing Solstice's own step, and the owner touches the sensor. A virtual authenticator (`WebAuthn.addVirtualAuthenticator`
 over DevTools) remains the way to test, never the owner's real keys.
 
 ## Next

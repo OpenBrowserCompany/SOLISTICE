@@ -1,6 +1,6 @@
 # Conventions
 
-How Ardia's code is laid out and written. `apps/browser/src/conventions.test.mjs` enforces most of it (see
+How Solstice's code is laid out and written. `apps/browser/src/conventions.test.mjs` enforces most of it (see
 [The check](#the-check)); the rest is on review.
 
 ## Backwards compatibility: migrations only
@@ -12,7 +12,7 @@ mismatched engine.
 - No `respondsToSelector` guards for ArdiaCore's API, no optional `?.()` native calls, no always-true `isAvailable`
   checks, no metadata probes, no aliases for old names, no duplicate overloads. Keep `respondsToSelector` only for
   private AppKit or Chromium classes looked up at runtime.
-- What stays: versioned on-disk data migrations (Netnyahoo → Ardia included), the versioned sync payload (a nightly Mac
+- What stays: versioned on-disk data migrations (Netnyahoo → Solstice included), the versioned sync payload (a nightly Mac
   syncs with a stable Mac a version behind), and the one app/engine version assertion: `NATIVE_API_VERSION` and
   `apiVersion` in `packages/shell/ios/AppModule.swift`. Bump both when the native surface changes.
 
@@ -310,7 +310,7 @@ writeDocument(DOC, versionedJson(data, VERSION));
 
 ## Names
 
-- App-side ObjC classes and their files are `Ardia<Thing>`; Swift types use plain names (the module namespaces them).
+- App-side ObjC classes and their files are `Solstice<Thing>`; Swift types use plain names (the module namespaces them).
 - The engine's exported ObjC API is `ArdiaCore*`; engine C/C++ is `ac_*`.
 - No `Cef*`/`CEF`/`cef` names, no `AC*` or app-side `ArdiaCore*` classes in `packages/*/ios`.
 - No `Netnyahoo` or `NN*` names outside migration code (`LegacyMigration.swift`, `legacy.ts`, `*Migration.swift`,
@@ -333,7 +333,7 @@ writeDocument(DOC, versionedJson(data, VERSION));
 - **One `PageEngine` protocol** for the Chromium and WebKit page engines: same method names, one event table.
 - **One Expo module per domain** (`ArdiaTabs`, `ArdiaDownloads`, `ArdiaExtensions`, `ArdiaProfiles`,
   `ArdiaPermissions`, `ArdiaWindows`, `ArdiaMenus`, `ArdiaSystem`, …), each in `<Domain>Module.swift`, registered as
-  `Ardia<Domain>`.
+  `Solstice<Domain>`.
 - ArdiaShell links ArdiaCore directly and calls it with types: no selector strings or string notifications between
   them.
 - **One authority per rule:** the engine's off-the-record flag alone decides private profiles; one helper builds

@@ -1,6 +1,6 @@
 # Config files
 
-Ardia can be set up from plain files, dotfiles style, and from the `ardia` command (`docs/cli.md`). Closes #716.
+Solstice can be set up from plain files, dotfiles style, and from the `ardia` command (`docs/cli.md`). Closes #716.
 
 ## Where
 
@@ -30,7 +30,7 @@ the same rule a macOS test instance follows. The schemas go to `<data dir>/confi
   plugin.schema.json   written by the app
 ```
 
-Ardia never creates the folder. `ardia config init` does, or the user does.
+Solstice never creates the folder. `ardia config init` does, or the user does.
 
 ## config.json
 
@@ -73,7 +73,7 @@ Ardia never creates the folder. `ardia config init` does, or the user does.
   `["mouse:5"]`, optionally followed by `"control"`, `"option"`, `"shift"`, `"command"`. It sits beside the command's
   key shortcut (setting one never takes the other), runs only on the Mac for now, and is what Settings › Shortcuts
   records when you press the middle or a side button over a shortcut field.
-- `launchActions` is a list of up to 20 Ardia command ids (`"newTab"`, or `"selectTab:2"` for a variant) that the app
+- `launchActions` is a list of up to 20 Solstice command ids (`"newTab"`, or `"selectTab:2"` for a variant) that the app
   runs itself, once per launch, after the session is restored and the first window is up, in the focused window: no
   CLI control and no LaunchAgent needed. `"launchActions": ["newTab"]` keeps your tabs and lands on a new tab.
   Only commands the ardia command may run (`docs/automation.md`) are accepted; an unknown id or variant makes the
@@ -118,20 +118,20 @@ row in it) is reported and skipped, the others apply.
   address.
 - `title` names the provider on its chip and on each of its rows (default: the template's host).
 
-**Approval.** A `suggest` endpoint and every global provider stay off until approved in Ardia. The approval is for
+**Approval.** A `suggest` endpoint and every global provider stay off until approved in Solstice. The approval is for
 the exact definition: editing the entry needs a new one. Static keyword lists and URL templates send nothing and
 need none. Pending ones appear in Settings › Advanced › Automation; in code they're `pendingOmniboxProviders()` and
 `approveOmniboxProvider(key)` (`apps/browser/src/state/omnibox/`); approvals are kept in the app's data dir with
 the other automation approvals and listed in Settings › Advanced › Automation (`docs/automation.md` › Approvals).
 
-**Safety.** Rows only open `http` and `https` URLs (never `javascript:`, `data:`, `file:`, `chrome:` or Ardia's own
+**Safety.** Rows only open `http` and `https` URLs (never `javascript:`, `data:`, `file:`, `chrome:` or Solstice's own
 pages). Titles are capped at 120 characters and subtitles at 160, with control and bidi characters removed, and each
-row shows the destination's host and the provider's title, which Ardia sets. Icons are `https` URLs or
+row shows the destination's host and the provider's title, which Solstice sets. Icons are `https` URLs or
 `data:image` (png, jpeg, gif, webp, ico) up to 16 KB. Suggestion requests carry only what you typed: no cookies,
 referrer, page, history or profile. They go only to `https` URLs on a plain DNS hostname: no IP
 literal of any form (dotted, short, octal, hex or decimal IPv4, IPv6), no percent-encoding, user info or backslash,
 a canonical port, and not `localhost` or a private suffix (`.local`, `.internal`, `.lan`, `.home.arpa`, `.test`,
-`.onion`…). A DNS name that resolves to a private or loopback address is not blocked: Ardia checks the URL, not
+`.onion`…). A DNS name that resolves to a private or loopback address is not blocked: Solstice checks the URL, not
 what the name resolves to. They wait 120 ms after the last key, are cancelled by the next key, give up after 1.5 s, keep at most 4
 requests in flight, and are cached for 5 minutes per profile. A reply over 128 KB (by its Content-Length, or as soon
 as JS sees more than that arrive) is aborted and dropped. That's early cancellation, not a hard memory bound:
@@ -141,8 +141,8 @@ isn't allowed is dropped. Remote, program and extension providers never run in a
 templates do. A test instance (`docs/agent-brief.md` › Launch variables) may also use `http://127.0.0.1` (written
 exactly so) endpoints, for fixtures; other builds refuse them.
 
-**Extensions' `chrome.omnibox` keywords** don't reach Ardia's bar yet. The engine lists them (`ac_search_engines.cc`,
-`isOmniboxExtension`), but Ardia's location bar has no `OmniboxController`, so nothing calls
+**Extensions' `chrome.omnibox` keywords** don't reach Solstice's bar yet. The engine lists them (`ac_search_engines.cc`,
+`isOmniboxExtension`), but Solstice's location bar has no `OmniboxController`, so nothing calls
 `ExtensionOmniboxEventRouter::OnInputStarted/OnInputChanged/OnInputCancelled/OnInputEntered` or listens to
 `OmniboxSuggestionsWatcher`. Wiring them needs engine calls (`ac_omnibox_input_*` wrapping those statics, plus an
 `extensions.omniboxSuggestions` event from the watcher and the stored default suggestion). Accepting a row would also
@@ -161,7 +161,7 @@ you type. It has no Settings row: plugins (github.com/ardia-browser/plugins) and
 - `openTabs.hidePinned` leaves out pinned tabs (the sidebar's pinned rows), `openTabs.hideTopApps` leaves out Top Apps
   (the tiles). Typing still finds every open tab.
 - `openTabs.limit` (0–20, default 8) is how many open tabs it lists; 0 lists none.
-- Any other key, or a value of the wrong type, makes the whole setting invalid. `{}` is Ardia's default.
+- Any other key, or a value of the wrong type, makes the whole setting invalid. `{}` is Solstice's default.
 - Code: `state/omnibox/commandBarStart.ts`, used by `useOpenTabsStart` (`components/omnibox/dropdownStart.ts`).
   Telemetry: `settings_snapshot` carries `setting_commandBarStart_hidePinned`, `_hideTopApps` and `_limit` with their
   defaults.
@@ -193,23 +193,23 @@ Settings row: plugins (github.com/ardia-browser/plugins, `nightly6-feel`) and pe
 
 ### The file wins
 
-`config.json` is read-only to the app. Ardia never writes it, so there is nothing to race with.
+`config.json` is read-only to the app. Solstice never writes it, so there is nothing to race with.
 
-- At launch, and every time `config.json` or the active theme changes on disk, Ardia applies every file setting
+- At launch, and every time `config.json` or the active theme changes on disk, Solstice applies every file setting
   whose value is valid and differs from the current one, through `updateSettings` (so it syncs like a change made in
   Settings).
 - A change made in the app, or one that arrives from device sync, stands until the next launch or the next change to
   the file, which puts the file's value back. Sync arrivals don't trigger a re-apply, so two Macs with different
   files can't ping-pong.
-- Taking a key out of the file stops the file from setting it; Ardia keeps the current value. To go back to the
+- Taking a key out of the file stops the file from setting it; Solstice keeps the current value. To go back to the
   default, set the default value.
 - Applying is idempotent: a change event means "read the file again and reconcile", never "something changed once".
-  Several Ardia instances can share the folder.
+  Several Solstice instances can share the folder.
 
 ### Files and links
 
 The config folder, `config.json`, `themes/` and theme files may be symlinks (a dotfiles repo); reads follow them.
-Ardia reads only regular files (checked after resolving), at most 1 MB, opened non-blocking so a FIFO can't hang the
+Solstice reads only regular files (checked after resolving), at most 1 MB, opened non-blocking so a FIFO can't hang the
 watcher. The watcher re-resolves the folder when it changes and notices it appearing after launch.
 
 On Linux the reads and the watcher are native (`ac_linux_config_core.cc`, `ac_linux_config.cc`): reads also refuse
@@ -229,7 +229,7 @@ a launch.
 
 ### Errors
 
-A file that doesn't parse, an unknown key, a wrong value or a missing theme never breaks anything: Ardia applies what
+A file that doesn't parse, an unknown key, a wrong value or a missing theme never breaks anything: Solstice applies what
 is valid, skips the rest (a bad value skips that whole setting), logs it and shows one toast that sums them up
 ("config.json has a problem: selectedTabGlow must be full, soft or off"; past two, "and N more"). The toast stays
 until the file is fixed or you dismiss it; it comes back only for a new problem, waits for another toast (an Undo,
@@ -239,7 +239,7 @@ keeps the last good version of that theme. `ardia config check` reports the same
 ## Themes
 
 A theme is `<config folder>/themes/NAME.json`; `config.json`'s `theme` picks one. It holds colour roles per
-appearance and four look blocks. Every key is optional, and a block left out is Ardia's own look.
+appearance and four look blocks. Every key is optional, and a block left out is Solstice's own look.
 
 ```json
 {
@@ -258,7 +258,7 @@ appearance and four look blocks. Every key is optional, and a block left out is 
 - `dark` and `light` take any colour role of `colorRoles` (`apps/browser/src/components/ui/tokens.ts`). Colours are
   `#RGB`, `#RRGGBB`, `#RRGGBBAA`, `rgb(r,g,b)` or `rgba(r,g,b,a)` (r, g, b integers 0–255, a 0–1). Number roles are
   finite: `grain` and the `…Opacity` roles 0–1, the `…Radius` roles 0–100. `tabSelectedBorder` takes two colours.
-- The file's roles replace Ardia's in the base palettes, before anything else. Profile colours and custom profile
+- The file's roles replace Solstice's in the base palettes, before anything else. Profile colours and custom profile
   themes keep adding what they add today (backdrop, tint, accent); incognito uses the dark palette, with the file's
   dark roles, plus its tint.
 
@@ -280,7 +280,7 @@ Fonts and text sizes in the interface. Web pages keep their own fonts.
 | `sizes.large` | 13–27 | 17 | large headings, the command bar's field |
 | `weights.regular`, `.medium`, `.semibold`, `.bold` | `"100"`–`"900"` in steps of 100, string or number | `"400"`, `"500"`, `"600"`, `"700"` | what each weight name draws with |
 
-The seven sizes are Ardia's text sizes everywhere in the chrome; line heights scale with them.
+The seven sizes are Solstice's text sizes everywhere in the chrome; line heights scale with them.
 
 ### metrics
 
@@ -318,17 +318,17 @@ downloads button) and `profile` (the profile name in the sidebar header and the 
 
 An object from an SF Symbol name to the one to draw instead, both lowercase letters, digits and dots
 (`"sidebar.left": "rectangle.lefthalf.inset.filled"`). Default `{}`. It replaces the symbol everywhere in the chrome
-and in Ardia's context menus. A name macOS doesn't have draws nothing.
+and in Solstice's context menus. A name macOS doesn't have draws nothing.
 
 ### How a theme applies
 
 - Each bad key or value is reported on its own, in the app's words (`metrics.rowHeight must be a number from 24 to
   56`, `layout.hide has "toolbar", which isn't a part (pinned, newTab, …)`), and the valid rest still applies. A bad
-  key falls back to Ardia's value for that key only. Keys other than `$schema`, `dark`, `light`, `type`, `metrics`,
+  key falls back to Solstice's value for that key only. Keys other than `$schema`, `dark`, `light`, `type`, `metrics`,
   `layout` and `icons`, and names that aren't roles or look keys, are reported (the schema has
   `additionalProperties: false`).
 - A file that doesn't parse keeps the last good version of that theme.
-- `theme: null`, no `theme` key, a missing theme file or no `config.json` means Ardia's own palette and look.
+- `theme: null`, no `theme` key, a missing theme file or no `config.json` means Solstice's own palette and look.
 - Saving the active theme's file, or switching themes, restyles every window at once: no restart, and no page
   reloads. The effective base palette carries a revision, and every cache and snapshot built from roles or the look
   depends on it.
@@ -340,7 +340,7 @@ every launch, and into the config folder whenever it exists, rewriting only when
 rename, replacing a symlinked schema rather than writing through it). They are generated from the allowlisted
 `SETTING_SPECS` entries (each spec carries its schema; a test checks schema and validator agree on samples and
 defaults), the command catalog (the property names of `shortcuts`), `colorRoles` (each role's `default` is
-Ardia's dark or light value) and the look spec in `apps/browser/src/lib/themeLook.ts` (ranges, parts and defaults
+Solstice's dark or light value) and the look spec in `apps/browser/src/lib/themeLook.ts` (ranges, parts and defaults
 of `type`, `metrics`, `layout` and `icons`), so they never drift. They help editors and the CLI; the app always validates with its
 own code.
 
@@ -351,7 +351,7 @@ They use only this subset, which `ardia` checks itself without a JSON Schema lib
 
 ## The ardia command
 
-None of these need Ardia running; they read and write the files, and a running Ardia picks the change up at once.
+None of these need Solstice running; they read and write the files, and a running Solstice picks the change up at once.
 Keys, values and defaults come from the schemas in the config folder, else `<data dir>/config-schema/` (the
 `--data-dir` / `$ARDIA_DATA_DIR` one, else the installed app's). With neither, `set` writes without checking and says
 so. Exit codes: 0 done, 1 a check failed or the input is wrong.
@@ -363,11 +363,11 @@ so. Exit codes: 0 done, 1 a check failed or the input is wrong.
   file. KEY is a setting name, or `shortcuts.<command id>`.
 - `ardia config set KEY VALUE` parses VALUE as JSON, else takes it as a string (also when the JSON value fails the
   check and the string passes), checks it, and writes it, creating `config.json` first if needed. It rewrites
-  the file even when the value is already there, so a running Ardia re-applies it. An unknown
+  the file even when the value is already there, so a running Solstice re-applies it. An unknown
   key names the closest ones; a wrong value names what's allowed. The left-out settings are refused with or
   without a schema, and `cmd+shift+t` shortcuts are parsed (modifier and key names) so typos fail; glyph
   shortcuts pass if the schema allows them.
-- `ardia config unset KEY` removes it from the file. Ardia keeps the current value. A key the file doesn't set
+- `ardia config unset KEY` removes it from the file. Solstice keeps the current value. A key the file doesn't set
   is a no-op (exit 0); a name that isn't a setting is an error.
 - `ardia config list [--json]` lists every key with its type or allowed values, default and file value.
 - `ardia config edit` opens `config.json` (created first if needed) in `$VISUAL`, `$EDITOR` (split like a shell
@@ -378,7 +378,7 @@ so. Exit codes: 0 done, 1 a check failed or the input is wrong.
   the ranges built into `ardia`. `--json` prints
   `{"ok", "files": [{"file", "problems": [{"key", "message"}]}], "warnings"}`.
 - `ardia theme new NAME [--from THEME]` writes `themes/NAME.json` with every role and every look key that has a
-  default (so no `type.family`, `metrics.sidebarWidth` or `layout.newTab`), from Ardia's defaults or from another
+  default (so no `type.family`, `metrics.sidebarWidth` or `layout.newTab`), from Solstice's defaults or from another
   theme, whose values win key by key. The file passes `ardia theme check`. It never overwrites.
 - `ardia theme use NAME|none` sets `theme` in `config.json`, creating it first if needed.
 - `ardia theme list [--json]` lists the themes and marks the active one.
@@ -389,11 +389,11 @@ so. Exit codes: 0 done, 1 a check failed or the input is wrong.
   KEY is a dotted path whose first part is the block: `dark.accent`, `type.sizes.body`, `metrics.radius.row`,
   `layout.hide`. Under `icons` everything after `icons.` is one SF Symbol name (`icons.chevron.down`). Missing
   blocks are created; the file keeps its key order and is rewritten even when the value is unchanged, so a running
-  Ardia re-applies it. With no active theme and no `--theme`, it creates `themes/custom.json` (`$schema` plus the
+  Solstice re-applies it. With no active theme and no `--theme`, it creates `themes/custom.json` (`$schema` plus the
   key) and makes it the active theme, saying so on stderr. Without a schema it writes unchecked and says so.
 - `ardia theme get [KEY] [--theme NAME] [--json]` prints one key from the theme, or the whole file. A key the file
-  doesn't set exits 1 with Ardia's default when the schema has one.
-- `ardia theme unset KEY [--theme NAME]` removes the key and the blocks it leaves empty, so Ardia's own value comes
+  doesn't set exits 1 with Solstice's default when the schema has one.
+- `ardia theme unset KEY [--theme NAME]` removes the key and the blocks it leaves empty, so Solstice's own value comes
   back. A key the file doesn't set is a no-op (exit 0). `get` and `unset` exit 1 when no theme is active and no
   `--theme` is given, and a theme name that doesn't exist names the closest ones.
 
