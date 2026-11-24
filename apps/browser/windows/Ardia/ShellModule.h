@@ -28,7 +28,7 @@
 #pragma comment(lib, "winhttp.lib")
 #pragma comment(lib, "wtsapi32.lib")
 
-namespace Ardia {
+namespace Solstice {
 
 REACT_STRUCT(ShellBangListReply)
 struct ShellBangListReply {
@@ -286,8 +286,8 @@ inline BangListOutcome FetchBangList(std::optional<std::string> etag) noexcept {
   if (path.empty()) path = L"/";
   bool secure = parts.nScheme == INTERNET_SCHEME_HTTPS;
 
-  InternetHandle session{WinHttpOpen(L"Ardia", WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY, WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, 0)};
-  if (!session) session.handle = WinHttpOpen(L"Ardia", WINHTTP_ACCESS_TYPE_DEFAULT_PROXY, WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, 0);
+  InternetHandle session{WinHttpOpen(L"Solstice", WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY, WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, 0)};
+  if (!session) session.handle = WinHttpOpen(L"Solstice", WINHTTP_ACCESS_TYPE_DEFAULT_PROXY, WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, 0);
   if (!session) {
     outcome.failure = LastErrorText("WinHttpOpen");
     return outcome;

@@ -5,7 +5,7 @@
 #include <optional>
 #include <string>
 
-namespace Ardia {
+namespace Solstice {
 
 namespace DialogParts {
 

@@ -13,7 +13,7 @@
 #include <bcrypt.h>
 #include <wincrypt.h>
 
-namespace Ardia::SyncCrypto {
+namespace Solstice::SyncCrypto {
 
 class WipedBytes {
  public:
