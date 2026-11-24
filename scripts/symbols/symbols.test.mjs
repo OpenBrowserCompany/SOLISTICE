@@ -33,8 +33,8 @@ function appBinary(uuid = APP_UUID) {
       { name: "_main", address: TEXT, type: 0x0f },
       { name: "-[MenuTarget undo:]", address: TEXT + 0x100, type: 0x0e },
       { name: "ltmp3", address: TEXT + 0x180, type: 0x0e },
-      { name: "_$s5Ardia10MenuTargetC4undoyyypF", address: TEXT + 0x200, type: 0x0e },
-      { name: "_$s5Ardia10MenuTargetC4undoyyypF.alias", address: TEXT + 0x200, type: 0x0f },
+      { name: "_$s5Solstice-10MenuTargetC4undoyyypF", address: TEXT + 0x200, type: 0x0e },
+      { name: "_$s5Solstice-10MenuTargetC4undoyyypF.alias", address: TEXT + 0x200, type: 0x0f },
       { name: "_debug_map", address: TEXT + 0x10, type: 0x24 },
       { name: "_undefined", address: 0, type: 0x01, sect: 0 },
       { name: "_in_data", address: TEXT + 0x20, type: 0x0e, sect: 2 },
@@ -51,7 +51,7 @@ test("a Mach-O image gives its UUID, its __TEXT base and its __text section", ()
   assert.deepEqual([image.text.addr, image.text.size], [TEXT, 0x300]);
   assert.deepEqual(functionStarts(slice, image), [TEXT, TEXT + 0x100, TEXT + 0x200]);
   const names = functionSymbols(slice, image).map((s) => s.name);
-  assert.deepEqual(names, ["_main", "-[MenuTarget undo:]", "_$s5Ardia10MenuTargetC4undoyyypF", "_$s5Ardia10MenuTargetC4undoyyypF.alias"]);
+  assert.deepEqual(names, ["_main", "-[MenuTarget undo:]", "_$s5Solstice-10MenuTargetC4undoyyypF", "_$s5Solstice-10MenuTargetC4undoyyypF.alias"]);
 });
 
 test("a fat file is searched slice by slice for the wanted UUID", () => {
@@ -71,7 +71,7 @@ test("a frame's offset is from the image's __TEXT start, and names the function 
   assert.deepEqual(lookup(map, 0x10ff), { name: "main", delta: 0xff });
   assert.deepEqual(lookup(map, 0x1100), { name: "-[MenuTarget undo:]", delta: 0 });
   assert.deepEqual(lookup(map, 0x1190), { name: "-[MenuTarget undo:]", delta: 0x90 });
-  assert.deepEqual(lookup(map, 0x1280), { name: "$s5Ardia10MenuTargetC4undoyyypF.alias (identical code folded)", delta: 0x80 });
+  assert.deepEqual(lookup(map, 0x1280), { name: "$s5Solstice-10MenuTargetC4undoyyypF.alias (identical code folded)", delta: 0x80 });
   assert.equal(lookup(map, 0xfff), null);
   assert.equal(lookup(map, 0x1300), null);
   assert.equal(lookup(map, -1), null);
@@ -89,7 +89,7 @@ test("a symbol map survives being written and read back, and a bad one is refuse
   const map = buildMap(appBinary(), APP_UUID, { demanglers: NO_DEMANGLERS });
   const back = parseMap(serializeMap(map));
   assert.deepEqual(back, { ...map });
-  assert.throws(() => parseMap("hello\n"), /not an Ardia symbol map/);
+  assert.throws(() => parseMap("hello\n"), /not an Solstice symbol map/);
   const text = serializeMap(map).split("\n");
   assert.throws(() => parseMap([text[0], text[2], text[1]].join("\n")), /sorted/);
   assert.throws(() => parseMap([text[0], "zz\t10\tx"].join("\n")), /malformed/);
@@ -106,19 +106,19 @@ test("names go to the Swift and C++ demanglers that are there, and stay as they 
     return path;
   };
   const demanglers = { swift: [["/nonexistent/swift-demangle", []], [fake("swift", "swift:"), []]], cxx: [[fake("cxx", "cxx:"), []]] };
-  const names = ["_$s5Ardia1AC", "__ZN4base5ValueD2Ev", "____ZN4base1FEv_block_invoke_2", "-[Foo bar:]", "___49+[Foo baz]_block_invoke", "_main"];
-  assert.deepEqual(demangle(names, demanglers), ["swift:$s5Ardia1AC", "cxx:_ZN4base5ValueD2Ev", "invocation function for block in cxx:_ZN4base1FEv", "-[Foo bar:]", "__49+[Foo baz]_block_invoke", "main"]);
-  assert.deepEqual(demangle(names, NO_DEMANGLERS), ["$s5Ardia1AC", "_ZN4base5ValueD2Ev", "___ZN4base1FEv_block_invoke_2", "-[Foo bar:]", "__49+[Foo baz]_block_invoke", "main"]);
+  const names = ["_$s5Solstice-1AC", "__ZN4base5ValueD2Ev", "____ZN4base1FEv_block_invoke_2", "-[Foo bar:]", "___49+[Foo baz]_block_invoke", "_main"];
+  assert.deepEqual(demangle(names, demanglers), ["swift:$s5Solstice-1AC", "cxx:_ZN4base5ValueD2Ev", "invocation function for block in cxx:_ZN4base1FEv", "-[Foo bar:]", "__49+[Foo baz]_block_invoke", "main"]);
+  assert.deepEqual(demangle(names, NO_DEMANGLERS), ["$s5Solstice-1AC", "_ZN4base5ValueD2Ev", "___ZN4base1FEv_block_invoke_2", "-[Foo bar:]", "__49+[Foo baz]_block_invoke", "main"]);
 });
 
 test("frames are read from crash and freeze events, keyed by their image's UUID", () => {
-  const images = imageUuids(JSON.stringify([{ name: "Ardia", uuid: APP_UUID.toUpperCase() }, { name: "Chromium Framework", uuid: ENGINE_UUID }, { name: "bad", uuid: "nope" }, { name: 3, uuid: OTHER_UUID }]));
-  assert.deepEqual([...images], [["Ardia", APP_UUID], ["Chromium Framework", ENGINE_UUID]]);
+  const images = imageUuids(JSON.stringify([{ name: "Solstice", uuid: APP_UUID.toUpperCase() }, { name: "Chromium Framework", uuid: ENGINE_UUID }, { name: "bad", uuid: "nope" }, { name: 3, uuid: OTHER_UUID }]));
+  assert.deepEqual([...images], [["Solstice", APP_UUID], ["Chromium Framework", ENGINE_UUID]]);
   assert.equal(imageUuids("not json").size, 0);
   assert.equal(frameOffset({ image_offset: "0x327180" }), 0x327180);
   for (const bad of ["327180", "0x", "0xzz", "0x" + "f".repeat(14), 12, null]) assert.equal(frameOffset({ image_offset: bad }), null);
   const crash = JSON.stringify([
-    { type: "EXC_BAD_ACCESS", stacktrace: { frames: [{ module: "Ardia", image_offset: "0x7d038" }, { module: "Ardia", image_offset: "0x327180" }, { module: "AppKit", function: "-[NSUndoManager undo]" }] } },
+    { type: "EXC_BAD_ACCESS", stacktrace: { frames: [{ module: "Solstice", image_offset: "0x7d038" }, { module: "Solstice", image_offset: "0x327180" }, { module: "AppKit", function: "-[NSUndoManager undo]" }] } },
     { type: "second", stacktrace: { frames: [{ module: "Chromium Framework", image_offset: "0x9ce0c00" }] } },
   ]);
   assert.equal(crashFrames(crash).length, 4);
@@ -126,8 +126,8 @@ test("frames are read from crash and freeze events, keyed by their image's UUID"
   const freeze = JSON.stringify([{ module: "system", image_offset: "0x10" }, { module: "Chromium Framework", image_offset: "0x318e860" }]);
   assert.deepEqual(nativeFrames(freezeFrames(freeze), images), [{ image: "Chromium Framework", uuid: ENGINE_UUID, offset: 0x318e860 }]);
   const wanted = wantedFrames([
-    { kind: "crash", images: JSON.stringify([{ name: "Ardia", uuid: APP_UUID }]), frames: crash },
-    { kind: "crash", images: JSON.stringify([{ name: "Ardia", uuid: APP_UUID }]), frames: crash },
+    { kind: "crash", images: JSON.stringify([{ name: "Solstice", uuid: APP_UUID }]), frames: crash },
+    { kind: "crash", images: JSON.stringify([{ name: "Solstice", uuid: APP_UUID }]), frames: crash },
     { kind: "freeze", images: JSON.stringify([{ name: "Chromium Framework", uuid: ENGINE_UUID }]), frames: freeze },
   ]);
   assert.equal(wanted.length, 3);
@@ -135,7 +135,7 @@ test("frames are read from crash and freeze events, keyed by their image's UUID"
 
 test("a frame is named once, and one without symbols is tried again after a day", () => {
   const now = 10 * RETRY_MISSING_MS;
-  const wanted = [1, 2, 3, 4].map((offset) => ({ image: "Ardia", uuid: APP_UUID, offset }));
+  const wanted = [1, 2, 3, 4].map((offset) => ({ image: "Solstice", uuid: APP_UUID, offset }));
   const known = [
     { uuid: APP_UUID, offset: "1", source: "dsym", at: 0 },
     { uuid: APP_UUID, offset: 2, source: "none", at: now - 1000 },
@@ -144,15 +144,15 @@ test("a frame is named once, and one without symbols is tried again after a day"
     { uuid: APP_UUID, offset: 5, source: "match", at: now - RETRY_MISSING_MS },
     { uuid: APP_UUID, offset: 6, source: "outside", at: now - RETRY_MISSING_MS },
   ];
-  const all = [...wanted, ...[5, 6, 7].map((offset) => ({ image: "Ardia", uuid: APP_UUID, offset }))];
+  const all = [...wanted, ...[5, 6, 7].map((offset) => ({ image: "Solstice", uuid: APP_UUID, offset }))];
   assert.deepEqual(plan(all, known, now).map((f) => f.offset), [3, 5, 6, 7]);
   assert.match(knownSql("sandbox", [APP_UUID, "x'); DROP TABLE y; --"]), new RegExp(`IN \\('${APP_UUID}'\\)`));
   assert.throws(() => knownSql("sandbox; DROP", []), /identifier/);
   const map = buildMap(appBinary(), APP_UUID, { demanglers: NO_DEMANGLERS });
-  const rows = resolve([{ image: "Ardia", uuid: APP_UUID, offset: 0x1104 }, { image: "Ardia", uuid: APP_UUID, offset: 0x9000 }, { image: "Chromium Framework", uuid: ENGINE_UUID, offset: 5 }], new Map([[APP_UUID, map]]), 0);
+  const rows = resolve([{ image: "Solstice", uuid: APP_UUID, offset: 0x1104 }, { image: "Solstice", uuid: APP_UUID, offset: 0x9000 }, { image: "Chromium Framework", uuid: ENGINE_UUID, offset: 5 }], new Map([[APP_UUID, map]]), 0);
   assert.deepEqual(rows.map((r) => [r.symbol, r.symbol_offset, r.source]), [["-[MenuTarget undo:]", 4, "dsym"], ["", 0, "outside"], ["", 0, "none"]]);
   assert.equal(rows[0].resolved_at, "1970-01-01 00:00:00.000");
-  const kept = resolve([{ image: "Ardia", uuid: ENGINE_UUID, offset: 9 }], new Map(), 5, [{ uuid: ENGINE_UUID, offset: "9", source: "match", symbol: "MenuTarget.undo(_:)", symbol_offset: "400", at: 0 }]);
+  const kept = resolve([{ image: "Solstice", uuid: ENGINE_UUID, offset: 9 }], new Map(), 5, [{ uuid: ENGINE_UUID, offset: "9", source: "match", symbol: "MenuTarget.undo(_:)", symbol_offset: "400", at: 0 }]);
   assert.deepEqual(kept.map((r) => [r.symbol, r.symbol_offset, r.source]), [["MenuTarget.undo(_:)", 400, "match"]], "a recheck that finds nothing keeps the name it had");
 });
 
@@ -181,12 +181,12 @@ test("end to end: frames from events are named from a published release's dSYM a
     "engine-dca8c35f7ac2/ArdiaCore-dca8c35f7ac2-uuids.txt": `${ENGINE_UUID}\tarm64\t${dwarf}\n`,
     "engine-367b6b04ea64/ArdiaCore-367b6b04ea64-uuids.txt": `${ENGINE_UUID}\tarm64\t${dwarf}\n`,
     "engine-367b6b04ea64/ArdiaCore-367b6b04ea64-symbols.tar.xz": readFileSync(archive),
-    "v0.2.47/Ardia-0.2.47-symbol-map.tsv.gz": gzipSync(serializeMap({ ...appMap, source: "match" })),
+    "v0.2.47/Solstice-0.2.47-symbol-map.tsv.gz": gzipSync(serializeMap({ ...appMap, source: "match" })),
   };
   const releases = [
     { tag_name: "engine-dca8c35f7ac2", assets: [{ name: "ArdiaCore-dca8c35f7ac2-uuids.txt" }, { name: "ArdiaCore-dca8c35f7ac2-symbols.tar.xz" }] },
     { tag_name: "engine-367b6b04ea64", assets: [{ name: "ArdiaCore-367b6b04ea64-uuids.txt" }, { name: "ArdiaCore-367b6b04ea64-symbols.tar.xz" }] },
-    { tag_name: "v0.2.47", assets: [{ name: "Ardia-0.2.47.zip" }, { name: "Ardia-0.2.47-symbol-map.tsv.gz" }] },
+    { tag_name: "v0.2.47", assets: [{ name: "Solstice-0.2.47.zip" }, { name: "Solstice-0.2.47-symbol-map.tsv.gz" }] },
     { tag_name: "not-a-release", assets: [{ name: "x-uuids.txt" }] },
   ];
   const fetched = [];
@@ -200,8 +200,8 @@ test("end to end: frames from events are named from a published release's dSYM a
   };
   const store = new SymbolStore({ cache: join(scratch, "cache"), repo: "ardia-browser/ardia", fetch, log: () => {} });
   const events = [
-    { kind: "crash", images: JSON.stringify([{ name: "Ardia", uuid: APP_UUID }, { name: "Chromium Framework", uuid: ENGINE_UUID }]), frames: JSON.stringify([{ stacktrace: { frames: [{ module: "Chromium Framework", image_offset: "0x4104" }, { module: "Ardia", image_offset: "0x1210" }] } }]) },
-    { kind: "freeze", images: JSON.stringify([{ name: "Chromium Framework", uuid: ENGINE_UUID }, { name: "Ardia", uuid: OTHER_UUID }]), frames: JSON.stringify([{ module: "Chromium Framework", image_offset: "0x45d4" }, { module: "Ardia", image_offset: "0x10" }]) },
+    { kind: "crash", images: JSON.stringify([{ name: "Solstice", uuid: APP_UUID }, { name: "Chromium Framework", uuid: ENGINE_UUID }]), frames: JSON.stringify([{ stacktrace: { frames: [{ module: "Chromium Framework", image_offset: "0x4104" }, { module: "Solstice", image_offset: "0x1210" }] } }]) },
+    { kind: "freeze", images: JSON.stringify([{ name: "Chromium Framework", uuid: ENGINE_UUID }, { name: "Solstice", uuid: OTHER_UUID }]), frames: JSON.stringify([{ module: "Chromium Framework", image_offset: "0x45d4" }, { module: "Solstice", image_offset: "0x10" }]) },
   ];
   const statements = [];
   const reader = async (sql, { params }) => {
@@ -217,10 +217,10 @@ test("end to end: frames from events are named from a published release's dSYM a
   const named = Object.fromEntries(rows.map((r) => [`${r.image}+0x${r.offset.toString(16)}`, `${r.symbol}|${r.symbol_offset}|${r.source}`]));
   assert.deepEqual(named, {
     "Chromium Framework+0x4104": "-[CrApplication sendAction:to:from:]|4|dsym",
-    "Ardia+0x1210": "$s5Ardia10MenuTargetC4undoyyypF.alias (identical code folded)|16|match",
-    "Ardia+0x10": "|0|none",
+    "Solstice+0x1210": "$s5Solstice-10MenuTargetC4undoyyypF.alias (identical code folded)|16|match",
+    "Solstice+0x10": "|0|none",
   });
-  assert.deepEqual(summary.buildsWithoutSymbols, [`Ardia ${OTHER_UUID}`]);
+  assert.deepEqual(summary.buildsWithoutSymbols, [`Solstice ${OTHER_UUID}`]);
   assert.match(statements[0].sql, /CREATE TABLE IF NOT EXISTS sandbox\.ardia_frame_symbols/);
   const insert = statements.find((s) => /^INSERT/.test(s.sql));
   assert.equal(insert.body.split("\n").length, 3);
@@ -281,13 +281,13 @@ test("hostile telemetry never reaches SQL or the stored rows as anything but a c
   const safeImage = /^[A-Za-z0-9 ._()+-]{1,64}$/;
   for (const { id, value } of HOSTILE_VALUES) {
     assert.equal(frameOffset({ image_offset: value }), null, id);
-    assert.equal(imageUuids([{ name: "Ardia", uuid: value }]).size, 0, id);
+    assert.equal(imageUuids([{ name: "Solstice", uuid: value }]).size, 0, id);
     for (const name of imageUuids([{ name: value, uuid: APP_UUID }]).keys()) assert.match(name, safeImage, id);
     assert.deepEqual(parseUuids(typeof value === "string" ? value : ""), [], id);
     assert.throws(() => parseMap(typeof value === "string" ? value : ""), id);
     const frames = wantedFrames([
       { kind: "crash", images: value, frames: value },
-      { kind: "freeze", images: JSON.stringify([{ name: value, uuid: APP_UUID }]), frames: JSON.stringify([{ module: value, image_offset: "0x10" }, { module: "Ardia", image_offset: value }]) },
+      { kind: "freeze", images: JSON.stringify([{ name: value, uuid: APP_UUID }]), frames: JSON.stringify([{ module: value, image_offset: "0x10" }, { module: "Solstice", image_offset: value }]) },
     ]);
     for (const f of frames) {
       assert.match(f.uuid, /^[0-9a-f-]{36}$/, id);
@@ -314,23 +314,23 @@ test("a function the linker folded with identical ones says so instead of passin
 });
 
 test("a cached match map gives way to a dSYM a release publishes later, and stays when that download fails", { skip: !haveXz && "needs tar and xz" }, async () => {
-  const dwarf = "Ardia.app.dSYM/Contents/Resources/DWARF/Ardia";
+  const dwarf = "Solstice.app.dSYM/Contents/Resources/DWARF/Solstice";
   const release = join(scratch, "later-release");
-  mkdirSync(join(release, "Ardia.app.dSYM/Contents/Resources/DWARF"), { recursive: true });
+  mkdirSync(join(release, "Solstice.app.dSYM/Contents/Resources/DWARF"), { recursive: true });
   writeFileSync(join(release, dwarf), appBinary());
-  const archive = join(scratch, "Ardia-0.2.49-symbols.tar.xz");
-  assert.equal(spawnSync("tar", ["-cJf", archive, "-C", release, "Ardia.app.dSYM"]).status, 0);
+  const archive = join(scratch, "Solstice-0.2.49-symbols.tar.xz");
+  assert.equal(spawnSync("tar", ["-cJf", archive, "-C", release, "Solstice.app.dSYM"]).status, 0);
   const releases = [
-    { tag_name: "v0.2.50", assets: [{ name: "Ardia-0.2.50-uuids.txt" }, { name: "Ardia-0.2.50-symbols.tar.xz" }] },
-    { tag_name: "v0.2.49", assets: [{ name: "Ardia-0.2.49-uuids.txt" }, { name: "Ardia-0.2.49-symbols.tar.xz" }] },
+    { tag_name: "v0.2.50", assets: [{ name: "Solstice-0.2.50-uuids.txt" }, { name: "Solstice-0.2.50-symbols.tar.xz" }] },
+    { tag_name: "v0.2.49", assets: [{ name: "Solstice-0.2.49-uuids.txt" }, { name: "Solstice-0.2.49-symbols.tar.xz" }] },
   ];
   let serveArchive = false;
   const fetch = async (url) => {
     const u = decodeURIComponent(String(url));
     if (u.startsWith("https://api.github.com/")) return new Response(JSON.stringify(u.endsWith("page=1") ? releases : []), { status: 200 });
-    if (u.endsWith("Ardia-0.2.50-uuids.txt")) return new Response("gone", { status: 404 });
-    if (u.endsWith("Ardia-0.2.49-uuids.txt")) return new Response(`${APP_UUID}\tarm64\t${dwarf}\n`, { status: 200 });
-    if (u.endsWith("Ardia-0.2.49-symbols.tar.xz") && serveArchive) return new Response(readFileSync(archive), { status: 200 });
+    if (u.endsWith("Solstice-0.2.50-uuids.txt")) return new Response("gone", { status: 404 });
+    if (u.endsWith("Solstice-0.2.49-uuids.txt")) return new Response(`${APP_UUID}\tarm64\t${dwarf}\n`, { status: 200 });
+    if (u.endsWith("Solstice-0.2.49-symbols.tar.xz") && serveArchive) return new Response(readFileSync(archive), { status: 200 });
     return new Response("missing", { status: 404 });
   };
   const cache = join(scratch, "later-cache");
@@ -343,8 +343,8 @@ test("a cached match map gives way to a dSYM a release publishes later, and stay
     repo: "ardia-browser/ardia",
     fetch: async (url) => {
       const u = decodeURIComponent(String(url));
-      if (u.endsWith("page=1")) return new Response(JSON.stringify([{ tag_name: "v0.2.47", assets: [{ name: "Ardia-0.2.47-symbol-map.tsv.gz" }] }]), { status: 200 });
-      if (u.endsWith("Ardia-0.2.47-symbol-map.tsv.gz")) return new Response(gzipSync(serializeMap(matched)), { status: 200 });
+      if (u.endsWith("page=1")) return new Response(JSON.stringify([{ tag_name: "v0.2.47", assets: [{ name: "Solstice-0.2.47-symbol-map.tsv.gz" }] }]), { status: 200 });
+      if (u.endsWith("Solstice-0.2.47-symbol-map.tsv.gz")) return new Response(gzipSync(serializeMap(matched)), { status: 200 });
       return new Response("rate limited", { status: 403 });
     },
     log: () => {},
@@ -385,14 +385,14 @@ test("a symbol at the end of __text gets no empty row, and maps with an unknown 
   assert.deepEqual(map.entries.map((e) => [e.name, e.end - e.start]), [["a", 0x40]]);
   assert.deepEqual(parseMap(serializeMap(map)), map);
   const header = serializeMap(map).split("\n")[0];
-  assert.throws(() => parseMap(header.replace("ardia-symbol-map 1 ", "ardia-symbol-map 10 ") + "\n"), /not an Ardia symbol map/);
+  assert.throws(() => parseMap(header.replace("ardia-symbol-map 1 ", "ardia-symbol-map 10 ") + "\n"), /not an Solstice symbol map/);
   assert.throws(() => parseMap([header, "1000\t1030\ta", "1020\t1022\tb"].join("\n")), /non-overlapping/);
   assert.equal(parseMap([header, "1000\t1020\ta", "1020\t1022\tb", "1030\t1040\tc"].join("\n")).entries.length, 3);
 });
 
 test("an image name listed with two UUIDs names no frames, and stored rows are read only for the wanted offsets", () => {
-  assert.equal(imageUuids([{ name: "Ardia", uuid: APP_UUID }, { name: "Ardia", uuid: OTHER_UUID }, { name: "Ardia", uuid: APP_UUID }]).size, 0);
-  assert.deepEqual([...imageUuids([{ name: "Ardia", uuid: APP_UUID }, { name: "Ardia", uuid: APP_UUID.toUpperCase() }])], [["Ardia", APP_UUID]]);
+  assert.equal(imageUuids([{ name: "Solstice", uuid: APP_UUID }, { name: "Solstice", uuid: OTHER_UUID }, { name: "Solstice", uuid: APP_UUID }]).size, 0);
+  assert.deepEqual([...imageUuids([{ name: "Solstice", uuid: APP_UUID }, { name: "Solstice", uuid: APP_UUID.toUpperCase() }])], [["Solstice", APP_UUID]]);
   assert.match(knownSql("sandbox", [APP_UUID, APP_UUID], [16, 2, 16, -1, 1.5]), new RegExp(`uuid IN \\('${APP_UUID}'\\) AND offset IN \\(16, 2\\)`));
 });
 
@@ -432,8 +432,8 @@ test("credentials only go to ClickHouse over https, or plain http on this machin
 });
 
 test("stored rows are read in chunks, so a long backfill stays under ClickHouse's query size", async () => {
-  const frames = Array.from({ length: KNOWN_CHUNK + 1 }, (_, i) => ({ module: "Ardia", image_offset: `0x${(i + 1).toString(16)}` }));
-  const event = { kind: "freeze", images: JSON.stringify([{ name: "Ardia", uuid: APP_UUID }]), frames: JSON.stringify(frames) };
+  const frames = Array.from({ length: KNOWN_CHUNK + 1 }, (_, i) => ({ module: "Solstice", image_offset: `0x${(i + 1).toString(16)}` }));
+  const event = { kind: "freeze", images: JSON.stringify([{ name: "Solstice", uuid: APP_UUID }]), frames: JSON.stringify(frames) };
   const selects = [];
   const sandbox = async (sql) => {
     if (sql.startsWith("SELECT")) selects.push(sql);
@@ -486,14 +486,14 @@ test("a release map is imported again when its cached copy went bad, and dSYMs f
   const archive = join(scratch, "ArdiaCore-111111111111-symbols.tar.xz");
   assert.equal(spawnSync("tar", ["-cJf", archive, "-C", release, "Chromium Framework.dSYM"]).status, 0);
   const pageOne = [
-    { tag_name: "v0.2.47", assets: [{ name: "Ardia-0.2.47-symbol-map.tsv.gz" }] },
+    { tag_name: "v0.2.47", assets: [{ name: "Solstice-0.2.47-symbol-map.tsv.gz" }] },
     { tag_name: "engine-111111111111", assets: [{ name: "ArdiaCore-111111111111-uuids.txt" }, { name: "ArdiaCore-111111111111-symbols.tar.xz" }] },
   ];
   const fetch = async (url) => {
     const u = decodeURIComponent(String(url));
     if (u.endsWith("page=1")) return new Response(JSON.stringify(pageOne), { status: 200 });
     if (u.startsWith("https://api.github.com/")) return new Response("rate limited", { status: 403 });
-    if (u.endsWith("Ardia-0.2.47-symbol-map.tsv.gz")) return new Response(mapAsset, { status: 200 });
+    if (u.endsWith("Solstice-0.2.47-symbol-map.tsv.gz")) return new Response(mapAsset, { status: 200 });
     if (u.endsWith("ArdiaCore-111111111111-uuids.txt")) return new Response(`${ENGINE_UUID}\tarm64\t${dwarf}\n`, { status: 200 });
     if (u.endsWith("ArdiaCore-111111111111-symbols.tar.xz")) return new Response(readFileSync(archive), { status: 200 });
     return new Response("missing", { status: 404 });

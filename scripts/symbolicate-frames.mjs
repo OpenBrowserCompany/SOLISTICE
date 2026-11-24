@@ -15,7 +15,7 @@ const HELP = `Names the native frames of recent Mac crashes and app_freeze event
   node scripts/symbolicate-frames.mjs [--days <n>] [--dry-run] [--cache <dir>] [--maps <dir>]... [--repo <owner/name>]
 
 Every frame keeps its image's UUID (crash_images, freeze_images). For each UUID it hasn't named yet it finds the
-release whose *-uuids.txt lists it (engine-<key:12> for Chromium Framework and its helpers, v<version> for Ardia),
+release whose *-uuids.txt lists it (engine-<key:12> for Chromium Framework and its helpers, v<version> for Solstice),
 downloads that release's *-symbols.tar.xz, unpacks only that image's DWARF file and reads its symbol table (no atos,
 so it runs on Linux too: tar and xz, plus swift-demangle and c++filt when present to demangle names). A release may
 also carry *-symbol-map.tsv.gz, a ready map for a build without a dSYM (scripts/symbols/name-stripped-build.mjs);
