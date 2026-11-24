@@ -13,7 +13,7 @@ import { medianOrNull as median } from "./median.mjs";
 const HELP = `Sidebar scroll cost with real gestures: what one trackpad flick or wheel spin over the sidebar's tab list costs the
 app, at several tab counts, read while the screen may be locked.
 
-  node apps/browser/scripts/perf/sidebar-scroll-bench.mjs run --app <Debug or Release Ardia.app> --scratch <dir>
+  node apps/browser/scripts/perf/sidebar-scroll-bench.mjs run --app <Debug or Release Solstice.app> --scratch <dir>
       [--bundle <main.jsbundle>] [--label <name>] [--tabs 50,150,300] [--profiles 1,2] [--reps 5]
       [--gestures pan,pan-up,wheel,wheel-up,fold100] [--folds 100,200] [--layout sidebar|top] [--pointer over|away] [--port 9631] [--keep] [--attach]
       [--post app|acperf] [--append] [--out <file.json>]

@@ -2,7 +2,7 @@
 // Long-session soak: a day's browsing compressed into minutes, on a production (Hermes) bundle in a hidden instance,
 // sampled at intervals so growth shows as a curve (#3163). Starts from js-bench's 200-tab seed.
 //
-//   node soak.mjs run --app <Release Ardia.app> --bundle <main.jsbundle> --label <name> [flags]
+//   node soak.mjs run --app <Release Solstice.app> --bundle <main.jsbundle> --label <name> [flags]
 //     --rounds <n>         rounds of activity (default 120). One round: --navs navigations spread over the windows'
 //                          tabs (60% new URLs, the rest revisits), --opens new tabs (at most 6 kept open: the oldest
 //                          closes as each opens), --switches tab switches

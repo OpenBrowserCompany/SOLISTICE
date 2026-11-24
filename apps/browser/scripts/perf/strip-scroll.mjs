@@ -12,7 +12,7 @@ import { medianOrNull as median } from "./median.mjs";
 const HELP = `Top tab strip scroll cost: what a two-finger horizontal pan (and a wheel) over the top strip costs the main thread,
 the JS thread and the process, with the React work it caused, in hidden instances of one app with one or more JS bundles.
 
-  node apps/browser/scripts/perf/strip-scroll.mjs run --app <Ardia.app> --side <label>=<main.jsbundle> [--side …] --out <dir>
+  node apps/browser/scripts/perf/strip-scroll.mjs run --app <Solstice.app> --side <label>=<main.jsbundle> [--side …] --out <dir>
         [--tabs 25,80] [--profiles 1,2] [--reps 5] [--cases mid,back,end,start,leave,arrive,wheel,idle] [--width 1360] [--port 9611]
         [--data <dir>] [--driver inproc|acperf] [--check] [--keep]
   node apps/browser/scripts/perf/strip-scroll.mjs compare <results.json>
