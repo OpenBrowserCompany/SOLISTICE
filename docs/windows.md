@@ -1549,15 +1549,15 @@ folder and refused all 3 launches), the concurrent-runs check (`ports.ps1`) and
 - Order in `BeforeChromeMain` (`main.cc`): the WebUI branch first makes sure Chromium will open the WebUI profile,
   then the test gate runs (as for RNW), then the WebUI branch returns **before** the `ArdiaApp.dll` check. A WebUI start
   never loads the app library, the RNW message hooks, the hosted-window frame or `AskBeforeDiscards`.
-- Its own folders: app data in `%LOCALAPPDATA%\Ardia WebUI` (a sibling of the RNW app's `%LOCALAPPDATA%\Ardia`, never
-  inside it) and Chromium's profile in `%LOCALAPPDATA%\Ardia WebUI\Chromium`. A test instance's `ARDIA_DATA_DIR` is
+- Its own folders: app data in `%LOCALAPPDATA%\Solstice WebUI` (a sibling of the RNW app's `%LOCALAPPDATA%\Solstice`, never
+  inside it) and Chromium's profile in `%LOCALAPPDATA%\Solstice WebUI\Chromium`. A test instance's `ARDIA_DATA_DIR` is
   used as is (`<ARDIA_DATA_DIR>\Chromium`), so the test gate, CDP and scratch-folder rules are the RNW ones.
 - Chromium on Windows takes its profile folder from `install_static`, which `chrome_elf` computes from the process's
-  real command line before any Ardia code runs, and opens Crashpad's database there; changing `--user-data-dir` in
+  real command line before any Solstice code runs, and opens Crashpad's database there; changing `--user-data-dir` in
   `BeforeChromeMain` does nothing (the first pilot run opened the wrong folder). So `chromium-win-webui-user-data-dir.patch`
   (the one Windows patch the pilot adds, after `chromium-win-install-names.patch`) decides it in `install_static`:
   with `--ardia-shell=webui` and no `--user-data-dir`, policy or `ARDIA_DATA_DIR` naming another folder, it picks
-  `%LOCALAPPDATA%\Ardia WebUI\Chromium`.
+  `%LOCALAPPDATA%\Solstice WebUI\Chromium`.
 - **Both stages read the switch the same way.** `install_static::IsWebUIShellCommandLine` repeats what
   `base::CommandLine::ParseFromString` and `AppendSwitchesAndArguments` do in Chromium 158 (`base/command_line.cc`):
   trim the whole command line with base's whitespace set, split it as `CommandLineToArgvW` does (`install_static`'s
@@ -1572,14 +1572,14 @@ folder and refused all 3 launches), the concurrent-runs check (`ports.ps1`) and
 - Whichever folder was chosen (command line, policy, `ARDIA_DATA_DIR` or that default) is resolved through the opened
   handle of its nearest existing part (`GetFinalPathNameByHandle`, by volume GUID, so `\\?\`, 8.3, UNC
   `\\localhost\C$`, `subst` and junction spellings all land on one path), before it is created and again after.
-  It is compared with the React Native app's folders resolved the same way: `%LOCALAPPDATA%\Ardia` and `%APPDATA%\Ardia`
+  It is compared with the React Native app's folders resolved the same way: `%LOCALAPPDATA%\Solstice` and `%APPDATA%\Solstice`
   and their `User Data` folders (followed wherever a junction moved them). If they are the same, one contains the
   other, a folder can't be resolved, or the chosen folder can't be created, the process exits with code 1 there,
   before Crashpad starts. There is no fallback: neither Chromium's default folder (the React Native app's) nor a
   temporary one.
 - **No links inside the WebUI tree.** After the folder is created, `install_static` walks the whole profile tree
   (`WebUITreeHasLink`: `FindFirstFileEx`, never following a link) and exits with code 1 if any file or folder in it
-  is a reparse point: a junction, a directory or file symlink, at any depth. Ardia's own check walks the WebUI
+  is a reparse point: a junction, a directory or file symlink, at any depth. Solstice's own check walks the WebUI
   app-data folder with the same function. The pilot's tree is its own, so the walk is bounded, and it doesn't matter
   where a link points: a stale link to an unrelated folder refuses too. The WebUI folder itself may still be a link
   (a profile moved to another drive); its target is what gets compared above. Only a reparse attribute refuses.
@@ -1614,7 +1614,7 @@ folder and refused all 3 launches), the concurrent-runs check (`ports.ps1`) and
 - If the folder Chromium will use is safe but isn't the WebUI one (an explicit `--user-data-dir`), the engine starts
   itself again with the WebUI folder and exits (`RelaunchIntoWebUIProfile`, once: a second mismatch refuses to start).
   Folders are compared by resolved path (`SameFolder`), not by spelling.
-- Ardia's own code checks again before Chromium opens the profile (`ReactNativeFolderClash`, the test gate's
+- Solstice's own code checks again before Chromium opens the profile (`ReactNativeFolderClash`, the test gate's
   `CanonicalPath`, with the same set of React Native folders and the link walk) and exits with code 1 on the same
   conditions.
 - Checked in a throwaway Windows 11 guest by `scripts/windows/webui-pilot/junction.ps1`. It never touches the account's
@@ -1623,18 +1623,18 @@ folder and refused all 3 launches), the concurrent-runs check (`ports.ps1`) and
   (links are unlinked first, never followed). Each launch starts suspended, the harness reads its real command line
   back and splits it with `CommandLineToArgvW`, and a case counts only if the engine got exactly the arguments meant.
   Each of these exits 1 with no window, and no file or folder in the React Native folder is added, removed or
-  changed: `Ardia WebUI` as a junction to `Ardia` (with the switch also spelled `--ARDIA-SHELL`, `-ardia-shell`,
-  `/ardia-shell`, `--Ardia-Shell`, padded with spaces, and after `--SINGLE-ARGUMENT`); `Ardia WebUI\Chromium` as a
-  junction to `Ardia\User Data`; a junction and a directory symlink at depth 1 (`Chromium\Default`) and at depth 3
+  changed: `Solstice WebUI` as a junction to `Solstice` (with the switch also spelled `--ARDIA-SHELL`, `-ardia-shell`,
+  `/ardia-shell`, `--Ardia-Shell`, padded with spaces, and after `--SINGLE-ARGUMENT`); `Solstice WebUI\Chromium` as a
+  junction to `Solstice\User Data`; a junction and a directory symlink at depth 1 (`Chromium\Default`) and at depth 3
   (`Chromium\Default\Local Storage\leveldb`) into the React Native profile, a junction to an unrelated folder, a
   file symlink to its `Local State`, and a junction beside `Chromium` in the app-data folder; `--user-data-dir`
-  pointing into `Ardia\User Data`, also spelled `\\?\…`, as its 8.3 short name and as `\\localhost\C$\…`;
-  `ARDIA_DATA_DIR` pointing at `Ardia`; `Ardia WebUI` made a file, so the profile folder can't be created; and
-  `Ardia\User Data` moved elsewhere behind a junction with `Ardia WebUI\Chromium` joined to the same place. The same
-  launch with none of these opens the window in `Ardia WebUI\Chromium` (also with the switch spelled upper case or
-  with one dash, and with a `--user-data-dir` that has a space in it), and `Ardia WebUI` can't be renamed while it
+  pointing into `Solstice\User Data`, also spelled `\\?\…`, as its 8.3 short name and as `\\localhost\C$\…`;
+  `ARDIA_DATA_DIR` pointing at `Solstice`; `Solstice WebUI` made a file, so the profile folder can't be created; and
+  `Solstice\User Data` moved elsewhere behind a junction with `Solstice WebUI\Chromium` joined to the same place. The same
+  launch with none of these opens the window in `Solstice WebUI\Chromium` (also with the switch spelled upper case or
+  with one dash, and with a `--user-data-dir` that has a space in it), and `Solstice WebUI` can't be renamed while it
   runs. With `ARDIA_TEST_PIN_PAUSE_MS` in a test build, `install_static` waits right after the pin, before chrome.dll
-  loads or Crashpad starts; renaming `Ardia WebUI\Chromium` or `Ardia WebUI` then fails, which shows the handle
+  loads or Crashpad starts; renaming `Solstice WebUI\Chromium` or `Solstice WebUI` then fails, which shows the handle
   alone holds the folder.
 - The WebUI shell's session (`session.json`) lives in its app-data folder, so the launch guard's recovery sets it aside
   after unfinished starts as it does the React Native app's. A start counts as finished when the shell reports it has

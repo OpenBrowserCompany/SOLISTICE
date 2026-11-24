@@ -146,7 +146,7 @@ Test hygiene the run keeps (each was a real failure):
   one behind).
 
 `node packages/ardiacore/scripts/token-signals-check.mjs <app> [metro host:port] [scratch dir]` runs the engine-answered
-`Ardia.*` DevTools methods and `tabs.hold {untilDisconnect, live}` over the real token connection and control socket in
+`Solstice.*` DevTools methods and `tabs.hold {untilDisconnect, live}` over the real token connection and control socket in
 one hidden instance (no DevTools port): the console ring, watermarks and generations, hit tests (listeners, cover,
 delegation, a cross-site iframe as a remote frame, cancellation on disconnect, the 4-probe cap), the focused frame's
 origin and document id, refusals off a tab session and for bad parameters, and SIGKILL ending a live hold.

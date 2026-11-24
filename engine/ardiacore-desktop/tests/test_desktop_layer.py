@@ -80,10 +80,10 @@ class DesktopLayerTests(unittest.TestCase):
 
     def test_linux_routes_exactly_its_system_calls_through_the_platform(self):
         platform = (LINUX / 'ac_linux_desktop_platform.h').read_text()
-        routed = re.findall(r'"(Ardia[A-Za-z]+\.[A-Za-z]+)"', platform)
+        routed = re.findall(r'"(Solstice[A-Za-z]+\.[A-Za-z]+)"', platform)
         core = (LINUX / 'ac_linux_desktop_core.h').read_text()
         listed = core[core.index('kSystemCapabilities[] = {'):]
-        system = re.findall(r'"(Ardia[A-Za-z]+\.[A-Za-z]+)"', listed[:listed.index('};')])
+        system = re.findall(r'"(Solstice[A-Za-z]+\.[A-Za-z]+)"', listed[:listed.index('};')])
         self.assertEqual(sorted(routed), sorted(system))
 
 
