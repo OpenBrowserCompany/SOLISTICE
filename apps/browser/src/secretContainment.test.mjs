@@ -329,7 +329,7 @@ test("the legitimate sinks get the plaintext and nothing else does", async () =>
   assert.deepEqual(JSON.parse(devtoolsEndpointLine(7, { port: 41234, generation: 3, token: endpoint })), { id: 7, result: { port: 41234, token: CANARY.devtoolsToken, generation: 3 } }, "control.devtoolsEndpoint's reply line carries the token to the admitted peer");
 });
 
-test("a malformed answer from a provider fails with Ardia's own words, not the provider's", async () => {
+test("a malformed answer from a provider fails with Solstice's own words, not the provider's", async () => {
   const { request } = await import("./state/live/net.ts");
   const saved = globalThis.fetch;
   globalThis.fetch = async () => ({ status: 200, ok: true, headers: new Headers(), text: async () => "", json: async () => JSON.parse(`{"echo": ${CANARY.apiToken}`) });

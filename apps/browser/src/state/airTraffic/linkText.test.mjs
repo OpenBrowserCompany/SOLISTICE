@@ -22,7 +22,7 @@ test("contains and exact-address conditions save, load and match literally", () 
   assert.ok(rules.linkMatches({ kind: "equals", text: "localhost:3000/app" }, "http://localhost:3000/app"));
 });
 
-test("a fallback the person sets, even back to Ardia's usual routing, is remembered as chosen", () => {
+test("a fallback the person sets, even back to Solstice's usual routing, is remembered as chosen", () => {
   store.resetAirTrafficForTests(rules.NO_AIR_TRAFFIC);
   assert.equal(store.currentAirTraffic().fallbackChosen, undefined);
   store.setAirTrafficFallback(null);

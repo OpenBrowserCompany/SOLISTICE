@@ -27,8 +27,8 @@ test("only an absolute, outermost .app bundle path is kept for the icon", () => 
 });
 
 test("no caller reads as a program, and a named one by its own name", () => {
-  assert.deepEqual(controlLine(null), { lead: "A program", name: "", rest: " is controlling Ardia" });
-  assert.equal(controlLineText(controlLine(null)), "A program is controlling Ardia");
-  assert.equal(controlLineText(controlLine({ name: "ardia", app: null })), "ardia is controlling Ardia");
-  assert.deepEqual(controlLine({ name: "Codex", app: null }), { lead: "", name: "Codex", rest: " is controlling Ardia" });
+  assert.deepEqual(controlLine(null), { lead: "A program", name: "", rest: " is controlling Solstice" });
+  assert.equal(controlLineText(controlLine(null)), "A program is controlling Solstice");
+  assert.equal(controlLineText(controlLine({ name: "ardia", app: null })), "ardia is controlling Solstice");
+  assert.deepEqual(controlLine({ name: "Codex", app: null }), { lead: "", name: "Codex", rest: " is controlling Solstice" });
 });
