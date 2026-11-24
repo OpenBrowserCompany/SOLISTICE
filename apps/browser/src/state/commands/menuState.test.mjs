@@ -243,7 +243,7 @@ test("the shown Peek's page rebuilds the menu like a shown tab; a Peek hidden be
   assert.equal(menuChanges(() => S().updateTab(hiddenPeek, { muted: true })), false);
 });
 
-test("the menu state tells the shell whether links from other apps open in Little Ardia", () => {
+test("the menu state tells the shell whether links from other apps open in Little Solstice", () => {
   S().hydrate({});
   S().createWindow({ url: "https://a.example/" });
   S().updateSettings({ openLinksInLittleArdia: true });
@@ -327,7 +327,7 @@ test("Browser Layout menu bar commands switch tab placement in one pick, gate Co
   assert.equal(menuState(S()).titles.togglePinnedFold, undefined);
 });
 
-test("Little Ardia direct command dispatch ignores Browser Layout commands", async () => {
+test("Little Solstice direct command dispatch ignores Browser Layout commands", async () => {
   const { runCommand } = await import("./commands.ts");
   S().hydrate({});
   const main = S().createWindow({ url: "https://a.example/" });
