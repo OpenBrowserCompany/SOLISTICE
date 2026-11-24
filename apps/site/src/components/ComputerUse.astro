@@ -22,7 +22,7 @@ const runsText = (passes: number, runs: number) => (passes === runs ? `all ${run
         <p class="label kicker">Bring your own agent</p>
         <h2 class="poster cu-heading" id="cu-title">CLI.</h2>
         <p class="lede">
-          Turn on the Command Line plugin and your own Claude Code or Codex drives your Ardia with <code>ardia browse</code>, logins and all, and your Mac’s other apps
+          Turn on the Command Line plugin and your own Claude Code or Codex drives your Solstice with <code>ardia browse</code>, logins and all, and your Mac’s other apps
           with <code>ardia computer</code>. Tokens spent on eight browser tasks, against Aside and OpenCode Browse.
         </p>
         {!cu.complete && <p class="label status">Bench in progress · {cu.runs} of {cu.planned} runs so far</p>}
@@ -130,13 +130,13 @@ const runsText = (passes: number, runs: number) => (passes === runs ? `all ${run
             {cu.partial.length ? `Striped: ${cu.partial.join("; ")}.` : "Every bar passed every run."}
           </li>
           <li>
-            Your own Claude Code or Codex drives Ardia through the <code>ardia</code> command, as shipped in 0.2.45-nightly.3. Nothing in
-            Ardia calls a model.
+            Your own Claude Code or Codex drives Solstice through the <code>ardia</code> command, as shipped in 0.2.45-nightly.3. Nothing in
+            Solstice calls a model.
           </li>
           <li>OpenCode Browse {cu.opencodeVersion}: the same Claude Code and Codex, through its extension and MCP server.</li>
           <li>Aside {cu.asideVersion}: its in-browser agent, not its desktop Computer Use, on its own subscription providers.</li>
           <li>
-            Cold every run: Ardia’s site notes wiped, Aside’s memory off and its bench chats deleted. High effort everywhere. Ardia ran
+            Cold every run: Solstice’s site notes wiped, Aside’s memory off and its bench chats deleted. High effort everywhere. Solstice ran
             hidden; Aside’s window sat behind other windows.
           </li>
           <li>On docs research the shell agents can read pages with curl; Aside’s agent can’t.</li>
