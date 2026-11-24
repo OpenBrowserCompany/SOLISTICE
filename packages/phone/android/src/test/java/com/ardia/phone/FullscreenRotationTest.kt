@@ -3,7 +3,7 @@ package com.ardia.phone
 import android.app.Activity
 import android.content.pm.ActivityInfo
 import android.view.View
-import com.ardia.browser.FullscreenVideo
+import com.openbrowsercompany.solstice.FullscreenVideo
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith

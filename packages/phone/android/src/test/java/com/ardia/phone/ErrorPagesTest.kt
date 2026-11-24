@@ -1,9 +1,9 @@
 package com.ardia.phone
 
-import com.ardia.browser.ErrorPages
-import com.ardia.browser.NetworkFailure
-import com.ardia.browser.PageLoadFailure
-import com.ardia.browser.PageTone
+import com.openbrowsercompany.solstice.ErrorPages
+import com.openbrowsercompany.solstice.NetworkFailure
+import com.openbrowsercompany.solstice.PageLoadFailure
+import com.openbrowsercompany.solstice.PageTone
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

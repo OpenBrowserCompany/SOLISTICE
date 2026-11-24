@@ -41,7 +41,7 @@ class MaterialSchemeTest {
 
     @Test
     @Config(sdk = [30])
-    fun belowAndroid12MenusUseArdiasSeededFallbackInBothModes() {
+    fun belowAndroid12MenusUseSolstice-sSeededFallbackInBothModes() {
         val app = RuntimeEnvironment.getApplication()
         assertEquals(MaterialFallback.light, MaterialScheme.roles(MaterialScheme.colorScheme(app, dark = false, given = null)))
         assertEquals(MaterialFallback.dark, MaterialScheme.roles(MaterialScheme.colorScheme(app, dark = true, given = null)))
