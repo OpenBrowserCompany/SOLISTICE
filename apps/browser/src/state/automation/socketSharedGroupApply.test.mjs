@@ -35,7 +35,7 @@ async function setup() {
   S().updateGroup(inner, { name: "Inner" });
   const profileId = S().groups[shared].profileId;
   const key = pinKeyOf(S().groups[shared]);
-  bindFolder(profileId, key, "/scratch/Ardia Shared/Team", { device: 1, inode: 2 });
+  bindFolder(profileId, key, "/scratch/Solstice Shared/Team", { device: 1, inode: 2 });
   return { windowId, one, two, loose, shared, inner, done: () => unbindFolder(profileId, key) };
 }
 

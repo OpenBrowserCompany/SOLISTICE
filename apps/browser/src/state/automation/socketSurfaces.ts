@@ -13,7 +13,7 @@ const NO_SUCH_MENU = "There's no open menu with that id; menus.open lists them."
 const CAPTURED_PICK_NEEDS_ENGINE =
   "A captured page menu is listed only: picking from it waits for engine support that runs the item for the frame the menu came from (runContextMenuCommand in ac_context_menu.mm).";
 const PRIVATE_WINDOW_OPEN = "A private window is open, so the ardia command doesn't use the menu bar until it closes.";
-const NATIVE_ITEMS_NEED_VISIBLE = "A background Ardia runs no native menu item (Minimize, Zoom and the like), and run refuses every command there, so menus.runBar runs nothing in it.";
+const NATIVE_ITEMS_NEED_VISIBLE = "A background Solstice runs no native menu item (Minimize, Zoom and the like), and run refuses every command there, so menus.runBar runs nothing in it.";
 const DYNAMIC_ROW_REFUSED = "That row stands for a menu built from open windows, profiles, pages or history, which the ardia command doesn't read or run.";
 
 const privateOpen = (s: BrowserState) => Object.values(s.windows).some((w) => w.kind === "private");
@@ -109,7 +109,7 @@ export const SURFACE_METHODS: MethodSpec[] = [
   {
     name: "menus.open",
     mutates: false,
-    description: "Page context menus captured in a hidden Ardia, each with the tab and window it came from and its items' enabled and checked state. No other menu is listed: one on screen (a page's, a <select> popup's, Ardia's own, WebKit's) has no proven source",
+    description: "Page context menus captured in a hidden Solstice, each with the tab and window it came from and its items' enabled and checked state. No other menu is listed: one on screen (a page's, a <select> popup's, Solstice's own, WebKit's) has no proven source",
     params: obj({}),
     result: "[{id, kind, window, tab, items}]",
     run: async () => {
@@ -150,7 +150,7 @@ export const SURFACE_METHODS: MethodSpec[] = [
     name: "menus.runBar",
     mutates: true,
     description:
-      "Run a menu bar item from menus.bar: an Ardia command goes through run and its policy (refused when it needs the person, such as Open File or Print); a window item (Minimize, Zoom, Enter Full Screen, Minimize All, Arrange in Front) goes to the named key window or the app, with no menu validation. In a background Ardia it runs nothing: run refuses every command there, and native items need a visible Ardia. Also refused while any private window is open, for dynamic rows, and for Quit, Hide, Close Window, updates and items that only act through the responder chain",
+      "Run a menu bar item from menus.bar: an Solstice command goes through run and its policy (refused when it needs the person, such as Open File or Print); a window item (Minimize, Zoom, Enter Full Screen, Minimize All, Arrange in Front) goes to the named key window or the app, with no menu validation. In a background Solstice it runs nothing: run refuses every command there, and native items need a visible Solstice. Also refused while any private window is open, for dynamic rows, and for Quit, Hide, Close Window, updates and items that only act through the responder chain",
     params: obj({ path: PATH, ref: REF, window: text("The window to run it in; the last focused one when left out. Window items act only when it is the key window and the item can be sent to that window itself") }, ["path", "ref"]),
     result: "{ok, title, command? | action?}",
     run: runBarItem,

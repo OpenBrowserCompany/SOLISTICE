@@ -118,14 +118,14 @@ async function uninstall(params: Record<string, unknown>, call: SocketCall) {
 }
 
 async function adBlocker() {
-  if (!PLATFORM_FEATURES.contentBlocker) throw new OpError("refused", "Ardia has no built-in ad blocker on this platform.");
+  if (!PLATFORM_FEATURES.contentBlocker) throw new OpError("refused", "Solstice has no built-in ad blocker on this platform.");
   const state = await getContentBlocker();
-  if (state.stats?.ready === false) throw new OpError("failed", "Ardia couldn't read the ad blocker's state; try again in a moment.");
+  if (state.stats?.ready === false) throw new OpError("failed", "Solstice couldn't read the ad blocker's state; try again in a moment.");
   return { enabled: state.enabled === true, allowedSites: [...state.allowedHosts].sort() };
 }
 
 const ANY_PROFILE = "";
-const NOT_HERE_YET = "This Ardia can't change the ad blocker's trusted sites from the ardia command yet; turn off Block Ads & Trackers in Site Controls for the site instead.";
+const NOT_HERE_YET = "This Solstice can't change the ad blocker's trusted sites from the ardia command yet; turn off Block Ads & Trackers in Site Controls for the site instead.";
 
 const unknownCall = (error: unknown) => (error as { code?: unknown } | null)?.code === "ERR_UNKNOWN_CALL";
 
@@ -133,7 +133,7 @@ async function oneSiteOf(value: unknown): Promise<string> {
   const site = siteOf(value);
   const probe = `ardia-probe.${site}`;
   const { domains } = await registrableDomainsOf(ANY_PROFILE, [site, probe]).catch((error: unknown) => {
-    throw new OpError(unknownCall(error) ? "refused" : "failed", unknownCall(error) ? NOT_HERE_YET : "Ardia couldn't check whether that's one site; try again.");
+    throw new OpError(unknownCall(error) ? "refused" : "failed", unknownCall(error) ? NOT_HERE_YET : "Solstice couldn't check whether that's one site; try again.");
   });
   const registrable = Array.isArray(domains) && domains.length === 2 ? domains[0] : undefined;
   if (typeof registrable !== "string" || domains[1] !== registrable || !(site === registrable || site.endsWith(`.${registrable}`))) {
@@ -243,5 +243,5 @@ export const SITE_METHODS: MethodSpec[] = [
       return { ok: true };
     },
   },
-  { name: "extensions.uninstall", mutates: true, description: "Remove an extension; Ardia asks the user to confirm first", params: obj(EXTENSION, ["id"]), result: "{removed}", run: uninstall },
+  { name: "extensions.uninstall", mutates: true, description: "Remove an extension; Solstice asks the user to confirm first", params: obj(EXTENSION, ["id"]), result: "{removed}", run: uninstall },
 ];
