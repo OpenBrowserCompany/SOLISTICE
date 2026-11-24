@@ -9,14 +9,14 @@ import { setConsentPeriod } from "../../browser/src/state/telemetry/consentPerio
 setConsentPeriod(true, "host-updates-test");
 
 const page = (tag) => `https://github.com/ardia-browser/ardia/releases/tag/${tag}`;
-const release = (tag, { prerelease = false, draft = false, assets = [`Ardia-${tag.replace(/^v/, "")}-linux-x64.tar.xz`] } = {}) =>
+const release = (tag, { prerelease = false, draft = false, assets = [`Solstice-${tag.replace(/^v/, "")}-linux-x64.tar.xz`] } = {}) =>
   ({ tag_name: tag, html_url: page(tag), prerelease, draft, assets: assets.map((name) => ({ name })) });
 const LIST = [
   release("engine-0be922b5d707", { prerelease: true, assets: ["ArdiaCore-0be922b5d707-linux-x64.tar.xz"] }),
   release("v0.2.47-nightly.3", { prerelease: true }),
   release("v0.2.47-nightly.2", { prerelease: true }),
-  release("v0.2.46", { assets: ["Ardia-0.2.46.dmg", "Ardia-0.2.46-linux-x64.tar.xz", "Ardia-0.2.46-linux-x64.deb"] }),
-  release("v0.2.48", { assets: ["Ardia-0.2.48.dmg"] }),
+  release("v0.2.46", { assets: ["Solstice-0.2.46.dmg", "Solstice-0.2.46-linux-x64.tar.xz", "Solstice-0.2.46-linux-x64.deb"] }),
+  release("v0.2.48", { assets: ["Solstice-0.2.48.dmg"] }),
   release("v0.2.49", { draft: true }),
   { ...release("v0.2.50"), html_url: "https://evil.example/ardia" },
 ];
@@ -156,7 +156,7 @@ test("a nightly build follows nightly releases, and switching channel checks aga
   assert.deepEqual(seen.asked.at(-1), ["0.2.47-nightly.3", "0.2.47-nightly.2"]);
   await updater.methods.setUpdateChannel("stable");
   assert.equal((await updater.methods.updaterState()).channel, "stable");
-  assert.deepEqual(seen.told, ["Ardia is up to date"], "0.2.46 is older than this nightly");
+  assert.deepEqual(seen.told, ["Solstice is up to date"], "0.2.46 is older than this nightly");
 });
 
 test("an automatic check offers a new release once and never opens a dialog", async () => {
@@ -171,7 +171,7 @@ test("a failed check says so when asked, counts the failure and shows failed in 
   takeUpdateCounts();
   const { updater, seen } = harness({ status: 0, body: "" });
   await updater.methods.checkForUpdates();
-  assert.deepEqual(seen.told, ["Ardia couldn't check for updates"]);
+  assert.deepEqual(seen.told, ["Solstice couldn't check for updates"]);
   assert.equal((await updater.methods.updaterState()).switchCheck.phase, "failed");
   assert.equal(takeUpdateCounts().update_check_failures, 1);
 });
@@ -239,9 +239,9 @@ test("the switch refresh through the native host updates the cached switches", a
 test("a launch started with --no-sandbox says why once, in the window that ran the launch, and counts it", async () => {
   const { noticeUnsandboxedLaunch, sandboxNotice } = await import("./sandboxNotice.ts");
   assert.equal(sandboxNotice(undefined), null);
-  const reason = "Ardia was started with --no-sandbox";
-  assert.equal(sandboxNotice(reason).message, "Ardia was started with --no-sandbox. Start Ardia without --no-sandbox to turn the sandbox back on.");
-  assert.match(sandboxNotice("--no-sandbox was passed to chrome directly").message, /^--no-sandbox was passed to chrome directly\. Start Ardia without --no-sandbox/);
+  const reason = "Solstice was started with --no-sandbox";
+  assert.equal(sandboxNotice(reason).message, "Solstice was started with --no-sandbox. Start Solstice without --no-sandbox to turn the sandbox back on.");
+  assert.match(sandboxNotice("--no-sandbox was passed to chrome directly").message, /^--no-sandbox was passed to chrome directly\. Start Solstice without --no-sandbox/);
   takeUpdateCounts();
   const shown = [];
   const host = { bootstrap: { sandboxDecision: reason } };
@@ -255,7 +255,7 @@ test("a launch started with --no-sandbox says why once, in the window that ran t
   assert.deepEqual(shown, [], "the first-run onboarding covers toasts, so the notice waits for it to close");
   close();
   assert.equal(await pending, true);
-  assert.deepEqual(shown.map(([windowId, title]) => [windowId, title]), [["w1", "Ardia is running without Chromium's sandbox"]]);
+  assert.deepEqual(shown.map(([windowId, title]) => [windowId, title]), [["w1", "Solstice is running without Chromium's sandbox"]]);
   assert.equal(takeUpdateCounts().launches_without_sandbox, 1);
 });
 
@@ -278,7 +278,7 @@ test("with self-update, an automatic check starts the engine's run, follows it t
   const engine = fakeEngine({ kind: "deb" });
   const { updater, seen, host } = harness({ engine });
   assert.equal((await updater.methods.updaterState()).automaticDownloads, true, "self-update turns the shared toggle on by default");
-  assert.equal(installsUpdates(host), true, "Settings shows Automatically update Ardia");
+  assert.equal(installsUpdates(host), true, "Settings shows Automatically update Solstice");
   await updater.check(false);
   await settled(() => seen.ready.length === 1);
   assert.deepEqual(engine.updates, ["0.2.46"]);
@@ -432,7 +432,7 @@ test("an install the package manager owns says to update there, and never opens 
   assert.deepEqual(seen.managed, [["0.2.46", "0.2.45", true], ["0.2.46", "0.2.45", false]]);
   assert.deepEqual([seen.asked, seen.offered, seen.opened, engine.updates], [[], [], [], []]);
   assert.equal((await updater.methods.updaterState()).automaticDownloads, false);
-  assert.equal(installsUpdates(host), false, "Settings hides Automatically update Ardia");
+  assert.equal(installsUpdates(host), false, "Settings hides Automatically update Solstice");
 });
 
 test("an install that can't update itself, and an engine without self-update, keep the release page", async () => {

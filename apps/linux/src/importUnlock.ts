@@ -2,7 +2,7 @@ import type { BrowserSource, ImportKind } from "../../../packages/import/src/ind
 
 type LinuxProfile = BrowserSource["profiles"][number] & { needsPrimaryPassword?: boolean; cardsNeedKeyring?: boolean };
 
-const APP_NAME = "Ardia";
+const APP_NAME = "Solstice";
 const FIREFOX_CARD_KEY = "Firefox Encrypted Storage";
 
 const chosen = (source: BrowserSource, selected: readonly string[]) =>

@@ -154,7 +154,7 @@ export function linuxUpdater(deps: UpdateDeps) {
     const status = await engineStatus();
     if (status?.phase === "ready" && status.run > settledRun && (await claim(status.run))) countOutcome(status, consent);
     noteUpdateRestart(consent);
-    await invokeHost(RESTART_METHOD, { args: [] }, deps.host).catch((error: unknown) => console.info(`[ardia linux] Ardia couldn't restart: ${String(error)}`));
+    await invokeHost(RESTART_METHOD, { args: [] }, deps.host).catch((error: unknown) => console.info(`[ardia linux] Solstice couldn't restart: ${String(error)}`));
   }
   const restartToUpdate = () => void restart(consentToken());
 
@@ -281,14 +281,14 @@ export function linuxUpdater(deps: UpdateDeps) {
         noteUpdateCheck(asked, "failed", consent);
         switchCheck = { phase: "failed", channel: wanted };
         console.info(`[ardia linux] the update check failed: ${String(error)}`);
-        if (asked) await deps.tell("Ardia couldn't check for updates", `Try again later, or see ${RELEASES_PAGE}.`);
+        if (asked) await deps.tell("Solstice couldn't check for updates", `Try again later, or see ${RELEASES_PAGE}.`);
         return;
       }
       const newer = !!release && compareVersions(release.version, current) > 0;
       noteUpdateCheck(asked, newer ? "found" : "upToDate", consent);
       switchCheck = newer ? { phase: "found", channel: wanted, version: release!.version } : { phase: "upToDate", channel: wanted };
       if (!newer) {
-        if (asked) await deps.tell("Ardia is up to date", `You have Ardia ${current}, the newest ${wanted === "nightly" ? "Nightly" : "Stable"} build for Linux.`);
+        if (asked) await deps.tell("Solstice is up to date", `You have Solstice ${current}, the newest ${wanted === "nightly" ? "Nightly" : "Stable"} build for Linux.`);
         return;
       }
       await deliver(release!, current, asked, saved, consent).catch((error: unknown) => console.info(`[ardia linux] the update to ${release!.version} stopped: ${String(error)}`));
