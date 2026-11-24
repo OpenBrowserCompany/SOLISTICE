@@ -146,7 +146,7 @@ desktop::LoginChange ChangeLaunchAtLogin(desktop::Install install, bool enabled)
 }
 
 void ReplyDefaultBrowser(bool changing, Done done, desktop::DefaultBrowserAnswer answer) {
-  if (changing && !answer.is_default) LOG(WARNING) << "Ardia is not the default browser: " << answer.problem;
+  if (changing && !answer.is_default) LOG(WARNING) << "Solstice is not the default browser: " << answer.problem;
   std::move(done).Run(true, base::Value(answer.is_default));
 }
 
@@ -158,7 +158,7 @@ void OpenExternalUrl(const base::ListValue& args, Done done) {
     return std::move(done).Run(true, base::Value(false));
   }
   if (BackgroundInstance()) {
-    LOG(INFO) << "Ardia background instance: not opening a " << url.scheme() << " link in another app";
+    LOG(INFO) << "Solstice background instance: not opening a " << url.scheme() << " link in another app";
     return std::move(done).Run(true, base::Value(false));
   }
   platform_util::OpenExternal(url);
@@ -249,7 +249,7 @@ void LinuxSystemInvoke(std::string_view method, const base::ListValue& args, Don
   if (method == "ArdiaSystem.isDefaultBrowser" || changing) {
     if (!args.empty()) return Fail(std::move(done), "ERR_SYSTEM_REQUEST", "The default browser calls take no arguments");
     if (BackgroundInstance()) {
-      if (changing) LOG(INFO) << "Ardia background instance: not setting the default browser";
+      if (changing) LOG(INFO) << "Solstice background instance: not setting the default browser";
       return std::move(done).Run(true, base::Value(false));
     }
     Worker()->PostTaskAndReplyWithResult(
@@ -271,7 +271,7 @@ void LinuxSystemInvoke(std::string_view method, const base::ListValue& args, Don
       return Fail(std::move(done), "ERR_SYSTEM_REQUEST", "Opening at login takes one boolean");
     }
     if (BackgroundInstance()) {
-      LOG(INFO) << "Ardia background instance: not changing launch at login";
+      LOG(INFO) << "Solstice background instance: not changing launch at login";
       return std::move(done).Run(true, base::Value());
     }
     Worker()->PostTaskAndReplyWithResult(
