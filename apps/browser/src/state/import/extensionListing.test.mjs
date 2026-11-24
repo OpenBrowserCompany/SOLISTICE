@@ -58,7 +58,7 @@ test("extensions that can't come from the Web Store, or are already in the profi
   assert.deepEqual(listing.targets, []);
   assert.deepEqual(leftOutCounts(listing), { installed: 1, manifestV2: 1, unpacked: 1, policy: 1, external: 1, notWebStore: 2 });
   assert.deepEqual(listing.leftOut.map(leftOutText), [
-    "Alpha (already in Ardia)",
+    "Alpha (already in Solstice)",
     "Old Toolbar (uses Manifest V2, which Chrome no longer runs)",
     "Dev Helper (loaded unpacked in developer mode)",
     "Company SSO (installed by your organization's policy)",

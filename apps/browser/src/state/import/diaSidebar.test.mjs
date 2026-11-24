@@ -76,7 +76,7 @@ test("Dia's pinned folders become pinned groups and its open-tab groups list gro
   assert.equal(g.Sources.parentId, g.Research.id);
   assert.equal([g.Research.icon, g.Research.color].join(" "), "🔬 purple");
   assert.equal(g.Sources.color, "green");
-  assert.equal(g.Later.color, null, "a colour Ardia has no swatch for is left out");
+  assert.equal(g.Later.color, null, "a colour Solstice has no swatch for is left out");
   assert.deepEqual(urlsIn(g.Research), ["https://paper.dia.example/", "https://source.dia.example/a"]);
   assert.equal(S().tabs[g.Sources.tabIds[0]].customTitle, "Primary source");
   assert.ok(Object.values(g).every((x) => x.name === "Imported" || x.collapsed), "imported folders and groups come in closed");
