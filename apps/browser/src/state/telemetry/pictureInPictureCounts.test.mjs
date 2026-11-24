@@ -129,7 +129,7 @@ test("activations asked for by a press or a move on a Picture in Picture window,
   assert.equal((await sentCounts()).length, before + 1);
 });
 
-test("activations Ardia handed back after it was left over a Picture in Picture window, and repeats, are counted, then start again from zero", async () => {
+test("activations Solstice handed back after it was left over a Picture in Picture window, and repeats, are counted, then start again from zero", async () => {
   client.loadChoice();
   client.setSharing(true, "onboarding");
   const sentCounts = async () => {
