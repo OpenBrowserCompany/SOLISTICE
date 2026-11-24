@@ -210,7 +210,7 @@ test("issueFor puts only public-safe fields in the issue", () => {
   assert.deepEqual(issueFor({ ...report, kind: "other" }, "https://d").labels, ["feedback"]);
   assert.equal(issue.title, "Slow @\u200bbob");
   assert.match(issue.body, /Typing lags at \/Users\/\[user\]\/x, mail \[email\]/);
-  assert.match(issue.body, /\| Version \| Ardia 0\.2\.45 \(45\\\|12\) nightly \|/);
+  assert.match(issue.body, /\| Version \| Solstice 0\.2\.45 \(45\\\|12\) nightly \|/);
   assert.match(issue.body, /\| macOS \| 26\.1 \|/);
   assert.match(issue.body, /https:\/\/dash\.ardia\.dev\/feedback\/FB-AB23/);
   for (const secret of ["jane@x.io", "secret.example", "recording.mp4", "400", INSTALL, "arm64"]) assert.ok(!issue.body.includes(secret), secret);
