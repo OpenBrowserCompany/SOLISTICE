@@ -1,9 +1,9 @@
 ---
 name: stats
-description: Ardia's numbers in one short report — users and installs, site traffic and downloads, the phone Send to my Mac panel, GitHub, and new errors. Use whenever the owner asks how things are going, "what are the stats", "how many users/downloads/installs", "how many updated", "how's the site doing", GitHub stats, or a growth check-in, even if they don't say "stats".
+description: Solstice's numbers in one short report — users and installs, site traffic and downloads, the phone Send to my Mac panel, GitHub, and new errors. Use whenever the owner asks how things are going, "what are the stats", "how many users/downloads/installs", "how many updated", "how's the site doing", GitHub stats, or a growth check-in, even if they don't say "stats".
 ---
 
-# Ardia stats
+# Solstice stats
 
 The owner wants the numbers fast: one command, then the reply. Don't read other files first.
 

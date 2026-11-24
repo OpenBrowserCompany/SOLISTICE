@@ -5,7 +5,7 @@ old="${1:?usage: update-test.sh <previous app> <new app> <appcast.xml> <version>
 new="${2:?}" appcast="${3:?}" version="${4:?}"
 here="$(cd "$(dirname "$0")" && pwd)"
 . "$here/lib/harness.sh"
-test_id="com.ardia.browser.updatetest"
+test_id="com.openbrowsercompany.solstice.updatetest"
 new_test_id="$test_id"
 [ "$(/usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$old/Contents/Info.plist")" = \
   "$(/usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$new/Contents/Info.plist")" ] || new_test_id="$test_id.renamed"
@@ -36,7 +36,7 @@ build_sparkle_tool "$work" "$old" sparkle-host "$identity"
 serve_dir "$work/feed"
 port="$served_port"
 
-zip="$work/feed/Ardia-$version.zip"
+zip="$work/feed/Solstice-$version.zip"
 ditto -c -k --keepParent "$work/new/$zip_name" "$zip"
 signature="$("$work/ed25519" sign "$zip" "$work/key")"
 python3 -I "$here/appcast.py" retarget "$appcast" "$version" "http://127.0.0.1:$port/$(basename "$zip")" "$(stat -f %z "$zip")" "$signature" \

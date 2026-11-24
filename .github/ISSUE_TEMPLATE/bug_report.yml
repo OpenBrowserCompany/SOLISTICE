@@ -1,5 +1,5 @@
 name: Bug report
-description: Something in Ardia crashes, got worse, or behaves wrong.
+description: Something in Solstice crashes, got worse, or behaves wrong.
 labels: [bug]
 body:
   - type: textarea
