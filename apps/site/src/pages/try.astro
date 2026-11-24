@@ -9,9 +9,9 @@ import { aboutArdiaPage, breadcrumbs } from "../data/jsonLd";
 
 const home = homeUrl(Astro.site);
 const url = new URL("try/", home).href;
-const title = "Try Ardia live · an Arc and Dia alternative you can click";
+const title = "Try Solstice live · an Arc and Dia alternative you can click";
 const description =
-  "Click around the real Ardia sidebar right here: tabs, split view, the command bar and profiles. Free for Mac once you’re done kicking the tires.";
+  "Click around the real Solstice sidebar right here: tabs, split view, the command bar and profiles. Free for Mac once you’re done kicking the tires.";
 const jsonLd = [aboutArdiaPage({ home, url, title, description }), breadcrumbs(home, ["Demo", url])];
 ---
 
@@ -21,7 +21,7 @@ const jsonLd = [aboutArdiaPage({ home, url, title, description }), breadcrumbs(h
     <section class="intro" aria-labelledby="try-title">
       <div class="wrap">
         <p class="label kicker">Live demo</p>
-        <h1 class="poster" id="try-title"><span class="visually-hidden">Try Ardia in your browser: </span>Kick the tires.</h1>
+        <h1 class="poster" id="try-title"><span class="visually-hidden">Try Solstice in your browser: </span>Kick the tires.</h1>
         <p class="lede">
           The real sidebar, running in this page. Click a tab, split two side by side, put the tabs on top, open the command bar.
           Nothing to install until you want the real thing.

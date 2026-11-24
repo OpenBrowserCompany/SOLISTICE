@@ -55,7 +55,7 @@ function wireCustomize(frame: HTMLIFrameElement, panel: HTMLElement) {
   const markCopied = (via: CopiedVia) => {
     if (value) value.hidden = true;
     if (getLabel) getLabel.textContent = "Copied. Downloading…";
-    if (line) line.textContent = "When Ardia opens, paste the code on its first screen. Already past it? Settings › General.";
+    if (line) line.textContent = "When Solstice opens, paste the code on its first screen. Already past it? Settings › General.";
     capture("demo_setup_code_copied", { via });
   };
 
