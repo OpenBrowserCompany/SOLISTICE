@@ -27,7 +27,7 @@ static NSString *SavedHistoryGeneration(ArdiaCoreProfile *profile) {
                  if ([result[@"generation"] isKindOfClass:NSString.class]) {
                    generation = result[@"generation"];
                  } else if ([result[@"fromMarker"] isEqual:@YES]) {
-                   NSString *marker = [profile.path stringByAppendingPathComponent:@"Ardia Tab History Cleared"];
+                   NSString *marker = [profile.path stringByAppendingPathComponent:@"Solstice Tab History Cleared"];
                    NSString *saved = [NSString stringWithContentsOfFile:marker encoding:NSUTF8StringEncoding error:nil];
                    if (saved || ![NSFileManager.defaultManager fileExistsAtPath:marker])
                      generation = [saved ?: @"" stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
@@ -44,7 +44,7 @@ static ArdiaCoreTab *RestoreSavedHistory(ArdiaWindowController *controller, Ardi
   const unsigned char *raw = (const unsigned char *)keyBytes.bytes;
   NSMutableString *name = [NSMutableString stringWithCapacity:keyBytes.length * 2];
   for (NSUInteger i = 0; i < keyBytes.length; i++) [name appendFormat:@"%02X", raw[i]];
-  NSString *file = [[profile.path stringByAppendingPathComponent:@"Ardia Tab History"] stringByAppendingPathComponent:name];
+  NSString *file = [[profile.path stringByAppendingPathComponent:@"Solstice Tab History"] stringByAppendingPathComponent:name];
   NSData *data = [NSData dataWithContentsOfFile:file options:NSDataReadingMappedIfSafe error:nil];
   if (!data.length || data.length > kMaxSavedHistoryBytes) return nil;
   NSDictionary *saved = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
