@@ -113,7 +113,7 @@ test("tabs.back across engines asks only where it can be seen and replies after 
     const before = stubReplies();
     const going = fire("tabs.back", { tab });
     for (let i = 0; i < 50 && !waiting.length; i++) await tick();
-    assert.equal(waiting.length, 1, "Ardia asked");
+    assert.equal(waiting.length, 1, "Solstice asked");
     assert.equal(stubReplies(), before, "no reply before the answer");
     waiting[0]({ confirmed: false, suppressed: false });
     assert.equal((await going).error?.code, "refused", "Stay on Page answers refused");

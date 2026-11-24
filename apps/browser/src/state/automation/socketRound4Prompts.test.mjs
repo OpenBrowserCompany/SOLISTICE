@@ -73,7 +73,7 @@ test("turning control off dismisses the socket's questions, answers refused and 
     await controlOn();
     const again = fire("windows.close", { window: windowId });
     for (let i = 0; i < 50 && !held.waiting.length; i++) await tick();
-    assert.equal(held.waiting.length, 1, "the close guard was released, so Ardia asks again");
+    assert.equal(held.waiting.length, 1, "the close guard was released, so Solstice asks again");
     held.waiting[0].resolve({ confirmed: true, suppressed: false });
     assert.ok(!(await again).error);
   } finally {

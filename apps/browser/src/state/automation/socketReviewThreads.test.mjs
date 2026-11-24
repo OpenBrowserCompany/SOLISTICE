@@ -47,7 +47,7 @@ async function fixture() {
   const otherTeam = S().groupTabs([S().newTab(w2, { url: "https://w2.example/", background: true })], { name: "Team" });
   const profileId = S().groups[shared].profileId;
   const key = pinKeyOf(S().groups[shared]);
-  bindFolder(profileId, key, "/scratch/Ardia Shared/Team", { device: 1, inode: 11 });
+  bindFolder(profileId, key, "/scratch/Solstice Shared/Team", { device: 1, inode: 11 });
   bound = [profileId, key];
   return { windowId, w2, one, two, plainMember, loose, shared, plain, otherTeam, profileId, key };
 }
@@ -112,7 +112,7 @@ test("profiles.delete doesn't delete a profile that gained a shared folder while
   const dialogs = shellNativeModules.ArdiaDialogs;
   const confirm = dialogs.confirm;
   dialogs.confirm = async () => {
-    bindFolder(side, pinKeyOf(S().groups[sideGroup]), "/scratch/Ardia Shared/Side", { device: 1, inode: 12 });
+    bindFolder(side, pinKeyOf(S().groups[sideGroup]), "/scratch/Solstice Shared/Side", { device: 1, inode: 12 });
     return { confirmed: true, suppressed: false };
   };
   try {
