@@ -1,8 +1,8 @@
 package com.ardia.phone
 
 import android.content.Context
-import com.ardia.browser.SiteOrigin
-import com.ardia.browser.SitePermission
+import com.openbrowsercompany.solstice.SiteOrigin
+import com.openbrowsercompany.solstice.SitePermission
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

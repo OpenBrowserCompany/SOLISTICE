@@ -14,7 +14,7 @@ class SyncFailureTest {
         val failure = SyncFailure.forScript(denial, lab = false)
         assertEquals("ERR_SYNC", failure.code)
         assertFalse(failure.message.orEmpty().contains("content://"))
-        assertFalse(failure.message.orEmpty().contains("Ardia"))
+        assertFalse(failure.message.orEmpty().contains("Solstice"))
         assertNull(failure.cause)
     }
 

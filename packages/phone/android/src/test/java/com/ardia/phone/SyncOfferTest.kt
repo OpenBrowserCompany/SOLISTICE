@@ -52,9 +52,9 @@ class SyncOfferTest {
     @Test
     fun theMacTabsLinkIsOnlyTakenWhenSyncIsOffered() {
         SyncOffer.forTests = true
-        assertEquals("macTabs", link("ardia://mac-tabs")?.get("kind"))
+        assertEquals("macTabs", link("solstice://mac-tabs")?.get("kind"))
         SyncOffer.forTests = false
-        assertNull("a shortcut or widget link into sync does nothing", link("ardia://mac-tabs"))
-        assertEquals("search", link("ardia://search")?.get("kind"))
+        assertNull("a shortcut or widget link into sync does nothing", link("solstice://mac-tabs"))
+        assertEquals("search", link("solstice://search")?.get("kind"))
     }
 }
