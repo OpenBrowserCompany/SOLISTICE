@@ -13,7 +13,7 @@
  BEGIN_METADATA(ChooserBubbleUiViewDelegate)
  END_METADATA
 +
-+// Ardia: ArdiaCore (engine/ardiacore) shows its own chooser for the tabs it hosts.
++// Solstice: ArdiaCore (engine/ardiacore) shows its own chooser for the tabs it hosts.
 +bool (*g_ardia_device_chooser)(
 +    content::WebContents* contents,
 +    std::unique_ptr<permissions::ChooserController>* controller,

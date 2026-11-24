@@ -34,7 +34,7 @@ SetAsDefaultBrowser no longer activates CoreServicesUIAgent over the owner's wor
 +  if (!g_ardia_background_instance) {
 +    return false;
 +  }
-+  LOG(WARNING) << "Ardia: background instance, not " << change;
++  LOG(WARNING) << "Solstice: background instance, not " << change;
 +  return true;
  }
  
