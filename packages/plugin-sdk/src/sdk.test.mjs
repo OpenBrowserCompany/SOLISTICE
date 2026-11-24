@@ -621,7 +621,7 @@ function fakeHost(replies = {}) {
   };
 }
 
-const hello = { app: "Ardia", version: "0.2.47", protocol: 2, plugin: "v2-test", values: { greeting: "Hi", loud: false } };
+const hello = { app: "Solstice", version: "0.2.47", protocol: 2, plugin: "v2-test", values: { greeting: "Hi", loud: false } };
 
 async function started(definition, replies = {}) {
   const host = fakeHost({ hello, ...replies });
@@ -649,7 +649,7 @@ describe("createHostRuntime", () => {
     assert.equal(host.sent[0].method, "hello");
     assert.equal(host.sent[0].params.protocol, 2);
     assert.equal(activatedWith, "Hi");
-    assert.deepEqual(runtime.ardia.plugin, { name: "v2-test", app: "Ardia", version: "0.2.47", protocol: 2 });
+    assert.deepEqual(runtime.ardia.plugin, { name: "v2-test", app: "Solstice", version: "0.2.47", protocol: 2 });
     assert.deepEqual(host.calls("subscribe")[0].params, { events: ["tab.activated"] });
     assert.deepEqual(host.calls("ready")[0].params, {
       commands: ["greet"],

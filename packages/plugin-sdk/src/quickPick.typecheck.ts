@@ -1,9 +1,9 @@
-import type { Ardia } from "./api";
+import type { Solstice } from "./api";
 import type { QuickPickItem, QuickPickOptions } from "./protocol";
 
 type Same<A, B> = (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B ? 1 : 2 ? true : false;
 
-declare const ardia: Ardia;
+declare const ardia: Solstice;
 declare const items: readonly QuickPickItem[];
 declare const widened: QuickPickOptions;
 

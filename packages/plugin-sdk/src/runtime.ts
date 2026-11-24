@@ -1,4 +1,4 @@
-import { createArdia, type ApiState, type Ardia } from "./api";
+import { createArdia, type ApiState, type Solstice } from "./api";
 import { enqueueMicrotask } from "./reconciler";
 import {
   HOST_METHODS as M,
@@ -23,9 +23,9 @@ const DEFAULT_STOP_GRACE_MS = 5000;
 type HostTimers = { setTimeout?: (callback: () => void, ms: number) => unknown; clearTimeout?: (timer: unknown) => void };
 
 export type HostRuntime = {
-  readonly ardia: Ardia;
+  readonly ardia: Solstice;
   readonly registry: Registry;
-  definePlugin(definition: PluginDefinition<Ardia>): Promise<void>;
+  definePlugin(definition: PluginDefinition<Solstice>): Promise<void>;
   request<T = unknown>(method: string, params?: Record<string, unknown>): Promise<T>;
   surfaceCount(): number;
   callCount(): number;
@@ -311,7 +311,7 @@ export function createHostRuntime(transport: Transport, options: HostRuntimeOpti
     }
   });
 
-  function register(definition: PluginDefinition<Ardia>): Disposable[] {
+  function register(definition: PluginDefinition<Solstice>): Disposable[] {
     const held: Disposable[] = [];
     for (const [name, handler] of Object.entries(definition.commands ?? {})) held.push(ardia.commands.register(name, handler));
     for (const [name, handler] of Object.entries(definition.tools ?? {})) held.push(ardia.tools.register(name, handler));
@@ -333,7 +333,7 @@ export function createHostRuntime(transport: Transport, options: HostRuntimeOpti
     events: [...registry.events.keys()],
   });
 
-  function definePlugin(definition: PluginDefinition<Ardia>): Promise<void> {
+  function definePlugin(definition: PluginDefinition<Solstice>): Promise<void> {
     const held = register(definition);
     cleanup = async () => {
       surfaces.closeAll();
