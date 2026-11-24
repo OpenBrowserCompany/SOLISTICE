@@ -23,12 +23,12 @@ const settle = async () => {
 
 const AFTER_UPDATE = [["skills", "install", "--auto"], ["skills", "refresh"], ["computer", "refresh"]];
 const PY_040 = JSON.stringify({
-  $schema: "ardia_cli/schemas/plugin.schema.json", manifest: 1, name: "cli", title: "Command Line", description: "Drive Ardia from your terminal or an agent.", version: "0.4.0",
+  $schema: "ardia_cli/schemas/plugin.schema.json", manifest: 1, name: "cli", title: "Command Line", description: "Drive Solstice from your terminal or an agent.", version: "0.4.0",
   icon: "terminal.fill", alwaysOn: true, official: true, permissions: ["control"], programs: [{ name: "ardia", path: "bin/ardia", afterUpdate: AFTER_UPDATE }],
 });
 const bun = (version, extra = {}, contributes = {}) =>
   JSON.stringify({
-    manifest: 2, name: "cli", title: "Command Line", description: "Drive Ardia from your terminal or an agent.", version, requires: "0.2.48", icon: "terminal.fill",
+    manifest: 2, name: "cli", title: "Command Line", description: "Drive Solstice from your terminal or an agent.", version, requires: "0.2.48", icon: "terminal.fill",
     keywords: ["command line", "terminal"], alwaysOn: true, official: true, main: "dist/main.js", permissions: { control: true },
     contributes: {
       commands: [{ name: "show-status", title: "Command Line: Show Status", icon: "terminal", view: "status", keywords: ["ardia"] }],
@@ -249,7 +249,7 @@ test("the plugin page says it updated by itself, says plainly when it added code
   assert.deepEqual(autoUpdateNote({ from: "0.4.0", to: "0.6.0", added: ["Adds to the command bar: Command Line: Show Status"], runtime: true }), {
     title: "Updated by itself to 0.6.0",
     description:
-      "It added its own code, which runs in Ardia's sandbox, offline, and first starts when you use one of its commands in the command bar. Its permissions didn't change. New since 0.4.0: Adds to the command bar: Command Line: Show Status.",
+      "It added its own code, which runs in Solstice's sandbox, offline, and first starts when you use one of its commands in the command bar. Its permissions didn't change. New since 0.4.0: Adds to the command bar: Command Line: Show Status.",
   });
   assert.equal(parsePluginRecords(RECORDS(PY_RECEIPT, { updated: { from: "0.4.0", to: "0.6.0", added: [], runtime: true } })).cli.updated.runtime, true);
   assert.equal(parsePluginRecords(RECORDS(PY_RECEIPT, { updated: { from: "0.4.0", to: "0.6.0", added: [], runtime: "yes" } })).cli.updated.runtime, undefined);

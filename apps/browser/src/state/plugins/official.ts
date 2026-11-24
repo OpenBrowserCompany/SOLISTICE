@@ -118,9 +118,9 @@ function linked(name: string): Promise<InstallResult> {
 export const FETCH_REASONS: Record<Exclude<OfficialFetchResult, { ok: true }>["code"], string> = {
   offline: "Couldn't download it. Check your internet connection, then try again.",
   failed: "Couldn't download it. Try again.",
-  verify: "The download didn't match the copy this version of Ardia trusts, so it wasn't installed.",
+  verify: "The download didn't match the copy this version of Solstice trusts, so it wasn't installed.",
   cancelled: "Cancelled.",
-  unsupported: `Not available in this version of Ardia.`,
+  unsupported: `Not available in this version of Solstice.`,
 };
 
 let progressWatched = false;

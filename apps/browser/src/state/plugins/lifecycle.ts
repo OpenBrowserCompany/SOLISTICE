@@ -192,7 +192,7 @@ export function rescanPlugins(consent: ConsentToken | null): Promise<void> {
 
 let lastConsentId = 0;
 
-export const ALREADY_ASKING = "Ardia is already asking about a plugin. Answer that first, then try again.";
+export const ALREADY_ASKING = "Solstice is already asking about a plugin. Answer that first, then try again.";
 
 function closeChangedConsent() {
   const asked = currentPlugins().consent;
@@ -359,9 +359,9 @@ export async function removePlugin(name: string, mayGoOn: () => boolean = () => 
   try {
     if (!(await turnOffPlugin(name, consent))) return { ok: false, reason: "It couldn't be turned off, because plugins.json couldn't be saved." };
     if (!(await pluginRecordsSaved(consent))) return { ok: false, reason: "It couldn't be turned off, because plugins.json couldn't be saved." };
-    if (!mayGoOn()) return { ok: false, reason: "Control was turned off after Ardia turned it off, so its files are still there." };
+    if (!mayGoOn()) return { ok: false, reason: "Control was turned off after Solstice turned it off, so its files are still there." };
     await removePrograms(name, consent);
-    if (!mayGoOn()) return { ok: false, reason: "Control was turned off after Ardia unlinked its programs, so its files are still there." };
+    if (!mayGoOn()) return { ok: false, reason: "Control was turned off after Solstice unlinked its programs, so its files are still there." };
     await closePluginStorage(name);
     const now = removalIdentity(name);
     if (expected && (now.official !== official || (!official && expected.folderId !== null && now.folderId !== null && now.folderId !== expected.folderId)))
@@ -372,7 +372,7 @@ export async function removePlugin(name: string, mayGoOn: () => boolean = () => 
     const forgotten = updateRecord(name, () => null, consent) && (await pluginRecordsSaved(consent));
     if (!forgotten) toForget.add(name);
     await rescanPlugins(consent);
-    if (!forgotten) return { ok: false, removed: true, reason: "Its files are removed, but plugins.json couldn't be updated; Ardia drops its record the next time it can save." };
+    if (!forgotten) return { ok: false, removed: true, reason: "Its files are removed, but plugins.json couldn't be updated; Solstice drops its record the next time it can save." };
     if (!secrets.ok) return { ok: false, removed: true, reason: secretsLeftReason(name, secrets) };
     return { ok: true };
   } finally {
