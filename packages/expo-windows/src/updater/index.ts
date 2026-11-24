@@ -87,8 +87,8 @@ async function check(asked: boolean) {
     } catch (error) {
       if (!feedNotPublished(error) || feedOverride()) throw error;
       console.info(`[ardia windows] update check failed: ${reason(error)}`);
-      const keepsChecking = checksByItself() ? " Ardia keeps checking by itself." : "";
-      if (asked) await tell("No Windows update published yet", `No Windows build of Ardia has been published for updates yet. You have ${named(current.version, current.build)}.${keepsChecking}`);
+      const keepsChecking = checksByItself() ? " Solstice keeps checking by itself." : "";
+      if (asked) await tell("No Windows update published yet", `No Windows build of Solstice has been published for updates yet. You have ${named(current.version, current.build)}.${keepsChecking}`);
       return;
     }
     const manifest = readManifest(feedText, publishedUnder());
@@ -96,14 +96,14 @@ async function check(asked: boolean) {
     remember({ lastCheck: Date.now() });
     const installer = offered(manifest, String(constants().cpu), current.build);
     if (!installer) {
-      if (asked) await tell("Ardia is up to date", `You have ${named(current.version, current.build)}.`);
+      if (asked) await tell("Solstice is up to date", `You have ${named(current.version, current.build)}.`);
       return;
     }
     if (!asked && declinedBuild === manifest.build) return;
     const newer = named(manifest.version, manifest.build);
     if (asked || !preferences().automaticDownloads) {
       const download = await ask({
-        title: "A newer Ardia is available",
+        title: "A newer Solstice is available",
         message: `${newer} is available. You have ${named(current.version, current.build)}. Download it now (${megabytes(installer.bytes)} MB)?`,
         confirmTitle: "Download",
         cancelTitle: "Later",
@@ -117,7 +117,7 @@ async function check(asked: boolean) {
     console.info(`[ardia windows] update ${manifest.build} downloaded`);
     const install = await ask({
       title: "The update is ready to install",
-      message: `Ardia closes, installs ${newer} and opens again.`,
+      message: `Solstice closes, installs ${newer} and opens again.`,
       confirmTitle: "Install and Restart",
       cancelTitle: "Later",
     });
@@ -131,7 +131,7 @@ async function check(asked: boolean) {
     }
   } catch (error) {
     console.info(`[ardia windows] update check failed: ${reason(error)}`);
-    if (asked) await tell("Ardia couldn't check for updates", reason(error));
+    if (asked) await tell("Solstice couldn't check for updates", reason(error));
   } finally {
     checking = false;
   }

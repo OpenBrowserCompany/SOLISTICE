@@ -1,14 +1,14 @@
 import { pdfDocument, PdfPage, wrapped, type PdfFont } from "./pdf";
 import { qrCode } from "./qr";
 
-export const KIT_PDF_NAME = "Ardia Recovery Kit.pdf";
-export const KIT_TEXT_NAME = "Ardia Recovery Kit.txt";
+export const KIT_PDF_NAME = "Solstice Recovery Kit.pdf";
+export const KIT_TEXT_NAME = "Solstice Recovery Kit.txt";
 export const HIDDEN_WORDS: readonly string[] = Array(24).fill("••••••");
 
 const INTRO = "If you don’t have access to the computer on which you first turned on sync, you can still get your synced data on another computer:";
-const STEPS = ["Open Ardia › Settings › General › Sync, and choose the same sync folder.", "Click Enter Recovery Phrase.", "Paste the 24 words below."];
+const STEPS = ["Open Solstice › Settings › General › Sync, and choose the same sync folder.", "Click Enter Recovery Phrase.", "Paste the 24 words below."];
 const WARNING =
-  "Keep this kit somewhere safe, like a password manager or a printed copy. Anyone with these words and your sync folder can read your synced data. Ardia can’t recover the words for you: there’s no server and no other copy.";
+  "Keep this kit somewhere safe, like a password manager or a printed copy. Anyone with these words and your sync folder can read your synced data. Solstice can’t recover the words for you: there’s no server and no other copy.";
 const CODE_TITLE = "Moving to a new computer?";
 const CODE_NOTE = "Scan this code with your phone’s camera to copy the words, then enter them on the new computer.";
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -20,7 +20,7 @@ const GREY = 0.4;
 const createdDate = (date: Date) => `${MONTHS[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
 
 export function kitText(words: readonly string[], created: Date, device: string): string {
-  const lines = ["Ardia Recovery Kit", `Created ${createdDate(created)} on ${device}`, "", INTRO, ""];
+  const lines = ["Solstice Recovery Kit", `Created ${createdDate(created)} on ${device}`, "", INTRO, ""];
   lines.push(...STEPS.map((step, i) => `${i + 1}. ${step}`));
   lines.push("", "Recovery phrase:", "");
   lines.push(...words.map((word, i) => `${String(i + 1).padStart(2, " ")}. ${word}`));
@@ -38,7 +38,7 @@ export function kitPdf(words: readonly string[], created: Date, device: string):
     lines.forEach((line, i) => page.text(line, x, y + i * lineHeight, font, size, gray));
     y += lines.length * lineHeight - 3 + spacing;
   };
-  text("Ardia Recovery Kit", "bold", 26, INK, 4);
+  text("Solstice Recovery Kit", "bold", 26, INK, 4);
   text(`Created ${createdDate(created)} on ${device}`, "regular", 12, GREY, 26);
   text(INTRO, "regular", 13, INK, 10);
   STEPS.forEach((step, i) => text(`${i + 1}.  ${step}`, "regular", 13, INK, 4, PAGE.margin + 8, width - 8));
@@ -69,5 +69,5 @@ export function kitPdf(words: readonly string[], created: Date, device: string):
   text(CODE_NOTE, "regular", 12, GREY, 8, PAGE.margin + side + 18, width - side - 18);
   y = Math.max(y, captionTop + side) + 26;
   text(WARNING, "regular", 11, GREY);
-  return pdfDocument(page, "Ardia Recovery Kit");
+  return pdfDocument(page, "Solstice Recovery Kit");
 }

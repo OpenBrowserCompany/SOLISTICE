@@ -116,7 +116,7 @@ export function pdfDocument(page: PdfPage, title: string): Uint8Array {
     "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>",
     "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>",
     "<< /Type /Font /Subtype /Type1 /BaseFont /Courier-Bold /Encoding /WinAnsiEncoding >>",
-    `<< /Title ${literal(encode(title))} /Producer (Ardia) >>`,
+    `<< /Title ${literal(encode(title))} /Producer (Solstice) >>`,
   ];
   let body = "%PDF-1.4\n%\xe2\xe3\xcf\xd3\n";
   const offsets: number[] = [];
