@@ -8,9 +8,9 @@
         android:shortcutLongLabel="@string/shortcut_search">
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="ardia://search"
-            android:targetClass="com.ardia.browser.android.system.ShortcutActivity"
-            android:targetPackage="com.ardia.browser.android">
+            android:data="solstice://search"
+            android:targetClass="com.openbrowsercompany.solstice.android.system.ShortcutActivity"
+            android:targetPackage="com.openbrowsercompany.solstice.android">
             <extra
                 android:name="com.ardia.SOURCE"
                 android:value="shortcut" />
@@ -24,9 +24,9 @@
         android:shortcutLongLabel="@string/shortcut_voice_search">
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="ardia://voice"
-            android:targetClass="com.ardia.browser.android.system.ShortcutActivity"
-            android:targetPackage="com.ardia.browser.android">
+            android:data="solstice://voice"
+            android:targetClass="com.openbrowsercompany.solstice.android.system.ShortcutActivity"
+            android:targetPackage="com.openbrowsercompany.solstice.android">
             <extra
                 android:name="com.ardia.SOURCE"
                 android:value="shortcut" />
@@ -40,9 +40,9 @@
         android:shortcutLongLabel="@string/shortcut_incognito">
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="ardia://incognito"
-            android:targetClass="com.ardia.browser.android.system.ShortcutActivity"
-            android:targetPackage="com.ardia.browser.android">
+            android:data="solstice://incognito"
+            android:targetClass="com.openbrowsercompany.solstice.android.system.ShortcutActivity"
+            android:targetPackage="com.openbrowsercompany.solstice.android">
             <extra
                 android:name="com.ardia.SOURCE"
                 android:value="shortcut" />
@@ -56,9 +56,9 @@
         android:shortcutLongLabel="@string/shortcut_mac_tabs">
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="ardia://mac-tabs"
-            android:targetClass="com.ardia.browser.android.system.ShortcutActivity"
-            android:targetPackage="com.ardia.browser.android">
+            android:data="solstice://mac-tabs"
+            android:targetClass="com.openbrowsercompany.solstice.android.system.ShortcutActivity"
+            android:targetPackage="com.openbrowsercompany.solstice.android">
             <extra
                 android:name="com.ardia.SOURCE"
                 android:value="shortcut" />
