@@ -4,7 +4,7 @@
 
 #include "Paths.h"
 
-namespace Ardia {
+namespace Solstice {
 
 struct LaunchLog {
   static void OpenFromCommandLine() noexcept {
