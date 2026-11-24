@@ -53,7 +53,7 @@ let newerNoted = false;
 function noteNewerRecord(consent: ConsentToken | null) {
   if (newerNoted) return;
   newerNoted = true;
-  warnFor(consent, `[passwords] ${HELD_OFF_DOCUMENT} is from a newer Ardia, so offer to save is left as it is`);
+  warnFor(consent, `[passwords] ${HELD_OFF_DOCUMENT} is from a newer Solstice, so offer to save is left as it is`);
   notePasswordManagerRecordFailed(consent);
 }
 

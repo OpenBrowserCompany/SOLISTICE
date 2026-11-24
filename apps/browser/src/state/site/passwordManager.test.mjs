@@ -49,7 +49,7 @@ function turnOn(name) {
 let work = "";
 let shared = "";
 
-test("before any password manager plugin is on, every profile keeps Ardia's manager and nothing is pushed for it", async () => {
+test("before any password manager plugin is on, every profile keeps Solstice's manager and nothing is pushed for it", async () => {
   S().hydrate({ profiles: { default: PERSONAL }, profileOrder: ["default"] });
   work = S().createProfile({ name: "Work" });
   shared = S().createProfile({ name: "Shared", shareWith: work });
@@ -70,7 +70,7 @@ test("the consent sheet names the reach and, for a built-in plugin, how many pro
   assert.ok(lines.includes("Moves 3 profiles that never picked a password manager to Test Passwords"), lines.join("\n"));
   assert.ok(lines.some((l) => l.startsWith("Shows a key in login and verification code fields on every site")));
   assert.ok(lines.some((l) => l.startsWith("Offers to set up two-factor codes")));
-  assert.ok(!lines.some((l) => /passkey/i.test(l)), "the passkeys key adds no line: the plugin can't use passkeys, and Ardia's own access lives in Settings › Engines");
+  assert.ok(!lines.some((l) => /passkey/i.test(l)), "the passkeys key adds no line: the plugin can't use passkeys, and Solstice's own access lives in Settings › Engines");
   const installed = consentLines(P().listings["other-passwords"].manifest, { official: false, movesProfiles: 3 }).map((l) => l.text);
   assert.ok(!installed.some((l) => l.startsWith("Moves")), "an installed plugin moves nobody");
 });
@@ -118,7 +118,7 @@ test("Edit › AutoFill › Passwords… opens the system panel in a profile who
   await settle();
   native.calls.length = 0;
   await requestAutofill(windowId, "passwords", tabId);
-  assert.deepEqual(calls("showSystemPanel"), [], "an Ardia profile gets Chrome's dropdown as before");
+  assert.deepEqual(calls("showSystemPanel"), [], "an Solstice profile gets Chrome's dropdown as before");
   pm.choosePasswordManager("default", "plugin:system-passwords");
   await settle();
   native.calls.length = 0;
@@ -223,14 +223,14 @@ test("a changed manifest withdraws the plugin until it's approved again", async 
 
 test("a choice counts only for the plugin approved under that name", async () => {
   await folders([pluginFolder("system-passwords", { official: true })]);
-  assert.equal(pm.currentPasswordManager(work), "ardia", "other-passwords is gone, so Work reads as Ardia");
+  assert.equal(pm.currentPasswordManager(work), "ardia", "other-passwords is gone, so Work reads as Solstice");
   await folders([pluginFolder("system-passwords", { official: true }), pluginFolder("other-passwords", { text: MANIFEST.replace("Test Passwords", "Someone Else") })]);
   assert.equal(pm.currentPasswordManager(work), "ardia", "a different manifest under the same name isn't the approved one");
   lifecycle.disablePlugin("system-passwords", consentToken());
   lifecycle.disablePlugin("other-passwords", consentToken());
 });
 
-test("a panel seen beside the field gets Ardia's hint on the other side, named for the site, until the profile closes it three times", async (t) => {
+test("a panel seen beside the field gets Solstice's hint on the other side, named for the site, until the profile closes it three times", async (t) => {
   sharingFor(t);
   const hints = await import("./panelHints.ts");
   const counts = await import("../telemetry/passwordManagerCounts.ts");
