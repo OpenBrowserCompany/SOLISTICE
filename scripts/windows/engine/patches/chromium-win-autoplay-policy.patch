@@ -5,7 +5,7 @@
    // do not change for the document's life. Defaults to false.
    bool can_use_device_bound_session_js_api = false;
 +
-+  // Ardia: whether the tab's top-level site blocks autoplay, decided by the
++  // Solstice: whether the tab's top-level site blocks autoplay, decided by the
 +  // Windows host before the document runs any script.
 +  bool ardia_autoplay_blocked = false;
  };
@@ -19,7 +19,7 @@
            blink::mojom::ScriptInjectionPolicy::kNone,
 -          /*can_use_device_bound_session_js_api=*/false);
 +          /*can_use_device_bound_session_js_api=*/false,
-+          // Ardia: ardia_autoplay_blocked, decided when it commits.
++          // Solstice: ardia_autoplay_blocked, decided when it commits.
 +          false);
  
    // internal_scroll_to_text_fragment should only be set for browser-initiated
@@ -30,7 +30,7 @@
  #include "ui/android/window_android_compositor.h"
  #endif
  
-+// Ardia: the Windows host (//ardia/win) answers whether a tab whose top-level
++// Solstice: the Windows host (//ardia/win) answers whether a tab whose top-level
 +// document has this origin blocks autoplay.
 +extern bool (*g_ardia_win_autoplay_blocked)(content::WebContents* contents,
 +                                            const url::Origin& top_level);
@@ -46,7 +46,7 @@
            blink::mojom::ScriptInjectionPolicy::kNone,
 -          /*can_use_device_bound_session_js_api=*/false);
 +          /*can_use_device_bound_session_js_api=*/false,
-+          // Ardia: ardia_autoplay_blocked, decided when it commits.
++          // Solstice: ardia_autoplay_blocked, decided when it commits.
 +          false);
  #if !BUILDFLAG(IS_ANDROID)
    CHECK(!GetContentClient()->browser()->IsInitialWebUIURL(common_params->url));
@@ -57,7 +57,7 @@
            blink::mojom::ScriptInjectionPolicy::kNone,
 -          /*can_use_device_bound_session_js_api=*/false);
 +          /*can_use_device_bound_session_js_api=*/false,
-+          // Ardia: ardia_autoplay_blocked, decided when it commits.
++          // Solstice: ardia_autoplay_blocked, decided when it commits.
 +          false);
    blink::mojom::BeginNavigationParamsPtr begin_params =
        blink::mojom::BeginNavigationParams::New();
@@ -66,7 +66,7 @@
    // cross-site-ness, therefore just sanitize unilaterally.
    SanitizeRedirectsForCommit(common_params, commit_params);
  
-+  // Ardia: the new document learns from the tab's top-level site, the one
++  // Solstice: the new document learns from the tab's top-level site, the one
 +  // this navigation commits for an outermost main frame, whether autoplay is
 +  // blocked.
 +  if (g_ardia_win_autoplay_blocked) {
@@ -90,7 +90,7 @@
            blink::mojom::ScriptInjectionPolicy::kNone,
 -          /*can_use_device_bound_session_js_api=*/false);
 +          /*can_use_device_bound_session_js_api=*/false,
-+          // Ardia: ardia_autoplay_blocked, decided when it commits.
++          // Solstice: ardia_autoplay_blocked, decided when it commits.
 +          false);
  #if BUILDFLAG(IS_ANDROID)
    // `data_url_as_string` is saved in NavigationEntry but should only be used by
@@ -102,11 +102,11 @@
    // The browser tells the renderer that an origin has specific autoplay flags.
    AddAutoplayFlags(url.mojom.Origin origin, int32 flags);
 +
-+  // Ardia: the Windows host sets whether this frame's tab blocks autoplay,
++  // Solstice: the Windows host sets whether this frame's tab blocks autoplay,
 +  // and blocking pauses what the document's user did not ask to play.
 +  SetArdiaAutoplayBlocked(bool blocked);
 +
-+  // Ardia: runs Ardia's media control script in an isolated world; a play
++  // Solstice: runs Solstice's media control script in an isolated world; a play
 +  // it starts counts as the user's ask in that media's document.
 +  RunArdiaMediaCommand(int32 world_id, string script);
  };
@@ -116,7 +116,7 @@
    UpdateUserActivationState(UserActivationUpdateType update_type,
                              UserActivationNotificationType notification_type);
  
-+  // Ardia: a play was refused because the tab blocks autoplay and the
++  // Solstice: a play was refused because the tab blocks autoplay and the
 +  // document's user did not ask for it; the Windows host counts these.
 +  ArdiaAutoplayRefused();
 +
@@ -139,7 +139,7 @@
               base::FEATURE_ENABLED_BY_DEFAULT);
  }  // namespace features
  
-+// Ardia: the Windows host (//ardia/win) counts the plays Blink refused on a
++// Solstice: the Windows host (//ardia/win) counts the plays Blink refused on a
 +// tab that blocks autoplay.
 +extern void (*g_ardia_win_autoplay_refused)(content::RenderFrameHost* frame);
 +void (*g_ardia_win_autoplay_refused)(content::RenderFrameHost* frame) =
@@ -207,7 +207,7 @@
    // the previously committed document did, and the navigation was same-site.
    bool should_have_sticky_user_activation = false;
  
-+  // Ardia: whether the tab's top-level site blocks autoplay, when the
++  // Solstice: whether the tab's top-level site blocks autoplay, when the
 +  // browser decided it for this commit; commits made in the renderer leave
 +  // it unset and keep the frame's.
 +  std::optional<bool> ardia_autoplay_blocked;
@@ -221,10 +221,10 @@
    // See |blink::Frame::HasTransientUserActivation()|.
    virtual bool HasTransientUserActivation() = 0;
  
-+  // Ardia: see |blink::AutoplayPolicy::ArdiaSetFrameBlocked()|.
++  // Solstice: see |blink::AutoplayPolicy::ArdiaSetFrameBlocked()|.
 +  virtual void SetArdiaAutoplayBlocked(bool blocked) = 0;
 +
-+  // Ardia: runs Ardia's media control script in the isolated world
++  // Solstice: runs Solstice's media control script in the isolated world
 +  // |world_id|; a play it starts counts as the user's ask.
 +  virtual void RunArdiaMediaCommand(int32_t world_id,
 +                                    const WebString& script) = 0;
@@ -276,7 +276,7 @@
  
    Frame* opener_frame = opener ? ToCoreFrame(*opener) : nullptr;
  
-+  // Ardia: a new frame copies its maker's autoplay decision now, so a later
++  // Solstice: a new frame copies its maker's autoplay decision now, so a later
 +  // opener = null or removal from its parent changes nothing.
 +  AutoplayPolicy::ArdiaInheritFrameBlocked(
 +      *frame_, parent_frame ? DynamicTo<LocalFrame>(parent_frame)
@@ -291,7 +291,7 @@
    // the previously committed document did, and the navigation was same-site.
    bool should_have_sticky_user_activation_ = false;
  
-+  // Ardia: see WebNavigationParams::ardia_autoplay_blocked.
++  // Solstice: see WebNavigationParams::ardia_autoplay_blocked.
 +  std::optional<bool> ardia_autoplay_blocked_;
 +
    std::vector<WebHistoryItem> navigation_api_back_entries_
@@ -319,7 +319,7 @@
      frame_->SetStickyUserActivationState();
    }
  
-+  // Ardia: the browser's decision for this commit; a commit made in the
++  // Solstice: the browser's decision for this commit; a commit made in the
 +  // renderer keeps the frame's.
 +  if (ardia_autoplay_blocked_.has_value()) {
 +    AutoplayPolicy::ArdiaSetFrameBlocked(*frame_, *ardia_autoplay_blocked_,
@@ -343,23 +343,23 @@
    // Returns true if the given |document| is capturing user media.
    static bool DocumentIsCapturingUserMedia(const Document&);
  
-+  // Ardia: autoplay blocking for the Windows host. Sets whether |frame|'s
++  // Solstice: autoplay blocking for the Windows host. Sets whether |frame|'s
 +  // tab blocks autoplay; with |pause_unasked|, blocking pauses the playing
 +  // media of a document whose user did not ask to play.
 +  static void ArdiaSetFrameBlocked(LocalFrame& frame,
 +                                   bool blocked,
 +                                   bool pause_unasked);
 +
-+  // Ardia: a frame the renderer makes takes its decision from |creator|, its
++  // Solstice: a frame the renderer makes takes its decision from |creator|, its
 +  // local parent or a new main frame's local opener, once, at creation.
 +  static void ArdiaInheritFrameBlocked(LocalFrame& frame, LocalFrame* creator);
 +
-+  // Ardia: trusted input reached |frame|'s document, which then counts as
++  // Solstice: trusted input reached |frame|'s document, which then counts as
 +  // asked, as the Mac's page script counts it.
 +  static void ArdiaNoteUsedHere(LocalFrame* frame);
 +
-+  // Ardia: while one is alive, a play counts as the user's ask in its
-+  // document (Ardia's own media controls).
++  // Solstice: while one is alive, a play counts as the user's ask in its
++  // document (Solstice's own media controls).
 +  class CORE_EXPORT ArdiaMediaCommandScope {
 +   public:
 +    ArdiaMediaCommandScope();
@@ -375,7 +375,7 @@
    // Called when the media element is moved to a new document.
    void DidMoveToNewDocument(Document& old_document);
  
-+  // Ardia: true, and counted, when the element's tab blocks autoplay and
++  // Solstice: true, and counted, when the element's tab blocks autoplay and
 +  // its document's user did not ask to play.
 +  bool ArdiaRefusesPlay();
 +
@@ -398,7 +398,7 @@
  const char kErrorAutoplayFuncMobile[] =
      "play() can only be initiated by a user gesture.";
  
-+// Ardia: Windows' autoplay blocking. A frame keeps the browser's word on
++// Solstice: Windows' autoplay blocking. A frame keeps the browser's word on
 +// whether its tab blocks autoplay, copied at creation from the frame that
 +// made it when the renderer makes it; a frame nothing decided for does not
 +// block. A document is asked once trusted input reached it (the Mac's
@@ -591,7 +591,7 @@
    if (!ShouldAutoplay())
      return false;
  
-+  // Ardia: a blocked tab's autoplay attribute waits for the user's ask,
++  // Solstice: a blocked tab's autoplay attribute waits for the user's ask,
 +  // ahead of every exemption and of muted autoplay.
 +  if (ArdiaRefusesPlay()) {
 +    return false;
@@ -604,7 +604,7 @@
  }
  
  std::optional<DOMExceptionCode> AutoplayPolicy::RequestPlay() {
-+  // Ardia: a play from Ardia's own media control is the user's ask in that
++  // Solstice: a play from Solstice's own media control is the user's ask in that
 +  // media's document and gives that frame user activation, as the Mac's
 +  // control does. Otherwise a blocked tab refuses a play() the user did not
 +  // ask for, ahead of every exemption and of muted autoplay, as the Mac's
@@ -633,7 +633,7 @@
  void HTMLMediaElement::PlayInternal() {
    DVLOG(3) << "playInternal(" << *this << ")";
  
-+  // Ardia: starts that skip play(), a document move or a system resume,
++  // Solstice: starts that skip play(), a document move or a system resume,
 +  // are refused on a blocked tab as play() is.
 +  if (paused_ && autoplay_policy_->ArdiaRefusesPlay()) {
 +    return;
@@ -664,7 +664,7 @@
         initial_key_event.GetType() == WebInputEvent::Type::kRawKeyDown)) {
      LocalFrame::NotifyUserActivation(
          frame_, mojom::blink::UserActivationNotificationType::kInteraction);
-+    // Ardia: the Mac's page script leaves out Escape and Command chords; on
++    // Solstice: the Mac's page script leaves out Escape and Command chords; on
 +    // Windows the shortcut chords are Ctrl's (Ctrl with Alt is AltGr).
 +    const int modifiers = initial_key_event.GetModifiers();
 +    if (!(modifiers & WebInputEvent::kMetaKey) &&
@@ -707,7 +707,7 @@
        !check_for_listener || target->HasEventListeners(event_type);
  
    if (!should_filter || listeners_exist) {
-+    // Ardia: the Mac's page script counts a trusted pointerdown, touch and
++    // Solstice: the Mac's page script counts a trusted pointerdown, touch and
 +    // pen too, as it reaches the document and before the page's handlers.
 +    if (event_type == event_type_names::kPointerdown &&
 +        pointer_event->pointerType() != "mouse" && target->ToNode()) {
@@ -731,7 +731,7 @@
      LocalFrame::NotifyUserActivation(
          window->GetFrame(),
          mojom::blink::UserActivationNotificationType::kInteraction);
-+    // Ardia: a Media Session action from the user is the user's ask in the
++    // Solstice: a Media Session action from the user is the user's ask in the
 +    // session's document, for every action Chrome grants activation for.
 +    AutoplayPolicy::ArdiaNoteUsedHere(window->GetFrame());
    }

@@ -4,7 +4,7 @@
    virtual ~DevToolsAgentHost() {}
  };
  
-+// Ardia: whether a client other than the given ones is attached to the host.
++// Solstice: whether a client other than the given ones is attached to the host.
 +CONTENT_EXPORT bool ArdiaHasOtherDevToolsClient(
 +    DevToolsAgentHost* host,
 +    const std::vector<const DevToolsAgentHostClient*>& ours);
@@ -43,7 +43,7 @@
  // Describes interface for managing devtools agents from the browser process.
  class CONTENT_EXPORT DevToolsAgentHostImpl : public DevToolsAgentHost {
   public:
-+  // Ardia: reads the sessions to tell the engine's own clients from others.
++  // Solstice: reads the sessions to tell the engine's own clients from others.
 +  friend bool ArdiaHasOtherDevToolsClient(
 +      DevToolsAgentHost* host,
 +      const std::vector<const DevToolsAgentHostClient*>& ours);
