@@ -1,4 +1,4 @@
-// Copyright 2026 Ardia. Apache-2.0.
+// Copyright 2026 Solstice. Apache-2.0.
 
 #ifndef CHROME_BROWSER_ARDIA_PIP_AC_PIP_WINDOW_H_
 #define CHROME_BROWSER_ARDIA_PIP_AC_PIP_WINDOW_H_
