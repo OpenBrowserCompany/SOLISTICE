@@ -281,7 +281,7 @@ export function MenuReplica({ menu, t, p, cam, k, symbols }: { menu: Menu; t: nu
     <div style={{ position: "absolute", inset: 0, opacity }}>
       <MenuColumn items={menu.items} x={g.x} y={g.y} width={g.width} g={g} hot={mainHot} cam={cam} k={k} symbols={symbols} />
       {subOpen ? <MenuColumn items={children} x={g.subX} y={g.subY} width={g.subWidth} g={g} hot={subHot} cam={cam} k={k} symbols={symbols} /> : null}
-      <div style={{ ...label, position: "absolute", right: 14, top: 14, fontSize: 18, fontWeight: 620, color: color.paper, background: color.ink, padding: "7px 12px 6px", borderRadius: 9 }}>Menu drawn from Ardia's log</div>
+      <div style={{ ...label, position: "absolute", right: 14, top: 14, fontSize: 18, fontWeight: 620, color: color.paper, background: color.ink, padding: "7px 12px 6px", borderRadius: 9 }}>Menu drawn from Solstice's log</div>
     </div>
   );
 }

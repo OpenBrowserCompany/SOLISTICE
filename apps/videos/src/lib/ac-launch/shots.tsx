@@ -565,7 +565,7 @@ function SiteLogo({ width }: { width: number }) {
           maskImage: "linear-gradient(90deg, #000 80%, transparent)", WebkitMaskImage: "linear-gradient(90deg, #000 80%, transparent)",
         }}
       >
-        Ardia · the sidebar browser for Mac
+        Solstice · the sidebar browser for Mac
       </p>
     </>
   );
