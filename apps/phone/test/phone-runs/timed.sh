@@ -1,5 +1,5 @@
 #!/system/bin/sh
-P=com.ardia.browser.android; T=/data/local/tmp/ardia-sync12; O=$T/touch.out; : > $O
+P=com.openbrowsercompany.solstice.android; T=/data/local/tmp/ardia-sync12; O=$T/touch.out; : > $O
 CLASSPATH=$T/ardia-touch.jar app_process /system/bin agentd.ArdiaTouch $1 > $O 2>&1 &
 J=$!
 n=0; until grep -q ready $O 2>/dev/null; do sleep 0.05; n=$((n+1)); [ $n -gt 200 ] && { cat $O; exit 1; }; done
