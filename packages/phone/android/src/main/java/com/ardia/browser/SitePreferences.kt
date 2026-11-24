@@ -1,4 +1,4 @@
-package com.ardia.browser
+package com.openbrowsercompany.solstice
 
 interface SitePreferences {
     fun nightShade(host: String?, isPrivate: Boolean): NightShadeMode
