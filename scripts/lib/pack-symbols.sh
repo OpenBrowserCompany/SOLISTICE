@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-usage="usage: scripts/lib/pack-symbols.sh [--app] <Chromium Framework.framework | Ardia.app> <dSYM dir> <symbols archive> <uuids file>"
+usage="usage: scripts/lib/pack-symbols.sh [--app] <Chromium Framework.framework | Solstice.app> <dSYM dir> <symbols archive> <uuids file>"
 mode=framework
 if [ "${1:-}" = "--app" ]; then
   mode=app
@@ -16,8 +16,8 @@ asset_limit=$((2 * 1024 * 1024 * 1024))
 
 if [ "$mode" = app ]; then
   imageroot="$(cd "$bundle" 2>/dev/null && pwd -P)" || die "no app at $bundle"
-  required="Contents/MacOS/Ardia"
-  label="Ardia"
+  required="Contents/MacOS/Solstice"
+  label="Solstice"
   hint="pack the dSYMs of the archive that made this app"
   [ -f "$imageroot/$required" ] || die "$bundle holds no $required"
 else
