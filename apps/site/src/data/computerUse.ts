@@ -19,7 +19,7 @@ const SHORT: Record<string, string> = {
   multitab: "Multi-tab",
 };
 const SIDES: { side: Side; name: string }[] = [
-  { side: "ardia", name: "Ardia" },
+  { side: "ardia", name: "Solstice" },
   { side: "aside", name: "Aside" },
   { side: "opencode", name: "OpenCode" },
 ];

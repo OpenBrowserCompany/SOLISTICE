@@ -81,7 +81,7 @@ function lanesOf(row: Row, roster: string[]): Lane[] {
 function stampOf(outcome: Outcome, winner: string): string {
   if (outcome === "tie") return "Dead heat";
   if (outcome === "loss") return `${winner} wins this one`;
-  return "Ardia";
+  return "Solstice";
 }
 
 function cardOf(group: Bench["groups"][number], roster: string[]): Card {
@@ -105,7 +105,7 @@ function cardOf(group: Bench["groups"][number], roster: string[]): Card {
         const ardia = row.bars.find((b) => b.isArdia)!;
         const best = row.bars.find((b) => b.name === c.winner)!;
         const verb = c.outcome === "tie" ? "ties" : "takes";
-        return [`${c.winner} ${verb} ${c.label.toLowerCase()}: ${valueText(best)} to Ardia’s ${valueText(ardia)}.`];
+        return [`${c.winner} ${verb} ${c.label.toLowerCase()}: ${valueText(best)} to Solstice’s ${valueText(ardia)}.`];
       })
     : [];
   return {
@@ -114,7 +114,7 @@ function cardOf(group: Bench["groups"][number], roster: string[]): Card {
     wide,
     solo: false,
     outcome,
-    stamp: wide ? `Ardia ${won} of ${cases.length}` : stampOf(cases[0].outcome, cases[0].winner),
+    stamp: wide ? `Solstice ${won} of ${cases.length}` : stampOf(cases[0].outcome, cases[0].winner),
     context: wide ? cases[headIndex].label : null,
     verdict: verdictOf(head),
     cases,
