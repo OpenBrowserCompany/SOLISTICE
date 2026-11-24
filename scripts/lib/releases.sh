@@ -1,7 +1,7 @@
 REPO="ardia-browser/ardia"
 REPO_URL="https://github.com/$REPO"
 LATEST_DOWNLOAD_URL="$REPO_URL/releases/latest/download"
-NIGHTLY_DMG_URL="$REPO_URL/releases/download/nightly/Ardia-Nightly.dmg"
+NIGHTLY_DMG_URL="$REPO_URL/releases/download/nightly/Solstice-Nightly.dmg"
 RELEASE_NOTES_URL="https://ardia.dev/release-notes"
 APPCAST_PY="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)/.claude/skills/release/scripts/appcast.py"
 
@@ -31,8 +31,8 @@ appcast() { python3 -I "$APPCAST_PY" "$@"; }
 
 engine_symbols_name() { echo "ArdiaCore-${1#engine-}-symbols.tar.xz"; }
 engine_uuids_name() { echo "ArdiaCore-${1#engine-}-uuids.txt"; }
-app_symbols_name() { echo "Ardia-${1#v}-symbols.tar.xz"; }
-app_uuids_name() { echo "Ardia-${1#v}-uuids.txt"; }
+app_symbols_name() { echo "Solstice-${1#v}-symbols.tar.xz"; }
+app_uuids_name() { echo "Solstice-${1#v}-uuids.txt"; }
 release_symbols_name() { case "$1" in engine-*) engine_symbols_name "$1" ;; *) app_symbols_name "$1" ;; esac; }
 release_uuids_name() { case "$1" in engine-*) engine_uuids_name "$1" ;; *) app_uuids_name "$1" ;; esac; }
 
