@@ -95,11 +95,11 @@ const withoutEngine: Check[] = [
     name: "engine host: profiles live in the instance's own Chromium folder, and nothing is removed while it has none",
     async run() {
       expectEqual(comparable(engineHost().profileDataFolder()), comparable(`${String(launchData())}\\Chromium`), "profileDataFolder()");
-      expectEqual(await engineHost().removeProfileFolder("Ardia x"), "refused", "a profile folder with no Chromium data beside it");
+      expectEqual(await engineHost().removeProfileFolder("Solstice x"), "refused", "a profile folder with no Chromium data beside it");
       expectEqual(await engineHost().removeProfileFolder("..\\System32"), "refused", "a name that leaves the folder");
-      expectEqual(await engineHost().removeProfileFolder("Ardia x (removing)"), "refused", "a name the engine never makes");
-      expectEqual(await engineHost().removeProfileFolder("Ardia Work"), "refused", "a name Ardia never makes");
-      expectEqual(await engineHost().removeProfileFolder(`Ardia ${"a".repeat(239)}`), "refused", "a name with no room for the removal suffix");
+      expectEqual(await engineHost().removeProfileFolder("Solstice x (removing)"), "refused", "a name the engine never makes");
+      expectEqual(await engineHost().removeProfileFolder("Solstice Work"), "refused", "a name Solstice never makes");
+      expectEqual(await engineHost().removeProfileFolder(`Solstice ${"a".repeat(239)}`), "refused", "a name with no room for the removal suffix");
     },
   },
 ];

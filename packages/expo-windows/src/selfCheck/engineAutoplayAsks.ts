@@ -50,18 +50,18 @@ async function cutPopupPlays(key: string) {
 
 const askChecks: Check[] = [
   {
-    name: "engine autoplay: on a site that blocks nothing, a muted video Ardia's play control started keeps playing when the page unmutes it",
+    name: "engine autoplay: on a site that blocks nothing, a muted video Solstice's play control started keeps playing when the page unmutes it",
     run: () =>
       withMedia("control-unmute", "media?muted", "media page", async (key) => {
         await mediaCommand(key, "play");
-        await until("Ardia's play control plays the muted video", SETTLE_MS, () => played(key), playing);
+        await until("Solstice's play control plays the muted video", SETTLE_MS, () => played(key), playing);
         await evaluate(key, 'm.muted = false; post("result", "true");');
         await pause(1000);
         await advances(key, "the video keeps playing once the page unmutes it");
       }),
   },
   {
-    name: "engine autoplay: Ardia's play toggle that pauses gives the page no user activation",
+    name: "engine autoplay: Solstice's play toggle that pauses gives the page no user activation",
     run: () =>
       withMedia("toggle-pause", "media?auto-muted", "media page", async (key) => {
         await until("the muted autoplay plays", SETTLE_MS, () => played(key), playing);
@@ -71,15 +71,15 @@ const askChecks: Check[] = [
       }),
   },
   {
-    name: "engine autoplay: media Ardia's play control started before blocking turned on keeps playing",
+    name: "engine autoplay: media Solstice's play control started before blocking turned on keeps playing",
     run: async () => {
       try {
         await withMedia("control-then-block", "media?muted", "media page", async (key) => {
           await mediaCommand(key, "play");
-          await until("Ardia's play control plays the muted video", SETTLE_MS, () => played(key), playing);
+          await until("Solstice's play control plays the muted video", SETTLE_MS, () => played(key), playing);
           await setAutoplay("block");
           await pause(1000);
-          await advances(key, "the video the user asked for through Ardia keeps playing after blocking turns on");
+          await advances(key, "the video the user asked for through Solstice keeps playing after blocking turns on");
         });
       } finally {
         await restore();

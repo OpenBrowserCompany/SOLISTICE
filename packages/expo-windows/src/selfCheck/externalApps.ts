@@ -32,7 +32,7 @@ export const checks: Check[] = [
     name: "ArdiaExternalApps.open refuses browser, drive-letter, path, file-type and unknown links",
     async run() {
       const opened: Record<string, boolean> = {};
-      for (const link of REFUSED_LINKS) opened[link] = await apps().open(link, "Ardia Self-Check", null);
+      for (const link of REFUSED_LINKS) opened[link] = await apps().open(link, "Solstice Self-Check", null);
       expectEqual(opened, Object.fromEntries(REFUSED_LINKS.map((link) => [link, false])), "links opened");
     },
   },
