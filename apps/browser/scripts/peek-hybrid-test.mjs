@@ -9,7 +9,7 @@ import { launch, reporter, session, sleep } from "../../../scripts/lib/instance.
 const args = process.argv.slice(2);
 const appArg = args.find((a) => !a.startsWith("--"));
 if (!appArg) {
-  console.error(`usage: node peek-hybrid-test.mjs <Debug Ardia.app> [--only=<check,…>] [--keep-data]
+  console.error(`usage: node peek-hybrid-test.mjs <Debug Solstice.app> [--only=<check,…>] [--keep-data]
 
 Peek's Genie-in, Seamless-after motion (docs/peek-motion.md › Failure scenarios): the page keeps one viewport from Peek
 to tab, one uniform scale, the same document and Chrome tab after Open as Tab, a pinch during the warp keeps every
