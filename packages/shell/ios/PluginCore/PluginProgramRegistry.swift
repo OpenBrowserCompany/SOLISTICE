@@ -88,9 +88,9 @@ struct ProgramRegistry: Equatable {
   }
 
   func refusal(program: String, plugin: String, builtIn: Bool) -> String? {
-    if failClosed { return "Ardia's list of program names kept for its official plugins is missing or damaged, so no program goes on PATH" }
+    if failClosed { return "Solstice's list of program names kept for its official plugins is missing or damaged, so no program goes on PATH" }
     guard let owner = claims[program] else { return nil }
-    return builtIn && owner == plugin ? nil : "\(program) belongs to Ardia's official \(owner) plugin"
+    return builtIn && owner == plugin ? nil : "\(program) belongs to Solstice's official \(owner) plugin"
   }
 
   func adoption(for plugin: String, programs: [String], builtIn: Bool) -> LegacyInstall? {

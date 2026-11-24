@@ -468,13 +468,13 @@ struct PluginSandbox {
     let inOfficialStore = officialCopy == pluginFolder && Self.isInside(pluginFolder, officialRoot)
       && pluginFolder.dropFirst(officialRoot.count + 1).split(separator: "/", omittingEmptySubsequences: false).count == 2
     if pluginFolder == "/" || [home, configFolder, appData].contains(where: { Self.isInside($0, pluginFolder) }) {
-      throw Refusal.unsafe("its folder takes in Ardia's data, its settings or your home folder")
+      throw Refusal.unsafe("its folder takes in Solstice's data, its settings or your home folder")
     }
     if (Self.isInside(pluginFolder, configFolder) || Self.isInside(pluginFolder, appData)) && !inPluginsRoot && !inOfficialStore {
-      throw Refusal.unsafe("its folder is in Ardia's data or config folder")
+      throw Refusal.unsafe("its folder is in Solstice's data or config folder")
     }
     if !Self.isInside(program, pluginFolder) && (Self.isInside(program, appData) || Self.isInside(program, configFolder)) {
-      throw Refusal.unsafe("its program is in Ardia's data or config folder")
+      throw Refusal.unsafe("its program is in Solstice's data or config folder")
     }
     guard Self.isInside(pluginData, appData), !Self.isInside(appData, pluginData) else { throw Refusal.unsafe("its data folder is in the wrong place") }
   }

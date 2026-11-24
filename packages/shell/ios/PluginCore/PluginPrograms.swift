@@ -367,7 +367,7 @@ enum PluginPrograms {
     }
     if let expectedDigest, payloadDigest(staged, keepingCaches: true) != expectedDigest {
       discard(staged)
-      return .failure(FolderRefusal(reason: "its files don't match the ones Ardia downloaded and checked"))
+      return .failure(FolderRefusal(reason: "its files don't match the ones Solstice downloaded and checked"))
     }
     if let problem = checkCopy(staged, folderId: folder.id, approved: approved, programs: programs) {
       discard(staged)
@@ -400,7 +400,7 @@ enum PluginPrograms {
     for name in names.sorted() {
       let shown = relative.isEmpty ? name : "\(relative)/\(name)"
       if name.unicodeScalars.contains(where: { $0.value < 0x20 || $0.value == 0x7f }) { return "a name in \(relative.isEmpty ? "its folder" : relative) has control characters" }
-      if relative.isEmpty && isReserved(name) { return "\(shown) is reserved for Ardia" }
+      if relative.isEmpty && isReserved(name) { return "\(shown) is reserved for Solstice" }
       var info = stat()
       guard fstatat(source, name, &info, AT_SYMLINK_NOFOLLOW) == 0 else { return "\(shown) couldn't be read" }
       if name == caches && (info.st_mode & S_IFMT) == S_IFDIR { continue }
@@ -463,7 +463,7 @@ enum PluginPrograms {
         defer { close(child) }
         if let problem = checkTree(child, relative: shown) { return problem }
       case S_IFREG:
-        if info.st_nlink != 1 || info.st_mode & 0o7022 != 0 { return "\(shown) isn't as Ardia copied it" }
+        if info.st_nlink != 1 || info.st_mode & 0o7022 != 0 { return "\(shown) isn't as Solstice copied it" }
       default:
         return "\(shown) isn't a file or a folder"
       }
