@@ -1,11 +1,21 @@
 diff --git a/tools/typescript/validate_tsconfig.py b/tools/typescript/validate_tsconfig.py
 --- a/tools/typescript/validate_tsconfig.py
 +++ b/tools/typescript/validate_tsconfig.py
-@@ -302,6 +302,7 @@
-     'third_party/d3/',
-     'third_party/material_web_components/',
-     'third_party/node/node_modules/',
-+    'third_party/chromium-bidi/node_modules/',
-     'third_party/polymer/v3_0/',
-     'third_party/typescript/',
+@@ -307,6 +307,9 @@
      'tools/typescript/tests/',
+   ]
+   exceptions = [getPathFromCwd(e) for e in exceptions_list]
++  def isBidiTypes(f):
++    rel = os.path.relpath(os.path.abspath(f), _SRC_DIR)
++    return os.sep + 'undici-types' + os.sep in os.sep + rel + os.sep or 'undici-types' in rel.split(os.sep)
+   definitions_normalized = [d.replace('\', '/') for d in definitions]
+ 
+   missing_inputs = []
+@@ -319,6 +322,7 @@
+       not is_gen_file
+       and f_from_gen not in definitions_normalized
+       and not any(f_from_cwd.startswith(exception) for exception in exceptions)
++      and not isBidiTypes(f)
+     ):
+       missing_inputs.append(
+         os.path.relpath(f_from_cwd, _SRC_DIR).replace('\', '/')
