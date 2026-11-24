@@ -1,7 +1,7 @@
 package com.ardia.appmodel
 
 import android.net.Uri
-import com.ardia.browser.BrowserUrl
+import com.openbrowsercompany.solstice.BrowserUrl
 
 sealed interface SystemLink {
     data class Search(val query: String?) : SystemLink

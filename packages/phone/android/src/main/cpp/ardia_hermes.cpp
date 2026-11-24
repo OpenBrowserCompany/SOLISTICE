@@ -259,7 +259,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_ardia_shared_ScriptEngine_nativeCrea
 #endif
       return jsi::Value::undefined();
     }));
-    rt.evaluateJavaScript(std::make_shared<jsi::StringBuffer>(setup), "ardia://setup.js");
+    rt.evaluateJavaScript(std::make_shared<jsi::StringBuffer>(setup), "solstice://setup.js");
     drain(*raw->runtime);
   } catch (const jsi::JSError &error) {
     throwScriptError(env, describe(error));
@@ -286,7 +286,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_ardia_shared_ScriptEngine_nativeEvalu
   jsize length = env->GetArrayLength(source);
   std::vector<uint8_t> data(static_cast<size_t>(length));
   env->GetByteArrayRegion(source, 0, length, reinterpret_cast<jbyte *>(data.data()));
-  std::string url = "ardia://" + utf8(javaText(env, name));
+  std::string url = "solstice://" + utf8(javaText(env, name));
   try {
     jsi::Runtime &rt = *engine.runtime;
     rt.evaluateJavaScript(std::make_shared<Bytes>(std::move(data)), url);

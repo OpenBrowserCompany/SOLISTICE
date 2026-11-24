@@ -8,11 +8,11 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import com.ardia.browser.DownloadOutcome
-import com.ardia.browser.DownloadProgress
-import com.ardia.browser.PageEngine
-import com.ardia.browser.PageDownload
-import com.ardia.browser.SystemDownloads
+import com.openbrowsercompany.solstice.DownloadOutcome
+import com.openbrowsercompany.solstice.DownloadProgress
+import com.openbrowsercompany.solstice.PageEngine
+import com.openbrowsercompany.solstice.PageDownload
+import com.openbrowsercompany.solstice.SystemDownloads
 import java.util.Locale
 import kotlinx.coroutines.flow.Flow
 
