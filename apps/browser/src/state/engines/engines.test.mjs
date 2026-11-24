@@ -31,7 +31,7 @@ test("a site is its scheme, host and port, and nothing else", () => {
   assert.equal(siteOf("https://www.Netflix.com/watch/1?x=2#y"), "https://www.netflix.com");
   assert.equal(siteOf("http://localhost:8080/a"), "http://localhost:8080");
   assert.equal(siteOf("https://example.com:443/"), "https://example.com");
-  assert.equal(siteOf("ardia://settings"), null);
+  assert.equal(siteOf("solstice://settings"), null);
   assert.equal(siteOf("not a url"), null);
 });
 
@@ -164,14 +164,14 @@ test("a website rule wins over the streaming default", () => {
 });
 
 test("Chromium's own pages always open in Chromium", () => {
-  const s = state([tab("v", { engine: "webkit", url: "ardia://version" }), tab("w", { engine: "webkit", url: "https://a.com/" })], { pageEngine: "webkit" });
+  const s = state([tab("v", { engine: "webkit", url: "solstice://version" }), tab("w", { engine: "webkit", url: "https://a.com/" })], { pageEngine: "webkit" });
   assert.equal(tabEngine(s, "v"), "chromium");
-  assert.equal(typedNavigationEngine(s, s.tabs.w, "ardia://extensions"), "chromium");
+  assert.equal(typedNavigationEngine(s, s.tabs.w, "solstice://extensions"), "chromium");
   assert.equal(typedNavigationEngine(s, s.tabs.w, "chrome-extension://abc/options.html"), "chromium");
 });
 
 test("the mark shows only on web pages away from the default engine, and never with one engine for every page", () => {
-  const tabs = [tab("w", { engine: "webkit", url: "https://a.com/" }), tab("c", { engine: "chromium", url: "https://a.com/" }), tab("n", { engine: "webkit", url: "ardia://history" })];
+  const tabs = [tab("w", { engine: "webkit", url: "https://a.com/" }), tab("c", { engine: "chromium", url: "https://a.com/" }), tab("n", { engine: "webkit", url: "solstice://history" })];
   const s = state(tabs);
   assert.equal(engineMark(s, "w"), "webkit");
   assert.equal(engineMark(s, "c"), null);

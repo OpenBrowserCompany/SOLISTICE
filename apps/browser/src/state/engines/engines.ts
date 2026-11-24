@@ -38,7 +38,7 @@ export function siteOf(url: string | undefined | null): string | null {
 }
 
 export const offersEngineChoice = () => PLATFORM_FEATURES.webKit;
-export const chromiumOnly = (url: string | undefined | null) => !!url && /^(ardia|chrome|chrome-extension|chrome-untrusted|devtools|view-source):/i.test(url);
+export const chromiumOnly = (url: string | undefined | null) => !!url && /^(solstice|ardia|chrome|chrome-extension|chrome-untrusted|devtools|view-source):/i.test(url);
 export const webStorePage = (url: string | undefined | null) => !!url && /^https:\/\/(chromewebstore\.google\.com|chrome\.google\.com\/webstore)([/?#]|$)/i.test(url);
 export const needsChromium = (url: string | undefined | null) => chromiumOnly(url) || webStorePage(url);
 export const canSwitchEngine = (url: string | undefined | null) => PLATFORM_FEATURES.webKit && !!url && isWebPageUrl(url) && !webStorePage(url);
