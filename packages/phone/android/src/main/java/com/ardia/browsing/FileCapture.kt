@@ -6,7 +6,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Process
 import androidx.core.content.FileProvider
-import com.ardia.browser.PageRequest
+import com.openbrowsercompany.solstice.PageRequest
 import java.io.File
 import java.util.UUID
 

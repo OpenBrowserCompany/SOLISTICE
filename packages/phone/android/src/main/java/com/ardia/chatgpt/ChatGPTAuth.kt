@@ -55,7 +55,7 @@ object ChatGPTAuth {
     const val PLAN_USAGE_SCOPE = "chatgpt.tokens.use.direct"
     const val CALLBACK_PATH = "/auth/callback"
     const val DYNAMIC_CLIENT = "dynamic_agent_client"
-    const val APP_NAME = "Ardia"
+    const val APP_NAME = "Solstice"
     const val FINISHED_SCHEME = "ardia-chatgpt"
     const val FINISHED_URL = "ardia-chatgpt://signed-in"
 
@@ -155,12 +155,12 @@ object LoopbackRequest {
         return when (reply) {
             Reply.NotFound -> "HTTP/1.1 404 Not Found\r\n${headers}Content-Length: 0\r\n\r\n".toByteArray()
             Reply.BadState -> {
-                val body = "Invalid sign-in state. Start again from Ardia."
+                val body = "Invalid sign-in state. Start again from Solstice."
                 "HTTP/1.1 400 Bad Request\r\n${headers}Content-Type: text/plain; charset=utf-8\r\nContent-Length: ${body.toByteArray().size}\r\n\r\n$body".toByteArray()
             }
             is Reply.Finish -> {
                 val url = ChatGPTAuth.FINISHED_URL
-                val body = "<!doctype html><meta charset=utf-8><meta name=viewport content=\"width=device-width\"><title>Return to Ardia</title><body style=\"font:17px system-ui;margin:20vh 24px\"><h1>Return to Ardia</h1><p><a href=\"$url\">Back to Ardia</a></p>"
+                val body = "<!doctype html><meta charset=utf-8><meta name=viewport content=\"width=device-width\"><title>Return to Solstice</title><body style=\"font:17px system-ui;margin:20vh 24px\"><h1>Return to Solstice</h1><p><a href=\"$url\">Back to Solstice</a></p>"
                 "HTTP/1.1 302 Found\r\n${headers}Location: $url\r\nContent-Type: text/html; charset=utf-8\r\nContent-Length: ${body.toByteArray().size}\r\n\r\n$body".toByteArray()
             }
         }
@@ -296,14 +296,14 @@ sealed class ChatGPTFailure : Exception() {
         get() = when (this) {
             Cancelled -> "Sign-in was cancelled."
             DiscoveryFailed -> "Couldn’t reach ChatGPT’s sign-in. Try again in a moment."
-            SignInIncomplete -> "ChatGPT didn’t finish connecting Ardia. Try signing in again."
+            SignInIncomplete -> "ChatGPT didn’t finish connecting Solstice. Try signing in again."
             Denied -> "Sign-in wasn’t completed. You can try again when you’re ready."
-            InvalidTokenResponse, InvalidIdentity -> "ChatGPT sent back something Ardia couldn’t verify. Sign in again."
-            PlanUsageNotGranted -> "ChatGPT didn’t allow Ardia to use your plan. Sign in again and allow it."
+            InvalidTokenResponse, InvalidIdentity -> "ChatGPT sent back something Solstice couldn’t verify. Sign in again."
+            PlanUsageNotGranted -> "ChatGPT didn’t allow Solstice to use your plan. Sign in again and allow it."
             AccountMismatch -> "That’s a different ChatGPT account. Sign in with the one you connected."
             Expired -> "Your ChatGPT connection expired. Sign in again."
             NotEligible -> "Your ChatGPT plan can’t be used in other apps. It takes Plus or Pro."
-            UsageLimit -> "You’ve hit your ChatGPT limit for Ardia. Check usage in ChatGPT’s settings."
+            UsageLimit -> "You’ve hit your ChatGPT limit for Solstice. Check usage in ChatGPT’s settings."
             Unsupported -> "ChatGPT doesn’t support this request with your plan."
             is Rejected -> "ChatGPT turned down the request."
             Unavailable -> "ChatGPT is busy right now. Try again shortly."
