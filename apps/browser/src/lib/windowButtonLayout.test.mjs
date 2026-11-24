@@ -7,7 +7,7 @@ const parsed = (raw) => {
   return [leading.join(","), trailing.join(",")].join(":");
 };
 
-test("real desktops' GTK button layouts become Ardia's buttons in their order and on their side, with the … always at the right", () => {
+test("real desktops' GTK button layouts become Solstice's buttons in their order and on their side, with the … always at the right", () => {
   const desktops = [
     [":minimize,maximize,close", ":menu,minimize,maximize,close", "Ubuntu, Pop!_OS, Zorin and today's default: the … at the inner end of the right group"],
     ["appmenu:close", ":menu,close", "upstream GNOME: the app menu token doesn't move the …, which stays beside close"],

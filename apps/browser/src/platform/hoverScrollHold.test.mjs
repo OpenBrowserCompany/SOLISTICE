@@ -585,7 +585,7 @@ function program(realClock, cases = realClock ? TIMED : SCENARIOS) {
   };
   const wake = realClock ? body("+ (void)ardia_markHoverDirty") : FAKE_WAKE;
   const tracking = cases === SEQUENCES ? NO_TRACKING : "";
-  return prelude(settle, realClock) + region("typedef struct {\n  double scrolledAt;", "// [Ardia: removeClippedSubviews hides") + STUBS + tracking + wake + REPLAYED.map(body).join("\n") + "\n@end\n" + cases;
+  return prelude(settle, realClock) + region("typedef struct {\n  double scrolledAt;", "// [Solstice: removeClippedSubviews hides") + STUBS + tracking + wake + REPLAYED.map(body).join("\n") + "\n@end\n" + cases;
 }
 
 const runs = new Map();
