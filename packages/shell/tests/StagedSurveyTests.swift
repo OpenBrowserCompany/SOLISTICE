@@ -2,7 +2,7 @@ import XCTest
 @testable import ArdiaUpdaterCore
 
 final class StagedSurveyTests: XCTestCase {
-  let bundleId = "com.ardia.browser.surveytest"
+  let bundleId = "com.openbrowsercompany.solstice.surveytest"
   var caches: URL!
 
   override func setUpWithError() throws {
@@ -22,18 +22,18 @@ final class StagedSurveyTests: XCTestCase {
   @discardableResult
   func stage(_ folder: String = "abc123", bundleId: String? = nil, build: String = "91", channel: String? = "nightly",
              executable: Bool = true, plist: Bool = true) throws -> URL {
-    let app = root.appendingPathComponent(folder).appendingPathComponent("Ardia.app")
+    let app = root.appendingPathComponent(folder).appendingPathComponent("Solstice.app")
     let contents = app.appendingPathComponent("Contents")
     try FileManager.default.createDirectory(at: contents.appendingPathComponent("MacOS"), withIntermediateDirectories: true)
     if executable {
-      FileManager.default.createFile(atPath: contents.appendingPathComponent("MacOS/Ardia").path, contents: Data(), attributes: [.posixPermissions: 0o755])
+      FileManager.default.createFile(atPath: contents.appendingPathComponent("MacOS/Solstice").path, contents: Data(), attributes: [.posixPermissions: 0o755])
     }
     if plist { try writeInfo(app, bundleId: bundleId ?? self.bundleId, build: build, channel: channel) }
     return app
   }
 
   func writeInfo(_ app: URL, bundleId: String? = nil, build: String = "91", channel: String? = "nightly") throws {
-    var info: [String: Any] = ["CFBundleIdentifier": bundleId ?? self.bundleId, "CFBundleVersion": build, "CFBundleExecutable": "Ardia"]
+    var info: [String: Any] = ["CFBundleIdentifier": bundleId ?? self.bundleId, "CFBundleVersion": build, "CFBundleExecutable": "Solstice"]
     if let channel { info["ACUpdateChannel"] = channel }
     let data = try PropertyListSerialization.data(fromPropertyList: info, format: .xml, options: 0)
     try data.write(to: app.appendingPathComponent("Contents/Info.plist"))
@@ -146,7 +146,7 @@ final class StagedSurveyTests: XCTestCase {
     let swapped = caches.appendingPathComponent("swapped")
     try FileManager.default.moveItem(at: update, to: swapped)
     try FileManager.default.createDirectory(at: update, withIntermediateDirectories: true)
-    try FileManager.default.moveItem(at: swapped.appendingPathComponent("Ardia.app"), to: update.appendingPathComponent("Ardia.app"))
+    try FileManager.default.moveItem(at: swapped.appendingPathComponent("Solstice.app"), to: update.appendingPathComponent("Solstice.app"))
     XCTAssertNotEqual(survey().found.first?.copy, found.first?.copy)
   }
 
