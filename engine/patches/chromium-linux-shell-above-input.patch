@@ -1,5 +1,5 @@
 The Linux shell WebView sits above the page views and passes input through wherever a page shows and no shell
-overlay covers it. BrowserView::ShouldDescendIntoChildForEventHandling asks the Ardia host first, so both aura's event
+overlay covers it. BrowserView::ShouldDescendIntoChildForEventHandling asks the Solstice host first, so both aura's event
 targeting and the drag-and-drop lookup (Window::GetEventHandlerForPoint) skip the shell's native view at such points
 and reach the page below.
 --- a/chrome/browser/ui/views/frame/browser_view.cc

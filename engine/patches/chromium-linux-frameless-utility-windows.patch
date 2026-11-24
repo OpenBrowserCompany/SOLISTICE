@@ -1,6 +1,6 @@
-The Ardia Linux host draws its own window controls in every window it hosts. Its Settings and Import windows are
+The Solstice Linux host draws its own window controls in every window it hosts. Its Settings and Import windows are
 legacy app windows (TYPE_APP with an app name and no web app controller), so on X11 Chromium asked the window manager
-for its frame and the window showed both the manager's title bar and Ardia's controls, and with a custom frame it
+for its frame and the window showed both the manager's title bar and Solstice's controls, and with a custom frame it
 drew a title bar of its own, its window icon (the product logo) over the window's top-left corner, and the 3 dip
 extra top border Linux adds to windows without a tab strip as a band of frame colour above the page. The host names
 such windows through g_ardia_linux_frameless_app; they get Chromium's custom frame with no window title bar, no window

@@ -1,5 +1,5 @@
-A tab hands a key its page left unhandled to the Ardia Linux host before the window gets it, so the host can tell
-the shell about an unhandled Escape (which closes Peek and Little Ardia windows) as the Mac does.
+A tab hands a key its page left unhandled to the Solstice Linux host before the window gets it, so the host can tell
+the shell about an unhandled Escape (which closes Peek and Little Solstice windows) as the Mac does.
 --- a/chrome/browser/ui/browser_web_contents_delegate/browser_web_contents_delegate.cc
 +++ b/chrome/browser/ui/browser_web_contents_delegate/browser_web_contents_delegate.cc
 @@ -331,9 +331,16 @@
