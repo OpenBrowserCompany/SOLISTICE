@@ -58,7 +58,7 @@ extension PluginPrograms {
       return .failure(FolderRefusal(reason: "its program folder (\(pluginStore)) is inside a folder other users can change"))
     }
     defer { folder.close() }
-    guard checkTree(folder.fd) == nil else { return .failure(FolderRefusal(reason: "its earlier copy isn't as Ardia made it")) }
+    guard checkTree(folder.fd) == nil else { return .failure(FolderRefusal(reason: "its earlier copy isn't as Solstice made it")) }
     for program in programs where PluginFiles.localProgram(program.path, in: folder) == nil {
       return .failure(FolderRefusal(reason: "its earlier copy has no \(program.path)"))
     }

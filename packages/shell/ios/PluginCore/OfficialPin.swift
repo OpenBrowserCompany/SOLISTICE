@@ -121,10 +121,10 @@ struct OfficialPin: Equatable {
 
   func refusal(manifest text: String, of entry: OfficialPinEntry) -> String? {
     guard OfficialPin.manifestName(text) == entry.name else { return "its plugin.json isn't the \(entry.name) plugin" }
-    guard OfficialPin.manifestVersion(text) == entry.version else { return "its plugin.json isn't version \(entry.version), the one this Ardia pins" }
+    guard OfficialPin.manifestVersion(text) == entry.version else { return "its plugin.json isn't version \(entry.version), the one this Solstice pins" }
     let claimed = ProgramRegistry.claimedPrograms(manifest: Data(text.utf8))
     if let stray = claimed.first(where: { !entry.reservedPrograms.contains($0) }) {
-      return "it claims \(stray), which this Ardia doesn't reserve for it"
+      return "it claims \(stray), which this Solstice doesn't reserve for it"
     }
     return nil
   }

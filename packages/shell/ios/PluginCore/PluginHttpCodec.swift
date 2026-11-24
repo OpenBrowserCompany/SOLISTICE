@@ -72,7 +72,7 @@ enum PluginHttpCodec {
       guard PluginFetchPolicy.isToken(name), !value.utf8.contains(where: { $0 == 0x0d || $0 == 0x0a || $0 == 0 }) else { return nil }
       lines.append("\(name): \(value)")
     }
-    if given["user-agent"] == nil { lines.append("user-agent: Ardia") }
+    if given["user-agent"] == nil { lines.append("user-agent: Solstice") }
     if given["accept"] == nil { lines.append("accept: */*") }
     lines.append("accept-encoding: identity")
     if hop.body != nil || bodyMethods.contains(hop.method) { lines.append("content-length: \(hop.body?.count ?? 0)") }
@@ -254,7 +254,7 @@ struct PluginHttpParser {
   private func framingFor(_ head: PluginHttpResponse) throws -> Framing {
     if method == "HEAD" || head.status == 204 || head.status == 304 { return .none }
     if let coding = head.values("content-encoding").joined(separator: ",").lowercased().split(separator: ",").map({ $0.trimmingCharacters(in: .whitespaces) }).first(where: { !$0.isEmpty && $0 != "identity" }) {
-      throw FolderRefusal(reason: "the answer is compressed (\(coding)), which Ardia doesn't decode")
+      throw FolderRefusal(reason: "the answer is compressed (\(coding)), which Solstice doesn't decode")
     }
     let codings = head.values("transfer-encoding").joined(separator: ",").lowercased().split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty }
     if !codings.isEmpty { return codings.last == "chunked" ? .chunked : .close }
