@@ -30,8 +30,8 @@ export function parseControlCaller(raw: unknown): ControlCaller | null {
 type ControlLine = { lead: string; name: string; rest: string };
 
 export function controlLine(caller: ControlCaller | null): ControlLine {
-  if (!caller) return { lead: "A program", name: "", rest: " is controlling Ardia" };
-  return { lead: "", name: caller.name, rest: " is controlling Ardia" };
+  if (!caller) return { lead: "A program", name: "", rest: " is controlling Solstice" };
+  return { lead: "", name: caller.name, rest: " is controlling Solstice" };
 }
 
 export const controlLineText = ({ lead, name, rest }: ControlLine) => `${lead}${name}${rest}`;
