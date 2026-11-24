@@ -13,7 +13,7 @@ const between = (text, start, end) => {
   return text.slice(from, to < 0 ? undefined : to);
 };
 
-test("a drag region hands the press that brings Ardia forward to AppKit instead of swallowing it", () => {
+test("a drag region hands the press that brings Solstice forward to AppKit instead of swallowing it", () => {
   const monitor = between(dragRegion, "monitor = NSEvent.addLocalMonitorForEvents", "deinit");
   const down = monitor.slice(monitor.indexOf("self.doubleClickDown = nil\n      self.pressAwaitingActivation"));
   const handOver = down.indexOf("if !NSApp.isActive, !leavesWindowBehind { return place == .region ? self.pressAfterAppKitActivates(event, place) : event }");
@@ -34,7 +34,7 @@ test("the handed-over press still drags or clicks once AppKit has dispatched it,
   assert.match(mouseDown, /pressAwaitingActivation = nil/, "AppKit giving the view the press itself cancels the deferred one");
 });
 
-test("a press never orders a window front while Ardia is inactive", () => {
+test("a press never orders a window front while Solstice is inactive", () => {
   const press = between(dragRegion, "private func press(", "private func clickOrDrag");
   assert.doesNotMatch(press, /NSApp\.activate/);
   assert.match(press, /if NSApp\.isActive, key == nil, window\.canBecomeKey, !leavesWindowBehind \{ window\.makeKeyAndOrderFront\(nil\) \}/);

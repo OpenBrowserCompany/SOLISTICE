@@ -318,18 +318,18 @@ test("stage-framework records the resolved line beside the staged framework", { 
 
 test("plist writes the engine keys into the app's Info.plist, and a local build keeps only its match", { skip: !isMac }, () => {
   const plist = join(scratch(), "Info.plist");
-  write(dirname(plist), "Info.plist", '<?xml version="1.0" encoding="UTF-8"?>\n<plist version="1.0"><dict><key>CFBundleName</key><string>Ardia</string></dict></plist>\n');
+  write(dirname(plist), "Info.plist", '<?xml version="1.0" encoding="UTF-8"?>\n<plist version="1.0"><dict><key>CFBundleName</key><string>Solstice</string></dict></plist>\n');
   const read = () => JSON.parse(execFileSync("plutil", ["-convert", "json", "-o", "-", plist], { encoding: "utf8" }));
   const r = run(matchScript, ["plist", "match=nearest key=abc version=engine-abc source=0123 public_tree=ff public=same", plist]);
   assert.equal(r.status, 0, r.stderr);
-  assert.deepEqual(read(), { CFBundleName: "Ardia", ArdiaEngineMatch: "nearest", ArdiaEngineKey: "abc", ArdiaEngineVersion: "engine-abc", ArdiaEngineSource: "0123" });
+  assert.deepEqual(read(), { CFBundleName: "Solstice", ArdiaEngineMatch: "nearest", ArdiaEngineKey: "abc", ArdiaEngineVersion: "engine-abc", ArdiaEngineSource: "0123" });
   assert.equal(run(matchScript, ["plist", "match=unknown key=abc version= source= public_tree=ff public=same", plist]).status, 0);
-  assert.deepEqual(read(), { CFBundleName: "Ardia", ArdiaEngineMatch: "unknown", ArdiaEngineKey: "abc" });
+  assert.deepEqual(read(), { CFBundleName: "Solstice", ArdiaEngineMatch: "unknown", ArdiaEngineKey: "abc" });
   assert.equal(run(matchScript, ["plist", "match=local", plist]).status, 0);
-  assert.deepEqual(read(), { CFBundleName: "Ardia", ArdiaEngineMatch: "local" });
+  assert.deepEqual(read(), { CFBundleName: "Solstice", ArdiaEngineMatch: "local" });
   const stopped = run(matchScript, ["plist", "match=nearest key=abc public=changed", plist]);
   assert.equal(stopped.status, 1);
-  assert.deepEqual(read(), { CFBundleName: "Ardia", ArdiaEngineMatch: "local" });
+  assert.deepEqual(read(), { CFBundleName: "Solstice", ArdiaEngineMatch: "local" });
 });
 
 test("build-app judges the engine again after taking its lock, right before it stamps the app cache", () => {
