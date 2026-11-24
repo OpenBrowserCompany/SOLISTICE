@@ -1,7 +1,7 @@
 # Agent brief (read first)
 
 You are one of several engineers working **in parallel on the same repository**, some in the shared root
-checkout and some in their own worktrees or clones, on Ardia, a macOS browser that must reach **full feature
+checkout and some in their own worktrees or clones, on Solstice, a macOS browser that must reach **full feature
 and visual parity with Dia** (The Browser Company). The feature checklist is `docs/dia-feature-parity.md`; the
 visual spec (colors, sizes, animations recovered from Dia's binary) is `docs/dia-spec.md`.
 The user is demanding: no sloppy work, every hover state/animation/detail matters.
@@ -30,7 +30,7 @@ variables) is in `docs/conventions.md`, enforced by `apps/browser/src/convention
       (`ArdiaEngineBridge`, `ArdiaServices`); ArdiaCore's own layer is `//ardia/core` (`engine/ardiacore`).
       No chrome:// page is scripted.
     - JS API in `packages/ardiacore/src`: `engine.call("domain.verb", args)` and `on("domain.event", …)`, typed from
-      `src/engine/api.ts`, plus the views (`WebView`, `SwipeArea`). Each domain is one Expo module, `Ardia<Domain>` in
+      `src/engine/api.ts`, plus the views (`WebView`, `SwipeArea`). Each domain is one Expo module, `Solstice<Domain>` in
       `packages/ardiacore/ios/<Domain>Module.swift` (Engine, WebView, Tabs, Windows, Downloads, Permissions, Profiles,
       Sites, Passwords, Autofill, Extensions, Search, Media, ContentBlocker, History, Bookmarks, Favicons, Swipe,
       WebKit); test scripts reach it through the dev harness's `ac.engine.call` / `ac.engine.on`.
@@ -49,7 +49,7 @@ variables) is in `docs/conventions.md`, enforced by `apps/browser/src/convention
   only if a patch adds or removes files). To change one: `pnpm patch <pkg>@<version> --edit-dir <scratch dir>`,
   edit there, then `scripts/agent/locked pod -- pnpm patch-commit <scratch dir>`, and read the new `.patch`:
   pnpm can add bogus `deleted file` entries (drop them and run `pnpm install` again under the same lock).
-  Mark edits `[Ardia: … Ardia]`. Current patches: `react-native-macos` (a view's `transform` survives
+  Mark edits `[Solstice: … Solstice]`. Current patches: `react-native-macos` (a view's `transform` survives
   AppKit layout and applies from its centre; RCTTiming's display link, c7ebd600; a view in a scroll view observes its bounds once, not once per re-add; focus() on a text field being edited keeps its edit, caret and selection; a placeholder change on an empty field being edited isn't a blur; a placeholder colour change on a field being edited reaches its field editor, so it shows once the field is emptied, and its text keeps the field's own colour; a single-line field with pastedTypes pastes only those as plain text, line breaks folded as in Chrome's omnibox, a088913e; a container whose children change leaves the ones already in place alone instead of re-adding every one, 6d7277fd; a mouse touch matches its own down on the same button and is never recorded twice, so JS never gets a null touch, 8bd086c8; mounts go through one queue in layout order, and a live-resize layout, which React Native mounts on the main thread at once, first mounts every older one still queued, so a zoomed window never keeps an older layout and its views track the window during the animation, 2f4aa603; a network task's callback blocks are atomic and only one of
   cancel, error and completion finishes it, so a cancel racing a completion never frees the block being called, #955; a React view whose parent and children are all React views leaves Auto Layout, which every macOS 26+ window engages and whose memory exploded with thousands of sidebar rows, #952; a view whose `overflow` changes redisplays its layer, so one that stops clipping at the same size stops masking its children; `measureInWindow` answers in the owning React root's points from its top left, and border images and decoded images use the view's own backing density, interface size included, and redraw when it changes; on a fractional pixel grid Yoga gives a node thinner than 3 device pixels one whole-pixel size wherever it sits, at least 1, so hairlines and 1 point rules neither vanish nor vary; a scroll tells hover once, from its RCTScrollView, not through an observer on every view in it; under a still pointer a view in it waits from the first step: it is left on the step that takes it out from under the pointer and none is entered until that list has been quiet for 60 ms (measured from its last real move), neither by the layout check nor by the enters AppKit sends for each view that scrolls under a real pointer, unless the pointer moved a point since hover last saw it before the scroll began, or since the last full hover check (then hover follows it at once), and a step that leaves the list where it was holds nothing; only views inside a list that just moved wait, each list on its own clock, so hover anywhere else is checked at once, and a row entered while the list coasts is left as soon as it scrolls away; an enter AppKit sends over the part of a view its scroll view clips, or one a scroll held, waits for the pointer to reach the shown part (one app-wide watch on mouse moves, kept only while something waits, tries it again), a leave goes only to a view that was entered, and a view that loses its hover handlers or leaves the window ends its hover state, with the leave it is owed; `removeClippedSubviews` hides the children further than 300 pt outside the scroll view's visible part instead of removing them, so AppKit skips them on each scroll step and measuring them still works, hides nothing while VoiceOver or Switch Control is on, never the child that holds the keyboard focus, and a hidden child that moves to another parent is shown there; a Pressable with no `onHoverIn` or `onHoverOut` asks for no mouse enter and leave, so its view gets no tracking area; a LayoutAnimation frame update sets the final frame at once and glides its layer there with additive Core Animation animations instead of AppKit's per-frame NSAnimationContext, and takes `controlPoints` for its curve, and a view still gliding (moving, or a clipping view's part not yet uncovered) takes no hits until it lands, #3660) and `expo-modules-core` (the JS
   runtime is prepared on the JS thread only, 364f5f7e).
@@ -153,7 +153,7 @@ Engine files are in `engine/ardiacore/src/ardia/core`, app files in `packages/ar
 - **CEF-era code** (removed in 6bdf66ce): `git show 6bdf66ce^:packages/cef/ios/<file>`. Comments citing
   `packages/cef/…` mean: `ACBrowserView.mm`, `ACClient.mm` → `ArdiaWebView*.mm`; `ACChromeWindow.mm`,
   `ACPopupWindow.mm` → `ArdiaWindowController.mm`, `ArdiaPopupWindow.mm`; `ACActivation`, `ACTabStrip`, `ACPictureInPicture`,
-  `ACContentBlocker`, `ACEngineBridge` → `Ardia<same>*.mm`; `ACPasswords`, `ACAutofill`, `ACZoom` →
+  `ACContentBlocker`, `ACEngineBridge` → `Solstice<same>*.mm`; `ACPasswords`, `ACAutofill`, `ACZoom` →
   `ArdiaServices.mm`; `ACExtensions.mm` → `ExtensionsModule.swift`; `ACCef.mm` → `ArdiaHost*.mm`,
   `ArdiaStartup.mm`; `ACEngine.mm` → `ardiacore_*.mm`; `helper/page_script.js` → `packages/ardiacore/ios/`;
   `packages/cef/src` → `packages/ardiacore/src`.
@@ -203,7 +203,7 @@ Engine files are in `engine/ardiacore/src/ardia/core`, app files in `packages/ar
     BackgroundOnly and every activation path is guarded (`packages/ardiacore/ios/ArdiaActivation.mm`); each
     attempt is logged to `$ARDIA_DATA_DIR/activation.log`. `lsappinfo front` must never show
     your pid. Its windows never come up over the owner's: every window (Chrome's bubbles and popups, panels, PiP,
-    Little Ardia, sheets) has its level set a band below normal (normal at layer -1000000, floating at -999997), so
+    Little Solstice, sheets) has its level set a band below normal (normal at layer -1000000, floating at -999997), so
     it sits behind every other app's window, above the desktop, in production's order among its own and out of Mission
     Control (same file, "Behind the owner's windows"; `-level` still answers the level asked for).
   - Any standalone test program or prototype window you create must be unable to take focus
@@ -233,7 +233,7 @@ Engine files are in `engine/ardiacore/src/ardia/core`, app files in `packages/ar
     `ac eval|page|quit|status` take that data dir (`--help`); scripts use `scripts/lib/instance.mjs` (`launch`,
     `attach`, `session`, `reporter`), whose pid is the DevTools port's listener, never a process-list diff
     (`ARDIA_DATA_DIR` isolates Chrome's and the app's data; a Debug build refuses to start without one).
-    Quit only your own instance (`ac quit`), never `pkill Ardia`.
+    Quit only your own instance (`ac quit`), never `pkill Solstice`.
   - Open a URL in your instance: CDP `Target.createTarget`, or the dev harness
     (`ac.actions.openUrls([url])`); `open -a` routes to whichever instance macOS picks.
   - Metro (JS dev server) is already running on :8081 and serves this working tree to every
@@ -335,7 +335,7 @@ The only variables the app and engine read, through `ArdiaLaunchConfig` (`packag
 | --- | --- | --- |
 | `ARDIA_DATA_DIR` | path | Scratch data dir: Chrome's data in `<dir>/Chromium`, the app's documents, defaults, keychain items and Sparkle state (`packages/shell/ios/ArdiaIsolation.m`); Chrome gets `--use-mock-keychain`. A Debug build refuses to start without one |
 | `ARDIA_BACKGROUND` | `1` (anything but empty or `0`) | Hidden test instance (Rules › never steal focus; `docs/testing.md`) |
-| `ARDIA_REMOTE_DEBUGGING_PORT` | port | CDP on that port, only on the mock keychain. CDP doesn't go through Settings › Advanced › Let programs control Ardia, so that switch can't be judged on an instance with a port: test it on one launched without |
+| `ARDIA_REMOTE_DEBUGGING_PORT` | port | CDP on that port, only on the mock keychain. CDP doesn't go through Settings › Advanced › Let programs control Solstice, so that switch can't be judged on an instance with a port: test it on one launched without |
 | `ARDIA_INSTANCE` | `jsLocation=host:port` | This launch's Metro (Debug builds) |
 | | `chromiumSwitches=--a --b=x,y` | Extra Chrome switches, space-separated, only on the mock keychain; background mode drops the auto-accept capture ones, and `--ardia-*` never passes |
 | | `downloadsDir=<dir>` | Chrome's default download folder for this launch, never written to the profile |
@@ -344,7 +344,7 @@ The only variables the app and engine read, through `ArdiaLaunchConfig` (`packag
 | | `releaseNotes` | Opens the release notes as after an update (works on a Developer ID build: the release smoke) |
 | | `cliHome=<dir>` · `cliBinDir=<dir>` · `cliUrl=<url>` | Where the `ardia` command installs, links and downloads from (`docs/cli.md`); a test instance installs only with the first two, and links plugins' programs only into `cliBinDir` (`docs/plugins.md` › programs) |
 | | `syncFolder=<dir>` | The sync folder (`packages/sync/scripts/e2e.mjs`) |
-| | `sharedFolders=<dir>` | Where Share Folder… creates shared folders and where Add Shared Folder… starts (`iCloud Drive › Ardia Shared` otherwise; a scratch data dir uses `<data dir>/Ardia Shared`), `docs/shared-folders.md` |
+| | `sharedFolders=<dir>` | Where Share Folder… creates shared folders and where Add Shared Folder… starts (`iCloud Drive › Solstice Shared` otherwise; a scratch data dir uses `<data dir>/Solstice Shared`), `docs/shared-folders.md` |
 | | `importSourceDir=<dir>` · `importSafariHome=<dir>` | Where import looks for other browsers and Safari's home, so a scratch instance never sees the owner's profiles |
 | `ARDIA_SWITCHES` | `name=on\|off,…` | Kill switches (`platform/killSwitches.ts` `SWITCHES`, at most 8, on by default) and experiments (`EXPERIMENTS`: `serverWindowDragAllOpen`, `dragRegionEveryMount`, off by default). Honoured in every build (`docs/kill-switches.md`) |
 | `ARDIA_TRACE` | `visibility` | Occlusion and each WebView attach/detach, `[ardiacore-vis]` in the system log |
@@ -367,12 +367,12 @@ The only variables the app and engine read, through `ArdiaLaunchConfig` (`packag
 | | `peekStrict` | Peek's test hooks stop relaxing its click checks |
 | | `peekMesh=unavailable\|throws` · `peekReady=never` · `peekReduceMotion` · `peekSlow=<n>` | Peek's motion (`docs/peek-motion.md`): the Genie mesh reported missing or throwing on build, a page that never reports a drawn frame (the 150 ms timeout), Reduce Motion, and the Genie <n> times slower for captures |
 | | `importSecret=<s>` · `importDiaBundleId=<id>` · `importDiaWindows=<json>` | Import's Safe Storage secret · the app Dia's tabs come from (opened hidden and quit by the import) · fixture windows answering for it, with no Automation prompt |
-| | `controlDoorbell` | The control socket asks before admitting a program not signed with Ardia's Team ID, as a release does (test instances otherwise admit every process of the user; `docs/automation.md`). With `appDialog` the doorbell goes to `dialog.json` |
+| | `controlDoorbell` | The control socket asks before admitting a program not signed with Solstice's Team ID, as a release does (test instances otherwise admit every process of the user; `docs/automation.md`). With `appDialog` the doorbell goes to `dialog.json` |
 | | `cliInstallScript=<path>` | Another `ardia` installer script (the Linux and Windows hosts' installer; macOS no longer runs one) |
 | | `applePasswordsPanel` | Background mode really opens macOS's Passwords panel for the key and Edit › AutoFill › Passwords… instead of logging it (`docs/testing.md`); the panel is another process's window and can show on screen |
 | | `systemPanelRace` | Runs AppKit's delayed autofill show-or-hide pass right after the Passwords command, to check the panel survives it (`docs/testing.md`) |
-| | `bundledPlugins=<dir>` | Built-in plugins come from this folder instead of `Ardia.app/Contents/Resources/Plugins` (`docs/plugins.md` › Built-in plugins) |
-| | `legacySource=<home>` · `legacyCrashAfter=<step>` | The Netnyahoo → Ardia migration from a scratch home |
+| | `bundledPlugins=<dir>` | Built-in plugins come from this folder instead of `Solstice.app/Contents/Resources/Plugins` (`docs/plugins.md` › Built-in plugins) |
+| | `legacySource=<home>` · `legacyCrashAfter=<step>` | The Netnyahoo → Solstice migration from a scratch home |
 | | `bangsUrl` · `onboarding` · `whatsNew` · `telemetry` · `liveMock=<url>` · `calendarFixture` | Debug builds only: bang list, run onboarding, show What's New, send telemetry, live folders from a mock, the calendar fixture |
 | | `cdpTabsVisible` | A tab that a DevTools-port client (`ARDIA_REMOTE_DEBUGGING_PORT`) attaches to stays visible to its renderer until that session detaches, as on the `ardia` command's token path (`ac_cli_visible_tabs.cc`; `docs/cli.md` › Input) |
 | | `nativeDragRefused` | The engine refuses every macOS drag session a page asks for, as when one is already open, and ends the page's drag (`drag-end-check.mjs`; `docs/engine-build.md`, `chromium-drag-always-ends.patch`) |
