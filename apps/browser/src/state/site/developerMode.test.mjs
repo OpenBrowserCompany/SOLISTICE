@@ -8,7 +8,7 @@ import { canChooseDeveloperMode, developerModeHost, developerModeOn, developerMo
 import { noteDeveloperBarPress, takeDeveloperModeCounts } from "../telemetry/developerModeCounts.ts";
 
 test("Developer Mode starts off everywhere, local addresses included", () => {
-  for (const url of ["http://localhost:5173/", "http://LOCALHOST:3000/app", "http://127.0.0.1:8080", "http://app.localhost:3000/", "http://[::1]:4000/", "http://0.0.0.0:8000", "https://localhost/", "https://github.com/", "http://localhost.example.com/", "", "about:blank", "file:///tmp/a.html", "ardia://settings"]) {
+  for (const url of ["http://localhost:5173/", "http://LOCALHOST:3000/app", "http://127.0.0.1:8080", "http://app.localhost:3000/", "http://[::1]:4000/", "http://0.0.0.0:8000", "https://localhost/", "https://github.com/", "http://localhost.example.com/", "", "about:blank", "file:///tmp/a.html", "solstice://settings"]) {
     assert.equal(developerModeOn({}, url), false, url);
   }
   assert.equal(developerModeOn(undefined, "http://localhost:5173/"), false);

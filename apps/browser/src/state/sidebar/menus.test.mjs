@@ -373,7 +373,7 @@ test("Browser Layout moves the tabs between the sides and the top in one pick, a
   assert.ok(!layout().some((l) => l.startsWith("Bookmarks Bar")), "bookmarks off, no bar row");
   S().updateSettings({ showBookmarks: true });
   const small = S().createWindow({ kind: "small", url: "https://small.example/" });
-  assert.ok(!appMenuItems(S(), small).some((it) => it.id === "browserLayout"), "Little Ardia omits Browser Layout from the app menu");
+  assert.ok(!appMenuItems(S(), small).some((it) => it.id === "browserLayout"), "Little Solstice omits Browser Layout from the app menu");
   runBrowserLayoutChoice(small, "layout:sidebarRight");
   assert.equal(S().settings.sidebarSide, "left");
   runBrowserLayoutChoice(small, "layout:top");
@@ -607,11 +607,11 @@ test("Sleep Tabs on a group asks Chrome about its hidden loaded tabs, nested gro
   takeTabSleepCounts();
   await whileMenuIsUp(() => openGroupMenu(w, outer), () => {}, "sleep");
   await new Promise((resolve) => setImmediate(resolve));
-  assert.deepEqual(asked.map(([id]) => id).sort(), [a, c].sort(), "b plays through Ardia's own player, e is shown and d is outside the group");
+  assert.deepEqual(asked.map(([id]) => id).sort(), [a, c].sort(), "b plays through Solstice's own player, e is shown and d is outside the group");
   assert.ok(asked.every(([, seconds]) => seconds === 0));
   const counts = takeTabSleepCounts();
   assert.equal(counts.groups_slept_from_menu, 1);
-  assert.equal(counts.menu_sleeps_kept_awake, 2, "Ardia kept b and Chrome kept c");
+  assert.equal(counts.menu_sleeps_kept_awake, 2, "Solstice kept b and Chrome kept c");
   S().updateLive(b, { playingAudio: false });
   for (const id of [a, b, c]) lifecycle.noteDiscarded(id);
   assert.ok(top(groupMenuItems(S(), w, inner)).includes("Sleep Tabs [moon.zzz] (off)"), "nothing left to sleep");

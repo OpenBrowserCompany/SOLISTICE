@@ -96,7 +96,7 @@ test("a page still loading lets the rows in at the deadline", () => {
 });
 
 test("an internal page (History) or a blank tab waits only for the first frames, as its own reason", () => {
-  hydrate({ urls: { a: "ardia://history" } });
+  hydrate({ urls: { a: "solstice://history" } });
   rows.startLaunchRows();
   advance(rows.HOLD_WITHOUT_PAGE_MS - 1);
   assert.equal(rows.launchRowsHolding("a"), true);
