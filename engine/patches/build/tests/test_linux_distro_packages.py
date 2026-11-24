@@ -94,7 +94,7 @@ class PkgbuildTests(unittest.TestCase):
         self.assertIn(f"sha256sums=('{DIGEST}')\n", pkgbuild)
         self.assertIn('\tpkgver = 0.2.48nightly.1\n', srcinfo)
         self.assertIn('\tsource = ardia-bin-0.2.48nightly.1.tar.xz::https://github.com/ardia-browser/ardia/releases/download/'
-                      'v0.2.48-nightly.1/Ardia-0.2.48-nightly.1-linux-x64.tar.xz\n', srcinfo)
+                      'v0.2.48-nightly.1/Solstice-0.2.48-nightly.1-linux-x64.tar.xz\n', srcinfo)
         self.assertIn(f'\tsha256sums = {DIGEST}\n', srcinfo)
         self.assertNotIn('SKIP', pkgbuild + srcinfo)
 

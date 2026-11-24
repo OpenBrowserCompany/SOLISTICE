@@ -42,7 +42,7 @@ struct CountedDomain {
 
 constexpr std::array<CountedDomain, 12> kCountedDomains = {{
     {"Accessibility", "accessibility"},
-    {"Ardia", "ardia"},
+    {"Solstice", "ardia"},
     {"Browser", "browser"},
     {"DOM", "dom"},
     {"Emulation", "emulation"},

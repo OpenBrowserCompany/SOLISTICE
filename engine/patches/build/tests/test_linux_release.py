@@ -166,14 +166,14 @@ class ArchPackageTests(unittest.TestCase):
 
     def test_source_is_the_release_tarball_of_the_package_version(self):
         release = 'https://github.com/ardia-browser/ardia/releases/download'
-        self.assertEqual(self.source('0.2.44nightly.3'), f'ardia-bin-0.2.44nightly.3.tar.xz::{release}/v{VERSION}/Ardia-{VERSION}-linux-x64.tar.xz')
-        self.assertEqual(self.source('0.2.45'), f'ardia-bin-0.2.45.tar.xz::{release}/v0.2.45/Ardia-0.2.45-linux-x64.tar.xz')
+        self.assertEqual(self.source('0.2.44nightly.3'), f'ardia-bin-0.2.44nightly.3.tar.xz::{release}/v{VERSION}/Solstice-{VERSION}-linux-x64.tar.xz')
+        self.assertEqual(self.source('0.2.45'), f'ardia-bin-0.2.45.tar.xz::{release}/v0.2.45/Solstice-0.2.45-linux-x64.tar.xz')
 
 
 @unittest.skipUnless(shutil.which('shasum'), 'shasum')
 class PublishLinuxAssetsTests(unittest.TestCase):
     STABLE = '0.2.48'
-    NAMES = ('Ardia-{v}-linux-x64.tar.xz', 'Ardia-{v}-linux-x64.deb', 'Ardia-{v}-linux-x64.AppImage',
+    NAMES = ('Solstice-{v}-linux-x64.tar.xz', 'Solstice-{v}-linux-x64.deb', 'Solstice-{v}-linux-x64.AppImage',
              'ardia-bin-{v}.src.tar.gz', 'ardia-cli-{v}-linux-x64.tar.gz')
 
     def linux_section(self):
@@ -218,17 +218,17 @@ class PublishLinuxAssetsTests(unittest.TestCase):
     def test_a_missing_deb_fails_unless_the_release_dropped_it(self):
         with tempfile.TemporaryDirectory() as scratch:
             dist, linux = self.dist(scratch)
-            (linux / f'Ardia-{self.STABLE}-linux-x64.deb').unlink()
-            (linux / f'Ardia-{self.STABLE}-linux-x64.deb.sha256').unlink()
+            (linux / f'Solstice-{self.STABLE}-linux-x64.deb').unlink()
+            (linux / f'Solstice-{self.STABLE}-linux-x64.deb.sha256').unlink()
             result = self.publish(dist)
             self.assertNotEqual(result.returncode, 0)
-            self.assertIn(f'has no Ardia-{self.STABLE}-linux-x64.deb', result.stderr)
+            self.assertIn(f'has no Solstice-{self.STABLE}-linux-x64.deb', result.stderr)
             with (linux / 'provenance.txt').open('a') as provenance:
                 provenance.write('deb dropped: it failed scripts/linux/deb-install-test.sh in run 1\n')
             result = self.publish(dist)
             self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertNotIn(f'Ardia-{self.STABLE}-linux-x64.deb', self.assets(result))
-            self.assertIn(f'Ardia-{self.STABLE}-linux-x64.AppImage', self.assets(result))
+            self.assertNotIn(f'Solstice-{self.STABLE}-linux-x64.deb', self.assets(result))
+            self.assertIn(f'Solstice-{self.STABLE}-linux-x64.AppImage', self.assets(result))
             self.assertIn('ships without the .deb', result.stdout)
 
     def test_a_wrong_digest_fails(self):
