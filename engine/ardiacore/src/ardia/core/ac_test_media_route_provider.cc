@@ -42,7 +42,7 @@ class Provider : public mr::mojom::MediaRouteProvider, public ProfileObserver {
     profile_observation_.Observe(profile);
     router_.Bind(router_receiver_.BindNewPipeAndPassRemote());
     mr::MediaSinkInternal sink;
-    sink.set_sink(mr::MediaSink("ac-test-sink", "Ardia Test Sink",
+    sink.set_sink(mr::MediaSink("ac-test-sink", "Solstice Test Sink",
                                 mr::SinkIconType::CAST, kId));
     sinks_ = {sink};
   }
