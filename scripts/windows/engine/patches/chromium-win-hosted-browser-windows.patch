@@ -7,7 +7,7 @@
 +#if BUILDFLAG(IS_WIN)
 +#include "ardia/win/hooks.h"  // nogncheck
 +
-+// Ardia: the app shows every normal browser window inside its own window
++// Solstice: the app shows every normal browser window inside its own window
 +// (//ardia/win), page only: the app draws the tabs and the toolbar.
 +bool g_ardia_win_hosts_normal_windows = false;
 +#endif
@@ -20,7 +20,7 @@
      WindowFeature feature,
      bool check_can_support) const {
 +#if BUILDFLAG(IS_WIN)
-+  // Ardia: a hosted window has no tab strip, toolbar or bookmark bar.
++  // Solstice: a hosted window has no tab strip, toolbar or bookmark bar.
 +  if (g_ardia_win_hosts_normal_windows &&
 +      browser_type_ == BrowserWindowInterface::Type::TYPE_NORMAL) {
 +    return false;
@@ -37,7 +37,7 @@
  #include "chrome/browser/ui/views/frame/picture_in_picture_browser_frame_view.h"
 +#include "ardia/win/hooks.h"  // nogncheck
 +
-+// Ardia: the frame of a browser window the app hosts (//ardia/win).
++// Solstice: the frame of a browser window the app hosts (//ardia/win).
 +std::unique_ptr<BrowserFrameView> (*g_ardia_win_frame_view)(
 +    BrowserWidget* widget,
 +    BrowserView* browser_view) = nullptr;
@@ -48,7 +48,7 @@
                                                                browser_view);
    }
  
-+  // Ardia: a hosted window has no frame of its own.
++  // Solstice: a hosted window has no frame of its own.
 +  if (g_ardia_win_frame_view &&
 +      browser_view->browser()->GetType() ==
 +          BrowserWindowInterface::Type::TYPE_NORMAL) {
@@ -74,7 +74,7 @@
      return views::FrameMode::SYSTEM_DRAWN;
 +  }
 +
-+  // Ardia: a hosted window is a child of the app's window, with no frame.
++  // Solstice: a hosted window is a child of the app's window, with no frame.
 +  if (g_ardia_win_hosts_normal_windows && browser_view_->GetIsNormalType()) {
 +    return views::FrameMode::CUSTOM_DRAWN;
    }
@@ -84,7 +84,7 @@
  }
  
  bool BrowserDesktopWindowTreeHostWin::ShouldUseNativeFrame() const {
-+  // Ardia: a hosted window is a child of the app's window, with no frame.
++  // Solstice: a hosted window is a child of the app's window, with no frame.
 +  if (g_ardia_win_hosts_normal_windows && browser_view_ &&
 +      browser_view_->GetIsNormalType()) {
 +    return false;

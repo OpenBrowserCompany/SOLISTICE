@@ -5,7 +5,7 @@
  #include "components/web_modal/web_contents_modal_dialog_manager.h"
  #endif
 +
-+// Ardia: the Windows engine host (ardia/win) asks the app about links to other apps
++// Solstice: the Windows engine host (ardia/win) asks the app about links to other apps
 +// for the tabs it hosts; the app names the handler, asks and launches.
 +bool (*g_ardia_win_external_protocol_dialog)(
 +    const GURL& url,
@@ -20,7 +20,7 @@
      const std::u16string& program_name,
      ExternalProtocolHandler::Delegate* delegate) {
    CHECK(web_contents, base::NotFatalUntil::M161);
-+  // Ardia: the Windows engine host
++  // Solstice: the Windows engine host
 +  if (!delegate && g_ardia_win_external_protocol_dialog &&
 +      g_ardia_win_external_protocol_dialog(url, web_contents, has_user_gesture,
 +                                           initiating_origin,

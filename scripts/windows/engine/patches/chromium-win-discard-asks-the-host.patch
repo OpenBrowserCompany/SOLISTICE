@@ -4,7 +4,7 @@
  
  namespace performance_manager::policies {
  
-+// Ardia: the embedding app's own reasons to keep a page, asked for every discard but one the user or one of their extensions asks for.
++// Solstice: the embedding app's own reasons to keep a page, asked for every discard but one the user or one of their extensions asks for.
 +bool (*g_ardia_keeps_page)(const PageNode* page_node) = nullptr;
 +
  namespace {
@@ -16,7 +16,7 @@
      return CanDiscardResult::kDisallowed;
 +  }
 +
-+  // Ardia: before the early answers below, so frozen-with-growing-memory and urgent discards ask too.
++  // Solstice: before the early answers below, so frozen-with-growing-memory and urgent discards ask too.
 +  if (g_ardia_keeps_page && discard_reason != DiscardReason::EXTERNAL &&
 +      g_ardia_keeps_page(page_node)) {
 +    add_reason(CannotDiscardReason::kExtensionProtected);
