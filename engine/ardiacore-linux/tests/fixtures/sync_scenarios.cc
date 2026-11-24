@@ -371,8 +371,8 @@ void Lease() {
   CHECK(RouteOf("ArdiaSync.write") == Route::kLeased && RouteOf("ArdiaSync.read") == Route::kLeased);
   CHECK(RouteOf("ArdiaSync.folderInfo") == Route::kCore && RouteOf("ArdiaSync.recoveryWords") == Route::kDisclose);
   for (const auto& method : kMethods) std::printf("capability %s\n", method.name);
-  CHECK(DefaultFolder("/home/someone") == "/home/someone/Ardia Sync");
-  CHECK(DefaultFolder("/home/someone/") == "/home/someone/Ardia Sync");
+  CHECK(DefaultFolder("/home/someone") == "/home/someone/Solstice Sync");
+  CHECK(DefaultFolder("/home/someone/") == "/home/someone/Solstice Sync");
   CHECK(LossyUtf8(Text("ok\xff\xc3")) == "ok\xef\xbf\xbd\xef\xbf\xbd");
   CHECK(!HostDeviceName().empty());
 }

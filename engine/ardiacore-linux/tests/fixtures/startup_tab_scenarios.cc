@@ -52,7 +52,7 @@ void PicksTheLaunchWindowsActiveTab() {
 }
 
 void SkipsWhatTheShellWouldNotLoadAsIs() {
-  for (const char* url : {"", "chrome://settings/", "ardia://history", "about:blank", "file:///tmp/a.html",
+  for (const char* url : {"", "chrome://settings/", "solstice://history", "about:blank", "file:///tmp/a.html",
                           "javascript:1", "data:text/html,x"}) {
     assert(!StartupTabFor(OneWindow(url), "main", "default"));
   }
