@@ -45,12 +45,12 @@ function fakeEngine({ saved = null, picked = null, files = {}, power = null, rep
   return engine;
 }
 
-const calling = (engine, domain) => async (verb, args = {}, profile = "Ardia p-1") => JSON.parse(await domainCall(rows, engine, domain)(verb, profile, JSON.stringify(args)));
+const calling = (engine, domain) => async (verb, args = {}, profile = "Solstice p-1") => JSON.parse(await domainCall(rows, engine, domain)(verb, profile, JSON.stringify(args)));
 
 test("bookmarks export asks where to save and hands the engine that Windows path", async () => {
-  const engine = fakeEngine({ saved: "C:\\Users\\tester\\Ardia Bookmarks.html" });
-  assert.equal(await calling(engine, "bookmarks")("exportHtml"), "C:\\Users\\tester\\Ardia Bookmarks.html");
-  assert.deepEqual(engine.calls, [{ name: "ac_bookmarks_export_html", profile: "Ardia p-1", args: { path: "C:\\Users\\tester\\Ardia Bookmarks.html" } }]);
+  const engine = fakeEngine({ saved: "C:\\Users\\tester\\Solstice Bookmarks.html" });
+  assert.equal(await calling(engine, "bookmarks")("exportHtml"), "C:\\Users\\tester\\Solstice Bookmarks.html");
+  assert.deepEqual(engine.calls, [{ name: "ac_bookmarks_export_html", profile: "Solstice p-1", args: { path: "C:\\Users\\tester\\Solstice Bookmarks.html" } }]);
   assert.equal(engine.saveRequests[0].extension, "html");
   const cancelled = fakeEngine();
   assert.equal(await calling(cancelled, "bookmarks")("exportHtml"), null);
@@ -58,10 +58,10 @@ test("bookmarks export asks where to save and hands the engine that Windows path
 });
 
 test("password export warns in the save panel, and only a written file reports its path", async () => {
-  const path = "\\\\nas\\backup\\Ardia Passwords.csv";
+  const path = "\\\\nas\\backup\\Solstice Passwords.csv";
   const engine = fakeEngine({ saved: path, replies: { ac_passwords_export: { status: "succeeded" } } });
-  assert.deepEqual(await calling(engine, "passwords")("export", {}, "incognito1@Ardia p-1"), { status: "succeeded", path });
-  assert.deepEqual(engine.calls, [{ name: "ac_passwords_export", profile: "Ardia p-1", args: { path } }]);
+  assert.deepEqual(await calling(engine, "passwords")("export", {}, "incognito1@Solstice p-1"), { status: "succeeded", path });
+  assert.deepEqual(engine.calls, [{ name: "ac_passwords_export", profile: "Solstice p-1", args: { path } }]);
   assert.match(engine.saveRequests[0].message, /Anyone who can open this file can read your passwords/);
   const refused = fakeEngine({ saved: path, replies: { ac_passwords_export: { status: "reauthFailed" } } });
   assert.deepEqual(await calling(refused, "passwords")("export"), { status: "reauthFailed" });
@@ -172,7 +172,7 @@ test("an export the engine never answers reports a failure after the time limit,
   assert.ok(EXPORT_ANSWER_MS >= 60_000);
   mock.timers.enable({ apis: ["setTimeout"] });
   try {
-    const engine = fakeEngine({ saved: "C:\\Users\\tester\\Ardia Passwords.csv" });
+    const engine = fakeEngine({ saved: "C:\\Users\\tester\\Solstice Passwords.csv" });
     engine.call = (name) => {
       engine.calls.push({ name });
       return new Promise(() => {});

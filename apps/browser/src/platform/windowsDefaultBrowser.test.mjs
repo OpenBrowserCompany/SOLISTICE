@@ -27,13 +27,13 @@ test("the installer registers the ProgID the app checks, opening the launcher wi
   assert.match(check, /Classes\\ArdiaHTM/);
 });
 
-test("the browser's capabilities name Ardia for http, https and web pages, and Windows can find them", () => {
-  const capabilities = "Software\\Clients\\StartMenuInternet\\Ardia\\Capabilities";
-  assert.equal(value("Software\\RegisteredApplications", "Ardia"), capabilities);
-  assert.equal(native.match(/RegisteredApplicationName\[\] = L"([^"]+)"/)?.[1], "Ardia");
+test("the browser's capabilities name Solstice for http, https and web pages, and Windows can find them", () => {
+  const capabilities = "Software\\Clients\\StartMenuInternet\\Solstice\\Capabilities";
+  assert.equal(value("Software\\RegisteredApplications", "Solstice"), capabilities);
+  assert.equal(native.match(/RegisteredApplicationName\[\] = L"([^"]+)"/)?.[1], "Solstice");
   for (const scheme of ["http", "https"]) assert.equal(value(`${capabilities}\\URLAssociations`, scheme), "ArdiaHTM", scheme);
   for (const type of [".htm", ".html"]) assert.equal(value(`${capabilities}\\FileAssociations`, type), "ArdiaHTM", type);
-  assert.equal(value(`${capabilities}`, "ApplicationName"), "Ardia");
+  assert.equal(value(`${capabilities}`, "ApplicationName"), "Solstice");
   assert.equal(value(`${capabilities}`, "ApplicationIcon"), "{app}\\Ardia.exe,0");
   assert.match(installer, /^ChangesAssociations=yes$/m);
 });
@@ -45,7 +45,7 @@ test("every key the installer writes goes again on uninstall", () => {
     assert.ok(covered, `${entry.Subkey} ${entry.ValueName} stays after uninstall`);
   }
   for (const shared of ["Software\\RegisteredApplications", "Software\\Classes\\.html\\OpenWithProgids"]) {
-    assert.ok(!entries.some((e) => e.Subkey === shared && /uninsdeletekey/.test(e.Flags ?? "")), `${shared} is shared and must lose only Ardia's value`);
+    assert.ok(!entries.some((e) => e.Subkey === shared && /uninsdeletekey/.test(e.Flags ?? "")), `${shared} is shared and must lose only Solstice's value`);
   }
 });
 
