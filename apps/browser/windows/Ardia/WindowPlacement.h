@@ -13,7 +13,7 @@
 
 #include "Paths.h"
 
-namespace Ardia {
+namespace Solstice {
 
 struct SavedPlacement {
   std::array<double, 4> frame{};

@@ -35,7 +35,7 @@
 #pragma comment(lib, "dwmapi.lib")
 #pragma comment(lib, "shcore.lib")
 
-namespace Ardia {
+namespace Solstice {
 
 struct OpenWindowRequest {
   std::string id;
@@ -596,7 +596,7 @@ struct WindowManager {
 
   static void Configure(ManagedWindow &entry, OpenWindowRequest const &request) noexcept {
     try {
-      entry.appWindow.Title(winrt::to_hstring(request.title.empty() ? std::string{"Ardia"} : request.title));
+      entry.appWindow.Title(winrt::to_hstring(request.title.empty() ? std::string{"Solstice"} : request.title));
       AppIcon::Apply(entry.hwnd, entry.id);
       auto presenter = entry.appWindow.Presenter().try_as<winrt::Microsoft::UI::Windowing::OverlappedPresenter>();
       double scale = Scale(entry.hwnd);
