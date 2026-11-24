@@ -12,7 +12,7 @@
    // always needs to be regenerated on Linux.
    need_regenerate = true;
  #elif BUILDFLAG(IS_WIN)
-+  // Ardia: a hosted window draws no frame of its own, so a theme change has
++  // Solstice: a hosted window draws no frame of its own, so a theme change has
 +  // no frame type to change; regenerating it would ask the window for a DWM
 +  // transition its custom-drawn frame can't make.
 +  if (g_ardia_win_hosts_normal_windows && browser_view_ &&

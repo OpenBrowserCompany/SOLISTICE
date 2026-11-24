@@ -27,7 +27,7 @@
 -    clearing_undecryptable_passwords.Run(is_account_store);
 -  }
 -  return base::FeatureList::IsEnabled(features::kClearUndecryptablePasswords);
-+  // Ardia: never delete a saved password because this PC can't decrypt it,
++  // Solstice: never delete a saved password because this PC can't decrypt it,
 +  // whatever kClearUndecryptablePasswords says.
 +  return false;
  }
@@ -82,7 +82,7 @@
 -  }
 -
 -  return DatabaseCleanupResult::kSuccess;
-+  // Ardia: the one place that deletes logins it can't decrypt deletes none,
++  // Solstice: the one place that deletes logins it can't decrypt deletes none,
 +  // for every caller, so no feature or flag can make it.
 +  metrics_util::LogDeleteUndecryptableLoginsReturnValue(
 +      metrics_util::DeleteCorruptedPasswordsResult::kEncryptionUnavailable);
@@ -99,7 +99,7 @@
 -  // Delete the local undecryptable copy. Launched on MacOS, Linux, Win and iOS.
 -  return base::FeatureList::IsEnabled(
 -      features::kClearUndecryptablePasswordsOnSync);
-+  // Ardia: never replace a local password this PC can't decrypt.
++  // Solstice: never replace a local password this PC can't decrypt.
 +  return false;
  }
  
