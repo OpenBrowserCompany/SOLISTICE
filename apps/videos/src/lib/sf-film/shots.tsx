@@ -439,7 +439,7 @@ function FilesShot() {
             <Img src={staticFile("brand/sf/folder-plain.png")} style={{ width: 96, height: 96 }} />
             <div>
               <div style={{ fontSize: 40, fontWeight: 700, color: "#1D1D1F" }}>Thesis Reading</div>
-              <div style={{ fontSize: 24, color: "#6E6E73", marginTop: 4 }}>iCloud Drive › Ardia Shared · Shared with 3 people</div>
+              <div style={{ fontSize: 24, color: "#6E6E73", marginTop: 4 }}>iCloud Drive › Solstice Shared · Shared with 3 people</div>
             </div>
           </div>
           <div style={{ marginTop: 26 }}>

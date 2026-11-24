@@ -240,7 +240,7 @@ const end: Shot = {
   marks: { lockup: 4 },
   type: [
     T("end-feature", "Shared Folders", 0, 4, "title", 120, [160, 460, 1600, 140], [60, 820, 960, 140], { portSize: 104, cut: true }),
-    T("end-ardia", "Ardia", 4, 10, "title", 116, [160, 400, 1600, 130], [60, 755, 960, 130], { portSize: 112, cut: true }),
+    T("end-ardia", "Solstice", 4, 10, "title", 116, [160, 400, 1600, 130], [60, 755, 960, 130], { portSize: 112, cut: true }),
     T("end-category", "The sidebar browser for Mac", 4, 10, "caption", 58, [160, 540, 1600, 84], [60, 895, 960, 84], { color: MUTED, portSize: 56, cut: true }),
     T("end-url", "Download at ardia.dev", 4, 10, "caption", 62, [160, 650, 1600, 90], [60, 1000, 960, 90], { color: "#2150D9", portSize: 60, cut: true }),
   ],
