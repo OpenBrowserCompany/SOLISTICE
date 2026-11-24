@@ -37,11 +37,11 @@ onAndroid("on Android a Settings push and Back show the destination at once as t
   expect(root.root.findAll((node) => node.props.testID === "settingsStack" && typeof node.type === "string")).toHaveLength(1);
   expect(settledTitle(root)).toBe("Settings");
   act(() => nav.pushSettings({ page: "about" }));
-  expect(settledTitle(root)).toBe("About Ardia");
+  expect(settledTitle(root)).toBe("About Solstice");
   act(() => nav.pushSettings({ page: "licenses" }));
   expect(settledTitle(root)).toBe("Open Source Licenses");
   act(() => void nav.popSettings());
-  expect(settledTitle(root)).toBe("About Ardia");
+  expect(settledTitle(root)).toBe("About Solstice");
   act(() => void nav.popSettings());
   expect(settledTitle(root)).toBe("Settings");
   unmount(root);
@@ -50,7 +50,7 @@ onAndroid("on Android a Settings push and Back show the destination at once as t
 onAndroid("on Android a direct Settings route opens on that page alone, and Back lands on the root at once", () => {
   act(() => nav.openSettings({ page: "about" }));
   const root = renderSurface(<SettingsView />);
-  expect(settledTitle(root)).toBe("About Ardia");
+  expect(settledTitle(root)).toBe("About Solstice");
   act(() => void nav.popSettings());
   expect(settledTitle(root)).toBe("Settings");
   act(() => nav.openSettingsPage({ page: "licenses" }));
@@ -62,7 +62,7 @@ onAndroid("on Android closing Settings keeps the last page while the sheet carri
   const root = settings();
   act(() => nav.pushSettings({ page: "about" }));
   act(() => nav.closeSettings());
-  expect(settledTitle(root)).toBe("About Ardia");
+  expect(settledTitle(root)).toBe("About Solstice");
   act(() => nav.openSettings());
   expect(settledTitle(root)).toBe("Settings");
   unmount(root);

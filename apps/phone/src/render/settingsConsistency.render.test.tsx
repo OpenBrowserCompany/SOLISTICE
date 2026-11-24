@@ -104,7 +104,7 @@ onIos("Settings' primary actions share one role: Default Browser and Sync's conn
 onIos("Sync Now keeps its spoken name while it runs, shows progress beside it and is locked until it ends", async () => {
   let finish: () => void = () => undefined;
   jest.spyOn(syncActions, "syncNow").mockReturnValue(new Promise<void>((resolve) => (finish = resolve)) as never);
-  useSync.setState((state) => ({ ...state, status: { ...OFF_STATUS, isEnabled: true, phase: "updated", deviceName: "Phone", folderName: "Ardia Sync" } }));
+  useSync.setState((state) => ({ ...state, status: { ...OFF_STATUS, isEnabled: true, phase: "updated", deviceName: "Phone", folderName: "Solstice Sync" } }));
   const root = await open({ page: "sync" });
   const syncButton = () => within(destination(root, "sync"), (props) => Array.isArray(props.modifiers)).find((node) => modifier(node, "disabled") !== undefined && within(node, (props) => props.text === "Sync Now").length > 0)!;
   expect(modifier(syncButton(), "disabled")).toMatchObject({ disabled: false });

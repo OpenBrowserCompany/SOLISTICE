@@ -130,7 +130,7 @@ onAndroid("turning it on saves it, shows On This Phone chosen, and says what cho
   expect(summariesSwitch(page).props.accessibilityState).toMatchObject({ checked: true });
   expect(choice(page, "On This Phone").props.accessibilityState).toMatchObject({ selected: true });
   expect(choice(page, "ChatGPT").props.accessibilityState).toMatchObject({ selected: false });
-  expect(textOf(page)).toMatch(/sends the text Ardia extracts from each page you summarize, Incognito pages included, straight from this phone to OpenAI/);
+  expect(textOf(page)).toMatch(/sends the text Solstice extracts from each page you summarize, Incognito pages included, straight from this phone to OpenAI/);
   expect(textOf(page)).toContain("Gemini Nano, on phones that have it");
   expect(textOf(page)).not.toContain("key lines");
   expect(summarized).not.toHaveBeenCalled();
