@@ -1,6 +1,6 @@
 package com.ardia.research
 
-import com.ardia.browser.ReadableContent
+import com.openbrowsercompany.solstice.ReadableContent
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test

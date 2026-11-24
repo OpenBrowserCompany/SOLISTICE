@@ -133,14 +133,14 @@ class DocumentTreeStorageTest {
     private val entropy = RecoveryPhrase.generateEntropy()
     private val keys = SyncKeys(entropy)
 
-    private fun syncFolder(tree: FakeDocumentTree) = tree.add(tree.rootId, "Ardia Sync", directory = true)
+    private fun syncFolder(tree: FakeDocumentTree) = tree.add(tree.rootId, "Solstice Sync", directory = true)
 
     private val pauses = ArrayList<Long>()
 
-    private fun storage(tree: FakeDocumentTree, subfolder: String? = "Ardia Sync") =
+    private fun storage(tree: FakeDocumentTree, subfolder: String? = "Solstice Sync") =
         DocumentTreeStorage(tree, subfolder, subfolder ?: "Picked", now = { tree.clock }, pause = { pauses += it })
 
-    private fun scopeNames(tree: FakeDocumentTree) = tree.namesIn(tree.path("Ardia Sync", keys.chainTag, keys.scopeTag("app"))!!)
+    private fun scopeNames(tree: FakeDocumentTree) = tree.namesIn(tree.path("Solstice Sync", keys.chainTag, keys.scopeTag("app"))!!)
 
     private fun writeFails(vault: SyncVault): String {
         try {
@@ -216,14 +216,14 @@ class DocumentTreeStorageTest {
         assertNull(DocumentTreeStorage.locate(tree))
         val ardia = syncFolder(tree)
         val old = tree.add(tree.rootId, "Netnyahoo Sync", directory = true)
-        assertEquals("Ardia Sync", DocumentTreeStorage.locate(tree))
+        assertEquals("Solstice Sync", DocumentTreeStorage.locate(tree))
         tree.add(old, keys.chainTag, directory = true)
         assertEquals("Netnyahoo Sync", DocumentTreeStorage.locate(tree))
         tree.add(ardia, keys.chainTag, directory = true)
-        assertEquals("Ardia Sync", DocumentTreeStorage.locate(tree))
+        assertEquals("Solstice Sync", DocumentTreeStorage.locate(tree))
         val picked = FakeDocumentTree()
         picked.add(picked.rootId, keys.chainTag, directory = true)
-        picked.add(picked.rootId, "Ardia Sync", directory = true)
+        picked.add(picked.rootId, "Solstice Sync", directory = true)
         assertNull(DocumentTreeStorage.locate(picked))
     }
 
@@ -240,7 +240,7 @@ class DocumentTreeStorageTest {
         assertEquals("{\"hello\":1}", String(again.files.single().payload))
         assertTrue(again.pending.isEmpty())
         assertTrue(again.damaged.isEmpty())
-        assertEquals(listOf("$id.nns"), tree.namesIn(tree.path("Ardia Sync", keys.chainTag, keys.scopeTag("app"))!!))
+        assertEquals(listOf("$id.nns"), tree.namesIn(tree.path("Solstice Sync", keys.chainTag, keys.scopeTag("app"))!!))
     }
 
     @Test
@@ -250,7 +250,7 @@ class DocumentTreeStorageTest {
         val writer = SyncVault(storage(tree), keys)
         writer.createChain()
         val id = writer.write("app", "{\"late\":true}".toByteArray())
-        val scope = tree.path("Ardia Sync", keys.chainTag, keys.scopeTag("app"))!!
+        val scope = tree.path("Solstice Sync", keys.chainTag, keys.scopeTag("app"))!!
         tree.nodes.getValue(tree.find(scope, "$id.nns")!!).pending = true
         val reader = SyncVault(storage(tree), keys)
         val waiting = reader.read("app", emptySet())
@@ -291,7 +291,7 @@ class DocumentTreeStorageTest {
                 fail("the write should fail")
             } catch (expected: IOException) {
             }
-            val scope = tree.path("Ardia Sync", keys.chainTag, keys.scopeTag("app"))!!
+            val scope = tree.path("Solstice Sync", keys.chainTag, keys.scopeTag("app"))!!
             assertEquals("renames $renames", emptyList<String>(), tree.namesIn(scope))
         }
     }
@@ -305,7 +305,7 @@ class DocumentTreeStorageTest {
         vault.createChain()
         val id = vault.write("app", "{\"inPlace\":1}".toByteArray())
         assertEquals("{\"inPlace\":1}", String(SyncVault(storage(tree), keys).read("app", emptySet()).files.single { it.id == id }.payload))
-        assertEquals(listOf("$id.nns"), tree.namesIn(tree.path("Ardia Sync", keys.chainTag, keys.scopeTag("app"))!!))
+        assertEquals(listOf("$id.nns"), tree.namesIn(tree.path("Solstice Sync", keys.chainTag, keys.scopeTag("app"))!!))
     }
 
     @Test
@@ -320,7 +320,7 @@ class DocumentTreeStorageTest {
             fail("the write should fail")
         } catch (expected: IOException) {
         }
-        assertEquals(emptyList<String>(), tree.namesIn(tree.path("Ardia Sync", keys.chainTag, keys.scopeTag("app"))!!))
+        assertEquals(emptyList<String>(), tree.namesIn(tree.path("Solstice Sync", keys.chainTag, keys.scopeTag("app"))!!))
     }
 
     @Test
@@ -370,7 +370,7 @@ class DocumentTreeStorageTest {
         vault.createChain()
         vault.write("app", "{\"one\":1}".toByteArray())
         assertEquals(1, vault.read("app", emptySet()).files.size)
-        tree.delete(tree.path("Ardia Sync", keys.chainTag)!!)
+        tree.delete(tree.path("Solstice Sync", keys.chainTag)!!)
         val other = SyncVault(storage(tree), keys)
         other.createChain()
         val id = other.write("app", "{\"two\":2}".toByteArray())

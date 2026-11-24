@@ -51,7 +51,7 @@ class SyncUpgradeIdentityTest {
 
     @Test
     fun aConnectedPhonesIdentityNameFolderAndKeySurviveTheNewAppStarting() {
-        val location = SyncFolderLocation.Path(folder.path, "Ardia")
+        val location = SyncFolderLocation.Path(folder.path, "Solstice")
         SyncFiles(sync).saveMeta(SyncMeta(deviceId = "D1", deviceName = "Shivam's Poco", folder = location, enabled = true, setupAt = 1_000L))
         FileKeyStore(keys).save(ByteArray(RecoveryPhrase.ENTROPY_BYTES) { it.toByte() }, "D1")
         val before = keyFiles()
@@ -71,7 +71,7 @@ class SyncUpgradeIdentityTest {
 
     @Test
     fun aConnectedPhoneWhoseKeyIsMissingLocksInsteadOfMakingANewIdentity() {
-        SyncFiles(sync).saveMeta(SyncMeta(deviceId = "D1", folder = SyncFolderLocation.Path(folder.path, "Ardia"), enabled = true))
+        SyncFiles(sync).saveMeta(SyncMeta(deviceId = "D1", folder = SyncFolderLocation.Path(folder.path, "Solstice"), enabled = true))
         val started = service().apply { start() }
         assertEquals(SyncPhase.Locked, started.phase)
         started.resignedActive()
