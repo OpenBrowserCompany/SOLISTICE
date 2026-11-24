@@ -248,7 +248,7 @@ def chromium_web_data(path):
         INSERT INTO masked_credit_cards VALUES ('server-1', 'Server Card', 'visa', '1111', 1, 2031);
     """)
     modern = {
-        "00000000-0000-4000-8000-00000000a001": [(7, "Alex Example"), (3, "Alex"), (5, "Example"), (60, "Ardia Ltd"),
+        "00000000-0000-4000-8000-00000000a001": [(7, "Alex Example"), (3, "Alex"), (5, "Example"), (60, "Solstice Ltd"),
             (77, "1 Example Way\nSuite 2"), (30, "1 Example Way"), (31, "Suite 2"), (33, "Cupertino"), (34, "CA"),
             (35, "95014"), (36, "US"), (14, "+14155550100"), (9, "alex@example.com")],
         "00000000-0000-4000-8000-00000000a002": [(3, "Sam"), (5, "Smith"), (30, "10 High Street"), (31, "Flat 1"),
@@ -284,7 +284,7 @@ GOOGLE = ("Google", "google.com", "{google:baseURL}search?q={searchTerms}&{googl
           PREPOPULATED_GUID.format(1))
 BING = ("Bing", "bing.com", "https://www.bing.com/search?q={searchTerms}&PC=U316&FORM=CHROMN", 3, PREPOPULATED_GUID.format(3))
 DUCKDUCKGO = ("DuckDuckGo", "duckduckgo.com", "https://duckduckgo.com/?q={searchTerms}", 92, PREPOPULATED_GUID.format(92))
-ARDIA_DOCS = ("Ardia Docs", "docs", "https://docs.ardia.example/find?q={searchTerms}&enc={inputEncoding}&{google:RLZ}", 0,
+ARDIA_DOCS = ("Solstice Docs", "docs", "https://docs.ardia.example/find?q={searchTerms}&enc={inputEncoding}&{google:RLZ}", 0,
               "00000000-0000-4000-8000-00000000e001")
 
 
@@ -450,7 +450,7 @@ def build_chrome():
     write(os.path.join(d, "Google Profile Picture.png"), PNG_1PX)
     t = BASE_UNIX - 86400 * 100
     chromium_bookmarks(os.path.join(d, "Bookmarks"),
-                       bar=[bookmark("Ardia", "https://ardia.example/", t, "00000000-0000-4000-8000-000000000101"),
+                       bar=[bookmark("Solstice", "https://ardia.example/", t, "00000000-0000-4000-8000-000000000101"),
                             folder("Dev", [
                                 bookmark("Swift Forums", "https://forums.swift.example/", t, "00000000-0000-4000-8000-000000000102"),
                                 folder("Docs", [bookmark("SQLite — Docs", "https://sqlite.example/docs.html", t,
@@ -1776,7 +1776,7 @@ BOOKMARKS_HTML_CHROME = """<!DOCTYPE NETSCAPE-Bookmark-file-1>
 <DL><p>
     <DT><H3 ADD_DATE="1700000000" LAST_MODIFIED="1700000100" PERSONAL_TOOLBAR_FOLDER="true">Bookmarks bar</H3>
     <DL><p>
-        <DT><A HREF="https://ardia.example/" ADD_DATE="1700000001" ICON="data:image/png;base64,AAAA">Ardia</A>
+        <DT><A HREF="https://ardia.example/" ADD_DATE="1700000001" ICON="data:image/png;base64,AAAA">Solstice</A>
         <DT><H3 ADD_DATE="1700000002" LAST_MODIFIED="0">Empty folder</H3>
         <DL><p>
         </DL><p>

@@ -1,6 +1,6 @@
 # @ardia/import
 
-Imports another browser's data into Ardia. The native code lives in `ios/`; `ios/Core/` is plain Swift with no
+Imports another browser's data into Solstice. The native code lives in `ios/`; `ios/Core/` is plain Swift with no
 Expo dependency, so `Package.swift` builds and tests it on its own. `src/index.ts` is the typed JS wrapper and the UI
 is `apps/browser/src/components/import/`. Every test reads fixtures. Never point anything at a real profile. On Windows the
 same module is TypeScript in `packages/expo-windows/src/import` (`docs/windows.md`, Import from another browser), with
@@ -66,7 +66,7 @@ Shared code: `Model.swift` (`ImportKind`, `ImportResult` and the other result ty
    pin and, when it can't come from the Chrome Web Store, why (`skip`). Only an explicit internal location (a JSON
    integer 1) with `from_webstore` a JSON `true` counts as the Web Store, and a malformed id is dropped.
    `apps/browser/src/state/import/extensionListing.ts` plans the done screen's list: every Web Store extension under the
-   Ardia profile its source profile went to, by the name the source lists, its id and a store link built from the id,
+   Solstice profile its source profile went to, by the name the source lists, its id and a store link built from the id,
    leaving out what that profile already has (`listedExtensions.ts` reads `extensions.list`). Nothing is installed:
    installing from the import waits on an engine op that can create an install only if absent, own it, and cancel it for
    good. Linux's reader (`ac_linux_import_readers.cc`) sends only the id, name and store link, so Linux keeps the plain
@@ -114,7 +114,7 @@ sqlite3 CLI: it checkpoints the WAL the tests depend on.
 | Swift tests (`tests/`, against `fixtures/`) | `pnpm --filter @ardia/import test` (`swift test`, scratch path in `$TMPDIR`) |
 | Rebuild fixtures | `pnpm --filter @ardia/import fixtures` |
 | Typecheck the JS wrapper | `pnpm --filter @ardia/import typecheck` |
-| End to end in a hidden Debug instance (cookies, addresses, cards) | `node packages/import/scripts/e2e.mjs <Ardia.app> <scratch dir>` (`--help`) |
+| End to end in a hidden Debug instance (cookies, addresses, cards) | `node packages/import/scripts/e2e.mjs <Solstice.app> <scratch dir>` (`--help`) |
 | Run one script in that instance (`e2e.mjs --keep`) | `scripts/agent/ac eval <scratch dir>/data '<js>'` |
 
 ## Test hooks (`ios/ImportModule.swift`)
