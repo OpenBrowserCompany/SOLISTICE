@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 const ReplayPlayer = lazy(() => import("@/components/replay-player"));
 
 export const Route = createFileRoute("/_app/replays/$sessionId")({
-  head: () => ({ meta: [{ title: "Replay · Ardia" }] }),
+  head: () => ({ meta: [{ title: "Replay · Solstice" }] }),
   component: ReplayPage,
 });
 

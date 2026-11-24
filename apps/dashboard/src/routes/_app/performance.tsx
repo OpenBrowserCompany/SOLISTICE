@@ -16,7 +16,7 @@ import { compareVersions } from "@/lib/versions";
 import type { SectionData } from "@/server/sections";
 
 export const Route = createFileRoute("/_app/performance")({
-  head: () => ({ meta: [{ title: "Performance · Ardia" }] }),
+  head: () => ({ meta: [{ title: "Performance · Solstice" }] }),
   component: PerformancePage,
 });
 
@@ -48,7 +48,7 @@ function specs(p: Perf) {
   return {
     launch: launchSpec,
     switching: (group: string): TrendSpec => ({ family: "switch", group, context: "Profile switch time", color: "var(--chart-4)", format: formatMs, options: switching }),
-    memory: (group: string): TrendSpec => ({ family: "memory", group, context: "Memory across all Ardia processes", color: "var(--chart-5)", format: mb, tickUnit: 1024, tick: mbTick, options: memory }),
+    memory: (group: string): TrendSpec => ({ family: "memory", group, context: "Memory across all Solstice processes", color: "var(--chart-5)", format: mb, tickUnit: 1024, tick: mbTick, options: memory }),
     omnibox: (group: string): TrendSpec => ({ family: "omnibox", group, context: "Omnibox time, one value per session", color: "var(--chart-2)", format: formatMs, options: omnibox }),
     launchCount: (): TrendSpec => ({
       family: "launch",
@@ -114,7 +114,7 @@ function PerformancePage() {
           </Loaded>
         </Panel>
       </div>
-      <Panel source="app" title="Memory against tabs" description="All Ardia processes in a memory sample, by how many tabs were open then.">
+      <Panel source="app" title="Memory against tabs" description="All Solstice processes in a memory sample, by how many tabs were open then.">
         <Loaded query={perf} skeleton={<ListSkeleton rows={5} />}>
           {(p) => (
             <QuantileRows

@@ -25,7 +25,7 @@ export const Route = createFileRoute("/_app/regressions")({
     if (typeof search.previous === "string" && VERSION.test(search.previous)) out.previous = search.previous;
     return out;
   },
-  head: () => ({ meta: [{ title: "Regressions · Ardia" }] }),
+  head: () => ({ meta: [{ title: "Regressions · Solstice" }] }),
   component: RegressionsPage,
 });
 
