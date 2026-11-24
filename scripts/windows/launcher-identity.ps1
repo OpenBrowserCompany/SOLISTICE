@@ -253,14 +253,14 @@ public static class ArdiaLauncherIdentity {
 "@
 
 $wanted = [ordered]@{
-  CompanyName = "Ardia"
-  CompanyShortName = "Ardia"
-  FileDescription = "Ardia"
-  ProductName = "Ardia"
-  ProductShortName = "Ardia"
-  InternalName = "Ardia"
+  CompanyName = "Solstice"
+  CompanyShortName = "Solstice"
+  FileDescription = "Solstice"
+  ProductName = "Solstice"
+  ProductShortName = "Solstice"
+  InternalName = "Solstice"
   OriginalFilename = "Ardia.exe"
-  LegalCopyright = "Ardia, built on Chromium. Copyright The Chromium Authors and Ardia's contributors."
+  LegalCopyright = "Solstice, built on Chromium. Copyright The Chromium Authors and Solstice's contributors."
 }
 
 function Get-Mismatches($reading, $images) {
@@ -287,13 +287,13 @@ $reading = [ArdiaLauncherIdentity]::Read($target)
 $before = @(Get-Mismatches $reading $images)
 
 if ($Check) {
-  if ($before.Count) { Write-Host "launcher-identity: $target is not Ardia's: $($before -join '; ')"; exit 1 }
-  Write-Host "launcher-identity: $target carries Ardia's icon ($($images.Count) images) and name"
+  if ($before.Count) { Write-Host "launcher-identity: $target is not Solstice's: $($before -join '; ')"; exit 1 }
+  Write-Host "launcher-identity: $target carries Solstice's icon ($($images.Count) images) and name"
   exit 0
 }
 
 if ($before.Count -eq 0) {
-  Write-Host "launcher-identity: $target already carries Ardia's icon and name"
+  Write-Host "launcher-identity: $target already carries Solstice's icon and name"
   exit 0
 }
 
@@ -307,5 +307,5 @@ $newVersion = if ($reading.Version) { [ArdiaLauncherIdentity]::WithStrings($read
 $after = @(Get-Mismatches ([ArdiaLauncherIdentity]::Read($target)) $images)
 if ($after.Count) { Write-Host "launcher-identity: wrote $target but it still differs: $($after -join '; ')"; exit 1 }
 $fixed = $before -join "; "
-Write-Host "launcher-identity: $target now carries Ardia's icon and name (was: $fixed)"
+Write-Host "launcher-identity: $target now carries Solstice's icon and name (was: $fixed)"
 exit 0

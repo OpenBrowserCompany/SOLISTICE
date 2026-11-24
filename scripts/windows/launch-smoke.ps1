@@ -442,8 +442,8 @@ function Test-WindowIcon([System.Diagnostics.Process]$Process, [string]$Log) {
     elseif ($icon -eq [IntPtr]::Zero) { $notes += "the browser window has no $($size.Name) icon (WM_GETICON gave none)" }
     else { Write-Host "Icon: the browser window's $($size.Name) icon is 0x$($icon.ToString('x'))." }
   }
-  if (-not (Select-String -Path $Log -Pattern "app icon: AppUserModelID is Ardia\.Browser" -Quiet)) { $notes += "the launch log does not say the process took the AppUserModelID Ardia.Browser" }
-  if (-not (Select-String -Path $Log -Pattern "app icon: set on " -Quiet)) { $notes += "the launch log does not say a window got Ardia's icon" }
+  if (-not (Select-String -Path $Log -Pattern "app icon: AppUserModelID is Solstice\.Browser" -Quiet)) { $notes += "the launch log does not say the process took the AppUserModelID Ardia.Browser" }
+  if (-not (Select-String -Path $Log -Pattern "app icon: set on " -Quiet)) { $notes += "the launch log does not say a window got Solstice's icon" }
   return $notes
 }
 
@@ -1385,7 +1385,7 @@ foreach ($fixture in @(@("firefox", "Firefox\Profiles\abcd1234.default-release")
 $env:ARDIA_CONFIG_DIR = $env:ARDIA_DATA_DIR
 $env:ARDIA_BACKGROUND = "1"
 $env:ARDIA_TEST = "pipHover=first,pipHover=last,httpPages=$httpPagesPort"
-$leftover = Join-Path $env:ARDIA_DATA_DIR "Chromium\Ardia self-check-stuck (removing)"
+$leftover = Join-Path $env:ARDIA_DATA_DIR "Chromium\Solstice self-check-stuck (removing)"
 $held = $null
 $check = $null
 Add-Type @"
@@ -1496,7 +1496,7 @@ function Invoke-LoginData([string]$Sql) {
   $database = Join-Path $env:ARDIA_DATA_DIR "Chromium\Default\Login Data"
   if (-not (Test-Path -LiteralPath $database)) { return "no Login Data at $database" }
   if (-not ("Ardia.Sqlite" -as [type])) {
-    Add-Type -Namespace Ardia -Name Sqlite -MemberDefinition @'
+    Add-Type -Namespace Solstice -Name Sqlite -MemberDefinition @'
 [DllImport("winsqlite3.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)] public static extern int sqlite3_open(string filename, out IntPtr db);
 [DllImport("winsqlite3.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)] public static extern int sqlite3_exec(IntPtr db, string sql, IntPtr callback, IntPtr argument, IntPtr error);
 [DllImport("winsqlite3.dll", CallingConvention = CallingConvention.StdCall)] public static extern int sqlite3_changes(IntPtr db);
@@ -1703,7 +1703,7 @@ Remove-Item -Force -LiteralPath $marker
 try { Test-NotATestInstance $gateData "no test-build marker" } finally { New-Item -ItemType File -Force -Path $marker | Out-Null }
 Test-NotATestInstance "gate-relative" "a relative ARDIA_DATA_DIR"
 if ($env:GITHUB_ACTIONS -eq "true") {
-  $realProfile = Join-Path $env:LOCALAPPDATA "Ardia"
+  $realProfile = Join-Path $env:LOCALAPPDATA "Solstice"
   New-Item -ItemType Directory -Force -Path $realProfile | Out-Null
   Test-NotATestInstance $realProfile "the real profile folder"
   $junction = Join-Path (New-DataDirectory "gate-junction") "profile"
@@ -1711,7 +1711,7 @@ if ($env:GITHUB_ACTIONS -eq "true") {
   try { Test-NotATestInstance $junction "a junction to the real profile folder" } finally { (Get-Item -LiteralPath $junction).Delete() }
 }
 if ($withEngine -and $env:GITHUB_ACTIONS -eq "true") {
-  $realUserData = Join-Path $env:LOCALAPPDATA "Ardia\User Data"
+  $realUserData = Join-Path $env:LOCALAPPDATA "Solstice\User Data"
   Test-WalkAround "" "an empty --type on the real profile" "" @("--type=", "--user-data-dir=`"$realUserData`"", "--remote-debugging-port=$gatePort", "--remote-allow-origins=*")
   Test-WalkAround (New-DataDirectory "gate-other-user-data") "a --user-data-dir other than the approved folder" "reauth=granted" @("--user-data-dir=`"$realUserData`"")
   $aliased = New-DataDirectory "gate-alias"
