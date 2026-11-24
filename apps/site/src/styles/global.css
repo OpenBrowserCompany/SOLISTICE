@@ -7,34 +7,34 @@
 :root {
   color-scheme: light;
 
-  --paper: #f1ece2;
-  --paper-deep: #e6dfd1;
-  --ink: #16130f;
-  --day-ink: #16130f;
-  --ink-2: #4d524a;
-  --ink-3: #595d53;
+  --paper: #101a2c;
+  --paper-deep: #0c1424;
+  --ink: #e8ecf3;
+  --day-ink: #e8ecf3;
+  --ink-2: #b6c2d6;
+  --ink-3: #98a7bf;
   --ink-on: var(--paper);
   --figure: var(--forest-deep);
   --rival: #7d776c;
   --ground: var(--paper);
   --rule: rgb(22 19 15 / 0.16);
   --rule-strong: rgb(22 19 15 / 0.85);
-  --accent: #1e5141;
-  --accent-deep: #113d2e;
-  --stamp: #b4532a;
-  --night: #121a2e;
-  --night-2: #1b2a50;
-  --night-ink: #efe8dc;
-  --night-ink-2: #b9b6c4;
+  --accent: #9fb6d6;
+  --accent-deep: #5d7ba3;
+  --stamp: #c9d6ea;
+  --night: #0a101c;
+  --night-2: #182642;
+  --night-ink: #e8ecf3;
+  --night-ink-2: #b6c2d6;
   --night-rule: rgb(241 235 220 / 0.16);
 
-  --sun: #fbb927;
-  --sun-pale: #fbcf5b;
-  --sun-deep: #f4a401;
-  --sage: #a6b96c;
-  --sage-deep: #688543;
-  --forest: #1e5141;
-  --forest-deep: #113d2e;
+  --sun: #c9d6ea;
+  --sun-pale: #dbe3f0;
+  --sun-deep: #9fb6d6;
+  --sage: #8fa7c6;
+  --sage-deep: #5d7ba3;
+  --forest: #1c2d4b;
+  --forest-deep: #101a2c;
 
   --morning: #f1ece2;
   --noon: #f3e7cf;
@@ -45,11 +45,6 @@
   --twilight: #5d5281;
   --evening: #2c416c;
 
-  --impasto: url("../assets/paint/impasto.webp");
-  --impasto-soft: url("../assets/paint/impasto-soft.webp");
-  --grain: url("../assets/paint/grain.webp");
-  --edge-a: url("../assets/paint/edge-a.svg");
-  --edge-b: url("../assets/paint/edge-b.svg");
 
   --sans: "Allo", -apple-system, "Helvetica Neue", sans-serif;
   --poster: "Allo", -apple-system, "Helvetica Neue", sans-serif;
@@ -402,10 +397,15 @@ h3 {
   }
 }
 
-/* Solstice: no painted or starry motion; a quiet silver-on-charcoal treatment. */
+/* Solstice: a restrained, professional deep-space theme. */
 .hero {
-  background-image: radial-gradient(ellipse at 50% 22%, rgb(80 88 104 / 0.45), transparent 62%), linear-gradient(180deg, #15171b 0%, #0b0c0e 100%);
+  background-image: radial-gradient(ellipse at 50% 18%, rgb(120 146 186 / 0.28), transparent 60%), radial-gradient(circle at 78% 26%, rgb(226 233 245 / 0.7) 0 1px, transparent 2px), radial-gradient(circle at 24% 64%, rgb(226 233 245 / 0.5) 0 1px, transparent 2px), linear-gradient(180deg, #101a2c 0%, #080d18 100%);
 }
 .hero-poster,
 .meadow-canvas { display: none !important; }
 .hero-title { color: #f5f6f8 !important; }
+
+[data-paint] {
+  background-image: radial-gradient(circle at 18% 24%, rgb(232 236 243 / 0.55) 0 1px, transparent 1.6px), radial-gradient(circle at 62% 12%, rgb(232 236 243 / 0.45) 0 1px, transparent 1.6px), radial-gradient(circle at 84% 58%, rgb(232 236 243 / 0.5) 0 1px, transparent 1.6px), var(--wash, none);
+  background-size: 320px 320px, 460px 460px, 540px 540px, 100% 100%;
+}

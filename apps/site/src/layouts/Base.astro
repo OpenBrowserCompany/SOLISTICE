@@ -22,7 +22,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogVersion = createHash("sha256").update(readFileSync(`${process.cwd()}/public/og.png`)).digest("hex").slice(0, 10);
 const og = new URL(`${base}/og.png?v=${ogVersion}`, Astro.site);
 const OG_ALT =
-  "Touch grass. Solstice: Arc’s sidebar and Dia’s look on Chromium, for Mac, by The Open Browser Company.";
+  "A Web with freedom. Solstice: Arc’s sidebar and Dia’s look on Chromium, for Mac, by The Open Browser Company.";
 ---
 
 <!doctype html>
