@@ -7,7 +7,7 @@
 #include <utility>
 #include <vector>
 
-namespace Ardia::Menus {
+namespace Solstice::Menus {
 
 enum Modifier : unsigned {
   ModifierControl = 1,
@@ -62,15 +62,15 @@ struct SystemRow {
 #define ARDIA_ELLIPSIS "\xE2\x80\xA6"
 
 inline constexpr CommandRow kCommandRows[] = {
-    {"openSettings", "Settings" ARDIA_ELLIPSIS, "Ardia", "cmd+,", "ctrl+,"},
-    {"importBrowserData", "Import from Another Browser" ARDIA_ELLIPSIS, "Ardia", "", ""},
+    {"openSettings", "Settings" ARDIA_ELLIPSIS, "Solstice", "cmd+,", "ctrl+,"},
+    {"importBrowserData", "Import from Another Browser" ARDIA_ELLIPSIS, "Solstice", "", ""},
 
     {"newTab", "New Tab", "File", "cmd+t", "ctrl+t"},
     {"newTabInGroup", "New Tab in Group", "File", "option+cmd+t|ctrl+cmd+c", "ctrl+alt+t|none"},
     {"newWindow", "New Window", "File", "cmd+n", "ctrl+n"},
     {"newIncognitoWindow", "New Incognito Window", "File", "shift+cmd+n", "ctrl+shift+n"},
-    {"newLittleArdia", "New Little Ardia Window", "File", "option+cmd+n", "ctrl+alt+n"},
-    {"", "", "File > New Little Ardia Window in Profile", "", "", 0, Expansion::LittleArdiaProfiles},
+    {"newLittleArdia", "New Little Solstice Window", "File", "option+cmd+n", "ctrl+alt+n"},
+    {"", "", "File > New Little Solstice Window in Profile", "", "", 0, Expansion::LittleArdiaProfiles},
     {"toggleOpenLinksInLittleArdia", "Open Links from Other Apps in Main Window", "File", "", ""},
     {"reopenClosedTab", "Reopen Closed Tab", "File", "shift+cmd+t", "ctrl+shift+t"},
     {"reopenClosedWindow", "Reopen Closed Window", "File", "", ""},
