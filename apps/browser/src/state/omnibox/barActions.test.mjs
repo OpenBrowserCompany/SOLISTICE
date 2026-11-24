@@ -85,7 +85,7 @@ test("each way of switching counts one switch in its direction, and Settings cou
   assert.deepEqual(takeTabLayoutCounts(), { tab_layout_switches_to_top: 0, tab_layout_switches_to_sidebar: 0 });
 });
 
-test("Little Ardia's command bar leaves out the layout row and the other commands its menus disable", () => {
+test("Little Solstice's command bar leaves out the layout row and the other commands its menus disable", () => {
   S().hydrate({});
   const main = S().createWindow({ url: "https://main.example/" });
   const little = S().createWindow({ kind: "small", url: "https://little.example/" });
