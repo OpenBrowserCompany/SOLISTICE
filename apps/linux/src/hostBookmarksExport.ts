@@ -2,7 +2,7 @@ import { bookmarkPages, bookmarksHtml, type BookmarkTree } from "./bookmarksHtml
 import { callHost, type ArdiaHost } from "./host.ts";
 
 export const BOOKMARKS_EXPORT_CALL = "bookmarks.exportHtml";
-export const BOOKMARKS_FILE_NAME = "Ardia Bookmarks.html";
+export const BOOKMARKS_FILE_NAME = "Solstice Bookmarks.html";
 const ICON_SIZE = 16;
 const ICON_BATCH = 200;
 const PNG_DATA_URI = "data:image/png;base64,";

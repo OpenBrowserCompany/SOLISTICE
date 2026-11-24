@@ -4,11 +4,11 @@ import { resolveHostModule } from "./hostModules.ts";
 import { BOOKMARKS_EXPORT_CALL, BOOKMARKS_FILE_NAME, exportBookmarksToDownloads } from "./hostBookmarksExport.ts";
 
 const tree = {
-  bar: { id: "bar", k: "f", t: "Bookmarks bar", a: 1_700_000_000_000, c: [{ id: "a", k: "u", t: "Ardia", u: "https://ardia.dev/", a: 1_710_000_000_000 }] },
+  bar: { id: "bar", k: "f", t: "Bookmarks bar", a: 1_700_000_000_000, c: [{ id: "a", k: "u", t: "Solstice", u: "https://ardia.dev/", a: 1_710_000_000_000 }] },
   other: { id: "other", k: "f", t: "Other bookmarks", a: 1_700_000_000_000, c: [{ id: "b", k: "u", t: "Loose", u: "https://loose.example/", a: 1_711_000_000_000 }] },
 };
 
-function rig({ capabilities = ["bookmarks.tree", "favicons.get"], listed = [[{ state: "downloading", path: "" }], [{ state: "finished", path: "/home/u/Downloads/Ardia Bookmarks.html" }]], icons = { pages: { "https://ardia.dev/": { png: "AAAA", icon: "https://ardia.dev/favicon.ico" }, "https://loose.example/": { png: "not base64!", icon: "" } } } } = {}) {
+function rig({ capabilities = ["bookmarks.tree", "favicons.get"], listed = [[{ state: "downloading", path: "" }], [{ state: "finished", path: "/home/u/Downloads/Solstice Bookmarks.html" }]], icons = { pages: { "https://ardia.dev/": { png: "AAAA", icon: "https://ardia.dev/favicon.ico" }, "https://loose.example/": { png: "not base64!", icon: "" } } } } = {}) {
   const calls = [];
   const saved = [];
   const released = [];
@@ -39,20 +39,20 @@ function rig({ capabilities = ["bookmarks.tree", "favicons.get"], listed = [[{ s
 
 test("an export builds the HTML from the profile's tree and icons, downloads it and answers the saved path", async () => {
   const { host, platform, calls, saved, released } = rig();
-  assert.equal(await exportBookmarksToDownloads(host, "Work", platform), "/home/u/Downloads/Ardia Bookmarks.html");
+  assert.equal(await exportBookmarksToDownloads(host, "Work", platform), "/home/u/Downloads/Solstice Bookmarks.html");
   assert.deepEqual(calls.slice(0, 2), [["bookmarks.tree", "Work", {}], ["favicons.get", "Work", { pages: ["https://ardia.dev/", "https://loose.example/"], icons: [], size: 16 }]]);
   assert.ok(calls.slice(2).every(([name, profile]) => name === "downloads.list" && profile === "default"));
   assert.equal(saved.length, 1);
   assert.equal(saved[0].name, BOOKMARKS_FILE_NAME);
   assert.ok(saved[0].html.startsWith("<!DOCTYPE NETSCAPE-Bookmark-file-1>\r\n"));
-  assert.ok(saved[0].html.includes('<DT><A HREF="https://ardia.dev/" ADD_DATE="1710000000" ICON="data:image/png;base64,AAAA">Ardia</A>'));
+  assert.ok(saved[0].html.includes('<DT><A HREF="https://ardia.dev/" ADD_DATE="1710000000" ICON="data:image/png;base64,AAAA">Solstice</A>'));
   assert.ok(saved[0].html.includes('<DT><A HREF="https://loose.example/" ADD_DATE="1711000000">Loose</A>'));
   assert.deepEqual(released, [1]);
 });
 
 test("an export still saves when icons can't be read", async () => {
   const { host, platform, saved } = rig({ icons: null });
-  assert.equal(await exportBookmarksToDownloads(host, "", platform), "/home/u/Downloads/Ardia Bookmarks.html");
+  assert.equal(await exportBookmarksToDownloads(host, "", platform), "/home/u/Downloads/Solstice Bookmarks.html");
   assert.equal(saved[0].html.includes("ICON="), false);
 });
 
