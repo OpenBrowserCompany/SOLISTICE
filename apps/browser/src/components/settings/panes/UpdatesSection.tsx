@@ -12,7 +12,7 @@ import { UI_LOCALE } from "../../../lib/uiLocale";
 import { Group, Row, SectionHeader } from "../Form";
 import { setting } from "../settingsIndex";
 
-const APP = "Ardia";
+const APP = "Solstice";
 const REPOSITORY = "https://github.com/ardia-browser/ardia";
 
 export function UpdatesSection() {
@@ -83,6 +83,9 @@ function VersionDetails({ status }: { status: string | null }) {
           {status}
         </Text>
       ) : null}
+      <Text selectable size="caption" tone="textSecondary" style={DETAIL()}>
+        Solstice by The Open Browser Company
+      </Text>
       <Text selectable size="caption" tone="textSecondary" style={DETAIL()}>
         {engines}
       </Text>

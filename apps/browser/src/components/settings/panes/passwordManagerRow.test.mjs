@@ -11,13 +11,13 @@ const { managerPopUp, unavailableNote } = await import("./PasswordManagerRow.tsx
 
 const MANAGER = { name: "password-manager", title: "Test Passwords", spec: { fill: "system", fields: ["login"] }, builtIn: true, approval: "h" };
 
-test("a stored plugin that is off shows as its own option, so picking Ardia is a change that gets saved", () => {
+test("a stored plugin that is off shows as its own option, so picking Solstice is a change that gets saved", () => {
   const popUp = managerPopUp([], "plugin:password-manager", "ardia", { title: "Test Passwords", installed: true });
   assert.equal(popUp.value, "plugin:password-manager");
   assert.deepEqual(
     popUp.options.map((o) => [o.value, o.title]),
     [
-      ["ardia", "Ardia"],
+      ["ardia", "Solstice"],
       ["plugin:password-manager", "Test Passwords (off)"],
       ["none", "None (an extension handles logins)"],
     ],
