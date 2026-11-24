@@ -10,7 +10,7 @@
   "harness": 1,
   "browsers": {
     "ardia": {
-      "name": "Ardia",
+      "name": "Solstice",
       "version": "main (6bd2319)",
       "chromium": "157.0.8103.50",
       "measured": "2026-11-13"
@@ -43,7 +43,7 @@
       "lowerIsBetter": true,
       "browsers": {
         "ardia": {
-          "name": "Ardia",
+          "name": "Solstice",
           "version": "main (6bd2319)",
           "chromium": "157.0.8103.50",
           "median": 515,
@@ -93,7 +93,7 @@
       "lowerIsBetter": true,
       "browsers": {
         "ardia": {
-          "name": "Ardia",
+          "name": "Solstice",
           "version": "main (6bd2319)",
           "chromium": "157.0.8103.50",
           "median": 278,
@@ -143,7 +143,7 @@
       "lowerIsBetter": true,
       "browsers": {
         "ardia": {
-          "name": "Ardia",
+          "name": "Solstice",
           "version": "main (6bd2319)",
           "chromium": "157.0.8103.50",
           "median": 351,
@@ -194,7 +194,7 @@
       "lowerIsBetter": true,
       "browsers": {
         "ardia": {
-          "name": "Ardia",
+          "name": "Solstice",
           "version": "main (6bd2319)",
           "chromium": "157.0.8103.50",
           "median": 63,
@@ -244,7 +244,7 @@
       "lowerIsBetter": true,
       "browsers": {
         "ardia": {
-          "name": "Ardia",
+          "name": "Solstice",
           "version": "main (6bd2319)",
           "chromium": "157.0.8103.50",
           "median": 13,
@@ -294,7 +294,7 @@
       "lowerIsBetter": true,
       "browsers": {
         "ardia": {
-          "name": "Ardia",
+          "name": "Solstice",
           "version": "main (6bd2319)",
           "chromium": "157.0.8103.50",
           "median": 79.4,
@@ -344,7 +344,7 @@
       "lowerIsBetter": true,
       "browsers": {
         "ardia": {
-          "name": "Ardia",
+          "name": "Solstice",
           "version": "main (6bd2319)",
           "chromium": "157.0.8103.50",
           "median": 240,
@@ -394,7 +394,7 @@
       "lowerIsBetter": true,
       "browsers": {
         "ardia": {
-          "name": "Ardia",
+          "name": "Solstice",
           "version": "main (6bd2319)",
           "chromium": "157.0.8103.50",
           "median": 504,
@@ -444,7 +444,7 @@
       "lowerIsBetter": true,
       "browsers": {
         "ardia": {
-          "name": "Ardia",
+          "name": "Solstice",
           "version": "main (6bd2319)",
           "chromium": "157.0.8103.50",
           "median": 734,
@@ -494,7 +494,7 @@
       "lowerIsBetter": true,
       "browsers": {
         "ardia": {
-          "name": "Ardia",
+          "name": "Solstice",
           "version": "main (6bd2319)",
           "chromium": "157.0.8103.50",
           "median": 281,
@@ -544,7 +544,7 @@
       "lowerIsBetter": true,
       "browsers": {
         "ardia": {
-          "name": "Ardia",
+          "name": "Solstice",
           "version": "main (6bd2319)",
           "chromium": "157.0.8103.50",
           "median": 0.25,
@@ -594,7 +594,7 @@
       "lowerIsBetter": true,
       "browsers": {
         "ardia": {
-          "name": "Ardia",
+          "name": "Solstice",
           "version": "main (6bd2319)",
           "chromium": "157.0.8103.50",
           "median": 0.77,
@@ -644,7 +644,7 @@
       "lowerIsBetter": true,
       "browsers": {
         "ardia": {
-          "name": "Ardia",
+          "name": "Solstice",
           "version": "main (6bd2319)",
           "chromium": "157.0.8103.50",
           "median": 9.33,
@@ -694,7 +694,7 @@
       "lowerIsBetter": true,
       "browsers": {
         "ardia": {
-          "name": "Ardia",
+          "name": "Solstice",
           "version": "main (6bd2319)",
           "chromium": "157.0.8103.50",
           "median": 20.06,
@@ -744,7 +744,7 @@
       "lowerIsBetter": true,
       "browsers": {
         "ardia": {
-          "name": "Ardia",
+          "name": "Solstice",
           "version": "main (6bd2319)",
           "chromium": "157.0.8103.50",
           "median": 0.09,
@@ -794,7 +794,7 @@
       "lowerIsBetter": true,
       "browsers": {
         "ardia": {
-          "name": "Ardia",
+          "name": "Solstice",
           "version": "main (6bd2319)",
           "chromium": "157.0.8103.50",
           "median": 0.4,
@@ -844,7 +844,7 @@
       "lowerIsBetter": true,
       "browsers": {
         "ardia": {
-          "name": "Ardia",
+          "name": "Solstice",
           "version": "main (6bd2319)",
           "chromium": "157.0.8103.50",
           "median": 5.29,
@@ -894,7 +894,7 @@
       "lowerIsBetter": true,
       "browsers": {
         "ardia": {
-          "name": "Ardia",
+          "name": "Solstice",
           "version": "main (6bd2319)",
           "chromium": "157.0.8103.50",
           "median": 14.85,
@@ -944,7 +944,7 @@
       "lowerIsBetter": false,
       "browsers": {
         "ardia": {
-          "name": "Ardia",
+          "name": "Solstice",
           "version": "0.2.38-nightly.7",
           "chromium": "155.0.8059.84",
           "median": 59.1,
@@ -991,7 +991,7 @@
       "group": "Power with 11 tabs open",
       "browsers": {
         "ardia": {
-          "name": "Ardia",
+          "name": "Solstice",
           "version": "0.2.38-nightly.8",
           "chromium": "155.0.8059.84",
           "median": 3.5,
@@ -1038,7 +1038,7 @@
       "group": "Power with 11 tabs open",
       "browsers": {
         "ardia": {
-          "name": "Ardia",
+          "name": "Solstice",
           "version": "0.2.38-nightly.8",
           "chromium": "155.0.8059.84",
           "median": 3.9,
@@ -1085,7 +1085,7 @@
       "group": "Power with 11 tabs open",
       "browsers": {
         "ardia": {
-          "name": "Ardia",
+          "name": "Solstice",
           "version": "0.2.38-nightly.8",
           "chromium": "155.0.8059.84",
           "median": 28.2,
@@ -1132,7 +1132,7 @@
       "group": "Power with 11 tabs open",
       "browsers": {
         "ardia": {
-          "name": "Ardia",
+          "name": "Solstice",
           "version": "0.2.38-nightly.8",
           "chromium": "155.0.8059.84",
           "median": 136,
@@ -1179,7 +1179,7 @@
       "group": "Power with 11 tabs open",
       "browsers": {
         "ardia": {
-          "name": "Ardia",
+          "name": "Solstice",
           "version": "0.2.38-nightly.8",
           "chromium": "155.0.8059.84",
           "median": 82,
@@ -1223,13 +1223,13 @@
   "notes": [
     "One harness drives all four from outside the app over CDP, the same local test pages served from 127.0.0.1, one instance at a time, browsers interleaved per run and rotated each round.",
     "Every run starts from its own copy of a template profile made once per browser (one launch, the test page open, 90 s to settle, quit), with HOME pointed into it; default settings, built-in ad blockers as shipped.",
-    "Chrome and Helium get --restore-last-session so all four restore the same one-tab session (Ardia and Dia restore by default).",
-    "Window 1280×800 at the same place for every browser that takes --window-size; Ardia's window frame is set in its session to the same size; Dia ignores --window-size and opens full-screen-sized (1512×949).",
-    "Chrome runs as shipped and brings itself to the front at launch and on a tab switch; Helium runs from a copy marked background-only (LSBackgroundOnly), so it can't take focus. Both fetch their Finch (variations) seed and components as usual. Dia runs in view without taking focus, signed in with a throwaway account. Ardia runs in its background test mode: it can't become the active app, its windows sit behind the owner's and report themselves as not occluded, and App Nap is off for it.",
+    "Chrome and Helium get --restore-last-session so all four restore the same one-tab session (Solstice and Dia restore by default).",
+    "Window 1280×800 at the same place for every browser that takes --window-size; Solstice's window frame is set in its session to the same size; Dia ignores --window-size and opens full-screen-sized (1512×949).",
+    "Chrome runs as shipped and brings itself to the front at launch and on a tab switch; Helium runs from a copy marked background-only (LSBackgroundOnly), so it can't take focus. Both fetch their Finch (variations) seed and components as usual. Dia runs in view without taking focus, signed in with a throwaway account. Solstice runs in its background test mode: it can't become the active app, its windows sit behind the owner's and report themselves as not occluded, and App Nap is off for it.",
     "Memory is phys_footprint summed over every process of the browser (app, helpers, GPU, renderers, utilities, anything running from its bundle); CPU and wakeups are rusage over the same processes.",
     "Measured on the owner's working Mac, in normal use: browsers interleaved run by run and rotated each round so the owner's activity falls on all of them alike; each figure is the median of the runs, with min–max and n.",
     "Median, min–max and n over runs; a row is a win when the ranges don't overlap.",
-    "Ardia and Helium both run as ad-hoc signed copies (a Developer ID signature adds about 30 ms to a cold launch on macOS 27), measured in the same session.",
+    "Solstice and Helium both run as ad-hoc signed copies (a Developer ID signature adds about 30 ms to a cold launch on macOS 27), measured in the same session.",
     "Speedometer 3: six runs each in turn on 0.2.38-nightly.7 (Chromium 155.0.8059.84), the same engine as nightly.8.",
     "Power: macOS's own per-process energy counter (ri_energy_nj), summed over every process of the browser, with 11 public, logged-out sites open, two runs each, interleaved, the same day."
   ],
