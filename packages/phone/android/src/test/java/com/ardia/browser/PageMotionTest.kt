@@ -1,4 +1,4 @@
-package com.ardia.browser
+package com.openbrowsercompany.solstice
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
