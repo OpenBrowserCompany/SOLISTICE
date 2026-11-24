@@ -707,7 +707,7 @@ test("the view orders pins, bookmarks, profiles and search as the Mac does", asy
   const shape = (b: (typeof personal.bookmarks)[number]): unknown => (b.children ? { [b.title]: b.children.map(shape) } : b.title);
   assert.deepEqual(personal.bookmarks.filter((b) => b.root === "bar").map(shape), [{ Work: ["Wiki", "Docs"] }, "Game"]);
   assert.deepEqual(personal.bookmarks.filter((b) => b.root === "other").map(shape), [{ "Loop A": [{ "Loop B": [] }] }, "Orphan"]);
-  assert.equal(personal.bookmarks.find((b) => b.title === "Game")!.url, "ardia://game");
+  assert.equal(personal.bookmarks.find((b) => b.title === "Game")!.url, "solstice://game");
   assert.deepEqual(view.search, { engineId: "duckduckgo", customURL: null, customEngines: [{ id: "c1", name: "Docs", keyword: "docs", url: "https://docs.example/?q=%s" }] });
   assert.deepEqual(view.look, { interfaceStyle: "classic", appearance: "dark" });
   const school = view.profiles.find((p) => p.name === "School")!;

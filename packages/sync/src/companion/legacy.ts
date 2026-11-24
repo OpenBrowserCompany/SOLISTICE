@@ -1,7 +1,7 @@
 const LEGACY_URLS: [string, string][] = [
-  ["netnyahoo://yahu", "ardia://game"],
+  ["netnyahoo://yahu", "solstice://game"],
   ["chrome://yahu", "chrome://game"],
-  ["netnyahoo://", "ardia://"],
+  ["netnyahoo://", "solstice://"],
 ];
 
 export function fromLegacyUrl(url: string): string {
