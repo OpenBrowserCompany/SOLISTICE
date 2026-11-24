@@ -624,7 +624,7 @@ function Shot({ seg, index, play }: { seg: Segment; index: number; play: number 
   return (
     <AbsoluteFill style={{ opacity: fade }}>
       <div style={{ position: "absolute", left: LEFT, top: 40, right: 60, display: "flex", justifyContent: "space-between" }}>
-        <div style={{ ...label, color: color.ink }}>Ardia {RELEASE} · before and after</div>
+        <div style={{ ...label, color: color.ink }}>Solstice {RELEASE} · before and after</div>
         <div style={{ ...label, color: color.blue }}>
           {speedOf(seg)}Change {number(index)}
         </div>
@@ -665,7 +665,7 @@ function Intro() {
     <AbsoluteFill style={{ justifyContent: "center", paddingLeft: 140, opacity: out }}>
       <div style={{ ...label, fontSize: 26, color: color.blue, ...rise(4) }}>Nightly · before and after</div>
       <div style={{ marginTop: 20, fontFamily: font.poster, fontWeight: 860, fontStretch: "75%", fontSize: 230, lineHeight: 0.9, color: color.ink, ...rise(12) }}>
-        Ardia
+        Solstice
       </div>
       <div style={{ marginTop: 18, fontFamily: font.poster, fontWeight: 700, fontStretch: "87.5%", fontSize: 92, color: color.stamp, ...rise(24) }}>{RELEASE}</div>
       <div style={{ marginTop: 22, fontFamily: font.serif, fontSize: 36, color: color.ink2, ...rise(32) }}>
@@ -682,7 +682,7 @@ function Outro() {
   return (
     <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", opacity }}>
       <Img src={staticFile("brand/app-icon.png")} style={{ width: 200, height: 200 }} />
-      <div style={{ marginTop: 28, fontFamily: font.poster, fontWeight: 760, fontStretch: "87.5%", fontSize: 60, color: color.ink }}>Ardia {RELEASE}</div>
+      <div style={{ marginTop: 28, fontFamily: font.poster, fontWeight: 760, fontStretch: "87.5%", fontSize: 60, color: color.ink }}>Solstice {RELEASE}</div>
       <div style={{ ...label, marginTop: 18, fontSize: 24, color: color.blue }}>ardia.dev</div>
     </AbsoluteFill>
   );
