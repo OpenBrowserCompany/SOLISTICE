@@ -73,7 +73,7 @@ export async function startFixtures({ tls, slowChunk = 16384, slowInterval = 100
       const form = `http://insecure-form.ardia.test:${ports.http}/submit`;
       return html("Mixed fixture", `<h1>Mixed fixture</h1><form id="form" method="post" action="${form}"><input name="q"></form><img id="mixed" src="${image}" width="1" height="1">`);
     }
-    if (url.pathname === "/print") return html("Print fixture", "<h1>Ardia print fixture</h1><p>Printable text.</p>");
+    if (url.pathname === "/print") return html("Print fixture", "<h1>Solstice print fixture</h1><p>Printable text.</p>");
     if (url.pathname === "/zoom") return html("Zoom fixture", "<h1>Zoom fixture</h1>");
     if (url.pathname === "/pixel.png") return send(200, "image/png", PIXEL_PNG);
     const download = /^\/download\/([A-Za-z0-9._-]+)$/.exec(url.pathname);

@@ -4,7 +4,7 @@ import { join } from "node:path";
 export const DEFAULT_PROFILE = "default";
 
 export function documentDirectory(scratch) {
-  return join(scratch, "Default", "Ardia");
+  return join(scratch, "Default", "Solstice");
 }
 
 export function sessionPath(scratch) {
