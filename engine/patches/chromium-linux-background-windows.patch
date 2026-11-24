@@ -3,7 +3,7 @@ BrowserView::Show maps a hidden window inactive (maximizing it afterwards when i
 Widget::ShowInactive would otherwise drop) and leaves an already visible one alone, and BrowserView::Activate keeps
 the active-browser bookkeeping but skips the platform activation. On X11 an inactive map sets _NET_WM_USER_TIME to 0
 so the window manager doesn't focus it; Wayland compositors decide focus on map themselves. Chrome shows its startup
-window before the Ardia host starts, so the launch environment is read in BasicStartupComplete instead of waiting for
+window before the Solstice host starts, so the launch environment is read in BasicStartupComplete instead of waiting for
 StartLinuxHost.
 
 --- a/chrome/app/chrome_main_delegate.cc

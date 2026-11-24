@@ -2,7 +2,7 @@ SPDX-License-Identifier: GPL-3.0-only
 Changes code from Helium's helium/core/web-push-service.patch (GPL-3.0, The Helium Authors).
 
 Helium 0.22 adds web push through its own autopush server: a WebSocket kept open to push.helium.computer for sites
-with a push subscription, behind the HeliumWebPush feature (off by default) and Helium's services consent. Ardia
+with a push subscription, behind the HeliumWebPush feature (off by default) and Helium's services consent. Solstice
 never turns Helium's services on, so it stays off for good here: ShouldAccessPushService is false whatever the prefs
 say, the default push server is the unresolvable services placeholder, and the GCM profile service never builds the
 autopush driver, whatever the feature says. The driver's code stays and compiles.

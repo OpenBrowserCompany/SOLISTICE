@@ -15,7 +15,7 @@
 -      if (!bwi || !bwi->IsDeleteScheduled()) {
 +      if (!bwi ||
 +          (!bwi->IsDeleteScheduled() &&
-+           // Ardia: extension pages ArdiaCore shows outside any tab strip
++           // Solstice: extension pages ArdiaCore shows outside any tab strip
 +           // (its popups, side panels) sit in hidden windows: their "current
 +           // window" is the last active one, as for Chrome's popups.
 +           !(g_ardia_hidden_from_extensions &&
@@ -27,7 +27,7 @@
    WindowController* window_controller = nullptr;
    ForEachCurrentBrowserWindowInterfaceOrderedByActivation(
        [&](BrowserWindowInterface* browser) {
-+        // Ardia: ArdiaCore's hidden windows.
++        // Solstice: ArdiaCore's hidden windows.
 +        if (g_ardia_hidden_from_extensions &&
 +            g_ardia_hidden_from_extensions(browser)) {
 +          return true;  // Continue iterating.
