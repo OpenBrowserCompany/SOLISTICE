@@ -124,9 +124,9 @@ test("the export saves every kept line under the Mac's file name", async () => {
   module.append(day(NOW), line(NOW, { n: "today" }));
   const exported = await module.exportToDownloads(NOW);
   assert.equal(gathered.length, 1);
-  assert.equal(saved[0].name, "Ardia data 2026-11-14.jsonl");
+  assert.equal(saved[0].name, "Solstice data 2026-11-14.jsonl");
   assert.deepEqual(saved[0].text.trim().split("\n").map((text) => JSON.parse(text).n), ["yesterday", "today"]);
-  assert.deepEqual(exported, { path: "/home/me/Downloads/Ardia data 2026-11-14.jsonl", bytes: utf8Bytes(saved[0].text), lines: 2 });
+  assert.deepEqual(exported, { path: "/home/me/Downloads/Solstice data 2026-11-14.jsonl", bytes: utf8Bytes(saved[0].text), lines: 2 });
   assert.equal(await module.exportForReport(NOW - DAY_MS), null);
   const failed = local({ save: async () => null });
   assert.equal(await failed.module.exportToDownloads(NOW), null);
@@ -170,11 +170,11 @@ test("without storage the copy says so instead of pretending", async () => {
 });
 
 test("the saved file is the finished download of the blob the page started", async () => {
-  const steps = [[], [{ url: "blob:other", state: "finished", path: "/other" }, { url: "blob:mine", state: "downloading", path: "" }], [{ url: "blob:mine", state: "finished", path: "/home/me/Downloads/Ardia data 2026-11-14.jsonl" }]];
+  const steps = [[], [{ url: "blob:other", state: "finished", path: "/other" }, { url: "blob:mine", state: "downloading", path: "" }], [{ url: "blob:mine", state: "finished", path: "/home/me/Downloads/Solstice data 2026-11-14.jsonl" }]];
   const released = [];
   let clock = 0;
   const deps = { begin: () => "blob:mine", release: (url) => released.push(url), list: async () => steps.shift() ?? [], pause: async (ms) => void (clock += ms), now: () => clock };
-  assert.equal(await downloadSaver(deps)("Ardia data 2026-11-14.jsonl", "{}\n"), "/home/me/Downloads/Ardia data 2026-11-14.jsonl");
+  assert.equal(await downloadSaver(deps)("Solstice data 2026-11-14.jsonl", "{}\n"), "/home/me/Downloads/Solstice data 2026-11-14.jsonl");
   assert.deepEqual(released, ["blob:mine"]);
   assert.equal(await downloadSaver({ ...deps, list: async () => [{ url: "blob:mine", state: "cancelled", path: "" }] })("a", "b"), null);
   assert.equal(await downloadSaver({ ...deps, list: async () => [] })("a", "b"), null);

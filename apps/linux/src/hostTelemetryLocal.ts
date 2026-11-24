@@ -232,7 +232,7 @@ export function createTelemetryLocal(deps: TelemetryLocalDeps): TelemetryLocal {
       if (!store) return null;
       await deps.gather?.().catch(report);
       const { text, lines } = await run(async () => collectSince(await store.all(), at - keepMs));
-      const path = await deps.save(`Ardia data ${utcDay(at)}.jsonl`, text);
+      const path = await deps.save(`Solstice data ${utcDay(at)}.jsonl`, text);
       return path ? { path, bytes: utf8Bytes(text), lines } : null;
     },
     settled: () => run(async () => {}),
