@@ -29,7 +29,7 @@ public enum LinkRoute: Sendable, Equatable {
 }
 
 public enum ExternalLinks {
-  static let webSchemes: Set<String> = ["http", "https", "about", "data", "blob", "file", BrowserURL.browseScheme]
+  static let webSchemes: Set<String> = ["http", "https", "about", "data", "blob", "file", BrowserURL.browseScheme, BrowserURL.legacyBrowseScheme]
   static let blockedSchemes: Set<String> = ["javascript", "vbscript"]
 
   public static func route(_ url: URL, isMainFrame: Bool = true) -> LinkRoute {

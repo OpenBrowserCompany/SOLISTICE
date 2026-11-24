@@ -128,7 +128,7 @@ public struct FidgetLogo: View {
     }
     .sensoryFeedback(.impact(weight: .light, intensity: 0.5), trigger: spins)
     .accessibilityElement()
-    .accessibilityLabel("Ardia")
+    .accessibilityLabel("Solstice")
     .accessibilityAddTraits(.isImage)
   }
 
