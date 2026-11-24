@@ -58,7 +58,7 @@ test("a size with a missing side and a record that isn't a plain object are turn
   assert.deepEqual(S().settings.shortcuts, {});
 });
 
-test("resizing Little Ardia never saves a size its setting would turn down", () => {
+test("resizing Little Solstice never saves a size its setting would turn down", () => {
   fresh();
   const little = S().createWindow({ kind: "small", url: "https://l.example/" });
   S().setWindowFrame(little, [0, 0, 700, 500]);

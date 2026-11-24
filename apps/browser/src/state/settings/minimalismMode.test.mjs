@@ -49,7 +49,7 @@ test("a minimal window has no toolbar field, so ⌘L opens the command bar in th
   assert.ok(!addressBarInSidebar(useBrowser.getState(), id));
 });
 
-test("Little Ardia keeps its own toolbar", () => {
+test("Little Solstice keeps its own toolbar", () => {
   useBrowser.getState().hydrate({ settings: { minimalismMode: true } });
   const id = useBrowser.getState().createWindow();
   assert.equal(minimalismIn(useBrowser.getState(), id), true);
