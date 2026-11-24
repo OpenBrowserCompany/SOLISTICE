@@ -25,7 +25,7 @@
 #include "WindowsHostModule.h"
 #include "WindowsModule.h"
 
-namespace Ardia {
+namespace Solstice {
 
 inline void RegisterViews(winrt::Microsoft::ReactNative::IReactPackageBuilder const &packageBuilder) noexcept {
   RegisterVectorIconView(packageBuilder);

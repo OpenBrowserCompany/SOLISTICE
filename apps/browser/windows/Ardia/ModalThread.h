@@ -18,7 +18,7 @@
 
 #include "LaunchLog.h"
 
-namespace Ardia::DialogParts {
+namespace Solstice::DialogParts {
 
 constexpr UINT OwnerWatchMs = 250;
 constexpr UINT StubbornEveryMs = 100;

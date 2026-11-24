@@ -12,7 +12,7 @@
 #include "LaunchLog.h"
 #include "ModalThread.h"
 
-namespace Ardia {
+namespace Solstice {
 
 namespace DialogParts {
 
@@ -157,7 +157,7 @@ inline DialogConfirmReply ShowConfirm(HWND owner, std::wstring const &title, std
     config.hwndParent = modal.Parent();
     config.hInstance = AppImage::Handle();
     config.dwFlags = TDF_ALLOW_DIALOG_CANCELLATION | (modal.Parent() ? TDF_POSITION_RELATIVE_TO_WINDOW : 0);
-    config.pszWindowTitle = L"Ardia";
+    config.pszWindowTitle = L"Solstice";
     config.pszMainInstruction = title.c_str();
     config.pszContent = message.empty() ? nullptr : message.c_str();
     if (destructive) config.pszMainIcon = TD_WARNING_ICON;
@@ -177,7 +177,7 @@ inline DialogConfirmReply ShowConfirm(HWND owner, std::wstring const &title, std
   }
   std::wstring text = message.empty() ? title : title + L"\n\n" + message;
   UINT style = MB_OKCANCEL | MB_DEFBUTTON1 | (destructive ? MB_ICONWARNING : 0) | (modal.Parent() ? MB_APPLMODAL : MB_TASKMODAL);
-  reply.confirmed = MessageBoxW(modal.Parent(), text.c_str(), L"Ardia", style) == IDOK;
+  reply.confirmed = MessageBoxW(modal.Parent(), text.c_str(), L"Solstice", style) == IDOK;
   return reply;
 }
 
@@ -291,7 +291,7 @@ inline std::optional<std::wstring> ShowPrompt(HWND owner, PromptState &state) no
   builder.words.push_back(static_cast<WORD>(height));
   builder.words.push_back(0);
   builder.words.push_back(0);
-  builder.Text(L"Ardia");
+  builder.Text(L"Solstice");
   builder.words.push_back(9);
   builder.Text(L"Segoe UI");
   builder.Item(SS_LEFT | SS_NOPREFIX, margin, headingY, inner, 10, PromptHeadingId, 0x0082, state.title);
