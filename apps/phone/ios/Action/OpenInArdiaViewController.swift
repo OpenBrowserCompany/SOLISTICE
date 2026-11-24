@@ -28,7 +28,7 @@ final class OpenInArdiaViewController: UIViewController {
       return
     }
     SystemStore.shared?.enqueue(SystemInboxItem(action: .open, url: url.absoluteString, title: page.title))
-    show(OpenFallbackView(message: String(localized: "This page opens the next time you open Ardia."), done: finish))
+    show(OpenFallbackView(message: String(localized: "This page opens the next time you open Solstice."), done: finish))
   }
 
   private func show(_ content: OpenFallbackView) {
@@ -87,5 +87,5 @@ struct OpenFallbackView: View {
 }
 
 #Preview("Fallback") {
-  OpenFallbackView(message: "This page opens the next time you open Ardia.", done: {})
+  OpenFallbackView(message: "This page opens the next time you open Solstice.", done: {})
 }

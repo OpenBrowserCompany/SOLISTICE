@@ -82,7 +82,7 @@
 		AE704818C60C688ED50FBD96 /* Pods-Ardia.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ardia.release.xcconfig"; path = "Target Support Files/Pods-Ardia/Pods-Ardia.release.xcconfig"; sourceTree = "<group>"; };
 		B18B7A3A82D521D51E08DD1A /* ArdiaWidgets.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = ArdiaWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9BE34AB56816C03B9E533EA /* ArdiaOpen.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = ArdiaOpen.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		BECC038EC0D62B75EFF2BF13 /* Ardia.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Ardia.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BECC038EC0D62B75EFF2BF13 /* Solstice.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Solstice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C149E7851D84E010E3A99076 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		C2E36794E1C4D02A24A90498 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = ../PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		C6166E8701513BBA380FF130 /* Intents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Intents.swift; sourceTree = "<group>"; };
@@ -182,12 +182,12 @@
 			path = Supporting;
 			sourceTree = "<group>";
 		};
-		7ECF730A0D458ED49804475E /* Ardia */ = {
+		7ECF730A0D458ED49804475E /* Solstice */ = {
 			isa = PBXGroup;
 			children = (
 				4A50E468EDC930AAC33080CE /* ExpoModulesProvider.swift */,
 			);
-			name = Ardia;
+			name = Solstice;
 			sourceTree = "<group>";
 		};
 		8AD6ED66562F8651295DCF3F /* Pods */ = {
@@ -200,7 +200,7 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		92BAAB3973651DBF28BC5E2E /* Ardia */ = {
+		92BAAB3973651DBF28BC5E2E /* Solstice */ = {
 			isa = PBXGroup;
 			children = (
 				7754184895DD73E45A1D6DBE /* Supporting */,
@@ -210,7 +210,7 @@
 				988A1C28E98E1E7E3DB2F376 /* SceneDelegate.swift */,
 				C2E36794E1C4D02A24A90498 /* PrivacyInfo.xcprivacy */,
 			);
-			path = Ardia;
+			path = Solstice;
 			sourceTree = "<group>";
 		};
 		A7333FB8D37A78466BEEBDE0 = {
@@ -218,7 +218,7 @@
 			children = (
 				B6838BB2DAD53AEA560C0E56 /* Action */,
 				E5D3BCCC73C5C2AE0D9D57F9 /* App */,
-				92BAAB3973651DBF28BC5E2E /* Ardia */,
+				92BAAB3973651DBF28BC5E2E /* Solstice */,
 				4CF68B70FCED3A93A01F77BA /* Packages */,
 				F79F208BB74F1D58D05F5B6D /* Frameworks */,
 				B09FAA87FD6285383A2BCD2E /* Products */,
@@ -232,7 +232,7 @@
 		B09FAA87FD6285383A2BCD2E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BECC038EC0D62B75EFF2BF13 /* Ardia.app */,
+				BECC038EC0D62B75EFF2BF13 /* Solstice.app */,
 				B9BE34AB56816C03B9E533EA /* ArdiaOpen.appex */,
 				D07F546A651D6A4E87729FC5 /* ArdiaShare.appex */,
 				B18B7A3A82D521D51E08DD1A /* ArdiaWidgets.appex */,
@@ -243,7 +243,7 @@
 		D6BB62497409B8D7FEFA07E4 /* ExpoModulesProviders */ = {
 			isa = PBXGroup;
 			children = (
-				7ECF730A0D458ED49804475E /* Ardia */,
+				7ECF730A0D458ED49804475E /* Solstice */,
 			);
 			name = ExpoModulesProviders;
 			sourceTree = "<group>";
@@ -317,9 +317,9 @@
 			productReference = B9BE34AB56816C03B9E533EA /* ArdiaOpen.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
-		DD52C294A990971E005E6738 /* Ardia */ = {
+		DD52C294A990971E005E6738 /* Solstice */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3DC31916F7C8488E19F48214 /* Build configuration list for PBXNativeTarget "Ardia" */;
+			buildConfigurationList = 3DC31916F7C8488E19F48214 /* Build configuration list for PBXNativeTarget "Solstice" */;
 			buildPhases = (
 				10EF131AF3125488B5BC7474 /* [CP] Check Pods Manifest.lock */,
 				B30E85FBB6A826D7394F66EA /* [Expo] Configure project */,
@@ -339,9 +339,9 @@
 				87E82D8C2A00D0E8788BE072 /* PBXTargetDependency */,
 				86D6225EF354C1EF14F295BE /* PBXTargetDependency */,
 			);
-			name = Ardia;
-			productName = Ardia;
-			productReference = BECC038EC0D62B75EFF2BF13 /* Ardia.app */;
+			name = Solstice;
+			productName = Solstice;
+			productReference = BECC038EC0D62B75EFF2BF13 /* Solstice.app */;
 			productType = "com.apple.product-type.application";
 		};
 		DD96EB2018C132DC7649EED8 /* ArdiaShare */ = {
@@ -395,7 +395,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 509F9031C4B3C8E0C8C94C93 /* Build configuration list for PBXProject "Ardia" */;
+			buildConfigurationList = 509F9031C4B3C8E0C8C94C93 /* Build configuration list for PBXProject "Solstice" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -412,7 +412,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				DD52C294A990971E005E6738 /* Ardia */,
+				DD52C294A990971E005E6738 /* Solstice */,
 				AF56FEA9443A3F2A9D139653 /* ArdiaWidgets */,
 				DD96EB2018C132DC7649EED8 /* ArdiaShare */,
 				CF60F2D18AB253CC46A4E428 /* ArdiaOpen */,
@@ -471,7 +471,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Ardia-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Solstice-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -484,15 +484,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Ardia/Pods-Ardia-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Ardia/Pods-Solstice-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Ardia/Pods-Ardia-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Ardia/Pods-Solstice-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Ardia/Pods-Ardia-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Ardia/Pods-Solstice-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		528C953F1082DF6FFEF79A9B /* Bundle React Native code and images */ = {
@@ -522,15 +522,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Ardia/Pods-Ardia-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Ardia/Pods-Solstice-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Ardia/Pods-Ardia-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Ardia/Pods-Solstice-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Ardia/Pods-Ardia-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Ardia/Pods-Solstice-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A7D1E5C2B9F04A3E8C6D2B10 /* Strip prebuilt symbols */ = {
@@ -639,7 +639,7 @@
 				CODE_SIGN_ENTITLEMENTS = Config/Share.entitlements;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Config/Share-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Ardia;
+				INFOPLIST_KEY_CFBundleDisplayName = Solstice;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -647,7 +647,7 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
-				PRODUCT_BUNDLE_IDENTIFIER = com.ardia.browser.ios.share;
+				PRODUCT_BUNDLE_IDENTIFIER = com.openbrowsercompany.solstice.ios.share;
 				PRODUCT_NAME = ArdiaShare;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -745,7 +745,7 @@
 				CODE_SIGN_ENTITLEMENTS = Config/Share.entitlements;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Config/Share-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Ardia;
+				INFOPLIST_KEY_CFBundleDisplayName = Solstice;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -753,7 +753,7 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = com.ardia.browser.ios.share;
+				PRODUCT_BUNDLE_IDENTIFIER = com.openbrowsercompany.solstice.ios.share;
 				PRODUCT_NAME = ArdiaShare;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -771,7 +771,7 @@
 				CODE_SIGN_ENTITLEMENTS = Config/Widgets.entitlements;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Config/Widgets-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Ardia;
+				INFOPLIST_KEY_CFBundleDisplayName = Solstice;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -779,7 +779,7 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
-				PRODUCT_BUNDLE_IDENTIFIER = com.ardia.browser.ios.widgets;
+				PRODUCT_BUNDLE_IDENTIFIER = com.openbrowsercompany.solstice.ios.widgets;
 				PRODUCT_NAME = ArdiaWidgets;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -797,7 +797,7 @@
 			buildSettings = {
 				ARDIA_DEFAULT_BROWSER = YES;
 				ARDIA_ENTITLEMENTS_NO = Config/Ardia.entitlements;
-				ARDIA_ENTITLEMENTS_YES = "Config/Ardia-DefaultBrowser.entitlements";
+				ARDIA_ENTITLEMENTS_YES = "Config/Solstice-DefaultBrowser.entitlements";
 				ARDIA_RELEASE_VERSION = "";
 				ARDIA_TEST_BUILD = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -814,8 +814,8 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = com.ardia.browser.ios;
-				PRODUCT_NAME = Ardia;
+				PRODUCT_BUNDLE_IDENTIFIER = com.openbrowsercompany.solstice.ios;
+				PRODUCT_NAME = Solstice;
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -833,7 +833,7 @@
 				CODE_SIGN_ENTITLEMENTS = Config/Open.entitlements;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Config/Open-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Open in Ardia";
+				INFOPLIST_KEY_CFBundleDisplayName = "Open in Solstice";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -841,7 +841,7 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
-				PRODUCT_BUNDLE_IDENTIFIER = com.ardia.browser.ios.open;
+				PRODUCT_BUNDLE_IDENTIFIER = com.openbrowsercompany.solstice.ios.open;
 				PRODUCT_NAME = ArdiaOpen;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -932,7 +932,7 @@
 				CODE_SIGN_ENTITLEMENTS = Config/Widgets.entitlements;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Config/Widgets-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Ardia;
+				INFOPLIST_KEY_CFBundleDisplayName = Solstice;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -940,7 +940,7 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = com.ardia.browser.ios.widgets;
+				PRODUCT_BUNDLE_IDENTIFIER = com.openbrowsercompany.solstice.ios.widgets;
 				PRODUCT_NAME = ArdiaWidgets;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -958,7 +958,7 @@
 			buildSettings = {
 				ARDIA_DEFAULT_BROWSER = YES;
 				ARDIA_ENTITLEMENTS_NO = Config/Ardia.entitlements;
-				ARDIA_ENTITLEMENTS_YES = "Config/Ardia-DefaultBrowser.entitlements";
+				ARDIA_ENTITLEMENTS_YES = "Config/Solstice-DefaultBrowser.entitlements";
 				ARDIA_RELEASE_VERSION = "";
 				ARDIA_TEST_BUILD = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -975,8 +975,8 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
-				PRODUCT_BUNDLE_IDENTIFIER = com.ardia.browser.ios;
-				PRODUCT_NAME = Ardia;
+				PRODUCT_BUNDLE_IDENTIFIER = com.openbrowsercompany.solstice.ios;
+				PRODUCT_NAME = Solstice;
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -994,7 +994,7 @@
 				CODE_SIGN_ENTITLEMENTS = Config/Open.entitlements;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Config/Open-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Open in Ardia";
+				INFOPLIST_KEY_CFBundleDisplayName = "Open in Solstice";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1002,7 +1002,7 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = com.ardia.browser.ios.open;
+				PRODUCT_BUNDLE_IDENTIFIER = com.openbrowsercompany.solstice.ios.open;
 				PRODUCT_NAME = ArdiaOpen;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -1026,7 +1026,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		3DC31916F7C8488E19F48214 /* Build configuration list for PBXNativeTarget "Ardia" */ = {
+		3DC31916F7C8488E19F48214 /* Build configuration list for PBXNativeTarget "Solstice" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				647775899F7D37AA0128335E /* Debug */,
@@ -1035,7 +1035,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		509F9031C4B3C8E0C8C94C93 /* Build configuration list for PBXProject "Ardia" */ = {
+		509F9031C4B3C8E0C8C94C93 /* Build configuration list for PBXProject "Solstice" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3D426F71D100D08DAE349E2B /* Debug */,
