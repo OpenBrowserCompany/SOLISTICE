@@ -1,4 +1,4 @@
-// Copyright 2026 Ardia. Apache-2.0.
+// Copyright 2026 Solstice. Apache-2.0.
 
 #include <map>
 #include <memory>
@@ -31,7 +31,7 @@ constexpr base::TimeDelta kSuggestTimeout = base::Seconds(10);
 constexpr net::NetworkTrafficAnnotationTag kSuggestAnnotation =
     net::DefineNetworkTrafficAnnotation("ardia_search_suggest", R"(
       semantics {
-        sender: "Ardia address bar"
+        sender: "Solstice address bar"
         description:
           "Asks the user's search engine for query completions while the user "
           "types in the address bar or command bar, as Chrome's omnibox does."
