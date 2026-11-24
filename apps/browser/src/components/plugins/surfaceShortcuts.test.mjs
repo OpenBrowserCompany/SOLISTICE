@@ -78,9 +78,9 @@ test("the selected List item's action wins over the list's, a new selection take
   assert.ok(reported.some((r) => r && r.keys.length === 2), "the host heard the keys while there were some");
 });
 
-test("a key Ardia's own command holds is never caught, shown or run", (t) => {
+test("a key Solstice's own command holds is never caught, shown or run", (t) => {
   const held = ardiaHeldLetter();
-  if (!held) return t.skip("no Ardia command holds a cmd+letter a plugin could otherwise use");
+  if (!held) return t.skip("no Solstice command holds a cmd+letter a plugin could otherwise use");
   assert.equal(heldByArdia(held.shortcut), true, held.text);
   const { fired, scope } = surface(t);
   const mine = action("Mine", held.text);
@@ -91,7 +91,7 @@ test("a key Ardia's own command holds is never caught, shown or run", (t) => {
   assert.equal(panelShortcuts([mine]).has(mine), false);
 });
 
-test("menus and buttons show the shortcut that wins, in Ardia's glyphs", () => {
+test("menus and buttons show the shortcut that wins, in Solstice's glyphs", () => {
   const copy = action("Copy", "cmd+shift+e");
   const twin = action("Twin", "cmd+shift+e");
   const shown = panelShortcuts([copy, twin, action("None")]);
@@ -101,7 +101,7 @@ test("menus and buttons show the shortcut that wins, in Ardia's glyphs", () => {
   assert.deepEqual(menuKeyOf(undefined), {});
 });
 
-test("rebinding the Ardia command that held a key hands it to a mounted surface without a remount", async (t) => {
+test("rebinding the Solstice command that held a key hands it to a mounted surface without a remount", async (t) => {
   const resolved = resolvedShortcuts(useBrowser.getState());
   let found = null;
   for (const [id, keys] of resolved.bindings) {
@@ -111,12 +111,12 @@ test("rebinding the Ardia command that held a key hands it to a mounted surface 
       if (s && heldByArdia(s)) found ??= { id, key: k.key, shortcut: s };
     }
   }
-  if (!found) return t.skip("no rebindable Ardia command holds a cmd+letter");
+  if (!found) return t.skip("no rebindable Solstice command holds a cmd+letter");
   const before = useBrowser.getState().settings.shortcuts;
   t.after(() => useBrowser.setState((s) => ({ settings: { ...s.settings, shortcuts: before } })));
   const { scope, mounted } = surface(t);
   scope().register("panel", 0, bindingsOf([action("Mine", `cmd+${found.key}`)]));
-  assert.equal(scope().keys.length, 0, "held by Ardia while bound");
+  assert.equal(scope().keys.length, 0, "held by Solstice while bound");
   useBrowser.setState((s) => ({ settings: { ...s.settings, shortcuts: { ...s.settings.shortcuts, [found.id]: ["9", "command", "option", "control", "shift"] } } }));
   await mounted.flush?.();
   await new Promise((resolve) => setImmediate(resolve));
