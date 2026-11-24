@@ -10,7 +10,7 @@ import { syncVault, type FileCounts, type SyncContract } from "./vault";
 
 export const NATIVE_SYNC = "ArdiaWindowsSync";
 
-const FOLDER_NAME = "Ardia Sync";
+const FOLDER_NAME = "Solstice Sync";
 const QR_SCALE = 8;
 const QR_BORDER = 1;
 

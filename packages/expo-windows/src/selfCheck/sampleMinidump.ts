@@ -21,7 +21,7 @@ type SampleDump = {
 export const SAMPLE_GPU_MODULE = "nvoglv64.dll";
 
 const SAMPLE_MODULES: SampleModule[] = [
-  { base: 0x7ff600000000, size: 0x2000000, path: "C:\\Program Files\\Ardia\\Ardia.exe" },
+  { base: 0x7ff600000000, size: 0x2000000, path: "C:\\Program Files\\Solstice\\Ardia.exe" },
   { base: 0x7ffa10000000, size: 0x1800000, path: `C:\\Windows\\System32\\DriverStore\\FileRepository\\sample.inf\\${SAMPLE_GPU_MODULE}` },
 ];
 

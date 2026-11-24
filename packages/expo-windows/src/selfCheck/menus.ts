@@ -68,7 +68,7 @@ export const checks: Check[] = [
       await withinSeconds(5, "setMenuBookmarks", menus().setMenuBookmarks({ bookmarkFolders: [], recentBookmarks: [], bookmarksBar: [], otherBookmarks: [] }));
       const listed = byId(await withinSeconds(5, "menuShortcuts", menus().menuShortcuts()));
       expectEqual(listed.get("switchProfile:selfcheck-work")?.path, ["Window", "Profiles"], "switchProfile:selfcheck-work path");
-      expectEqual(listed.get("newLittleArdia:selfcheck-home")?.path, ["File", "New Little Ardia Window in Profile"], "newLittleArdia:selfcheck-home path");
+      expectEqual(listed.get("newLittleArdia:selfcheck-home")?.path, ["File", "New Little Solstice Window in Profile"], "newLittleArdia:selfcheck-home path");
       expectEqual(listed.get("openExtension:selfcheck-extension")?.path, ["Extensions"], "openExtension:selfcheck-extension path");
       expectTrue(!listed.has("newWindow:selfcheck-home"), "the profile's new-window alternate is listed");
     },
