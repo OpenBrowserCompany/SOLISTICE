@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
-# Names the frames of a native crash in Chromium Framework, in Ardia itself or in any other image with published
+# Names the frames of a native crash in Chromium Framework, in Solstice itself or in any other image with published
 # symbols: finds the release whose symbols hold the image's UUID, downloads them and runs atos on the offsets.
 #
 #   scripts/symbolicate-crash.sh [--tag <release-tag>] [--cache <dir>] <image uuid> <offset>...
 #   scripts/symbolicate-crash.sh -h | --help
 #
 # The UUID and the offsets are what the crash records for the image: "Chromium Framework + 0x2e2334" is the offset
-# 0x2e2334 of that image's UUID, "Ardia + 0x18828" is the offset 0x18828 of Ardia's, and a leading + is accepted.
+# 0x2e2334 of that image's UUID, "Solstice + 0x18828" is the offset 0x18828 of Solstice's, and a leading + is accepted.
 # scripts/publish-engine.sh uploads ArdiaCore-<tree:12>-uuids.txt (one "<uuid> <arch> <DWARF file>" row per image) and
 # ArdiaCore-<tree:12>-symbols.tar.xz (the build's dSYMs) to each engine-<tree:12> prerelease; every Mac release and
-# nightly v<version> carries Ardia-<version>-uuids.txt and Ardia-<version>-symbols.tar.xz, the app's own dSYM, packed
+# nightly v<version> carries Solstice-<version>-uuids.txt and Solstice-<version>-symbols.tar.xz, the app's own dSYM, packed
 # the same way. Every engine and app release is searched newest first, or --tag names one (engine-<tree:12> or
 # v<version>). Each run downloads into its own folder and moves only the image it checked into --cache (default
 # dist/engine-symbols), so runs can share a cache. Prints "<offset> <frame>" per offset and warns about any atos could
