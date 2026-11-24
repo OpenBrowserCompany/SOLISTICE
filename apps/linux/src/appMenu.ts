@@ -85,8 +85,8 @@ export function appMenuItems(state: MenuState, shortcuts: AppMenuShortcuts = new
   const extensions = state.extensions ?? [];
 
   return [
-    sub("Ardia", [
-      { id: ABOUT, title: "About Ardia" },
+    sub("Solstice", [
+      { id: ABOUT, title: "About Solstice" },
       ...(context.updates === "restart" ? [{ id: RESTART_TO_UPDATE, title: "Restart to Update" }] : context.updates === "check" ? [{ id: CHECK_FOR_UPDATES, title: "Check for Updates…" }] : []),
       separator,
       cmd("openSettings"),
@@ -100,7 +100,7 @@ export function appMenuItems(state: MenuState, shortcuts: AppMenuShortcuts = new
       cmd("newWindow"),
       cmd("newIncognitoWindow"),
       cmd("newLittleArdia"),
-      ...(multipleProfiles ? [sub("New Little Ardia Window in Profile", state.profiles.map(entry("newLittleArdia")))] : []),
+      ...(multipleProfiles ? [sub("New Little Solstice Window in Profile", state.profiles.map(entry("newLittleArdia")))] : []),
       cmd("reopenClosedTab"),
       cmd("reopenClosedWindow"),
       cmd("openFile"),

@@ -48,7 +48,7 @@ test("an empty tree is the header, an empty bookmarks bar and the closing list, 
 test("the bar's bookmarks nest under the bar, and Other bookmarks' children sit at the top level, as Chromium writes them", () => {
   const tree = emptyTree();
   tree.bar.c = [
-    link("a", "Ardia", "https://ardia.dev/", 1_710_000_000_000),
+    link("a", "Solstice", "https://ardia.dev/", 1_710_000_000_000),
     folder("f", "Reading", 1_711_000_000_000, [
       link("b", "Deep", "https://example.com/deep", 1_712_000_000_500),
       folder("g", "Empty", 1_713_000_000_000),
@@ -62,7 +62,7 @@ test("the bar's bookmarks nest under the bar, and Other bookmarks' children sit 
       ...HEADER,
       '    <DT><H3 ADD_DATE="1700000000" LAST_MODIFIED="1711000000" PERSONAL_TOOLBAR_FOLDER="true">Bookmarks bar</H3>',
       "    <DL><p>",
-      '        <DT><A HREF="https://ardia.dev/" ADD_DATE="1710000000">Ardia</A>',
+      '        <DT><A HREF="https://ardia.dev/" ADD_DATE="1710000000">Solstice</A>',
       '        <DT><H3 ADD_DATE="1711000000" LAST_MODIFIED="1714000000">Reading</H3>',
       "        <DL><p>",
       '            <DT><A HREF="https://example.com/deep" ADD_DATE="1712000000">Deep</A>',

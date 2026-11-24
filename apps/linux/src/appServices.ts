@@ -166,7 +166,7 @@ function quitApp(windowId: string) {
   void linuxQuit()().catch((error: unknown) => {
     if ((error as { code?: string } | null)?.code === "ERR_UNAVAILABLE") return unavailable(windowId, "Quit");
     report(error);
-    showToast(windowId, "Ardia couldn't quit", "Try again, or close each window.");
+    showToast(windowId, "Solstice couldn't quit", "Try again, or close each window.");
   });
 }
 
