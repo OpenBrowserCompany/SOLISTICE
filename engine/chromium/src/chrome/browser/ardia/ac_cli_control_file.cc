@@ -1,4 +1,4 @@
-// Copyright 2026 Ardia. Apache-2.0.
+// Copyright 2026 Solstice. Apache-2.0.
 
 #include "chrome/browser/ardia/ac_cli_control_file.h"
 
@@ -248,7 +248,7 @@ std::string WriteControlFile(const base::FilePath& path,
                              const std::string& contents,
                              uint64_t generation) {
   if (path.empty()) {
-    return "Ardia has no data folder.";
+    return "Solstice has no data folder.";
   }
   const base::FilePath dir_path = path.DirName();
   base::ScopedFD dir(HANDLE_EINTR(
