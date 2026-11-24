@@ -613,7 +613,7 @@ class ShellWindow : public views::WidgetDelegate,
     SetCanMaximize(true);
     SetCanMinimize(true);
     SetCanResize(true);
-    SetTitle(u"Ardia");
+    SetTitle(u"Solstice");
   }
 
   ~ShellWindow() override {
@@ -774,7 +774,7 @@ class ShellWindow : public views::WidgetDelegate,
   void PageNavigated(Page* page);
 
   void Note(const std::string& line) const {
-    LOG(WARNING) << "Ardia WebUI shell: " << line;
+    LOG(WARNING) << "Solstice WebUI shell: " << line;
     NoteForTest("webui shell: " + line);
   }
 
@@ -1207,7 +1207,7 @@ void ShellWindow::Emit(std::string_view module, std::string_view event,
 
 std::string ShellWindow::BootstrapJson() const {
   base::DictValue info;
-  info.Set("appName", "Ardia");
+  info.Set("appName", "Solstice");
   info.Set("appVersion", std::string(version_info::GetVersionNumber()));
   info.Set("appBuild", "windows-webui-pilot");
   info.Set("bundleId", "dev.ardia.windows.webui");
@@ -1527,7 +1527,7 @@ namespace {
 
 std::optional<GURL> AllowedPageUrl(const std::string& requested) {
   std::string text = requested.empty() ? "about:blank" : requested;
-  if (base::StartsWith(text, "ardia://",
+  if (base::StartsWith(text, "solstice://",
                        base::CompareCase::INSENSITIVE_ASCII)) {
     text.replace(0, 8, "chrome://");
   }
@@ -1967,19 +1967,19 @@ bool ShellWindow::PreTranslate(const MSG& msg) {
 
 void RefuseMissingBundle() {
   const std::string folder = AssetDirectory().AsUTF8Unsafe();
-  LOG(ERROR) << "Ardia WebUI shell: the shell UI could not load from "
+  LOG(ERROR) << "Solstice WebUI shell: the shell UI could not load from "
              << folder << "; quitting";
   NoteForTest("webui shell: the shell UI could not load from " + folder +
               "; quitting");
   const DWORD background = ::GetEnvironmentVariableW(L"ARDIA_BACKGROUND",
                                                      nullptr, 0);
   if (background == 0) {
-    const std::wstring text = L"Ardia couldn't start: the browser UI is "
+    const std::wstring text = L"Solstice couldn't start: the browser UI is "
                               L"missing from " +
                               base::UTF8ToWide(folder) +
-                              L".\n\nInstalling Ardia again usually fixes "
+                              L".\n\nInstalling Solstice again usually fixes "
                               L"this.";
-    ::MessageBoxW(nullptr, text.c_str(), L"Ardia",
+    ::MessageBoxW(nullptr, text.c_str(), L"Solstice",
                   MB_OK | MB_ICONERROR | MB_SETFOREGROUND | MB_TOPMOST);
   }
   MarkStartSettled();
@@ -2072,7 +2072,7 @@ std::unique_ptr<ShellWindow>& TheWindow() {
 
 void ShowWindowFor(Profile* profile) {
   if (!profile) {
-    LOG(ERROR) << "Ardia WebUI shell: the shell profile did not load";
+    LOG(ERROR) << "Solstice WebUI shell: the shell profile did not load";
     QuitApp();
     return;
   }

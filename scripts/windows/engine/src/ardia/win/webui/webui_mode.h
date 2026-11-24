@@ -11,7 +11,7 @@ namespace ardia_win {
 
 inline constexpr char kShellSwitch[] = "ardia-shell";
 inline constexpr char kWebUIShell[] = "webui";
-inline constexpr wchar_t kWebUIAppDataFolder[] = L"Ardia WebUI";
+inline constexpr wchar_t kWebUIAppDataFolder[] = L"Solstice WebUI";
 inline constexpr wchar_t kWebUIChromiumFolder[] = L"Chromium";
 
 bool WebUIShellRequested(const base::CommandLine& command_line);

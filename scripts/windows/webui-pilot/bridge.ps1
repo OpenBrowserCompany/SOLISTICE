@@ -11,7 +11,7 @@ function Js([string]$value) { $value | ConvertTo-Json -Compress }
 function Invoke-Host([string]$method, [string]$argsJson) {
   Cdp-Eval "__ardiaHost.invoke($(Js $method), $argsJson).then(r => JSON.stringify({ ok: true, r }), e => JSON.stringify({ ok: false, e: String(e && e.message || e) }))"
 }
-function Profiles { @(Get-ChildItem -LiteralPath "$Data\Chromium" -Directory -Filter 'Ardia *' -ErrorAction SilentlyContinue | ForEach-Object Name) }
+function Profiles { @(Get-ChildItem -LiteralPath "$Data\Chromium" -Directory -Filter 'Solstice *' -ErrorAction SilentlyContinue | ForEach-Object Name) }
 
 Stop-Engine
 Start-Shell -Fresh | Out-Null
@@ -74,7 +74,7 @@ Check 'bad-create-arguments-refused' ($quiet -and ($refusedCount -eq $refusals.C
 
 $reserved = @(
   'javascript:alert(1)', 'JavaScript:alert(1)', 'chrome://ardia/', 'CHROME://ARDIA/index.html', 'chrome://ardia./',
-  'ardia://ardia/', 'ArDiA://ardia/', 'view-source:chrome://ardia/', 'view-source:javascript:alert(1)',
+  'solstice://ardia/', 'ArDiA://ardia/', 'view-source:chrome://ardia/', 'view-source:javascript:alert(1)',
   'view-source:view-source:chrome://ardia/', 'http://[not a host', 'not a url at all'
 )
 $n = 0
@@ -84,12 +84,12 @@ foreach ($url in $reserved) {
   Log "reserved tab.create $url -> $($answer | ConvertTo-Json -Compress -Depth 6)"
   $results["reserved-create $url"] = @{ ok = (-not $answer.ok); detail = "$($answer.e)" }
 }
-$quiet = Never { (Test-Path -LiteralPath "$Data\Chromium\Ardia reservedprofile") -or ((PageTargets).Count -ne 1) } 2
+$quiet = Never { (Test-Path -LiteralPath "$Data\Chromium\Solstice reservedprofile") -or ((PageTargets).Count -ne 1) } 2
 $targets = PageTargets
 $refusedAll = @($reserved | Where-Object { $results["reserved-create $_"].ok }).Count
-$reservedProfile = Test-Path -LiteralPath "$Data\Chromium\Ardia reservedprofile"
+$reservedProfile = Test-Path -LiteralPath "$Data\Chromium\Solstice reservedprofile"
 Check 'reserved-tab-urls-refused' ($quiet -and ($refusedAll -eq $reserved.Count) -and ((PagesCreated) -eq $baseCreated) -and ($targets.Count -eq 1)) "$refusedAll of $($reserved.Count) refused; pages: $($targets -join ' | ')"
-Check 'reserved-url-loads-no-profile' ((-not $reservedProfile) -and (((Profiles) -join '|') -eq $baseProfiles)) "Ardia reservedprofile on disk: $reservedProfile; profile folders $baseProfiles -> $((Profiles) -join '|')"
+Check 'reserved-url-loads-no-profile' ((-not $reservedProfile) -and (((Profiles) -join '|') -eq $baseProfiles)) "Solstice reservedprofile on disk: $reservedProfile; profile folders $baseProfiles -> $((Profiles) -join '|')"
 
 $navigations = @('javascript:document.title="owned"', 'chrome://ardia/', 'ArDiA://ardia/', 'view-source:chrome://ardia/', '')
 foreach ($url in $navigations) {
