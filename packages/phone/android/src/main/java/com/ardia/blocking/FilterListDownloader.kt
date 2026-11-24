@@ -81,10 +81,10 @@ class HttpFilterListDownloader(
 
 internal object DownloadMessages {
     const val NOT_CONNECTED = "Your phone isn’t connected to the internet."
-    const val TIMED_OUT = "The server took too long to respond. Ardia will try again later."
+    const val TIMED_OUT = "The server took too long to respond. Solstice will try again later."
     const val NOT_FOUND = "The server can’t be found. Check the address and try again."
-    const val GENERIC = "This list couldn’t be downloaded. Ardia will try again later."
-    const val SERVER = "The server couldn’t provide this list right now. Ardia will try again later."
+    const val GENERIC = "This list couldn’t be downloaded. Solstice will try again later."
+    const val SERVER = "The server couldn’t provide this list right now. Solstice will try again later."
 
     fun forError(error: Throwable): String = when (error) {
         is FilterListException -> error.error.message

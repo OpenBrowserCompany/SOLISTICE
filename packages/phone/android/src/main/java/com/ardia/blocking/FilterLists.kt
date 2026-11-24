@@ -79,7 +79,7 @@ sealed class FilterListError(val message: String) {
 
     class Unreachable(reason: String) : FilterListError(reason)
 
-    data object TooLarge : FilterListError("This list is too large for Ardia to use.")
+    data object TooLarge : FilterListError("This list is too large for Solstice to use.")
 
     data object NotAFilterList : FilterListError("This doesn’t look like a filter list. Check the address and try again.")
 }
@@ -383,14 +383,14 @@ class FilterLists(
             if (id in output.tooLarge) {
                 states[id] = FilterListState.TooLarge
             } else if (id in output.failed) {
-                states[id] = FilterListState.Failed("Ardia couldn’t use this list’s rules. It keeps the last version that worked.")
+                states[id] = FilterListState.Failed("Solstice couldn’t use this list’s rules. It keeps the last version that worked.")
             } else {
                 downloadStates[id]?.let { states[id] = it }
             }
         }
         buildError = when {
-            output.tooLarge.isNotEmpty() -> "Some lists are too large for Ardia to use. Ardia keeps the last version that worked."
-            output.failed.isNotEmpty() -> "Some lists couldn’t be applied. Ardia keeps the last version that worked."
+            output.tooLarge.isNotEmpty() -> "Some lists are too large for Solstice to use. Solstice keeps the last version that worked."
+            output.failed.isNotEmpty() -> "Some lists couldn’t be applied. Solstice keeps the last version that worked."
             else -> null
         }
         lastBuildStats = BuildStats(output.reused, output.parsed, (System.nanoTime() - started) / 1_000_000)
