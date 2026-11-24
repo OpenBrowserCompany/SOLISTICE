@@ -6,7 +6,7 @@
 //   channel-switch-test.mjs <installed app> [--candidate APP] [--scratch DIR] [--only a,b] [--jobs N] [--keep] [--list]
 //
 // The candidate (default: the installed app) becomes build +1 on the nightly channel. Every copy gets the bundle id
-// com.ardia.browser.switchtest.<run>.<n>, the run's own EdDSA key, this run's local feed in its Info.plist and in
+// com.openbrowsercompany.solstice.switchtest.<run>.<n>, the run's own EdDSA key, this run's local feed in its Info.plist and in
 // ARDIA_INSTANCE updateFeed, and an LSEnvironment that keeps any relaunch hidden in its scratch dir. A copy that fails
 // any of that isn't launched. Cleanup touches only those ids, their launchd jobs and processes run from the run's dirs.
 // Scratch: --scratch (default ~/ardia-scratch/channel-switch-test). Needs an Apple Development identity, swiftc,
@@ -234,7 +234,7 @@ const scenarios = [
       await until(() => !s.hasButton("Install Update"), 15000, "the Update Found window stayed open");
       await s.untilIdle();
       check(JSON.stringify(s.skipKeys()) === JSON.stringify(s.presetSkips), `skip keys changed: ${JSON.stringify(s.skipKeys())}`);
-      check(!s.served().some((e) => e.path === "Ardia.zip"), "the nightly was downloaded");
+      check(!s.served().some((e) => e.path === "Solstice.zip"), "the nightly was downloaded");
       const q = await s.quit();
       s.expectInstalled(false);
       return `quit in ${q} ms`;
@@ -287,7 +287,7 @@ const scenarios = [
       s.press("Install Update");
       await s.untilServed(1 << 20);
       await s.switchTo("stable");
-      await until(() => s.served().some((e) => e.path === "Ardia.zip" && e.aborted), 15000, "the download wasn't cancelled");
+      await until(() => s.served().some((e) => e.path === "Solstice.zip" && e.aborted), 15000, "the download wasn't cancelled");
       await s.untilSettledWithoutCopy(20000);
       const q = await s.quit();
       s.expectInstalled(false);
@@ -347,7 +347,7 @@ const scenarios = [
       await s.launch();
       const q = await s.quit(QUIT_HOLD_LIMIT);
       s.expectUntouched();
-      check(existsSync(join(s.installation, "abandoned/Ardia.app/Contents")), "the abandoned copy was touched");
+      check(existsSync(join(s.installation, "abandoned/Solstice.app/Contents")), "the abandoned copy was touched");
       s.expectInstalled(false);
       return `quit in ${q} ms, both left alone`;
     },
@@ -551,8 +551,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
             body = open(os.path.join(folder, control.get('feed', 'full') + '.xml'), 'rb').read()
             self.send_response(200); self.send_header('Content-Type', 'application/xml'); self.send_header('Content-Length', str(len(body))); self.end_headers()
             self.wfile.write(body); return note(bytes=len(body), done=True)
-        if parts[1] != 'Ardia.zip': return self.send_error(404)
-        path = os.path.join(folder, 'Ardia.zip'); size = os.path.getsize(path); rate = control.get('rate', 0)
+        if parts[1] != 'Solstice.zip': return self.send_error(404)
+        path = os.path.join(folder, 'Solstice.zip'); size = os.path.getsize(path); rate = control.get('rate', 0)
         self.send_response(200); self.send_header('Content-Type', 'application/zip'); self.send_header('Content-Length', str(size)); self.end_headers()
         sent, mark, began = 0, 0, time.time()
         note(bytes=0, done=False)
@@ -599,11 +599,11 @@ ${Object.entries(values).map(([k, v]) => `<key>${k}</key><string>${v}</string>`)
 class Scenario {
   constructor(def, n) {
     this.def = def;
-    this.id = `com.ardia.browser.switchtest.${run}.${n}`;
+    this.id = `com.openbrowsercompany.solstice.switchtest.${run}.${n}`;
     this.dir = join(runDir, `${n}-${def.key}`);
     this.data = join(this.dir, "data");
-    this.copy = join(this.dir, "installed/Ardia.app");
-    this.candidate = join(this.dir, "candidate/Ardia.app");
+    this.copy = join(this.dir, "installed/Solstice.app");
+    this.candidate = join(this.dir, "candidate/Solstice.app");
     this.feedDir = join(feedRoot, String(n));
     this.feedUrl = `http://127.0.0.1:${port}/${n}/appcast.xml`;
     this.prefs = join(this.data, "Preferences", this.id);
@@ -643,11 +643,11 @@ class Scenario {
     execFileSync("cp", ["-cR", candidateApp, this.candidate]);
     this.tag(this.copy, start);
     this.tag(this.candidate, { ...start, build: candidateBuild, channel: "nightly" });
-    const zip = join(this.feedDir, "Ardia.zip");
+    const zip = join(this.feedDir, "Solstice.zip");
     execFileSync("ditto", ["-c", "-k", "--keepParent", this.candidate, zip]);
     const size = statSync(zip).size;
     const signature = execFileSync(join(tools, "ed25519"), ["sign", zip, join(tools, "key")], { encoding: "utf8" }).trim();
-    writeFileSync(join(this.feedDir, "full.xml"), appcast(`http://127.0.0.1:${port}/${basename(this.feedDir)}/Ardia.zip`, size, signature));
+    writeFileSync(join(this.feedDir, "full.xml"), appcast(`http://127.0.0.1:${port}/${basename(this.feedDir)}/Solstice.zip`, size, signature));
     writeFileSync(join(this.feedDir, "empty.xml"), emptyAppcast);
     const control = { feed: "full", ...this.def.control };
     if (control.throttled) control.rate = Math.round(size / (control.throttled === true ? THROTTLED_SECONDS : control.throttled));
@@ -658,11 +658,11 @@ class Scenario {
     const imported = sh("defaults", ["import", this.prefs, defaultsFile]);
     check(imported.status === 0, `couldn't import the scratch defaults: ${imported.stderr}`);
     writeFileSync(join(this.data, "perf-probe"), "");
-    if (start.abandoned) mkdirSync(join(this.installation, "abandoned/Ardia.app/Contents"), { recursive: true });
+    if (start.abandoned) mkdirSync(join(this.installation, "abandoned/Solstice.app/Contents"), { recursive: true });
     if (start.stale) {
       const folder = join(this.installation, "stale-copy");
       mkdirSync(folder, { recursive: true });
-      execFileSync("cp", ["-cR", this.candidate, join(folder, "Ardia.app")]);
+      execFileSync("cp", ["-cR", this.candidate, join(folder, "Solstice.app")]);
     }
   }
 
@@ -680,7 +680,7 @@ class Scenario {
     }
     check(/^http:\/\/127\.0\.0\.1:\d+\//.test(this.feedUrl), "the feed isn't local");
     check(existsSync(`${this.prefs}.plist`), "the scratch defaults aren't in place");
-    check(this.caches.startsWith(join(home, "Library/Caches/com.ardia.browser.switchtest.")), "Sparkle's cache dir isn't the test id's");
+    check(this.caches.startsWith(join(home, "Library/Caches/com.openbrowsercompany.solstice.switchtest.")), "Sparkle's cache dir isn't the test id's");
   }
 
   async launch() {
@@ -750,9 +750,9 @@ class Scenario {
     }
   }
   async untilServed(bytes) {
-    await until(() => this.served().some((e) => e.path === "Ardia.zip" && e.bytes >= bytes), 120000, "the download never started");
+    await until(() => this.served().some((e) => e.path === "Solstice.zip" && e.bytes >= bytes), 120000, "the download never started");
   }
-  zipEnded() { return this.served().some((e) => e.path === "Ardia.zip" && (e.done || e.aborted)); }
+  zipEnded() { return this.served().some((e) => e.path === "Solstice.zip" && (e.done || e.aborted)); }
 
   ax(...args) { return sh(join(tools, "ax"), [String(this.app.pid), ...args], { timeout: 15000 }); }
   hasButton(title) {
@@ -820,9 +820,9 @@ class Scenario {
     return ms;
   }
   expectUntouched() {
-    check(this.def.start?.stale ? existsSync(join(this.installation, "stale-copy/Ardia.app/Contents/Info.plist")) : this.offChannelCopies().length,
-      "Ardia moved or deleted a staged copy");
-    check(!existsSync(join(this.caches, "ArdiaDiscardedUpdates")), "Ardia set staged copies aside");
+    check(this.def.start?.stale ? existsSync(join(this.installation, "stale-copy/Solstice.app/Contents/Info.plist")) : this.offChannelCopies().length,
+      "Solstice moved or deleted a staged copy");
+    check(!existsSync(join(this.caches, "ArdiaDiscardedUpdates")), "Solstice set staged copies aside");
   }
     expectInstalled(expected) {
     const build = Number(info(this.copy, "CFBundleVersion"));
