@@ -67,13 +67,13 @@ public final class ControlApprovals {
     defer { Darwin.close(fd) }
     var info = stat()
     guard PrivateFolder.privateFile(fd), fstat(fd, &info) == 0, info.st_size <= Self.maxBytes else {
-      problem = "\(Self.fileName) isn't a private file of yours, so Ardia ignores it."
+      problem = "\(Self.fileName) isn't a private file of yours, so Solstice ignores it."
       return []
     }
     var data = Data(count: Int(info.st_size))
     let read = data.withUnsafeMutableBytes { Darwin.read(fd, $0.baseAddress, Int(info.st_size)) }
     guard read == Int(info.st_size), let entries = try? JSONDecoder().decode([ControlApproval].self, from: data) else {
-      problem = "\(Self.fileName) is damaged, so Ardia ignores it."
+      problem = "\(Self.fileName) is damaged, so Solstice ignores it."
       return []
     }
     return Array(entries.filter { $0.live(at: now) }.suffix(Self.maxEntries))

@@ -124,7 +124,7 @@ enum CommandTable {
     "newTab": "New Tab",
     "newWindow": "New Window",
     "newIncognitoWindow": "New Incognito Window",
-    "newLittleArdia": "New Little Ardia Window",
+    "newLittleArdia": "New Little Solstice Window",
     "toggleOpenLinksInLittleArdia": "Open Links from Other Apps in Main Window",
     "reopenClosedTab": "Reopen Closed Tab",
     "reopenClosedWindow": "Reopen Closed Window",
