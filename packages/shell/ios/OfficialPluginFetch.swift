@@ -84,9 +84,9 @@ final class OfficialPluginFetch: NSObject, URLSessionDownloadDelegate {
   }
 
   private func run(_ name: String, generation mine: Int) {
-    guard let folders = PluginFolders.current() else { return fail(name, Failure(code: "failed", reason: "Ardia has no data folder")) }
+    guard let folders = PluginFolders.current() else { return fail(name, Failure(code: "failed", reason: "Solstice has no data folder")) }
     guard let pin = PluginFolders.officialPin(), let entry = pin.entry(name) else {
-      return fail(name, Failure(code: "unsupported", reason: "this Ardia doesn't pin an official \(name) plugin"))
+      return fail(name, Failure(code: "unsupported", reason: "this Solstice doesn't pin an official \(name) plugin"))
     }
     let registry = folders.programRegistry(pin: pin)
     let store = folders.officialStore()
@@ -135,7 +135,7 @@ final class OfficialPluginFetch: NSObject, URLSessionDownloadDelegate {
     let finished = DispatchSemaphore(value: 0)
     var outcome: Result<URL, Failure> = .failure(Failure(code: "failed", reason: "the download didn't finish"))
     var request = URLRequest(url: url)
-    request.setValue("Ardia", forHTTPHeaderField: "User-Agent")
+    request.setValue("Solstice", forHTTPHeaderField: "User-Agent")
     let task = session.downloadTask(with: request)
     lock.lock()
     guard running[name]?.generation == mine, !cancelled.contains(name) else {
@@ -166,7 +166,7 @@ final class OfficialPluginFetch: NSObject, URLSessionDownloadDelegate {
   }
 
   static func promote(_ name: String, folderId: String, approved: String) -> [String: Any] {
-    guard let folders = PluginFolders.current(), let pin = PluginFolders.officialPin() else { return ["ok": false, "reason": "It isn't an official plugin this Ardia pins."] }
+    guard let folders = PluginFolders.current(), let pin = PluginFolders.officialPin() else { return ["ok": false, "reason": "It isn't an official plugin this Solstice pins."] }
     if let problem = OfficialInstaller.promote(name, folderId: folderId, approved: approved, store: folders.officialStore(), pin: pin) {
       return ["ok": false, "reason": problem]
     }
