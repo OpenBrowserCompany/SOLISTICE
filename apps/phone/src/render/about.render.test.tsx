@@ -21,12 +21,12 @@ test("About's hero is the 72-point app icon on white with a shadow, over a bold 
   expect(frame.backgroundColor).toBe("#FFFFFF");
   expect(frame.boxShadow).toBeDefined();
   expect(icon.findAll((node) => node.props.source !== undefined && typeof node.type === "string").length).toBeGreaterThan(0);
-  const title = root.root.findAll((node) => typeof node.type === "string" && node.props.accessibilityRole === "header" && textOf({ root: node } as never) === "Ardia")[0]!;
+  const title = root.root.findAll((node) => typeof node.type === "string" && node.props.accessibilityRole === "header" && textOf({ root: node } as never) === "Solstice")[0]!;
   expect(StyleSheet.flatten(title.props.style).fontWeight).toBe("700");
   unmount(root);
 });
 
-test("the licences list this phone's own native code: Ardia's Swift packages on iPhone, the Android libraries on Android", () => {
+test("the licences list this phone's own native code: Solstice's Swift packages on iPhone, the Android libraries on Android", () => {
   const root = renderSurface(<LicensesPage />);
   const text = textOf(root);
   if (Platform.OS === "ios") {

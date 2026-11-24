@@ -39,7 +39,7 @@ onIos("on iPhone the button opens the system's default apps page through the mod
   const root = renderSurface(<DefaultBrowserPage />);
   await settle();
   expect(textOf(root)).toContain("How to change your default browser");
-  await pressButton(root, "Open Ardia in Settings");
+  await pressButton(root, "Open Solstice in Settings");
   await settle();
   expect(opened).toHaveBeenCalledTimes(1);
   expect(appSettings).not.toHaveBeenCalled();
@@ -57,13 +57,13 @@ onIos("in onboarding on iPhone, tapping the button moves on as you leave for Set
   const done = jest.fn();
   const root = renderSurface(<DefaultBrowserSteps onLater={jest.fn()} onDone={done} />);
   await settle();
-  await pressButton(root, "Open Ardia in Settings");
+  await pressButton(root, "Open Solstice in Settings");
   await settle();
   expect(done).toHaveBeenCalledTimes(1);
   unmount(root);
 });
 
-onAndroid("on Android nothing changed: without the role on offer the button opens Default Apps and moves on only once Ardia is the default", async () => {
+onAndroid("on Android nothing changed: without the role on offer the button opens Default Apps and moves on only once Solstice is the default", async () => {
   const opened = jest.spyOn(defaultBrowser, "openDefaultAppsSettings").mockImplementation(async () => undefined);
   const done = jest.fn();
   const root = renderSurface(<DefaultBrowserSteps onLater={jest.fn()} onDone={done} />);
@@ -75,7 +75,7 @@ onAndroid("on Android nothing changed: without the role on offer the button open
   status = { isDefault: true, canAsk: false };
   comeBack();
   await settle();
-  expect(textOf(root)).toContain("Ardia is your default browser");
+  expect(textOf(root)).toContain("Solstice is your default browser");
   unmount(root);
 });
 

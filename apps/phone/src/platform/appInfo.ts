@@ -4,5 +4,5 @@ import { appVersionLabel } from "../lib/appVersionLabel";
 
 export const appVersion = () => {
   const release = pages.appRelease();
-  return release ? appVersionLabel(release, __DEV__) : `Ardia ${Constants.expoConfig?.version ?? "1.0"}`;
+  return release ? appVersionLabel(release, __DEV__) : `Solstice ${Constants.expoConfig?.version ?? "1.0"}`;
 };
