@@ -30,7 +30,7 @@ export function workspaceMethod(params: Record<string, unknown>): Body | Promise
   if (!params.usage) return { result: workspace(s, { window, profile }) };
   return sampleTabUsage().then(
     (usage) => ({ result: workspaceWithUsage(workspace(useBrowser.getState(), { window, profile }), usage) }),
-    (error) => failure("failed", `Ardia couldn't read its processes: ${errorText(error)}`),
+    (error) => failure("failed", `Solstice couldn't read its processes: ${errorText(error)}`),
   );
 }
 
