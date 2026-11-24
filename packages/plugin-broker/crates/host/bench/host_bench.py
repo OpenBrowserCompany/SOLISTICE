@@ -51,7 +51,7 @@ class Host:
             if "id" in message and "method" in message:
                 result = None
                 if message["method"] == "hello":
-                    result = {"app": "Ardia", "version": "bench", "protocol": 2, "plugin": "sdk-bench", "values": {}}
+                    result = {"app": "Solstice", "version": "bench", "protocol": 2, "plugin": "sdk-bench", "values": {}}
                 self.send({"id": message["id"], "result": result})
                 if message["method"] == method and (surface is None or message["params"].get("surfaceId") == surface):
                     self.sizes[method] = size

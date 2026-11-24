@@ -19,10 +19,10 @@ pub enum SendRefusal {
 impl SendRefusal {
     pub fn message(self) -> &'static str {
         match self {
-            SendRefusal::TooLong => "a line to Ardia is at most 1 MB",
-            SendRefusal::HasNewline => "a line to Ardia can't contain a newline",
-            SendRefusal::BackedUp => "Ardia isn't reading, so the line was dropped",
-            SendRefusal::Closed => "the channel to Ardia is closed",
+            SendRefusal::TooLong => "a line to Solstice is at most 1 MB",
+            SendRefusal::HasNewline => "a line to Solstice can't contain a newline",
+            SendRefusal::BackedUp => "Solstice isn't reading, so the line was dropped",
+            SendRefusal::Closed => "the channel to Solstice is closed",
         }
     }
 }
@@ -469,10 +469,10 @@ mod tests {
 
     #[test]
     fn refusal_messages_match_the_swift_host() {
-        assert_eq!(SendRefusal::TooLong.message(), "a line to Ardia is at most 1 MB");
-        assert_eq!(SendRefusal::HasNewline.message(), "a line to Ardia can't contain a newline");
-        assert_eq!(SendRefusal::BackedUp.message(), "Ardia isn't reading, so the line was dropped");
-        assert_eq!(SendRefusal::Closed.message(), "the channel to Ardia is closed");
+        assert_eq!(SendRefusal::TooLong.message(), "a line to Solstice is at most 1 MB");
+        assert_eq!(SendRefusal::HasNewline.message(), "a line to Solstice can't contain a newline");
+        assert_eq!(SendRefusal::BackedUp.message(), "Solstice isn't reading, so the line was dropped");
+        assert_eq!(SendRefusal::Closed.message(), "the channel to Solstice is closed");
     }
 
     #[test]

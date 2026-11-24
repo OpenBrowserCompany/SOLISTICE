@@ -146,8 +146,8 @@ public final class SpeechModule: Module {
 
     AsyncFunction("start") { (id: Int) throws in
       self.stopRecording()
-      guard PhoneSpeechAccess.hasMicrophone else { throw PagePayloads.error("ERR_NO_MICROPHONE", "Ardia can't use the microphone") }
-      guard PhoneSpeechAccess.hasRecognition else { throw PagePayloads.error("ERR_NO_RECOGNITION", "Ardia isn't allowed to recognize speech") }
+      guard PhoneSpeechAccess.hasMicrophone else { throw PagePayloads.error("ERR_NO_MICROPHONE", "Solstice can't use the microphone") }
+      guard PhoneSpeechAccess.hasRecognition else { throw PagePayloads.error("ERR_NO_RECOGNITION", "Solstice isn't allowed to recognize speech") }
       guard let recognizer = PhoneSpeechAccess.recognizer else { throw PagePayloads.error("ERR_NO_RECOGNIZER", "Speech recognition isn't available on this iPhone") }
       let made = PhoneSpeechRecorder(recognizer: recognizer)
       self.lock.withLock {
