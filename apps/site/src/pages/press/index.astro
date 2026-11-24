@@ -7,6 +7,9 @@ import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
 import appIcon from "../../assets/app-icon.png";
 import paintedMark from "../../assets/ardia-mark.png";
+import colourMark from "../../assets/mark-colour.png";
+import blackMark from "../../assets/mark-black.png";
+import whiteMark from "../../assets/mark-white.png";
 import { DISCORD, MIN_MACOS_MAJOR, REPO } from "../../data/release";
 import {
   COLOURS,
@@ -21,14 +24,20 @@ import {
   megabytes,
   shotFile,
 } from "../../data/press";
-import { MARK_SVGS, pressZip } from "../../lib/pressAssets";
+import { pressZip } from "../../lib/pressAssets";
 import { oklch } from "../../lib/oklch";
 
 const press = `${base}/press`;
 const zipSize = megabytes((await pressZip()).length);
 const shotImages = import.meta.glob<{ default: ImageMetadata }>("../../assets/shots/*.webp");
 const shots = await Promise.all(SHOTS.map(async (s) => ({ ...s, image: (await shotImages[`../../assets/shots/${s.id}.webp`]!()).default })));
-const previews: Record<string, ImageMetadata> = { "app-icon": appIcon, "mark-painted": paintedMark };
+const previews: Record<string, ImageMetadata> = {
+  "app-icon": appIcon,
+  "mark-painted": paintedMark,
+  "mark-colour": colourMark,
+  "mark-black": blackMark,
+  "mark-white": whiteMark,
+};
 const sections = [
   ["logo", "Logo"],
   ["screenshots", "Screenshots"],
@@ -41,20 +50,20 @@ const rules = [
   "Use the logos as they are. Don’t redraw the hills, recolor them, stretch, rotate, outline or add effects.",
   "Give the mark room: at least the sun’s width of clear space all around.",
   "Black on light backgrounds, white on dark ones and photos.",
-  "Write the name Ardia, with a capital A.",
+  "Write the name Solstice, with a capital A.",
   "Crop the screenshots as you like, but don’t edit what’s inside the window.",
-  "Ardia isn’t affiliated with Google or The Browser Company. Arc, Dia and Chrome are their trademarks, so don’t suggest otherwise.",
+  "Solstice isn’t affiliated with Google or The Browser Company. Arc, Dia and Chrome are their trademarks, so don’t suggest otherwise.",
 ];
 ---
 
-<Base title="Press kit · Ardia" description="Logos, screenshots, colors and boilerplate copy for Ardia, the sidebar browser for Mac.">
+<Base title="Press kit · Solstice" description="Logos, screenshots, colors and boilerplate copy for Solstice, the sidebar browser for Mac.">
   <Header home={`${base}/`} />
   <main id="main" class="press">
     <section class="wrap intro">
       <p class="label kicker">Press kit</p>
       <h1 class="poster">Take what <br />you need.</h1>
       <p class="lede">
-        Logos, screenshots, colors and boilerplate copy for writing about Ardia. For an interview or anything that isn’t here,
+        Logos, screenshots, colors and boilerplate copy for writing about Solstice. For an interview or anything that isn’t here,
         say hi on <a class="link" href={DISCORD} rel="noopener" data-track="discord_clicked" data-track-location="press">Discord</a> or open an
         issue on <a class="link" href={`${REPO}/issues`} rel="noopener" data-track="github_clicked" data-track-link="issues" data-track-location="press">GitHub</a>.
       </p>
@@ -83,11 +92,7 @@ const rules = [
             LOGOS.map((logo) => (
               <li class="card">
                 <div class:list={["ground", logo.ground]}>
-                  {previews[logo.id] ? (
-                    <Image class:list={["preview", logo.id]} src={previews[logo.id]!} alt="" width={logo.id === "app-icon" ? 160 : 240} densities={[1, 2]} />
-                  ) : (
-                    <div class="preview vector" set:html={MARK_SVGS[logo.id]} />
-                  )}
+                  <Image class:list={["preview", logo.id]} src={previews[logo.id]!} alt="" width={logo.id === "app-icon" ? 160 : 240} densities={[1, 2]} />
                 </div>
                 <div class="card-text">
                   <h3>{logo.title}</h3>

@@ -23,7 +23,7 @@ const jsonLd = [
   {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    name: "Ardia",
+    name: "Solstice",
     description,
     url: home,
     image: new URL("og.png", home).href,
@@ -36,13 +36,13 @@ const jsonLd = [
     license: "https://www.gnu.org/licenses/gpl-3.0.html",
     sameAs: [REPO],
   },
-  { "@context": "https://schema.org", "@type": "WebSite", name: "Ardia", url: home },
+  { "@context": "https://schema.org", "@type": "WebSite", name: "Solstice", url: home },
   faqJsonLd(),
 ];
 ---
 
 <Base
-  title="Ardia · a free Arc alternative for Mac, built on Chromium"
+  title="Solstice · a free Arc alternative for Mac, built on Chromium"
   description={description}
   jsonLd={jsonLd}
 >
