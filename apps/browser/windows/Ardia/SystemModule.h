@@ -23,17 +23,17 @@
 #pragma comment(lib, "shlwapi.lib")
 #pragma comment(lib, "uuid.lib")
 
-namespace Ardia {
+namespace Solstice {
 
 namespace SystemShell {
 
 constexpr wchar_t RunKey[] = L"Software\\Microsoft\\Windows\\CurrentVersion\\Run";
 constexpr wchar_t StartupApprovedKey[] = L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run";
-constexpr wchar_t LaunchAtLoginValue[] = L"Ardia";
+constexpr wchar_t LaunchAtLoginValue[] = L"Solstice";
 constexpr wchar_t UrlAssociationsKey[] = L"Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\";
 constexpr wchar_t ArdiaProgId[] = L"ArdiaHTM";
 constexpr wchar_t ArdiaProgIdCommandKey[] = L"Software\\Classes\\ArdiaHTM\\shell\\open\\command";
-constexpr wchar_t RegisteredApplicationName[] = L"Ardia";
+constexpr wchar_t RegisteredApplicationName[] = L"Solstice";
 constexpr DWORD FirstBuildWithAppDefaultsPage = 22000;
 
 inline bool Exists(std::wstring const &path) noexcept {

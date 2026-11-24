@@ -3,7 +3,7 @@
 #include <string_view>
 #include <vector>
 
-namespace Ardia::SyncWordlist {
+namespace Solstice::SyncWordlist {
 
 inline std::vector<std::string_view> const &English() noexcept {
   static constexpr std::string_view joined =

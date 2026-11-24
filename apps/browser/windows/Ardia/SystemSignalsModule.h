@@ -23,7 +23,7 @@
 #pragma comment(lib, "powrprof.lib")
 #pragma comment(lib, "user32.lib")
 
-namespace Ardia {
+namespace Solstice {
 
 namespace SystemSignalsParts {
 
