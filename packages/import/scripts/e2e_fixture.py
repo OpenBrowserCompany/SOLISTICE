@@ -78,7 +78,7 @@ CREATE TABLE credit_cards (guid VARCHAR PRIMARY KEY, name_on_card VARCHAR, expir
 """)
 g = "00000000-0000-4000-8000-00000000e2e1"
 wd.execute("INSERT INTO addresses VALUES (?,1,0,0,'en','',0,0)", (g,))
-for t, v in [(7, "The mascot"), (60, "Ardia Test Co"), (77, "1 Fixture Way"), (33, "Testville"), (34, "CA"),
+for t, v in [(7, "The mascot"), (60, "Solstice Test Co"), (77, "1 Fixture Way"), (33, "Testville"), (34, "CA"),
              (35, "94000"), (36, "US"), (14, "+14155550100"), (9, "mascot@example.com")]:
     wd.execute("INSERT INTO address_type_tokens VALUES (?,?,?,0,NULL)", (g, t, v))
 wd.execute("INSERT INTO credit_cards VALUES ('00000000-0000-4000-8000-00000000e2c1','the mascot',12,2031,?,0,'',0,0,'',NULL)",
