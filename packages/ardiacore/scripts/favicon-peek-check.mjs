@@ -7,7 +7,7 @@ import { launch, session, sleep } from "../../../scripts/lib/instance.mjs";
 const [appArg, scratchArg] = process.argv.slice(2);
 if (!appArg || appArg === "-h" || appArg === "--help") {
   console.error(
-    "usage: favicon-peek-check.mjs <Ardia.app> [parent dir for the scratch dir]\nA private window shows a regular profile's stored icons, and its lookups leave that profile's Favicons database as it was: same size and modification time, same last_requested. A regular lookup afterwards does write, which shows the check would see a write.",
+    "usage: favicon-peek-check.mjs <Solstice.app> [parent dir for the scratch dir]\nA private window shows a regular profile's stored icons, and its lookups leave that profile's Favicons database as it was: same size and modification time, same last_requested. A regular lookup afterwards does write, which shows the check would see a write.",
   );
   process.exit(appArg ? 0 : 64);
 }

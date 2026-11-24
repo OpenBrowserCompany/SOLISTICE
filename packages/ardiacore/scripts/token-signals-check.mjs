@@ -7,8 +7,8 @@ import { join, resolve } from "node:path";
 import { session } from "../../../scripts/lib/instance.mjs";
 import { HOSTILE_VALUES } from "../../../scripts/security/hostile-inputs.mjs";
 
-const usage = `usage: token-signals-check.mjs <Ardia.app> [metro host:port] [scratch dir]
-Runs Ardia's engine-answered DevTools methods over the real token connection (no DevTools port) in one hidden
+const usage = `usage: token-signals-check.mjs <Solstice.app> [metro host:port] [scratch dir]
+Runs Solstice's engine-answered DevTools methods over the real token connection (no DevTools port) in one hidden
 instance, with a local page that logs a warning, an error and an uncaught exception as it loads and holds a cross-site
 iframe. Checks: Ardia.consoleDelta holds the load-time entries before any session attached, a watermark returns only
 newer entries, a stale generation starts over with reset; Ardia.hitTest finds a button's own click listener, a covered
