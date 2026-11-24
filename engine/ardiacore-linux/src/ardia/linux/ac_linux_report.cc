@@ -44,10 +44,10 @@ using Done = base::OnceCallback<void(bool, base::Value)>;
 constexpr net::NetworkTrafficAnnotationTag kTrafficAnnotation =
     net::DefineNetworkTrafficAnnotation("ardia_linux_problem_report", R"(
       semantics {
-        sender: "Ardia Report a Problem"
+        sender: "Solstice Report a Problem"
         description:
           "Sends a problem report the user wrote, and the files they chose "
-          "to attach to it, to Ardia's feedback service."
+          "to attach to it, to Solstice's feedback service."
         trigger:
           "The user pressing Send in the Report a Problem sheet."
         user_data {
@@ -59,7 +59,7 @@ constexpr net::NetworkTrafficAnnotationTag kTrafficAnnotation =
           "system versions, diagnostics, and the attachments the user left "
           "ticked. No cookies or browsing data."
         destination: OTHER
-        destination_other: "Ardia's feedback service at ardia.dev."
+        destination_other: "Solstice's feedback service at ardia.dev."
         last_reviewed: "2026-11-15"
       }
       policy {
@@ -330,7 +330,7 @@ void StartPost(const base::ListValue& args, int caller, Done done) {
   }
   const report::Request request = report::ClassifyUrl(report::kEndpoint, args[0].GetString());
   if (request.target != report::Target::kCreate && request.target != report::Target::kComplete) {
-    return Refuse(std::move(done), "Reports go to Ardia's feedback service only");
+    return Refuse(std::move(done), "Reports go to Solstice's feedback service only");
   }
   const std::optional<std::vector<report::Header>> given = HeadersFrom(args[2]);
   const auto headers = given ? report::AllowedHeaders(request.target, *given) : std::nullopt;
@@ -350,7 +350,7 @@ void StartUpload(const base::ListValue& args, const base::FilePath& documents, i
   }
   const report::Request request = report::ClassifyUrl(report::kEndpoint, args[1].GetString());
   if (request.target != report::Target::kFile || !report::MethodAllowed(request.target, args[2].GetString())) {
-    return Refuse(std::move(done), "Report files go to Ardia's feedback service only");
+    return Refuse(std::move(done), "Report files go to Solstice's feedback service only");
   }
   const std::optional<std::vector<report::Header>> given = HeadersFrom(args[3]);
   auto headers = given ? report::AllowedHeaders(request.target, *given) : std::nullopt;

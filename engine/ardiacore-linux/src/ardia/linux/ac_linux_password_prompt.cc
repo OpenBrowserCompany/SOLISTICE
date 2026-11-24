@@ -112,7 +112,7 @@ class Confirmation : public views::WidgetObserver {
     delegate_->SetModalType(ui::mojom::ModalType::kWindow);
     delegate_->SetButtonLabel(ui::mojom::DialogButton::kOk, u"Confirm");
     delegate_->SetButtonLabel(ui::mojom::DialogButton::kCancel, u"Cancel");
-    std::u16string text = u"Ardia is trying to ";
+    std::u16string text = u"Solstice is trying to ";
     text += purpose_;
     text += u".\n\n";
     text += base::UTF8ToUTF16(problem.empty() ? "Enter the password you use to log in to this computer." : problem);

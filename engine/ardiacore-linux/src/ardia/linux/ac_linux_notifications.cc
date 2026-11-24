@@ -146,7 +146,7 @@ void PostNotification(const base::ListValue& args, Profile* profile, int owner, 
     return Fail(std::move(done), "The notification options are not valid");
   }
   if (BackgroundInstance()) {
-    LOG(INFO) << "Ardia background instance: not showing a desktop notification";
+    LOG(INFO) << "Solstice background instance: not showing a desktop notification";
     return std::move(done).Run(true, base::Value());
   }
   NotificationDisplayServiceImpl* service = Service(profile);
