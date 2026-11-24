@@ -25,7 +25,7 @@ const WEB_URL = /^https?:\/\/[^/?#\\]/i;
 const FILE_URL = /^file:\/\//i;
 const BLANK_PAGE = /^about:blank$/i;
 const ENGINE_PAGES_OPENED_FROM_APPS = new Set(["game", "version"]);
-const APP_URL_HOST = /^ardia:\/\/([^/?#]*)/;
+const APP_URL_HOST = /^(?:ardia|solstice):\/\/([^/?#]*)/;
 
 function admitAppUrl(given: string): string | null {
   const url = toAppUrl(fromLegacyUrl(given));
