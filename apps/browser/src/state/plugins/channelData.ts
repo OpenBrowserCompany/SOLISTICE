@@ -68,7 +68,7 @@ function headersOf(raw: unknown): Record<string, string> | string {
   let size = 0;
   for (const [name, value] of entries) {
     if (!HEADER_NAME.test(name)) return `headers has a bad name: ${JSON.stringify(name.slice(0, 64))}.`;
-    if (FORBIDDEN_HEADERS.test(name)) return `Ardia sets ${name} itself.`;
+    if (FORBIDDEN_HEADERS.test(name)) return `Solstice sets ${name} itself.`;
     if (typeof value !== "string" || /[\r\n\0]/.test(value)) return `headers.${name} must be text on one line.`;
     size += name.length + value.length;
     out[name] = value;

@@ -35,7 +35,7 @@ test("autoInstall installs nothing by itself: activation waits for the user's ap
   assert.equal(S().settings.cliControl, true);
 });
 
-test("you turn control off, Ardia restarts, and it stays off: no launch turns it back on", async () => {
+test("you turn control off, Solstice restarts, and it stays off: no launch turns it back on", async () => {
   const { stopProgramControl } = await import("../app/programControl.ts");
   stopProgramControl();
   assert.equal(S().settings.cliControl, false);
