@@ -44,10 +44,10 @@ const jsonLd = [
   {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "Ardia release notes",
+    name: "Solstice release notes",
     url: page,
-    isPartOf: { "@type": "WebSite", name: "Ardia", url: home },
-    about: { "@type": "SoftwareApplication", name: "Ardia", applicationCategory: "BrowserApplication", operatingSystem: "macOS" },
+    isPartOf: { "@type": "WebSite", name: "Solstice", url: home },
+    about: { "@type": "SoftwareApplication", name: "Solstice", applicationCategory: "BrowserApplication", operatingSystem: "macOS" },
     dateModified: isoDate(releases[0]!.date),
     mainEntity: {
       "@type": "ItemList",
@@ -57,7 +57,7 @@ const jsonLd = [
         "@type": "ListItem",
         position: i + 1,
         url: new URL(releasePath(r.version), home).href,
-        name: `Ardia ${r.version}: ${r.headline}`,
+        name: `Solstice ${r.version}: ${r.headline}`,
       })),
     },
   },
@@ -66,8 +66,8 @@ const jsonLd = [
 ---
 
 <Base
-  title="Ardia release notes · every update, newest first"
-  description={`What’s new, fixed and faster in every Ardia release, from 0.1.0 to ${latest.version}. The Mac browser with Arc’s sidebar ships often, and writes it all down.`}
+  title="Solstice release notes · every update, newest first"
+  description={`What’s new, fixed and faster in every Solstice release, from 0.1.0 to ${latest.version}. The Mac browser with Arc’s sidebar ships often, and writes it all down.`}
   jsonLd={jsonLd}
 >
   <script is:inline slot="head" define:vars={{ viewKey: KEYS.releaseNotesView }}>
@@ -114,7 +114,7 @@ const jsonLd = [
         <div class="mast-copy">
           <p class="label kicker">Release notes</p>
           <h1 class="poster title" id="notes-title">
-            <span class="visually-hidden">Ardia release notes: </span>Fresh <br />paint.
+            <span class="visually-hidden">Solstice release notes: </span>Fresh <br />paint.
           </h1>
           <p class="lede">
             Every update, newest on top. {stable.length} so far, and the app brings you here after each one.
@@ -218,7 +218,7 @@ const jsonLd = [
                   <h2 class="headline" id={`title-${r.version}`}>
                     <a href={`${base}/${releasePath(r.version)}`}>
                       <span class="poster version">
-                        <span class="visually-hidden">Ardia </span>
+                        <span class="visually-hidden">Solstice </span>
                         {r.version}
                         <span class="visually-hidden">: </span>
                       </span>
@@ -248,7 +248,7 @@ const jsonLd = [
       <div class="wrap end-inner">
         <p class="label kicker">0.1.0 was the first</p>
         <h2 class="poster end-title" id="end-title">That’s all of them.</h2>
-        <p class="end-line">Download Ardia for Mac and try it yourself.</p>
+        <p class="end-line">Download Solstice for Mac and try it yourself.</p>
         <DownloadButton location="release_notes" class="not-phone sun-btn" />
         <SendToMac location="release_notes" main />
       </div>

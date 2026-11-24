@@ -32,13 +32,13 @@ const { release: r, newer, older } = Astro.props;
 const home = homeUrl(Astro.site);
 const index = new URL("release-notes/", home).href;
 const url = new URL(releasePath(r.version), home).href;
-const name = `Ardia ${r.version}`;
+const name = `Solstice ${r.version}`;
 const headline = r.headline.replace(/\.$/, "");
 const title = `${name} release notes: ${headline}`.length <= 70 ? `${name} release notes: ${headline}` : `${name} release notes`;
 const longDate = new Intl.DateTimeFormat("en-US", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
 const published = isoDate(r.date);
 const isCurrent = r.version === VERSION;
-const organization = { "@type": "Organization", name: "Ardia", url: home, logo: new URL("apple-touch-icon.png", home).href };
+const organization = { "@type": "Organization", name: "Solstice", url: home, logo: new URL("apple-touch-icon.png", home).href };
 const jsonLd = [
   {
     "@context": "https://schema.org",
@@ -53,10 +53,10 @@ const jsonLd = [
     inLanguage: "en",
     author: organization,
     publisher: organization,
-    isPartOf: { "@type": "CollectionPage", name: "Ardia release notes", url: index },
+    isPartOf: { "@type": "CollectionPage", name: "Solstice release notes", url: index },
     about: {
       "@type": "SoftwareApplication",
-      name: "Ardia",
+      name: "Solstice",
       softwareVersion: r.version,
       applicationCategory: "BrowserApplication",
       operatingSystem: "macOS",
@@ -84,7 +84,7 @@ const jsonLd = [
         </p>
         <h1 class="headline" id="release-title">
           <span class:list={["poster", "version", { nightly: r.nightly }]}>
-            <span class="visually-hidden">Ardia </span>{r.version}<span class="visually-hidden">: </span>
+            <span class="visually-hidden">Solstice </span>{r.version}<span class="visually-hidden">: </span>
           </span>
           <span class="headline-text">{r.headline}</span>
         </h1>
@@ -161,7 +161,7 @@ const jsonLd = [
         <p class="label kicker">{isCurrent ? "The latest one" : `Now on ${VERSION}`}</p>
         <h2 class="poster end-title" id="end-title">{isCurrent ? "Latest release." : "It kept going."}</h2>
         <p class="end-line">
-          Ardia is a free Mac browser with Arc’s sidebar and Dia’s look, built on Chromium.{" "}
+          Solstice is a free Mac browser with Arc’s sidebar and Dia’s look, built on Chromium.{" "}
           <a class="link" href={`${base}/benchmarks/`}>See how fast</a>, or <a class="link" href={`${base}/try/`}>click around the demo</a> first.
         </p>
         <DownloadButton location="release_notes" class="not-phone sun-btn" />
