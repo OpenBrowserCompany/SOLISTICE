@@ -38,7 +38,7 @@ test("the self-check carries the Mac's fixture vault byte for byte", () => {
 test("the recovery kit lists the 24 words in order, and its PDF is well formed with a working cross-reference table", () => {
   const created = new Date(2026, 10, 13);
   const text = kitText(mac.words, created, "DESKTOP-1");
-  assert.match(text, /^Ardia Recovery Kit\nCreated November 13, 2026 on DESKTOP-1\n/);
+  assert.match(text, /^Solstice Recovery Kit\nCreated November 13, 2026 on DESKTOP-1\n/);
   mac.words.forEach((word, i) => assert.ok(text.includes(`${String(i + 1).padStart(2, " ")}. ${word}\n`), word));
   assert.ok(!/\bMac\b/.test(text));
   const pdf = Buffer.from(kitPdf(mac.words, created, "DESKTOP-1")).toString("latin1");
