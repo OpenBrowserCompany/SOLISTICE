@@ -258,7 +258,7 @@ def build_appimage(root, destination, tools=None):
         (app / 'lib/ardia/chrome-sandbox').unlink(missing_ok=True)
         (app / 'AppRun').symlink_to('lib/ardia/ardia-launch')
         (app / 'ardia.desktop').write_text(desktop_entry(root / 'share/applications/ardia.desktop', 'AppRun'))
-        icon = root / 'share/icons/hicolor/256x256/apps/ardia.png'
+        icon = root / 'share/icons/hicolor/256x256/apps/solstice.png'
         if icon.is_file():
             shutil.copyfile(icon, app / 'ardia.png')
             shutil.copyfile(icon, app / '.DirIcon')

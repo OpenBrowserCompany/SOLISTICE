@@ -114,7 +114,7 @@ install -m 0755 "$launcher" "$target/bin/ardia"
 sed "s|^Exec=ardia |Exec=$prefix/bin/ardia |" "$source_root/share/applications/ardia.desktop" > "$launcher"
 install -m 0644 "$launcher" "$target/share/applications/ardia.desktop"
 
-icon=share/icons/hicolor/256x256/apps/ardia.png
+icon=share/icons/hicolor/256x256/apps/solstice.png
 if [[ -f "$source_root/$icon" ]]; then
   install -D -m 0644 "$source_root/$icon" "$target/$icon"
 fi
