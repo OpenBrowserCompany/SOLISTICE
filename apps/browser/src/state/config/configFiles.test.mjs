@@ -260,7 +260,7 @@ test("restoreSession from the file decides the launch restore, both ways", async
   assert.equal(configRestoreSession(), undefined);
 });
 
-test("a theme's look applies live through the tokens, keeps the last good version, and going back gives Ardia's own look", () => {
+test("a theme's look applies live through the tokens, keeps the last good version, and going back gives Solstice's own look", () => {
   fresh();
   writeConfig({ theme: "roomy" });
   files.set("themes/roomy.json", JSON.stringify({ type: { family: "Avenir Next", sizes: { body: 15 }, weights: { medium: "600" } }, metrics: { rowHeight: 40, radius: { row: 14 } }, icons: { plus: "plus.circle" } }));
@@ -283,7 +283,7 @@ test("a theme's look applies live through the tokens, keeps the last good versio
   assert.equal(layout.rowHeight, 40);
   files.set("themes/roomy.json", JSON.stringify({ metrics: { rowHeight: 80, rowGap: 5 } }));
   reconcileConfig();
-  assert.equal(layout.rowHeight, 34, "an out-of-range value is reported and Ardia's applies");
+  assert.equal(layout.rowHeight, 34, "an out-of-range value is reported and Solstice's applies");
   assert.equal(layout.rowGap, 5);
   assert.ok(warnings.some((w) => w.includes("themes/roomy.json: metrics.rowHeight must be a number from 24 to 56")));
   writeConfig({ theme: null });

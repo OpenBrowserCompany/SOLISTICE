@@ -60,7 +60,7 @@ test("config.schema.json lists the allowlist with defaults, shortcuts by command
   assert.equal(accepts(schema, { settings: { cliControl: true } }), false);
 });
 
-test("theme.schema.json has every role but dark with Ardia's values as defaults, and agrees with the app's own check", () => {
+test("theme.schema.json has every role but dark with Solstice's values as defaults, and agrees with the app's own check", () => {
   const schema = themeSchema(colorRoles);
   assert.deepEqual(keywordsOutsideSubset(schema), []);
   for (const mode of ["dark", "light"]) {
@@ -86,7 +86,7 @@ test("theme.schema.json has every role but dark with Ardia's values as defaults,
   }
 });
 
-test("theme.schema.json covers type, metrics, layout and icons with Ardia's defaults, and agrees with the app's own check on every key", () => {
+test("theme.schema.json covers type, metrics, layout and icons with Solstice's defaults, and agrees with the app's own check on every key", () => {
   const schema = themeSchema(colorRoles);
   assert.deepEqual(Object.keys(schema.properties), ["$schema", "dark", "light", "type", "metrics", "layout", "icons"]);
   assert.equal(schema.properties.metrics.properties.rowHeight.default, 34);

@@ -34,7 +34,7 @@ function settingSchema(key: (typeof CONFIG_SETTING_KEYS)[number]): JsonSchema {
       items: { type: "string", enum: launchActionIds() },
       maxItems: MAX_LAUNCH_ACTIONS,
       default: [],
-      description: "Commands Ardia runs in the focused window after it restores the session, like [\"newTab\"]. Command ids, or id:variant.",
+      description: "Commands Solstice runs in the focused window after it restores the session, like [\"newTab\"]. Command ids, or id:variant.",
     };
   }
   const spec = SETTING_SPECS[key];
@@ -46,11 +46,11 @@ function settingSchema(key: (typeof CONFIG_SETTING_KEYS)[number]): JsonSchema {
 export function configSchema(): object {
   return {
     $schema: JSON_SCHEMA_DIALECT,
-    description: "Ardia's config.json. Ardia applies it at launch and whenever it changes; it never writes it.",
+    description: "Solstice's config.json. Solstice applies it at launch and whenever it changes; it never writes it.",
     type: "object",
     properties: {
       $schema: { type: "string" },
-      theme: { type: ["string", "null"], pattern: CONFIG_THEME_PATTERN, description: "A theme in themes/<name>.json, a plugin's theme as plugin:<plugin>/<theme>, or null for Ardia's own", default: null },
+      theme: { type: ["string", "null"], pattern: CONFIG_THEME_PATTERN, description: "A theme in themes/<name>.json, a plugin's theme as plugin:<plugin>/<theme>, or null for Solstice's own", default: null },
       settings: {
         type: "object",
         properties: Object.fromEntries(CONFIG_SETTING_KEYS.map((key) => [key, settingSchema(key)])),
