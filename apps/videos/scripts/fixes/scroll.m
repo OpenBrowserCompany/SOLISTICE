@@ -135,7 +135,7 @@ static void Poll(void) {
 __attribute__((constructor)) static void ScrollInit(void) {
   NSString *exe = NSProcessInfo.processInfo.arguments.firstObject.lastPathComponent;
   NSString *dir = NSProcessInfo.processInfo.environment[@"ARDIA_DATA_DIR"];
-  if (![exe isEqualToString:@"Ardia"] || !dir) return;
+  if (![exe isEqualToString:@"Solstice"] || !dir) return;
   gInbox = [dir stringByAppendingPathComponent:@"film-scroll.json"];
   gOutbox = [dir stringByAppendingPathComponent:@"film-scroll-done.json"];
   gSend = [NSProcessInfo.processInfo.environment[@"FIXES_SCROLL_DISPATCH"] isEqualToString:@"send"];

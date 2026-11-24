@@ -1,7 +1,7 @@
 import { execFileSync } from "node:child_process";
 
 const LINK = "https://ardia.dev/release-notes/0.2.41";
-const TITLE = "Ardia 0.2.41 release notes";
+const TITLE = "Solstice 0.2.41 release notes";
 
 export default {
   setup: `st().activate("t3"); return sleep(2500).then(() => done());`,

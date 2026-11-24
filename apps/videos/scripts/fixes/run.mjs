@@ -19,8 +19,8 @@ const pasteLib = process.env.FIXES_PASTEBOARD ? join(scratch, "pasteboard.dylib"
 const injected = [hoverLib, inputLib, selfLib, pasteLib].filter(Boolean).join(":");
 const fps = process.env.FIXES_FPS ?? "60";
 const apps = {
-  before: { app: process.env.BEFORE_APP ?? join(scratch, "before/Ardia.app"), js: "none", probe: true },
-  after: { app: process.env.AFTER_APP ?? join(repo, "apps/browser/build-tester/Build/Products/Debug/Ardia.app"), ...(process.env.AFTER_JS === "none" ? { js: "none", probe: true } : {}) },
+  before: { app: process.env.BEFORE_APP ?? join(scratch, "before/Solstice.app"), js: "none", probe: true },
+  after: { app: process.env.AFTER_APP ?? join(repo, "apps/browser/build-tester/Build/Products/Debug/Solstice.app"), ...(process.env.AFTER_JS === "none" ? { js: "none", probe: true } : {}) },
 };
 
 const args = process.argv.slice(2);
