@@ -9,7 +9,7 @@ import { FadeLabel } from "../src/shims/web/FadeLabel";
 
 document.body.style.cssText = "margin:40px;background:#f6f5f2;color:#202020;font:18px system-ui";
 document.getElementById("root")!.innerHTML = `
-  <h1>Ardia web shim regression checks</h1>
+  <h1>Solstice web shim regression checks</h1>
   <p>Issue #1554. Real clock, palette, pointer and rendered MacView modules.</p>
   <p>Click Run checks, then leave the pointer still.</p>
   <div id="hover" style="width:420px;height:120px;margin:28px 0">

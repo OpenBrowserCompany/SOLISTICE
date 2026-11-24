@@ -2,14 +2,14 @@ import { callError, ok, served, type Engine, type Handlers } from "./calling";
 import { deleteOriginalProfileData } from "./originalProfile";
 import { releaseProfile } from "../privateWindows";
 
-const FOLDER_PREFIX = "Ardia ";
+const FOLDER_PREFIX = "Solstice ";
 const LONGEST_ID = 238;
 const ARDIA_ID = new RegExp(`^[a-z0-9-]{1,${LONGEST_ID}}$`);
 const EVERY_KIND = ["history", "siteData", "cache", "downloads", "formData", "siteSettings"];
 const GONE = new Set(["removed", "absent"]);
 const OFF_THE_RECORD = "@";
 const END_OF_NAME = "\u0000";
-const NOT_ARDIAS = "data (the profile's id isn't one Ardia makes)";
+const NOT_ARDIAS = "data (the profile's id isn't one Solstice makes)";
 
 export const profileFolder = (profile: string): string | null => (ARDIA_ID.test(profile) ? FOLDER_PREFIX + profile : null);
 
@@ -46,6 +46,6 @@ export const profileCalls: Handlers = {
     const outcome = await engine.removeProfileFolder(folder);
     if (GONE.has(outcome)) return ok({ remaining: [] });
     if (outcome === "inUse") await served(engine, "ac_browsing_data_clear", profile, { types: EVERY_KIND, since: 0 });
-    return ok({ remaining: [outcome === "inUse" ? "files in use until Ardia restarts" : `files (${outcome})`] });
+    return ok({ remaining: [outcome === "inUse" ? "files in use until Solstice restarts" : `files (${outcome})`] });
   },
 };

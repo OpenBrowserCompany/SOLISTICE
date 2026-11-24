@@ -28,7 +28,7 @@ function withinLimit<Value>(answer: Promise<Value>): Promise<Value | typeof TIME
 
 export const bookmarkCalls: Handlers = {
   exportHtml: async (args, engine) => {
-    const path = await desktopOf(engine).saveFile({ name: "Ardia Bookmarks.html", extension: "html", kind: "Web page", message: "" });
+    const path = await desktopOf(engine).saveFile({ name: "Solstice Bookmarks.html", extension: "html", kind: "Web page", message: "" });
     if (!path) return ok(null);
     const answer = await withinLimit(served(engine, "ac_bookmarks_export_html", args.profile, { path }));
     if (answer === TIMED_OUT) throw callError("ERR_ENGINE", "The export didn't finish");
@@ -37,7 +37,7 @@ export const bookmarkCalls: Handlers = {
 };
 
 export const exportPasswords: Handler = async (args, engine) => {
-  const path = await desktopOf(engine).saveFile({ name: "Ardia Passwords.csv", extension: "csv", kind: "CSV file", message: PASSWORD_FILE_WARNING });
+  const path = await desktopOf(engine).saveFile({ name: "Solstice Passwords.csv", extension: "csv", kind: "CSV file", message: PASSWORD_FILE_WARNING });
   if (!path) return ok({ status: "cancelled" });
   const result: Fields | typeof TIMED_OUT = await withinLimit(served(engine, "ac_passwords_export", originalProfile(args.profile), { path }));
   if (result === TIMED_OUT) return ok({ status: "writeFailed" });
