@@ -6,7 +6,7 @@
 
 #include <shlobj.h>
 
-namespace Ardia::Paths {
+namespace Solstice::Paths {
 
 inline std::string Utf8(std::wstring_view wide) noexcept {
   if (wide.empty()) return {};
@@ -77,7 +77,7 @@ inline bool HasCustomDataDirectory() noexcept {
 inline const std::filesystem::path &DataDirectory() noexcept {
   static const std::filesystem::path directory = [] {
     std::wstring const &chosen = RequestedDataDirectory();
-    return Ensured(chosen.empty() ? UserFolder(FOLDERID_LocalAppData, L"LOCALAPPDATA") / L"Ardia" : std::filesystem::path(chosen));
+    return Ensured(chosen.empty() ? UserFolder(FOLDERID_LocalAppData, L"LOCALAPPDATA") / L"Solstice" : std::filesystem::path(chosen));
   }();
   return directory;
 }

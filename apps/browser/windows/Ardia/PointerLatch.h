@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Ardia {
+namespace Solstice {
 
 struct PointerLatch {
   static constexpr int kLeft = 1;

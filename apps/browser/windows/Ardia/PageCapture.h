@@ -13,7 +13,7 @@
 #pragma comment(lib, "crypt32.lib")
 #pragma comment(lib, "windowscodecs.lib")
 
-namespace Ardia {
+namespace Solstice {
 
 namespace PageCapture {
 
