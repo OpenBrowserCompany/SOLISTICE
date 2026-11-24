@@ -8,7 +8,7 @@ import { launch, session, sleep } from "../../../scripts/lib/instance.mjs";
 const args = process.argv.slice(2);
 const appArg = args.find((a) => !a.startsWith("--"));
 if (!appArg) {
-  console.error("usage: node swipe-history-list-test.mjs <Debug Ardia.app> [--js=pinned|live|host:port]");
+  console.error("usage: node swipe-history-list-test.mjs <Debug Solstice.app> [--js=pinned|live|host:port]");
   process.exit(2);
 }
 const js = args.find((a) => a.startsWith("--js="))?.slice("--js=".length) ?? "pinned";

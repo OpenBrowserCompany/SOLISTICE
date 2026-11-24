@@ -9,7 +9,7 @@ import { readPng } from "../../../scripts/lib/png.mjs";
 const args = process.argv.slice(2);
 const appArg = args.find((a) => !a.startsWith("--"));
 if (!appArg) {
-  console.error("usage: node sidebar-slide-test.mjs <Debug Ardia.app> [--port=<DevTools port>] [--trials=<n>] [--keep-data]\n\nClosing a sidebar tab leaves no blank space: the rows below slide up, every slide rests at 0, and the sidebar looks the same before and after every row renders again. Also when the list updates while the slides are still running later than they should have finished, as after a close that kept the app busy, and when a row renders just as its slide ends (both left a row one place down, with a blank space above it).");
+  console.error("usage: node sidebar-slide-test.mjs <Debug Solstice.app> [--port=<DevTools port>] [--trials=<n>] [--keep-data]\n\nClosing a sidebar tab leaves no blank space: the rows below slide up, every slide rests at 0, and the sidebar looks the same before and after every row renders again. Also when the list updates while the slides are still running later than they should have finished, as after a close that kept the app busy, and when a row renders just as its slide ends (both left a row one place down, with a blank space above it).");
   process.exit(2);
 }
 const appPath = resolve(appArg);

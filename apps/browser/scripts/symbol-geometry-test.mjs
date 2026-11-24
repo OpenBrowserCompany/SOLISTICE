@@ -7,7 +7,7 @@ import { launch, reporter, session, sleep } from "../../../scripts/lib/instance.
 
 const [appArg, port, metroPort] = process.argv.slice(2);
 if (!appArg) {
-  console.error("usage: node symbol-geometry-test.mjs <ad hoc Debug Ardia.app> [cdpPort] [metroPort]");
+  console.error("usage: node symbol-geometry-test.mjs <ad hoc Debug Solstice.app> [cdpPort] [metroPort]");
   process.exit(2);
 }
 const scratch = mkdtempSync(join(tmpdir(), "ac-symbol-geometry-"));
