@@ -5,9 +5,9 @@ S=${FIXES_SCRATCH:-$HOME/ardia-scratch/film-0246}
 mkdir -p "$S/before" "$S/after"
 for side in before after; do
   dir=$([ "$side" = before ] && echo 0.2.45 || echo 0.2.46-rc)
-  if [ ! -d "$S/$side/Ardia.app" ]; then
-    ditto "$REPO/dist/$dir/export/Ardia.app" "$S/$side/Ardia.app"
-    codesign --force --deep --sign - "$S/$side/Ardia.app" >/dev/null 2>&1
+  if [ ! -d "$S/$side/Solstice.app" ]; then
+    ditto "$REPO/dist/$dir/export/Solstice.app" "$S/$side/Solstice.app"
+    codesign --force --deep --sign - "$S/$side/Solstice.app" >/dev/null 2>&1
   fi
 done
 for f in sessions-0246n2 sessions-0246n6 sessions-0246n7 sessions-release-0246; do

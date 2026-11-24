@@ -20,7 +20,7 @@
    "scene": "sharefolder",
    "section": "New",
    "title": "Share a pinned folder through iCloud Drive",
-   "body": "Right-click a pinned folder › Share Folder…. Ardia keeps it in iCloud Drive › Ardia Shared and hands it to macOS's share sheet. Links sync both ways, per profile, with no account. 0.2.43's menu has no such item.",
+   "body": "Right-click a pinned folder › Share Folder…. Solstice keeps it in iCloud Drive › Solstice Shared and hands it to macOS's share sheet. Links sync both ways, per profile, with no account. 0.2.43's menu has no such item.",
    "layout": "side",
    "cam": [
     0,
@@ -61,8 +61,8 @@
   {
    "scene": "configfile",
    "section": "New",
-   "title": "Set Ardia up from a file",
-   "body": "Settings, keybindings and themes can live in ~/.config/ardia/config.json, dotfiles style. Each save applies at once: light appearance, then a theme file that turns the selected tab green. Ardia never writes the file back. 0.2.43 ignores it.",
+   "title": "Set Solstice up from a file",
+   "body": "Settings, keybindings and themes can live in ~/.config/ardia/config.json, dotfiles style. Each save applies at once: light appearance, then a theme file that turns the selected tab green. Solstice never writes the file back. 0.2.43 ignores it.",
    "layout": "side",
    "cam": [
     0,
@@ -128,8 +128,8 @@
   {
    "scene": "browsecli",
    "section": "New",
-   "title": "The ardia command can drive Ardia",
-   "body": "With \"Let the ardia command control Ardia\" on, ardia browse takes agent-browser's commands and runs them on the Ardia you have open: open a page, read it, fill a field, click. 0.2.43's ardia command has no browse.",
+   "title": "The ardia command can drive Solstice",
+   "body": "With \"Let the ardia command control Solstice\" on, ardia browse takes agent-browser's commands and runs them on the Solstice you have open: open a page, read it, fill a field, click. 0.2.43's ardia command has no browse.",
    "layout": "side",
    "cam": [
     0,
@@ -220,8 +220,8 @@
    "from": "fixes-0244n4",
    "source_scene": "littlelink",
    "section": "New",
-   "title": "New-tab links can stay in Little Ardia",
-   "body": "Settings › General › \"Open new-tab links inside Little Ardia\". A link that would open a new tab loads in Little Ardia itself, so Back takes you back. Thanks, @narasaka.",
+   "title": "New-tab links can stay in Little Solstice",
+   "body": "Settings › General › \"Open new-tab links inside Little Solstice\". A link that would open a new tab loads in Little Solstice itself, so Back takes you back. Thanks, @narasaka.",
    "beforeVersion": "0.2.44-nightly.3",
    "afterVersion": "0.2.44-nightly.4"
   },
@@ -315,7 +315,7 @@
    "source_scene": "movetop",
    "section": "Fixed",
    "title": "Moved tabs land where new tabs go",
-   "body": "Open in Ardia, Move to Window or a drop on another window puts the tab where \"New tabs open at\" says, never inside a group. Thanks, @daberni.",
+   "body": "Open in Solstice, Move to Window or a drop on another window puts the tab where \"New tabs open at\" says, never inside a group. Thanks, @daberni.",
    "beforeVersion": "0.2.44-nightly.3",
    "afterVersion": "0.2.44-nightly.4"
   },
@@ -332,7 +332,7 @@
    "scene": "omnifreeze",
    "section": "Fixed",
    "title": "Dashes and dots no longer freeze the address bar",
-   "body": "Text like my-post.another-post.x: stalled each keystroke for seconds while a pattern backtracked, and longer text crashed Ardia. The check is linear now.",
+   "body": "Text like my-post.another-post.x: stalled each keystroke for seconds while a pattern backtracked, and longer text crashed Solstice. The check is linear now.",
    "source": "text",
    "reason": "The short example didn't stall in a hidden test instance, and the long one crashes 0.2.43, which would put macOS's crash dialog on the owner's screen.",
    "length": 3.4
@@ -369,15 +369,15 @@
    "source": "text",
    "section": "Fixed",
    "title": "The collapsed sidebar stays put behind other apps",
-   "body": "A hover over Ardia's edge while another app is in front no longer slides the sidebar out later.",
+   "body": "A hover over Solstice's edge while another app is in front no longer slides the sidebar out later.",
    "reason": "A hidden test instance always counts as the app in front, so the case can't happen there.",
    "length": 3.2
   },
   {
    "scene": "littleexpand",
    "section": "Fixed",
-   "title": "Expanding Little Ardia mid-load keeps the page",
-   "body": "Expanding Little Ardia into a tab while its link was still loading could leave the tab on a blank page. It now lands on the page. Thanks, @narasaka.",
+   "title": "Expanding Little Solstice mid-load keeps the page",
+   "body": "Expanding Little Solstice into a tab while its link was still loading could leave the tab on a blank page. It now lands on the page. Thanks, @narasaka.",
    "source": "text",
    "reason": "With a slow redirect, 0.2.43 reached the page too; the stuck hand-off couldn't be reproduced on demand.",
    "length": 3.4
