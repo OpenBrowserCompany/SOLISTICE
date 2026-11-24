@@ -413,7 +413,7 @@ test("before-close sends debounced changes once while transport is open and tole
   let disposed = false;
   const { host, requests } = fixture(async () => {
     assert.equal(disposed, false);
-    throw new Error("Ardia host closed");
+    throw new Error("Solstice host closed");
   });
   host.onBeforeClose = (callback) => { callbacks.add(callback); return () => callbacks.delete(callback); };
   const store = mutableStore(browserState());

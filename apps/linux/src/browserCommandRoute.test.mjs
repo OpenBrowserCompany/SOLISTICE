@@ -95,7 +95,7 @@ test("a focused window that doesn't serve (a private window, or one still loadin
   }
 });
 
-test("the focus order keeps only regular, non-Little-Ardia windows", () => {
+test("the focus order keeps only regular, non-Little-Solstice windows", () => {
   const state = {
     ui: { focusOrder: ["p", "small", "b", "gone"] },
     windowOrder: ["a", "b", "p", "small"],
