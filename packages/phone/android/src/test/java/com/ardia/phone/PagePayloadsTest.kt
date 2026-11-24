@@ -1,8 +1,8 @@
 package com.ardia.phone
 
-import com.ardia.browser.PageRequest
-import com.ardia.browser.SitePermission
-import com.ardia.browser.VisitKind
+import com.openbrowsercompany.solstice.PageRequest
+import com.openbrowsercompany.solstice.SitePermission
+import com.openbrowsercompany.solstice.VisitKind
 import expo.modules.kotlin.exception.CodedException
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals

@@ -1,9 +1,9 @@
 package com.ardia.phone
 
 import android.content.Context
-import com.ardia.browser.NightShadeVerdict
-import com.ardia.browser.NightShadeVerdictUse
-import com.ardia.browser.NightShadeMode
+import com.openbrowsercompany.solstice.NightShadeVerdict
+import com.openbrowsercompany.solstice.NightShadeVerdictUse
+import com.openbrowsercompany.solstice.NightShadeMode
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

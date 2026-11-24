@@ -1,6 +1,6 @@
 package com.ardia.phone
 
-import com.ardia.browser.TouchScrollers
+import com.openbrowsercompany.solstice.TouchScrollers
 import com.ardia.browsing.SwipeDirection
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
