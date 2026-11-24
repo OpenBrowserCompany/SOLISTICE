@@ -6,7 +6,7 @@
 static const char manifest[] =
     "ardia-linux-update 1\n"
     "version 0.2.48\n"
-    "appimage Ardia-0.2.48-linux-x64.AppImage 86a3ea70f1cc738fa332e14d087a25247917fb7d88bef063ca71a29aeeb63b9a 5\n";
+    "appimage Solstice-0.2.48-linux-x64.AppImage 86a3ea70f1cc738fa332e14d087a25247917fb7d88bef063ca71a29aeeb63b9a 5\n";
 static const char signature_hex[] =
     "3c313533c2dd7cbd657228a27d44650e5d1eecc10c928d14682127c7824e97ee"
     "a51d6a60cfd336eddcdde58e4ded039735656b09b8067020bdd2f3ff4cef9104";

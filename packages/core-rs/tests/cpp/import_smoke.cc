@@ -55,7 +55,7 @@ int Fail(const char *what) {
 int main() {
   const std::string local =
       R"({"roots":{"bookmark_bar":{"type":"folder","name":"Favorites bar","children":[)"
-      R"({"type":"url","name":"Ardia","url":"https://ardia.dev/"},3,)"
+      R"({"type":"url","name":"Solstice","url":"https://ardia.dev/"},3,)"
       R"({"type":"folder","name":"Work","children":[{"type":"url","name":"","url":"file:///tmp/x"}]}]}}})";
   const std::string account = R"({"roots":{"bookmark_bar":{"type":"folder","children":[{"type":"url","url":"https://account/"}]}}})";
   const std::string truncated = local.substr(0, 20);

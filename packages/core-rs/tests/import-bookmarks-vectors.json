@@ -39,7 +39,7 @@
                 "children": [
                   {
                     "type": "url",
-                    "name": "Ardia",
+                    "name": "Solstice",
                     "url": "https://ardia.dev/",
                     "guid": "0bc5d13f-2cba-5d74-951f-3f233fe6c908",
                     "id": "5",
@@ -114,7 +114,7 @@
               "children": [
                 {
                   "type": "url",
-                  "title": "Ardia",
+                  "title": "Solstice",
                   "url": "https://ardia.dev/",
                   "dateAdded": 1655526400000
                 },
