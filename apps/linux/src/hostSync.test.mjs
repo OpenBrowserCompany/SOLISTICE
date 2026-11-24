@@ -285,13 +285,13 @@ test("a Settings window picks the sync folder itself and hands turning on, choos
   t.after(() => { browser.authority.stop(); settings.authority.stop(); });
   await tick(80);
   assert.equal(settings.authority.role(), "client");
-  await settings.authority.call("useFolder", ["/home/tux/Nextcloud/Ardia Sync"]);
-  await settings.authority.call("turnOnSync", ["/home/tux/Nextcloud/Ardia Sync", "picked"]);
-  await settings.authority.call("moveFolder", ["/media/usb/Ardia Sync"]);
+  await settings.authority.call("useFolder", ["/home/tux/Nextcloud/Solstice Sync"]);
+  await settings.authority.call("turnOnSync", ["/home/tux/Nextcloud/Solstice Sync", "picked"]);
+  await settings.authority.call("moveFolder", ["/media/usb/Solstice Sync"]);
   assert.deepEqual(browser.calls, [
-    { method: "useFolder", args: ["/home/tux/Nextcloud/Ardia Sync"] },
-    { method: "turnOnSync", args: ["/home/tux/Nextcloud/Ardia Sync", "picked"] },
-    { method: "moveFolder", args: ["/media/usb/Ardia Sync"] },
+    { method: "useFolder", args: ["/home/tux/Nextcloud/Solstice Sync"] },
+    { method: "turnOnSync", args: ["/home/tux/Nextcloud/Solstice Sync", "picked"] },
+    { method: "moveFolder", args: ["/media/usb/Solstice Sync"] },
   ]);
   assert.deepEqual(settings.calls, [], "the Settings window never runs sync itself");
 });

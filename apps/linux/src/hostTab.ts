@@ -90,7 +90,7 @@ export class HostTab {
       const identity = await invokeHost<HostTabIdentity>("tab.create", {
         ...options, adoptId: nativeAdoptId(options.adoptId, host), claim: this.claim, ...(previousClaim ? { previousClaim } : {}), profile: hostProfile(options.profile, host), url: options.url ?? "about:blank",
       }, host);
-      if (!Number.isInteger(identity?.browserId) || identity.browserId <= 0 || !Number.isInteger(identity.chromeTabId) || identity.chromeTabId <= 0) throw new Error("Invalid Ardia tab identity");
+      if (!Number.isInteger(identity?.browserId) || identity.browserId <= 0 || !Number.isInteger(identity.chromeTabId) || identity.chromeTabId <= 0) throw new Error("Invalid Solstice tab identity");
       this.identity = identity;
       owners.set(this.key, this);
       if (this.disposed) this.detach();
@@ -100,7 +100,7 @@ export class HostTab {
           this.disposed = true;
           this.unsubscribe();
           this.detach();
-          throw new Error("Invalid Ardia page lease");
+          throw new Error("Invalid Solstice page lease");
         }
         deliver({ type: "ready", browserId: identity.browserId, chromeTabId: identity.chromeTabId });
       } else if (owners.get(this.key) === this) {
@@ -128,7 +128,7 @@ export class HostTab {
   async command<T = unknown>(command: string, args: unknown[] = []): Promise<T> {
     await this.ready;
     const send = async () => {
-      if (this.disposed || !this.identity || claims.get(this.host)?.get(this.key) !== this) throw new Error(`Ardia tab released: ${this.key}`);
+      if (this.disposed || !this.identity || claims.get(this.host)?.get(this.key) !== this) throw new Error(`Solstice tab released: ${this.key}`);
       return invokeHost<T>("tab.command", { id: this.identity.browserId, claim: this.claim, command, args }, this.host);
     };
     return UNORDERED_COMMANDS.has(command) ? send() : enqueueTab(this.host, this.key, send);
