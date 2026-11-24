@@ -161,6 +161,6 @@ test("pngInk decodes filtered RGB and RGBA rows and counts dark pixels", () => {
 
 test("fixturePage carries the run's token in its title and marker", () => {
   const page = fixturePage("smokeabc");
-  assert.match(page, /<title>Ardia smoke smokeabc<\/title>/);
-  assert.match(page, /id="smoke-marker"[^>]*>Ardia smoke smokeabc</);
+  assert.match(page, /<title>Solstice smoke smokeabc<\/title>/);
+  assert.match(page, /id="smoke-marker"[^>]*>Solstice smoke smokeabc</);
 });

@@ -28,7 +28,7 @@ const find = (items, id) => {
 };
 
 test("the menu mirrors the macOS menu bar's top-level menus", () => {
-  assert.deepEqual(appMenuItems(state()).map((item) => item.title), ["Ardia", "File", "Edit", "View", "Tabs", "Bookmarks", "History", "Extensions", "Window", "Help"]);
+  assert.deepEqual(appMenuItems(state()).map((item) => item.title), ["Solstice", "File", "Edit", "View", "Tabs", "Bookmarks", "History", "Extensions", "Window", "Help"]);
 });
 
 test("items carry the menu state's checks, disabled commands and titles", () => {
@@ -51,7 +51,7 @@ test("empty lists show a disabled placeholder and single profiles hide profile m
   const history = top(items, "History").children;
   assert.deepEqual(history.at(-1), { id: "empty", title: "Empty", enabled: false });
   assert.equal(find(items, "menu:Profiles"), undefined);
-  assert.equal(find(items, "menu:New Little Ardia Window in Profile"), undefined);
+  assert.equal(find(items, "menu:New Little Solstice Window in Profile"), undefined);
 });
 
 test("items show the effective Linux shortcut", () => {
@@ -71,10 +71,10 @@ test("choices resolve to commands or window actions and ignore structure rows", 
 
 const rows = (items, title) => top(items, title).children.map((item) => "separator" in item ? "-" : item.title);
 
-test("the Ardia, File, View and Help menus carry the Mac menu bar's entries in its order", () => {
+test("the Solstice, File, View and Help menus carry the Mac menu bar's entries in its order", () => {
   const items = appMenuItems(state(), new Map([["std:quit:", { key: "q", modifiers: ["command", "shift"] }], ["newIncognitoWindow", { key: "n", modifiers: ["command", "shift"] }]]));
-  assert.deepEqual(rows(items, "Ardia"), ["About Ardia", "-", "Settings…", "Import from Another Browser…", "-", "Quit Ardia"]);
-  assert.deepEqual(find(items, "std:quit:"), { id: "std:quit:", title: "Quit Ardia", key: "q", modifiers: ["command", "shift"] });
+  assert.deepEqual(rows(items, "Solstice"), ["About Solstice", "-", "Settings…", "Import from Another Browser…", "-", "Quit Solstice"]);
+  assert.deepEqual(find(items, "std:quit:"), { id: "std:quit:", title: "Quit Solstice", key: "q", modifiers: ["command", "shift"] });
   const file = rows(items, "File");
   assert.deepEqual(file.slice(0, 4), ["New Tab", "New Tab in Group", "New Window", "New Incognito Window"]);
   assert.deepEqual(file.slice(-4), ["Save Page As…", "Share", "Print…", "Print Using System Dialog…"]);
@@ -164,13 +164,13 @@ test("the Bookmarks menu exports bookmarks and the Window menu minimizes every w
   assert.deepEqual(appMenuChoice("window:minimizeAll"), { kind: "window", action: "minimizeAll" });
 });
 
-test("the Ardia menu checks for updates, or restarts to finish one, only where updates work", () => {
-  const ardia = (context) => top(appMenuItems(state(), new Map(), new Set(), context), "Ardia").children.map((item) => item.title ?? "—");
-  assert.deepEqual(ardia({}).slice(0, 2), ["About Ardia", "—"]);
-  assert.deepEqual(ardia({ updates: "check" }).slice(0, 2), ["About Ardia", "Check for Updates…"]);
-  assert.deepEqual(ardia({ updates: "restart" }).slice(0, 2), ["About Ardia", "Restart to Update"]);
+test("the Solstice menu checks for updates, or restarts to finish one, only where updates work", () => {
+  const ardia = (context) => top(appMenuItems(state(), new Map(), new Set(), context), "Solstice").children.map((item) => item.title ?? "—");
+  assert.deepEqual(ardia({}).slice(0, 2), ["About Solstice", "—"]);
+  assert.deepEqual(ardia({ updates: "check" }).slice(0, 2), ["About Solstice", "Check for Updates…"]);
+  assert.deepEqual(ardia({ updates: "restart" }).slice(0, 2), ["About Solstice", "Restart to Update"]);
   assert.deepEqual(appMenuChoice("checkForUpdates"), { kind: "updates", restart: false });
-  assert.deepEqual(appMenuChoice("restartToUpdate"), { kind: "updates", restart: true }, "the item picked decides whether Ardia restarts, not what finished while the menu was open");
+  assert.deepEqual(appMenuChoice("restartToUpdate"), { kind: "updates", restart: true }, "the item picked decides whether Solstice restarts, not what finished while the menu was open");
 });
 
 test("Move to Profile lists the profiles only, and the Tabs and Extensions menus leave setup rows to Settings", () => {
