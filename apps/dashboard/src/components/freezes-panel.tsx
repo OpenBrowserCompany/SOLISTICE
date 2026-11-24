@@ -29,7 +29,7 @@ function Signatures({ data }: { data: Freezes }) {
             header: "Where",
             cell: (s: Signature) => {
               const lines = s.topFrames.map((label, i) => (label === s.rawFrames[i] ? label : `${label}  (${s.rawFrames[i]})`));
-              if (!lines.length) return <span className="font-mono text-[12px]" title="No frames from Ardia's own code">{`no own frames (${s.signature})`}</span>;
+              if (!lines.length) return <span className="font-mono text-[12px]" title="No frames from Solstice's own code">{`no own frames (${s.signature})`}</span>;
               return (
                 <details className="font-mono text-[12px]" title={lines.join("\n")}>
                   <summary className="cursor-pointer">{s.topFrames[0]}</summary>
@@ -56,7 +56,7 @@ export function FreezesPanel() {
     <Panel
       source="app"
       title="Freezes"
-      description="app_freeze over the last 7 days, grouped by where Ardia's own code was stuck (the top three frames from Ardia's own files). Frames are named from each build's published symbols (scripts/symbolicate-frames.mjs); hover a place for its top frames and their raw offsets."
+      description="app_freeze over the last 7 days, grouped by where Solstice's own code was stuck (the top three frames from Solstice's own files). Frames are named from each build's published symbols (scripts/symbolicate-frames.mjs); hover a place for its top frames and their raw offsets."
     >
       <Loaded query={freezes} skeleton={<TableSkeleton rows={6} columns={7} />}>
         {(data) => <Signatures data={data} />}

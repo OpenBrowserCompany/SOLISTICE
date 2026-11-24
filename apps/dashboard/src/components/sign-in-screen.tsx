@@ -37,7 +37,7 @@ export function SignInScreen({ next }: { next: string }) {
         <div className="flex flex-col items-center gap-3 text-center">
           <img src="/app-icon.png" alt="" width={56} height={56} className="size-14 rounded-[15px] shadow-[0_8px_24px_rgba(0,0,0,0.18)]" />
           <ScrambleText as="h1" playOnMount className="text-[1.65rem] font-semibold tracking-[-0.025em]">
-            Ardia dashboard
+            Solstice dashboard
           </ScrambleText>
           <p className="max-w-72 text-sm text-foreground/60">Private. Sign in with the owner account.</p>
         </div>
