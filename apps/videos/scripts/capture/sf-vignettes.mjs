@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// usage: node sf-vignettes.mjs <Debug Ardia.app> <scratch dir> [vignette…] — runs each vignette of sf-vignettes.json in its own hidden instances sharing one scratch folder, capturing setup, share, add and every action with the other people watching
+// usage: node sf-vignettes.mjs <Debug Solstice.app> <scratch dir> [vignette…] — runs each vignette of sf-vignettes.json in its own hidden instances sharing one scratch folder, capturing setup, share, add and every action with the other people watching
 import { execFileSync, spawn } from "node:child_process";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
