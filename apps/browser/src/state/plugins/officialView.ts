@@ -69,7 +69,7 @@ export function officialView(plugin: OfficialPlugin, programs: ProgramsState | u
 export function autoUpdateNote(updated: OfficialAutoUpdate): { title: string; description: string } {
   const title = updated.to ? `Updated by itself to ${updated.to}` : "Updated by itself";
   const said = updated.runtime
-    ? "It added its own code, which runs in Ardia's sandbox, offline, and first starts when you use one of its commands in the command bar. Its permissions didn't change."
+    ? "It added its own code, which runs in Solstice's sandbox, offline, and first starts when you use one of its commands in the command bar. Its permissions didn't change."
     : "Its permissions didn't change.";
   const since = updated.from ? `New since ${updated.from}` : "New since the version you approved";
   return { title, description: updated.added.length ? `${said} ${since}: ${updated.added.join("; ")}.` : said };

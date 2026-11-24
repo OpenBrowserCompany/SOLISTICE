@@ -24,7 +24,7 @@ const settle = async () => {
 const cli = (version, extra = {}) =>
   JSON.stringify({ manifest: 1, name: "cli", title: "Command Line", version, alwaysOn: true, official: true, icon: "terminal.fill", permissions: ["control"], programs: [{ name: "ardia", path: "bin/ardia" }], ...extra });
 const OLD = cli("0.4.0");
-const NEW = cli("0.5.0", { description: "Drive Ardia from your terminal or an agent.", permissions: ["control", "tabs"] });
+const NEW = cli("0.5.0", { description: "Drive Solstice from your terminal or an agent.", permissions: ["control", "tabs"] });
 const PINNED = { name: "cli", version: "0.5.0", folderId: `official-${"5".repeat(64)}` };
 const LEGACY = { name: "cli", status: "ok", official: true, legacy: true, folderId: "bundled", text: OLD };
 const OLD_RECEIPT = manifestHash(OLD, "bundled");

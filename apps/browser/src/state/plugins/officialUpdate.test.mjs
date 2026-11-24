@@ -11,11 +11,11 @@ const parse = (doc) => {
 
 const AFTER_UPDATE = [["skills", "install", "--auto"], ["skills", "refresh"], ["computer", "refresh"]];
 const CLI_040 = {
-  manifest: 1, name: "cli", title: "Command Line", description: "Drive Ardia from your terminal or an agent.", version: "0.4.0", icon: "terminal.fill",
+  manifest: 1, name: "cli", title: "Command Line", description: "Drive Solstice from your terminal or an agent.", version: "0.4.0", icon: "terminal.fill",
   alwaysOn: true, official: true, permissions: ["control"], programs: [{ name: "ardia", path: "bin/ardia", afterUpdate: AFTER_UPDATE }],
 };
 const CLI_060 = {
-  manifest: 2, name: "cli", title: "Command Line", description: "Drive Ardia from your terminal or an agent.", version: "0.6.0", requires: "0.2.48", icon: "terminal.fill",
+  manifest: 2, name: "cli", title: "Command Line", description: "Drive Solstice from your terminal or an agent.", version: "0.6.0", requires: "0.2.48", icon: "terminal.fill",
   keywords: ["command line", "terminal"], alwaysOn: true, official: true, main: "dist/main.js", permissions: { control: true },
   contributes: {
     commands: [{ name: "show-status", title: "Command Line: Show Status", icon: "terminal", view: "status", keywords: ["ardia"] }],
@@ -91,7 +91,7 @@ test("the Python CLI 0.4.0 to 0.6.0: same permissions, so it passes, and the not
   const verdict = from040(parse(CLI_060));
   assert.equal(verdict.ok, true);
   assert.ok(verdict.added.some((line) => line.includes("Adds to the command bar: Command Line: Show Status")), verdict.added.join("\n"));
-  assert.ok(verdict.added.some((line) => line.startsWith("Runs its code in Ardia's plugin sandbox, starting the first time you use it")), verdict.added.join("\n"));
+  assert.ok(verdict.added.some((line) => line.startsWith("Runs its code in Solstice's plugin sandbox, starting the first time you use it")), verdict.added.join("\n"));
   assert.ok(!verdict.added.some((line) => line.includes("PATH")), "PATH lines were already approved");
 });
 
