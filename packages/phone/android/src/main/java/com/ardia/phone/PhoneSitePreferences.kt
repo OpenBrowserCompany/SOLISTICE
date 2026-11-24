@@ -1,11 +1,11 @@
 package com.ardia.phone
 
 import android.content.SharedPreferences
-import com.ardia.browser.BrowserUrl
-import com.ardia.browser.NightShadeVerdict
-import com.ardia.browser.NightShadeVerdictUse
-import com.ardia.browser.NightShadeMode
-import com.ardia.browser.SitePreferences
+import com.openbrowsercompany.solstice.BrowserUrl
+import com.openbrowsercompany.solstice.NightShadeVerdict
+import com.openbrowsercompany.solstice.NightShadeVerdictUse
+import com.openbrowsercompany.solstice.NightShadeMode
+import com.openbrowsercompany.solstice.SitePreferences
 import org.json.JSONObject
 
 class PhoneSitePreferences(

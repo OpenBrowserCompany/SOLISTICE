@@ -5,20 +5,20 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.util.Base64
 import android.webkit.WebView
-import com.ardia.browser.BrowserUrl
-import com.ardia.browser.CaptureRoute
-import com.ardia.browser.DevelopmentWebViewEngine
-import com.ardia.browser.DownloadFailure
-import com.ardia.browser.DownloadOutcome
-import com.ardia.browser.DownloadProgress
-import com.ardia.browser.Page
-import com.ardia.browser.PageEvent
-import com.ardia.browser.PageSetup
-import com.ardia.browser.PopupRequest
-import com.ardia.browser.PrivatePagesUnavailableException
-import com.ardia.browser.SystemDownloads
-import com.ardia.browser.VisitKind
-import com.ardia.browser.WebViewPage
+import com.openbrowsercompany.solstice.BrowserUrl
+import com.openbrowsercompany.solstice.CaptureRoute
+import com.openbrowsercompany.solstice.DevelopmentWebViewEngine
+import com.openbrowsercompany.solstice.DownloadFailure
+import com.openbrowsercompany.solstice.DownloadOutcome
+import com.openbrowsercompany.solstice.DownloadProgress
+import com.openbrowsercompany.solstice.Page
+import com.openbrowsercompany.solstice.PageEvent
+import com.openbrowsercompany.solstice.PageSetup
+import com.openbrowsercompany.solstice.PopupRequest
+import com.openbrowsercompany.solstice.PrivatePagesUnavailableException
+import com.openbrowsercompany.solstice.SystemDownloads
+import com.openbrowsercompany.solstice.VisitKind
+import com.openbrowsercompany.solstice.WebViewPage
 import expo.modules.kotlin.exception.CodedException
 import java.lang.ref.WeakReference
 import java.util.UUID
@@ -78,7 +78,7 @@ object PhonePages {
 
     @Synchronized
     fun engine(context: Context): DevelopmentWebViewEngine = shared ?: run {
-        if (UpgradeGate.pending(context)) throw CodedException("ERR_IMPORT_PENDING", "The import from the previous Ardia app has not finished", null)
+        if (UpgradeGate.pending(context)) throw CodedException("ERR_IMPORT_PENDING", "The import from the previous Solstice app has not finished", null)
         create(context.applicationContext)
     }
 
@@ -364,10 +364,10 @@ object PhonePages {
     }
 
 
-    private fun gateThenSend(page: Page, request: com.ardia.browser.PageRequest?) {
+    private fun gateThenSend(page: Page, request: com.openbrowsercompany.solstice.PageRequest?) {
         val id = page.id
         val kind = request?.kind
-        if (request == null || kind !is com.ardia.browser.PageRequest.Kind.Permission) {
+        if (request == null || kind !is com.openbrowsercompany.solstice.PageRequest.Kind.Permission) {
             permissionAsks.drop(id)
             send(id, "page.request", "request" to request?.let { PagePayloads.request(app, it) })
             return
@@ -410,7 +410,7 @@ object PhonePages {
             launch { page.find.drop(1).filter { it == null || it.isDone }.collect { send(id, "page.find", "result" to PagePayloads.find(it)) } }
             launch { page.request.collect { request -> gateThenSend(page, request) } }
             launch {
-                var shown: com.ardia.browser.FullscreenVideo? = null
+                var shown: com.openbrowsercompany.solstice.FullscreenVideo? = null
                 page.fullscreen.drop(1).collect { video ->
                     if (video != null) {
                         fullscreen.show(host?.get(), video)

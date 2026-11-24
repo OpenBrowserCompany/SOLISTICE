@@ -4,7 +4,7 @@ import android.app.SearchManager
 import android.content.Intent
 import android.net.Uri
 import com.ardia.appmodel.SystemLink
-import com.ardia.browser.BrowserUrl
+import com.openbrowsercompany.solstice.BrowserUrl
 
 object PhoneSystemLinks {
     const val SOURCE_EXTRA = "com.ardia.SOURCE"
