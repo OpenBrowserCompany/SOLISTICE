@@ -1,7 +1,7 @@
 pkgname=ardia-bin
 pkgver=0.2.47nightly.2
 pkgrel=1
-pkgdesc="A Chromium-based browser with Arc's sidebar and Dia's polish"
+pkgdesc="A Web with freedom. A Chromium-based browser with Arc's sidebar and Dia's polish"
 arch=('x86_64')
 url="https://ardia.dev"
 license=('GPL-3.0-only')

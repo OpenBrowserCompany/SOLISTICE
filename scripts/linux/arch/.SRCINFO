@@ -1,5 +1,5 @@
 pkgbase = ardia-bin
-	pkgdesc = A Chromium-based browser with Arc's sidebar and Dia's polish
+	pkgdesc = A Web with freedom. A Chromium-based browser with Arc's sidebar and Dia's polish
 	pkgver = 0.2.47nightly.2
 	pkgrel = 1
 	url = https://ardia.dev
