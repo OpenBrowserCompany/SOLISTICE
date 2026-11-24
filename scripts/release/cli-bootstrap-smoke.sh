@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-usage="usage: scripts/release/cli-bootstrap-smoke.sh <Ardia.app> <version> <fixtures dir> [<earlier Ardia.app>]
-Launches hidden instances of <Ardia.app> on scratch data folders with scratch bin folders, fetching official plugins
+usage="usage: scripts/release/cli-bootstrap-smoke.sh <Solstice.app> <version> <fixtures dir> [<earlier Solstice.app>]
+Launches hidden instances of <Solstice.app> on scratch data folders with scratch bin folders, fetching official plugins
 from <fixtures dir> (official-plugins.py fixtures: the pinned, SHA-256 checked release assets) instead of GitHub. A
 fresh profile downloads nothing and gets no ardia until it installs Command Line. A profile whose plugins.json holds the
 approval the Install sheet records for the pinned copy (its plugin.json under the official-<sha256> identity) fetches
-it, checks its SHA-256 against the pin, links ardia from Ardia's copy without a quarantine flag, and with control on
+it, checks its SHA-256 against the pin, links ardia from Solstice's copy without a quarantine flag, and with control on
 ardia tabs answers; the linked ardia is the pinned version, run as published (ad hoc or Developer ID-signed alike). The
 same profile with a changed asset, or with none (offline), gets no ardia and no downloaded copy. A copy no signed pin
 names gets no ardia even with active pointing at it and plugins.json approving it. Command Line coverage
 can't be skipped: no fixture fails. Given an earlier release that bundles Command Line (0.2.47), a profile where it
-installed and linked its own ardia moves to the pinned version on <Ardia.app> the way that pair is expected to:
+installed and linked its own ardia moves to the pinned version on <Solstice.app> the way that pair is expected to:
 CLI_UPGRADE_EXPECT=auto or prompt, or the built-in answer for a known pair (0.4.0 to 0.6.0: auto); an unknown pair with
 no answer fails. auto: it switches with no click and plugins.json records the new approval, the old one as previous and
 the update note. prompt: the pinned copy is fetched and verified but waits for Update…, with plugins.json untouched,
@@ -56,7 +56,7 @@ launch() {
   echo '{"version":1,"completedAt":1}' >"$1/onboarding.json"
   open -g -n --env ARDIA_BACKGROUND=1 --env "ARDIA_DATA_DIR=$1" --env "ARDIA_INSTANCE=cliBinDir=$2${3:+,officialPluginsFrom=$3}" \
     --stdout "$1/app.out.log" --stderr "$1/app.out.log" "$which"
-  for _ in $(seq 1 100); do pid="$(pgrep -n -f "^$which/Contents/MacOS/Ardia" || true)"; [ -n "$pid" ] && break; sleep 0.1; done
+  for _ in $(seq 1 100); do pid="$(pgrep -n -f "^$which/Contents/MacOS/Solstice" || true)"; [ -n "$pid" ] && break; sleep 0.1; done
 }
 
 installed_profile() {
@@ -83,10 +83,10 @@ check "the approved Command Line is fetched, verified and linked" "$([ -L "$bin/
 check "its download is kept under its SHA-256, with no quarantine flag" "$([ -f "$data/OfficialPlugins/cli/$sha/plugin.json" ] && [ -f "$data/OfficialPlugins/cli/$sha.tar.gz" ] && ! xattr -p com.apple.quarantine "$data/OfficialPlugins/cli/$sha/bin/ardia" >/dev/null 2>&1 && echo 1 || echo 0)"
 linked="$(readlink "$bin/ardia" || true)"
 store="$(cd "$data" && pwd -P)/Programs/cli/current/bin/ardia"
-check "ardia comes from Ardia's copy in the store" "$([ "$linked" = "$store" ] || [ "$linked" = "$data/Programs/cli/current/bin/ardia" ] && echo 1 || echo 0)" "$linked"
+check "ardia comes from Solstice's copy in the store" "$([ "$linked" = "$store" ] || [ "$linked" = "$data/Programs/cli/current/bin/ardia" ] && echo 1 || echo 0)" "$linked"
 check "the linked ardia is the pinned copy's, byte for byte" "$(cmp -s "$store" "$data/OfficialPlugins/cli/$sha/bin/ardia" && echo 1 || echo 0)"
 got="$("$bin/ardia" --version 2>&1 || true)"
-check "it is the pinned ardia $pinned (Ardia $version)" "$([ "$got" = "ardia $pinned" ] && echo 1 || echo 0)" "$got"
+check "it is the pinned ardia $pinned (Solstice $version)" "$([ "$got" = "ardia $pinned" ] && echo 1 || echo 0)" "$got"
 control="$data/Chromium/ArdiaControl.json"
 for _ in $(seq 1 150); do [ -s "$control" ] && break; sleep 0.2; done
 tabs="$(env -i HOME="$HOME" PATH="$bin:/usr/bin:/bin" ARDIA_DATA_DIR="$data" ARDIA_TELEMETRY=off ardia tabs 2>&1)" && ok=1 || ok=0
@@ -137,7 +137,7 @@ bundled="${earlier:+$earlier/Contents/Resources/Plugins/cli/plugin.json}"
 if [ -z "$earlier" ]; then
   echo "SKIP  an earlier release's Command Line keeps working: no earlier release given"
 elif [ ! -f "$bundled" ]; then
-  echo "SKIP  an earlier release's Command Line keeps working: Ardia $(plutil -extract CFBundleShortVersionString raw "$earlier/Contents/Info.plist" 2>/dev/null) bundles no Command Line"
+  echo "SKIP  an earlier release's Command Line keeps working: Solstice $(plutil -extract CFBundleShortVersionString raw "$earlier/Contents/Info.plist" 2>/dev/null) bundles no Command Line"
 else
   read -r old_version receipt < <(python3 -I -c '
 import hashlib, json, sys

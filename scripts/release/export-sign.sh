@@ -7,14 +7,14 @@ archive="${2:?$usage}"
 identity="${3:?$usage}"
 provisioning_profile="${4:-}"
 . "$(dirname "$0")/lib.sh"
-app="$dist/export/Ardia.app"
+app="$dist/export/Solstice.app"
 
 if [ -n "$provisioning_profile" ]; then
   app_entitlements="$macos/Ardia-macOS/Ardia.entitlements"
-  grants_browser_passkeys "$provisioning_profile" && app_entitlements="$macos/Ardia-macOS/Ardia-ICloudPasskeys.entitlements"
+  grants_browser_passkeys "$provisioning_profile" && app_entitlements="$macos/Ardia-macOS/Solstice-ICloudPasskeys.entitlements"
   echo "==> Export (Developer ID, $(basename "$provisioning_profile"), $(basename "$app_entitlements"))"
-  "$root/scripts/lib/export-developer-id.sh" "$archive/Products/Applications/Ardia.app" "$app" "$provisioning_profile" \
-    "$app_entitlements" "$identity" com.ardia.browser > "$dist/export.log" 2>&1 || { cat "$dist/export.log" >&2; exit 1; }
+  "$root/scripts/lib/export-developer-id.sh" "$archive/Products/Applications/Solstice.app" "$app" "$provisioning_profile" \
+    "$app_entitlements" "$identity" com.openbrowsercompany.solstice > "$dist/export.log" 2>&1 || { cat "$dist/export.log" >&2; exit 1; }
 else
   echo "==> Export (Developer ID)"
   for attempt in 1 2 3 4 5 6; do
@@ -27,7 +27,7 @@ else
     sleep 10
   done
 fi
-[ "$(lipo -archs "$app/Contents/MacOS/Ardia")" = arm64 ] || die "the app's executable is $(lipo -archs "$app/Contents/MacOS/Ardia"), not arm64"
+[ "$(lipo -archs "$app/Contents/MacOS/Solstice")" = arm64 ] || die "the app's executable is $(lipo -archs "$app/Contents/MacOS/Solstice"), not arm64"
 
 echo "==> Official plugins (fetched on Install; the app carries only the pin and the program registry)"
 plist="$app/Contents/Info.plist"
@@ -60,10 +60,10 @@ done
 sign_as "$identity" --options restrict,library,kill,runtime "$fwv/Helpers/chrome_crashpad_handler"
 sign_as "$identity" --options restrict,library,kill,runtime "$fwv/Helpers/app_mode_loader"
 [ -e "$fwv/Helpers/web_app_shortcut_copier" ] && sign_as "$identity" --options restrict,library,kill,runtime \
-  --identifier com.ardia.browser.web_app_shortcut_copier "$fwv/Helpers/web_app_shortcut_copier"
+  --identifier com.openbrowsercompany.solstice.web_app_shortcut_copier "$fwv/Helpers/web_app_shortcut_copier"
 sign_as "$identity" "$fw"
 plugin_host="$app/Contents/Helpers/ArdiaPluginHost"
-[ -e "$plugin_host" ] && sign_as "$identity" --options runtime --identifier com.ardia.browser.plugin-host "$plugin_host"
+[ -e "$plugin_host" ] && sign_as "$identity" --options runtime --identifier com.openbrowsercompany.solstice.plugin-host "$plugin_host"
 [ -d "$app/Contents/Frameworks/hermes.framework" ] \
   && sign_as "$identity" --preserve-metadata=identifier,entitlements,flags,runtime "$app/Contents/Frameworks/hermes.framework"
 sign_as "$identity" --preserve-metadata=entitlements,requirements,flags,runtime "$app"
