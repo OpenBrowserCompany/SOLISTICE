@@ -68,7 +68,7 @@ test("site switches are kept per canonical origin", () => {
   assert.equal(switchOrigin("http://localhost:5173/a"), "http://localhost:5173");
   assert.equal(switchOrigin("http://[::1]:8318/"), "http://[::1]:8318");
   assert.equal(switchOrigin("http://user:pw@example.com/"), null);
-  assert.equal(switchOrigin("ardia://settings"), null);
+  assert.equal(switchOrigin("solstice://settings"), null);
   assert.equal(switchOrigin("file:///tmp/x.html"), null);
   for (const local of ["http://localhost:1", "http://app.localhost", "http://127.0.0.1:18318", "http://127.1.2.3", "http://0.0.0.0:3000", "http://[::1]:8080"]) assert.ok(isLocalOrigin(switchOrigin(local)), local);
   for (const remote of ["http://192.168.1.4:18318", "https://localhost.example.com", "http://10.0.0.1"]) assert.ok(!isLocalOrigin(switchOrigin(remote)), remote);

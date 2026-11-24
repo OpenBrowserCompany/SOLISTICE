@@ -79,7 +79,7 @@ test("only http and https links carry a URL; others fall back to their text", ()
     { text: "docs", bold: true, url: "https://example.com/a?b=1" },
     { text: " now" },
   ]);
-  for (const href of ["javascript:alert(1)", "file:///etc/passwd", "ardia://settings", "https://user:pw@example.com/", "/relative"]) {
+  for (const href of ["javascript:alert(1)", "file:///etc/passwd", "solstice://settings", "https://user:pw@example.com/", "/relative"]) {
     assert.deepEqual(parseInline(`[x](${href})`), [{ text: "x" }], href);
   }
 });

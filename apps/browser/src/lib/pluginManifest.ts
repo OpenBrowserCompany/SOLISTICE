@@ -133,7 +133,7 @@ function checkManifest(raw: Fields, declaredManifest = MANIFEST_VERSION): { mani
   const title = text(c, "title", raw.title ?? raw.name, LIMITS.title);
   const description = text(c, "description", raw.description, LIMITS.description, false) ?? "";
   const version = matching(c, "version", raw.version, VERSION, "MAJOR.MINOR.PATCH", false);
-  const requires = matching(c, "requires", raw.requires, VERSION, "an Ardia version, MAJOR.MINOR.PATCH", false);
+  const requires = matching(c, "requires", raw.requires, VERSION, "an Solstice version, MAJOR.MINOR.PATCH", false);
   const icon = matching(c, "icon", raw.icon, SYMBOL, SYMBOL_RULE, false);
   const keywords = keywordsOf(c, raw.keywords);
   const telemetry = telemetryOf(c, raw.telemetry);
@@ -150,8 +150,8 @@ function checkManifest(raw: Fields, declaredManifest = MANIFEST_VERSION): { mani
   v2OnlyProblems(c, raw, contributes.programs, declaredManifest);
   commandProblems(c, contributes, permissions, page !== null, runtime.main);
   contributionProblems(c, contributes, permissions, runtime);
-  if (contributes.panels.some((p) => p.file) && name && RESERVED_PAGE_NAMES.includes(name)) c.problems.push(`name: ${name} is one of Ardia's own pages (ardia://${name}), so a plugin with a page can't use it`);
-  if (sidecar && Array.isArray(permissions.network)) c.problems.push(`permissions.network: a sidecar can only have "*" or false, since Ardia can't hold a program to a list of hosts`);
+  if (contributes.panels.some((p) => p.file) && name && RESERVED_PAGE_NAMES.includes(name)) c.problems.push(`name: ${name} is one of Solstice's own pages (solstice://${name}), so a plugin with a page can't use it`);
+  if (sidecar && Array.isArray(permissions.network)) c.problems.push(`permissions.network: a sidecar can only have "*" or false, since Solstice can't hold a program to a list of hosts`);
   if (c.problems.length || !name || !title) return { manifest: null, problems: c.problems };
   const activationEvents = given ?? derivedActivationEvents(contributes, runtime);
   const k = contributes;
@@ -177,7 +177,7 @@ export function readManifest(text: string): ManifestRead {
   if (given !== undefined && (typeof given !== "number" || !Number.isSafeInteger(given) || given < 0))
     return { manifest: null, problems: ["manifest must be a whole number, the manifest's version"], newer: false };
   if (typeof given === "number" && given > MANIFEST_VERSION)
-    return { manifest: null, problems: [`manifest ${given} needs a newer Ardia (this one reads up to ${MANIFEST_VERSION})`], newer: true };
+    return { manifest: null, problems: [`manifest ${given} needs a newer Solstice (this one reads up to ${MANIFEST_VERSION})`], newer: true };
   const current = upgraded(doc, MANIFEST_VERSION, MANIFEST_MIGRATIONS, "manifest");
   if (!current) return { manifest: null, problems: [`${MANIFEST_FILE} couldn't be read`], newer: false };
   const declared = typeof given === "number" ? given : 0;
