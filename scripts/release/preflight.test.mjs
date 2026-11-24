@@ -37,7 +37,7 @@ ${channel ? `            <sparkle:channel>${channel}</sparkle:channel>\n` : ""} 
   return `<?xml version="1.0" standalone="yes"?>
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
-        <title>Ardia</title>
+        <title>Solstice</title>
 ${body}    </channel>
 </rss>
 `;
@@ -280,8 +280,8 @@ test("a feed cut off, not well-formed, without items, or with items appcast.py w
   const mismatched = LIVE.replace("<sparkle:shortVersionString>1.2.2</sparkle:shortVersionString>", "<sparkle:shortVersionString>1.2.2</sparkle:version>");
   const langChannel = LIVE.replace("<channel>", '<channel xml:lang="en">');
   const wrapped = LIVE.replace("        <item>", "        <group><item>").replace("</item>\n", "</item></group>\n");
-  const entities = LIVE.replace("<rss", '<!DOCTYPE rss [<!ENTITY a "aaaaaaaaaa">]>\n<rss').replace("<title>Ardia</title>", "<title>&a;</title>");
-  const huge = LIVE.replace("<title>Ardia</title>", `<title>${"x".repeat(9 * 1024 * 1024)}</title>`);
+  const entities = LIVE.replace("<rss", '<!DOCTYPE rss [<!ENTITY a "aaaaaaaaaa">]>\n<rss').replace("<title>Solstice</title>", "<title>&a;</title>");
+  const huge = LIVE.replace("<title>Solstice</title>", `<title>${"x".repeat(9 * 1024 * 1024)}</title>`);
   const cases = { cut, unclosed, buildless, itemless, attributed, mismatched, langChannel, wrapped, entities, huge };
   for (const [name, body] of Object.entries(cases)) {
     const feedOut = join(root, "base.xml");
@@ -313,7 +313,7 @@ test("a stable that isn't above the latest stable in the feed fails, as publish.
 
 test("the 8 MB cap counts UTF-8 bytes while the body streams, and applies to a feed file too", async () => {
   const root = fixture();
-  const body = LIVE.replace("<title>Ardia</title>", `<title>${"é".repeat(4_500_000)}</title>`);
+  const body = LIVE.replace("<title>Solstice</title>", `<title>${"é".repeat(4_500_000)}</title>`);
   const result = await preflight({ version: "1.2.3", root, feed: FEED_URL, fetchImpl: async () => new Response(body, { status: 200 }) });
   assert.match(result.results.filter((r) => r.level === "fail").map((r) => r.message).join("\n"), /is over 8388608 bytes/);
   const file = join(root, "big.xml");

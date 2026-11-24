@@ -250,7 +250,7 @@ export async function preflight({ version, mode = "release", feed, feedOut, valu
 
   const arch = archFacts(root, version);
   const pkgver = version.replace("-nightly", "nightly");
-  const tarball = `https://github.com/${REPO}/releases/download/v${version}/Ardia-${version}-linux-x64.tar.xz`;
+  const tarball = `https://github.com/${REPO}/releases/download/v${version}/Solstice-${version}-linux-x64.tar.xz`;
   if (arch.error) fail(`Arch package: ${arch.error}`);
   else if (arch.pkgver !== pkgver) fail(`Arch package: update-pkgbuild.sh writes pkgver ${arch.pkgver} for ${version}, not ${pkgver}`);
   else if (arch.source !== `ardia-bin-${pkgver}.tar.xz::${tarball}`) fail(`Arch package: its source is ${arch.source}, not ${tarball}`);

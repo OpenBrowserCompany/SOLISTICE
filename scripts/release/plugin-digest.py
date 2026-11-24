@@ -2,8 +2,8 @@
 """Usage: scripts/release/plugin-digest.py <plugin folder>
   Prints the folder's payload digest, the one PluginPrograms.payloadDigest computes for the copy it publishes: the
   SHA-256 of one line per entry, sorted by path bytes, `d <path>` or `f <755 if executable, else 644> <sha256> <path>`, leaving out
-  every __pycache__ folder and the top-level names Ardia keeps for itself (.leases, .after-update, .after-update-claim).
-  A link, a name with control characters or any other kind of file is refused, as Ardia refuses it."""
+  every __pycache__ folder and the top-level names Solstice keeps for itself (.leases, .after-update, .after-update-claim).
+  A link, a name with control characters or any other kind of file is refused, as Solstice refuses it."""
 import hashlib
 import os
 import stat
