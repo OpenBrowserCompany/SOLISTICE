@@ -111,6 +111,10 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
+      - name: Create the build root
+        run: |
+          mkdir -p "$HOME/chromium-build"
+          touch "$HOME/chromium-build/.metadata_never_index"
       - name: Sync a fresh Chromium tree
         run: scripts/agent/locked chromium --as release --wait 3600 -- engine/patches/build/01-sync.sh --apply
       - name: Helium and its substitutions
