@@ -23,8 +23,8 @@ export async function generateTls(dir) {
   await writeFile(join(dir, "leaf.ext"), `basicConstraints = CA:FALSE\nkeyUsage = digitalSignature, keyEncipherment\nextendedKeyUsage = serverAuth\nsubjectAltName = @names\n[names]\n${altNames}\n`);
   await writeFile(join(dir, "bad.ext"), `basicConstraints = CA:FALSE\nextendedKeyUsage = serverAuth\nsubjectAltName = ${UNTRUSTED_HOSTS.map((host) => `DNS:${host}`).join(",")}\n`);
   try {
-    await openssl(dir, ["req", "-x509", "-newkey", "rsa:2048", "-nodes", "-keyout", "ca.key", "-out", "ca.pem", "-days", "2", "-subj", "/CN=Ardia Acceptance Test CA", "-addext", "basicConstraints=critical,CA:TRUE", "-addext", "keyUsage=critical,keyCertSign,cRLSign"]);
-    await openssl(dir, ["req", "-newkey", "rsa:2048", "-nodes", "-keyout", "leaf.key", "-out", "leaf.csr", "-subj", "/CN=secure.ardia.test/O=Ardia Acceptance"]);
+    await openssl(dir, ["req", "-x509", "-newkey", "rsa:2048", "-nodes", "-keyout", "ca.key", "-out", "ca.pem", "-days", "2", "-subj", "/CN=Solstice Acceptance Test CA", "-addext", "basicConstraints=critical,CA:TRUE", "-addext", "keyUsage=critical,keyCertSign,cRLSign"]);
+    await openssl(dir, ["req", "-newkey", "rsa:2048", "-nodes", "-keyout", "leaf.key", "-out", "leaf.csr", "-subj", "/CN=secure.ardia.test/O=Solstice Acceptance"]);
     await openssl(dir, ["x509", "-req", "-in", "leaf.csr", "-CA", "ca.pem", "-CAkey", "ca.key", "-CAcreateserial", "-out", "leaf.pem", "-days", "2", "-sha256", "-extfile", "leaf.ext"]);
     await openssl(dir, ["req", "-x509", "-newkey", "rsa:2048", "-nodes", "-keyout", "bad.key", "-out", "bad.pem", "-days", "2", "-subj", "/CN=badcert.ardia.test", "-addext", `subjectAltName=${UNTRUSTED_HOSTS.map((host) => `DNS:${host}`).join(",")}`]);
   } catch (error) {

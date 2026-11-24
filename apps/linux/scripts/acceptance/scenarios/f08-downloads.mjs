@@ -187,7 +187,7 @@ export default {
       const active = await until(async () => {
         const id = await state.shell.activeTabId();
         const tab = id ? await state.shell.tab(id) : null;
-        return tab?.url?.startsWith("ardia://downloads") ? tab.url : false;
+        return tab?.url?.startsWith("solstice://downloads") ? tab.url : false;
       }, { timeout: 8000, label: "the downloads page in the active tab" });
       await pause(400);
       return { active };

@@ -56,7 +56,7 @@ async function main() {
   const scratchRoot = join(resultsDir, "scratch");
   await mkdir(scratchRoot, { recursive: true });
   const startedAt = new Date().toISOString();
-  log(`Ardia acceptance: ${scenarios.length} scenarios, evidence in ${resultsDir}`);
+  log(`Solstice acceptance: ${scenarios.length} scenarios, evidence in ${resultsDir}`);
   const tls = await generateTls(join(resultsDir, "tls"));
   const fixtures = await startFixtures({ tls });
   let results = [];
