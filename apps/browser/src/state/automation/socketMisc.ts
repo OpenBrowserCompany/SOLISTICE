@@ -63,7 +63,7 @@ function ardiaKeepsPasswords(params: Record<string, unknown>) {
   const plugin = currentManagerPlugin(profileArg(params.profile));
   if (!plugin) return;
   noteSocketPasswordManagerRefused(consentToken());
-  throw new OpError("password_manager_plugin", `This profile's passwords are kept by ${plugin.title}; Ardia's own password store isn't used.`);
+  throw new OpError("password_manager_plugin", `This profile's passwords are kept by ${plugin.title}; Solstice's own password store isn't used.`);
 }
 
 function passwordsList(params: Record<string, unknown>) {

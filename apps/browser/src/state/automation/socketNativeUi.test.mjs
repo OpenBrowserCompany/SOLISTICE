@@ -95,7 +95,7 @@ test("a page's menu in a private window is not listed", async () => {
   assert.equal((await call("menus.dismiss", { menu: "m4" })).error.code, "no_window");
 });
 
-test("menus.runBar runs a catalog item by its ref: Ardia commands through run with no validation, other items to their native target", async () => {
+test("menus.runBar runs a catalog item by its ref: Solstice commands through run with no validation, other items to their native target", async () => {
   const { windowId } = await freshWindow();
   stub.surfaces.bar = [
     {
