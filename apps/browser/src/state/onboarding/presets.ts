@@ -17,7 +17,7 @@ export const PRESET_NAMES: Record<Preset, string> = {
   chromium: "Chromium",
   vivaldi: "Vivaldi",
   opera: "Opera",
-  fresh: "Ardia",
+  fresh: "Solstice",
 };
 
 const CLASSIC_TABS: Partial<Settings> = {

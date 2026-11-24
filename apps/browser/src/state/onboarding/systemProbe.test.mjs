@@ -17,7 +17,7 @@ test("onboarding reads the default browser, Dock and login item when every check
   );
 });
 
-test("a failed default browser check never claims Ardia is already the default, and onboarding still settles", async () => {
+test("a failed default browser check never claims Solstice is already the default, and onboarding still settles", async () => {
   const system = await probeOnboardingSystem(probes({ isDefaultBrowser: failed }));
   assert.equal(system.isDefault, false);
   assert.equal(system.dockAvailable, true);
