@@ -7,7 +7,7 @@ const parse = (doc) => {
   return { blocks: parseLookBlocks("themes/t.json", doc, problems), problems };
 };
 
-test("no look blocks, or empty ones, resolve to Ardia's own look object", () => {
+test("no look blocks, or empty ones, resolve to Solstice's own look object", () => {
   assert.equal(resolveLook(null), DEFAULT_LOOK);
   assert.equal(resolveLook({}), DEFAULT_LOOK);
   assert.equal(resolveLook(parse({ dark: {} }).blocks), DEFAULT_LOOK);
@@ -35,7 +35,7 @@ test("type: family, mono, per-size overrides, a scale over every size, and weigh
   assert.deepEqual(look.weights, { regular: "400", medium: "600", semibold: "600", bold: "800" });
 });
 
-test("metrics and radii replace Ardia's, each one on its own", () => {
+test("metrics and radii replace Solstice's, each one on its own", () => {
   const look = resolveLook(parse({ metrics: { rowHeight: 40, rowGap: 6, pinnedHeight: 50, sidebarWidth: 260, radius: { row: 14, pinned: 18, panel: 20 } } }).blocks);
   assert.deepEqual(look.metrics, { rowHeight: 40, rowGap: 6, pinnedHeight: 50 });
   assert.equal(look.sidebarWidth, 260);
@@ -109,7 +109,7 @@ test("a block that isn't an object is reported and ignored", () => {
   assert.equal(resolveLook(blocks), DEFAULT_LOOK);
 });
 
-test("the schema's defaults are Ardia's own look, and lookDefaults writes the same values", () => {
+test("the schema's defaults are Solstice's own look, and lookDefaults writes the same values", () => {
   const schemas = lookSchemas();
   assert.equal(schemas.type.properties.sizes.properties.body.default, TYPE_SIZES.body);
   assert.equal(schemas.type.properties.mono.default, "Menlo");

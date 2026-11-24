@@ -100,13 +100,13 @@ const BLOCKS: Record<keyof LookBlocks, Spec> = {
       sizes: {
         kind: "block",
         noun: "text size",
-        about: "Text sizes in points, each replacing one step of Ardia's scale",
+        about: "Text sizes in points, each replacing one step of Solstice's scale",
         keys: Object.fromEntries(Object.entries(TYPE_SIZES).map(([k, v]) => [k, sizeRange(v, SIZE_ABOUT[k as TypeSizeName])])),
       },
       weights: {
         kind: "block",
         noun: "weight",
-        about: "What each of Ardia's weight names draws with, from \"100\" (thin) to \"900\" (black)",
+        about: "What each of Solstice's weight names draws with, from \"100\" (thin) to \"900\" (black)",
         keys: Object.fromEntries(Object.entries(WEIGHTS).map(([k, v]) => [k, { kind: "weight", default: v, about: WEIGHT_ABOUT[k as WeightName] }])),
       },
     },
@@ -119,7 +119,7 @@ const BLOCKS: Record<keyof LookBlocks, Spec> = {
       rowHeight: number(24, 56, ROW_METRICS.rowHeight, "Height of a sidebar row: tabs, folders, groups, the New Tab row and the sidebar address field"),
       rowGap: number(0, 12, ROW_METRICS.rowGap, "Space between sidebar rows"),
       pinnedHeight: number(28, 72, ROW_METRICS.pinnedHeight, "Height of a pinned tile in the sidebar's top apps grid"),
-      sidebarWidth: number(160, 400, null, `The sidebar's width. The sidebar takes it when you switch to the theme or change this value, and a double-click on its edge returns to it; left out, the width is yours (Ardia's default is ${DEFAULT_SIDEBAR_WIDTH})`),
+      sidebarWidth: number(160, 400, null, `The sidebar's width. The sidebar takes it when you switch to the theme or change this value, and a double-click on its edge returns to it; left out, the width is yours (Solstice's default is ${DEFAULT_SIDEBAR_WIDTH})`),
       radius: {
         kind: "block",
         noun: "radius",
@@ -140,7 +140,7 @@ const BLOCKS: Record<keyof LookBlocks, Spec> = {
       newTab: { kind: "place", default: null, about: "Where the New Tab row sits: top or bottom of the tab list; left out, Settings › Tabs decides" },
     },
   },
-  icons: { kind: "symbols", about: "SF Symbols to draw in place of Ardia's, by name: { \"plus\": \"plus.circle\" }" },
+  icons: { kind: "symbols", about: "SF Symbols to draw in place of Solstice's, by name: { \"plus\": \"plus.circle\" }" },
 };
 
 export const LOOK_KEYS = Object.keys(BLOCKS) as (keyof LookBlocks)[];

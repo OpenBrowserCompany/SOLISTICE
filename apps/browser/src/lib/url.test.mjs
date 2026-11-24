@@ -22,15 +22,15 @@ test("Show Full URL adds the path, query and fragment, without a trailing slash"
 test("hovering shows the whole path, trailing slash kept, whatever Show Full URL says", () => {
   assert.equal(urlTrail("https://example.com/docs/", "", hover), "/docs/");
   assert.equal(urlTrail("https://example.com/", "", { hovered: true, showFullUrl: true }), "/");
-  assert.equal(urlTrail("ardia://settings/appearance", "Settings", hover), "/appearance");
+  assert.equal(urlTrail("solstice://settings/appearance", "Settings", hover), "/appearance");
 });
 
 test("the app's own pages keep host / title, and drop it with no title", () => {
-  assert.equal(pageHostLabel("ardia://settings"), "ardia://settings");
-  assert.equal(urlTrail("ardia://settings", "Settings", rest), " / Settings");
+  assert.equal(pageHostLabel("solstice://settings"), "solstice://settings");
+  assert.equal(urlTrail("solstice://settings", "Settings", rest), " / Settings");
   assert.equal(urlTrail("chrome://extensions", "Extensions", rest), " / Extensions");
-  assert.equal(urlTrail("ardia://settings", "", rest), "");
-  assert.equal(urlTrail("ardia://history?q=x", "History", full), "?q=x");
+  assert.equal(urlTrail("solstice://settings", "", rest), "");
+  assert.equal(urlTrail("solstice://history?q=x", "History", full), "?q=x");
 });
 
 test("a local file shows File and its decoded path on hover or with Show Full URL", () => {
