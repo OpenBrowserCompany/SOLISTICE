@@ -209,7 +209,7 @@ class ResolverDocumentTree(
         }
     }
 
-    class FolderAccessLost(cause: Throwable) : IOException("Ardia can’t open the sync folder any more", cause)
+    class FolderAccessLost(cause: Throwable) : IOException("Solstice can’t open the sync folder any more", cause)
 
     companion object {
         const val DEFAULT_TIMEOUT_MS = 20_000L

@@ -11,7 +11,7 @@ import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 
-class KeystoreKeyStore(directory: File, private val alias: String = "Ardia Sync Key") : SyncKeyStore {
+class KeystoreKeyStore(directory: File, private val alias: String = "Solstice Sync Key") : SyncKeyStore {
     private val sealed = FileKeyStore(directory)
 
     override fun load(account: String): ByteArray? {

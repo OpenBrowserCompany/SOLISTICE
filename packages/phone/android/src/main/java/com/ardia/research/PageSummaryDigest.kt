@@ -1,6 +1,6 @@
 package com.ardia.research
 
-import com.ardia.browser.ReadableContent
+import com.openbrowsercompany.solstice.ReadableContent
 
 object PageSummaryDigest {
     const val MINIMUM_CHARACTERS = 200
