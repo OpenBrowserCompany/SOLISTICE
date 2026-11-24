@@ -1,12 +1,12 @@
-package com.ardia.browser.android
+package com.openbrowsercompany.solstice.android
 
-import com.ardia.browser.android.system.MacTabsWidget
-import com.ardia.browser.android.system.SystemDevice
-import com.ardia.browser.android.system.SystemDeviceTabs
-import com.ardia.browser.android.system.SystemSnapshot
-import com.ardia.browser.android.system.SystemSnapshots
-import com.ardia.browser.android.system.SystemStore
-import com.ardia.browser.android.system.SystemTab
+import com.openbrowsercompany.solstice.android.system.MacTabsWidget
+import com.openbrowsercompany.solstice.android.system.SystemDevice
+import com.openbrowsercompany.solstice.android.system.SystemDeviceTabs
+import com.openbrowsercompany.solstice.android.system.SystemSnapshot
+import com.openbrowsercompany.solstice.android.system.SystemSnapshots
+import com.openbrowsercompany.solstice.android.system.SystemStore
+import com.openbrowsercompany.solstice.android.system.SystemTab
 import com.ardia.sync.DeviceTabs
 import com.ardia.sync.RemoteTab
 import com.ardia.sync.SyncSnapshot

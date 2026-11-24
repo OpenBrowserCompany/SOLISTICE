@@ -1,9 +1,9 @@
-package com.ardia.browser.android
+package com.openbrowsercompany.solstice.android
 
-import com.ardia.browser.android.share.ShareSheetModel
-import com.ardia.browser.android.share.SharedPage
-import com.ardia.browser.android.system.SystemDevice
-import com.ardia.browser.android.system.SystemSnapshot
+import com.openbrowsercompany.solstice.android.share.ShareSheetModel
+import com.openbrowsercompany.solstice.android.share.SharedPage
+import com.openbrowsercompany.solstice.android.system.SystemDevice
+import com.openbrowsercompany.solstice.android.system.SystemSnapshot
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
@@ -52,14 +52,14 @@ class ShareSheetTest {
         assertFalse(model.opensPage)
         assertTrue(model.sendTargets.isEmpty())
         model.openInArdia()
-        assertEquals(listOf("ardia://search?q=best%20tapas%20in%20lisbon"), opened)
+        assertEquals(listOf("solstice://search?q=best%20tapas%20in%20lisbon"), opened)
     }
 
     @Test
     fun aPageOpensThroughTheOpenLink() {
         val opened = ArrayList<String>()
         model(SharedPage.from("https://example.com/a?b=1", null), synced, opened).openInArdia()
-        assertEquals("ardia://open?url=https%3A%2F%2Fexample.com%2Fa%3Fb%3D1", opened.single())
+        assertEquals("solstice://open?url=https%3A%2F%2Fexample.com%2Fa%3Fb%3D1", opened.single())
     }
 
     @Test
@@ -78,7 +78,7 @@ class ShareSheetTest {
         assertTrue("a connected phone still gets no Send to Your Mac", hidden(synced).sendTargets.isEmpty())
         assertFalse(hidden(synced).offersSyncHint)
         assertFalse("nor the hint to turn sync on", hidden(SystemSnapshot.empty).offersSyncHint)
-        assertTrue("Open in Ardia stays", hidden(synced).opensPage)
+        assertTrue("Open in Solstice stays", hidden(synced).opensPage)
     }
 
     @Test

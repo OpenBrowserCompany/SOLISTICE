@@ -1,14 +1,14 @@
-package com.ardia.browser.android
+package com.openbrowsercompany.solstice.android
 
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.service.quicksettings.TileService
 import androidx.test.core.app.ApplicationProvider
-import com.ardia.browser.android.system.ArdiaTileService
-import com.ardia.browser.android.system.IncognitoTileService
-import com.ardia.browser.android.system.SearchTileService
-import com.ardia.browser.android.system.VoiceSearchTileService
+import com.openbrowsercompany.solstice.android.system.ArdiaTileService
+import com.openbrowsercompany.solstice.android.system.IncognitoTileService
+import com.openbrowsercompany.solstice.android.system.SearchTileService
+import com.openbrowsercompany.solstice.android.system.VoiceSearchTileService
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,7 +22,7 @@ class TileServicesTest {
     @Test
     fun eachTileOpensWhatTheMatchingLauncherShortcutOpens() {
         val opened = listOf(SearchTileService::class.java, VoiceSearchTileService::class.java, IncognitoTileService::class.java).map { intentOf(it) }
-        assertEquals(listOf("ardia://search", "ardia://voice", "ardia://incognito"), opened.map { it.dataString })
+        assertEquals(listOf("solstice://search", "solstice://voice", "solstice://incognito"), opened.map { it.dataString })
         for (intent in opened) {
             assertEquals(Intent.ACTION_VIEW, intent.action)
             assertEquals(MainActivity::class.java.name, intent.component?.className)
