@@ -6,7 +6,7 @@
 #include <cmath>
 #include <string_view>
 
-namespace Ardia::Vector {
+namespace Solstice::Vector {
 
 class PathDataReader {
  public:

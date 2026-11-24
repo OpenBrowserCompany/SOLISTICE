@@ -19,7 +19,7 @@
 
 #pragma comment(lib, "d2d1.lib")
 
-namespace Ardia::Vector {
+namespace Solstice::Vector {
 
 constexpr float PointTolerance = 0.02f;
 constexpr size_t CacheLimit = 2048;

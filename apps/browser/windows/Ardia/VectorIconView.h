@@ -14,7 +14,7 @@
 
 #include "VectorGeometry.h"
 
-namespace Ardia {
+namespace Solstice {
 
 REACT_STRUCT(VectorIconElement)
 struct VectorIconElement {
