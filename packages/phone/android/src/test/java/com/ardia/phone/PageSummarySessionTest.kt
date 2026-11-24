@@ -2,7 +2,7 @@ package com.ardia.phone
 
 import android.content.Context
 import android.os.Looper
-import com.ardia.browser.ReadableContent
+import com.openbrowsercompany.solstice.ReadableContent
 import kotlinx.coroutines.CompletableDeferred
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue

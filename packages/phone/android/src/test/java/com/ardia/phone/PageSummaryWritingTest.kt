@@ -1,6 +1,6 @@
 package com.ardia.phone
 
-import com.ardia.browser.ReadableContent
+import com.openbrowsercompany.solstice.ReadableContent
 import com.ardia.chatgpt.ChatGPTFailure
 import com.google.mlkit.genai.common.GenAiException
 import kotlinx.coroutines.test.runTest

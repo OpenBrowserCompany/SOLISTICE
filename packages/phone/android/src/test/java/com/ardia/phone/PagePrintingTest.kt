@@ -5,14 +5,14 @@ import android.graphics.Bitmap
 import android.view.View
 import android.webkit.WebView
 import android.widget.FrameLayout
-import com.ardia.browser.FindResult
-import com.ardia.browser.FullscreenVideo
-import com.ardia.browser.Page
-import com.ardia.browser.PageEvent
-import com.ardia.browser.PageRequest
-import com.ardia.browser.PageState
-import com.ardia.browser.PageTone
-import com.ardia.browser.ReadableContent
+import com.openbrowsercompany.solstice.FindResult
+import com.openbrowsercompany.solstice.FullscreenVideo
+import com.openbrowsercompany.solstice.Page
+import com.openbrowsercompany.solstice.PageEvent
+import com.openbrowsercompany.solstice.PageRequest
+import com.openbrowsercompany.solstice.PageState
+import com.openbrowsercompany.solstice.PageTone
+import com.openbrowsercompany.solstice.ReadableContent
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -72,14 +72,14 @@ class PagePrintingTest {
     fun onlyWebPagesPrintAsOnIPhone() {
         assertTrue(PagePrinting.printable("https://example.com"))
         assertTrue(PagePrinting.printable("HTTP://example.com"))
-        assertFalse(PagePrinting.printable("ardia://start"))
+        assertFalse(PagePrinting.printable("solstice://start"))
         assertFalse(PagePrinting.printable("file:///sdcard/a.html"))
         assertFalse(PagePrinting.printable(null))
     }
 
     @Test
     fun theStartPageAndAPageWithoutAWebViewAreRefused() {
-        assertFalse(PagePrinting.print(activity, StillPage("ardia://start", "", WebView(activity))))
+        assertFalse(PagePrinting.print(activity, StillPage("solstice://start", "", WebView(activity))))
         assertFalse(PagePrinting.print(activity, StillPage("https://example.com", "Example", null)))
         assertFalse(PagePrinting.print(activity, StillPage("https://example.com", "Example", FrameLayout(activity))))
     }
