@@ -1,6 +1,6 @@
 # J1 launch: the critical path
 
-Where a launch of 0.2.27 (`dist/0.2.27/export/Ardia.app`) spends its time, from the process starting to the
+Where a launch of 0.2.27 (`dist/0.2.27/export/Solstice.app`) spends its time, from the process starting to the
 window with its content, the command bar usable and the restored tab painted, and what to cut. Measured 2026-10-06
 by the sprint's launch agent; companion to [sprint-baseline.md](sprint-baseline.md) (the journey numbers) and
 [sprint.md](sprint.md).
@@ -398,7 +398,7 @@ when the app didn't reach it:
 
 `load_1m` (the 1-minute load average from `getloadavg`) says whether the Mac was busy, and `launched_hidden` whether
 the launch was a hidden one (a login item) or the user opening the app. `launch_source` says which of three started it:
-`login_item`, `documents` (another app opened a link or file with Ardia) or `user`; null until AppKit finished launching. Together with `since_boot` and `since_quit`
+`login_item`, `documents` (another app opened a link or file with Solstice) or `user`; null until AppKit finished launching. Together with `since_boot` and `since_quit`
 (`unclean`) they tell the first launch after a reboot or an unclean quit from the rest.
 
 How to read a slow launch once these ship (nightly first, since stable builds carry no `engine_ms` today): when
