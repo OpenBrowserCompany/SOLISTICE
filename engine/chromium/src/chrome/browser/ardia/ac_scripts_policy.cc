@@ -1,4 +1,4 @@
-// Copyright 2026 Ardia. Apache-2.0.
+// Copyright 2026 Solstice. Apache-2.0.
 
 #include "chrome/browser/ardia/ac_scripts_policy.h"
 
@@ -190,7 +190,7 @@ bool NamesFolder(const base::FilePath& path) {
 }
 
 std::u16string Refusal(const std::string& problem) {
-  return base::UTF8ToUTF16("Ardia Scripts can only hold content scripts: " +
+  return base::UTF8ToUTF16("Solstice Scripts can only hold content scripts: " +
                            problem);
 }
 
@@ -217,7 +217,7 @@ class ScriptsPolicyProvider : public extensions::ManagementPolicy::Provider {
   void EndInstall() { --installs_pending_; }
 
   std::string GetDebugPolicyProviderName() const override {
-    return "Ardia Scripts";
+    return "Solstice Scripts";
   }
 
   bool UserMayLoad(const Extension* extension,
@@ -569,18 +569,18 @@ std::optional<std::string> ScriptsFolderInstallProblem(
     const base::FilePath& path) {
   const base::FilePath folder = Scripts().folder();
   if (folder.empty()) {
-    return "Ardia has no data folder";
+    return "Solstice has no data folder";
   }
   if (LinkType(path.StripTrailingSeparators().DirName()) != S_IFDIR ||
       LinkType(path.StripTrailingSeparators()) != S_IFDIR ||
       LinkType(Scripts().scripts()) != S_IFDIR ||
       LinkType(folder) != S_IFDIR) {
-    return "Ardia Scripts: Scripts/extension must be a plain folder";
+    return "Solstice Scripts: Scripts/extension must be a plain folder";
   }
   const std::optional<base::FilePath> real_path = RealPath(path);
   const std::optional<base::FilePath> real_folder = RealPath(folder);
   if (!real_path || !real_folder || *real_path != *real_folder) {
-    return "Ardia Scripts: that isn't this Ardia's Scripts/extension folder";
+    return "Solstice Scripts: that isn't this Solstice's Scripts/extension folder";
   }
   return std::nullopt;
 }
