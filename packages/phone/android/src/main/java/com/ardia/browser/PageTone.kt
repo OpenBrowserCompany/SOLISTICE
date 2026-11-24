@@ -1,4 +1,4 @@
-package com.ardia.browser
+package com.openbrowsercompany.solstice
 
 import kotlin.math.pow
 import kotlin.math.roundToInt
