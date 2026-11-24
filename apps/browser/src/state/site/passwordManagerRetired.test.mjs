@@ -77,7 +77,7 @@ test("a scan that fails stamps nothing and drops nothing, so a plugin of that na
   assert.equal(S().profiles.work.passwordManager, undefined);
 });
 
-test("a record of that name Ardia didn't bundle survives a listing that comes back empty, and a removed plugin of that name keeps its profiles' choice", async () => {
+test("a record of that name Solstice didn't bundle survives a listing that comes back empty, and a removed plugin of that name keeps its profiles' choice", async () => {
   const own = { enabled: true, approved: manifestHash(OWN, "1:2"), values: {}, applied: {} };
   stub.docs.set("plugins.json", JSON.stringify({ version: 1, plugins: { "apple-passwords": own } }));
   usePlugins.setState({ records: { "apple-passwords": own }, listings: {}, order: [], scanned: false });
@@ -94,7 +94,7 @@ test("a record of that name Ardia didn't bundle survives a listing that comes ba
   assert.equal(S().profiles.default.passwordManager, "plugin:apple-passwords", "with no bundled record dropped this launch, nothing is stamped");
 });
 
-test("a disabled Apple Passwords record is dropped and leaves unset profiles alone; an explicit choice still reads Ardia", async () => {
+test("a disabled Apple Passwords record is dropped and leaves unset profiles alone; an explicit choice still reads Solstice", async () => {
   stub.docs.set("plugins.json", JSON.stringify({ version: 1, plugins: { "apple-passwords": { enabled: false, approved: HASH, values: {}, applied: {} } } }));
   usePlugins.setState({ records: JSON.parse(stub.docs.get("plugins.json")).plugins });
   S().hydrate({ profiles: { default: profile("default", "plugin:apple-passwords"), work: profile("work", undefined) }, profileOrder: ["default", "work"] });

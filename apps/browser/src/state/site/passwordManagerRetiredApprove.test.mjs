@@ -29,7 +29,7 @@ async function launch() {
   pm.startPasswordManager();
   await settle();
   return { pm, lifecycle, consentToken };
-}test("approving your own folder of that name over the bundled record moves the old choices to Ardia first, so the new plugin takes no profile by itself", async () => {
+}test("approving your own folder of that name over the bundled record moves the old choices to Solstice first, so the new plugin takes no profile by itself", async () => {
   const record = { enabled: true, approved: HASH, values: {}, applied: {} };
   stub.docs.set("plugins.json", JSON.stringify({ version: 1, plugins: { "apple-passwords": record } }));
   usePlugins.setState({ records: { "apple-passwords": record }, listings: {}, order: [], scanned: false });

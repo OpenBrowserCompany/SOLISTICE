@@ -10,7 +10,7 @@ const S = () => useBrowser.getState();
 const PERSONAL = { id: "default", name: "Personal", color: "plum", icon: null, createdAt: 0, passwordManager: "none" };
 const settle = () => new Promise((resolve) => setTimeout(resolve, 20));
 
-test("a switch back to Ardia that couldn't reach its profile is finished after a relaunch, and a person's own off stays off", async () => {
+test("a switch back to Solstice that couldn't reach its profile is finished after a relaunch, and a person's own off stays off", async () => {
   S().hydrate({ profiles: { default: PERSONAL }, profileOrder: ["default"] });
   const work = S().createProfile({ name: "Work" });
   S().updateProfile(work, { passwordManager: "none" });
@@ -36,6 +36,6 @@ test("a switch back to Ardia that couldn't reach its profile is finished after a
   const relaunched = await import("./passwordManager.ts?launch=2");
   relaunched.startPasswordManager();
   await settle();
-  assert.equal(stub.profileToggles.user.get(work)?.passwords, true, "after the relaunch Ardia mode puts Work's offer to save back");
+  assert.equal(stub.profileToggles.user.get(work)?.passwords, true, "after the relaunch Solstice mode puts Work's offer to save back");
   assert.equal(stub.profileToggles.user.get("")?.passwords, false, "Personal's off was the person's own and stays");
 });
