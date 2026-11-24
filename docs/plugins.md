@@ -1,6 +1,6 @@
 # Plugins
 
-A plugin is a folder with a `plugin.json` that adds to Ardia without a restart. Plugin Architecture v2 (#3183) gives
+A plugin is a folder with a `plugin.json` that adds to Solstice without a restart. Plugin Architecture v2 (#3183) gives
 it the same reach Raycast extensions have, inside a browser: native views written in JSX (lists, details, forms,
 sidebar views, popovers), toolbar buttons, context-menu items, command bar entries and omnibox results, side panels,
 themes, settings rows (secrets included, kept in the Keychain), decide hooks that can rewrite or stop a navigation,
@@ -17,22 +17,22 @@ and the `ardia` command's plugin commands still install and list files there.
 
 ```
 plugin.json          the manifest: what it adds, what it may touch, when it wakes
-dist/index.js        main: the plugin's code, run by ArdiaPluginHost (JavaScriptCore, out of Ardia's process)
+dist/index.js        main: the plugin's code, run by ArdiaPluginHost (JavaScriptCore, out of Solstice's process)
 bin/helper           sidecar (optional): any program, for what JavaScript can't do
 themes/dusk.json     themes it offers
 page/index.html      a web page panel (optional), for a view JSX can't express
 ```
 
-- **main** is a JavaScript file built against `@ardia/plugin-sdk`. Ardia runs it in `ArdiaPluginHost`, a small
+- **main** is a JavaScript file built against `@ardia/plugin-sdk`. Solstice runs it in `ArdiaPluginHost`, a small
   helper app holding one JavaScriptCore context, started inside the same `sandbox-exec` profile as any helper and
-  always **offline**: it can't open a socket. Its only way out is Ardia's channel, and its `fetch` is Ardia's, limited
+  always **offline**: it can't open a socket. Its only way out is Solstice's channel, and its `fetch` is Solstice's, limited
   to the hosts in `permissions.network` (below).
 - **sidecar** is the v1 `process`: a long-running program of the plugin's own, with the same sandbox, supervision and
   channel ([The sidecar](#the-sidecar)). A plugin may have main, a sidecar, or neither (settings only), never both:
   a manifest that declares both is refused (`a plugin can declare main or sidecar, not both`).
 - **Views are native.** A plugin never draws pixels: its JSX renders through the SDK's reconciler into a tree of plain
-  nodes (`lib/pluginNodes.ts`), Ardia validates that tree and draws it with its own components, so a plugin's list
-  looks, scrolls, themes and answers keys like Ardia's own.
+  nodes (`lib/pluginNodes.ts`), Solstice validates that tree and draws it with its own components, so a plugin's list
+  looks, scrolls, themes and answers keys like Solstice's own.
 
 ## The SDK
 
@@ -66,11 +66,11 @@ definePlugin({ views: { releases: Releases }, commands: { refresh: async () => a
 - **Action shortcuts.** `shortcut` on an `Action`, `Action.OpenInBrowser` or `Action.CopyToClipboard` is `cmd` plus
   any of `ctrl`, `opt` (`option`, `alt`) and `shift`, joined by `+`, then one key: `a`–`z`, `0`–`9`, one of `` - = [ ]
   \ ; ' , . / ` ``, `space` or `f1`–`f12` (`"cmd+shift+e"`, `"cmd+k"`, or in glyphs `"⇧⌘E"`). `cmd` is Ctrl on Windows
-  and Linux. Ardia drops a shortcut it can't read and one that would shadow a key it needs: no `cmd` (a plain or
+  and Linux. Solstice drops a shortcut it can't read and one that would shadow a key it needs: no `cmd` (a plain or
   shifted key types into a field), `shift` with a digit or punctuation (a different character on each layout), any
   `cmd` shortcut on `q`, `w`, `t`, `n`, `h` or `m`, editing and system keys (`cmd+a`, `cmd+c`, `cmd+v`, `cmd+x`,
   `cmd+z`, `cmd+shift+z`, `cmd+shift+v`, `cmd+opt+shift+v`, `cmd+,`, `` cmd+` ``, `cmd+space`, `cmd+ctrl+space`,
-  `cmd+opt+space`, `cmd+ctrl+f`, `cmd+ctrl+q`), and, at the moment of the press, any shortcut one of Ardia's own
+  `cmd+opt+space`, `cmd+ctrl+f`, `cmd+ctrl+q`), and, at the moment of the press, any shortcut one of Solstice's own
   commands holds, which is most `cmd` letters (rebinding a command frees its key; Settings › Shortcuts lists them).
   Escape, Return, Tab, the arrows and Delete aren't keys a shortcut can use. The shortcuts that work are the active
   ones: in a `List`, the selected item's actions, then the list's own; in a `Detail` or `Form`, the actions it shows,
@@ -82,9 +82,9 @@ definePlugin({ views: { releases: Releases }, commands: { refresh: async () => a
   `useContext`, `useId`, and `useSurface` (which surface and window a view is in).
 - **`ardia`**: `tabs`, `workspace`, `activePage`, `commands`, `tools`, `storage`, `secrets`, `net.fetch`, `programs`, `ui`
   (`toast`, `quickPick`, `inputBox`, `confirm`), `panels`, `toolbar` (title, badge, icon updates), `omnibox`, `decide` and `pages`.
-  Each call is a request on the channel and is held to the manifest's permissions on Ardia's side; the SDK never
+  Each call is a request on the channel and is held to the manifest's permissions on Solstice's side; the SDK never
   decides what a plugin may do.
-- **Rendering.** The reconciler batches a commit into one `surface.render` with the whole tree; Ardia checks it
+- **Rendering.** The reconciler batches a commit into one `surface.render` with the whole tree; Solstice checks it
   (node types, prop types, sizes, at most a few thousand nodes) and draws it. Events come back as
   `surface.event {handlerId, args}`, so a handler is a plain function in the plugin. A surface whose view throws shows
   the error in place, not a blank panel.
@@ -96,15 +96,15 @@ definePlugin({ views: { releases: Releases }, commands: { refresh: async () => a
 <data dir>/plugins.json                         which plugins are on, what you approved, your row values
 <data dir>/PluginData/<name>/                   the helper's home, temp folder and log
 <data dir>/OfficialPlugins/<name>/<sha256>/     official plugins as fetched and verified on Install (below)
-~/Library/Application Support/Ardia/Programs/   Ardia's copies of the programs plugins put on PATH (below)
+~/Library/Application Support/Ardia/Programs/   Solstice's copies of the programs plugins put on PATH (below)
 ```
 
 - The config folder is `docs/config.md`'s (`~/.config/ardia/`, or `<data dir>/config` for a scratch instance), so a
-  dotfiles repo can carry plugins. A plugin's folder may be a symlink (Ardia watches its target); its `plugin.json`
-  may not: a linked manifest could point anywhere Ardia doesn't watch, so it is listed as a problem. Ardia reads
+  dotfiles repo can carry plugins. A plugin's folder may be a symlink (Solstice watches its target); its `plugin.json`
+  may not: a linked manifest could point anywhere Solstice doesn't watch, so it is listed as a problem. Solstice reads
   regular files only, at most 1 MB per manifest, and at most 64 plugins.
 - The folder name is the plugin's `name`. A folder whose name doesn't match its manifest is listed with that problem.
-- Ardia watches the folder: a plugin appears, changes or disappears the moment its files do.
+- Solstice watches the folder: a plugin appears, changes or disappears the moment its files do.
 - Installing, enabling and the rest need no restart. Turning a plugin off withdraws everything it added at once.
 
 ### Official plugins: fetched on Install
@@ -132,13 +132,13 @@ is the only source of which version may be fetched.
     for it.
   - trusts nothing but the pin, as VS Code does with its own extensions: no Developer ID signature or notarization is
     required, so ad hoc and linker-signed programs run as published, and signed ones run too. The files are written by
-    Ardia itself and carry no quarantine flag (one found on the download is cleared only after the SHA-256 matches),
+    Solstice itself and carry no quarantine flag (one found on the download is cleared only after the SHA-256 matches),
     so Gatekeeper never asks to notarize them.
-  - unpacks only after the SHA-256 matched, into a private folder (`.stage-*`, mode 0700) inside Ardia's data folder,
+  - unpacks only after the SHA-256 matched, into a private folder (`.stage-*`, mode 0700) inside Solstice's data folder,
     then publishes it with a same-volume rename under a per-plugin lock as `OfficialPlugins/<name>/<sha256>/`, sealed
     read-only (folders 0555, files 0555 or 0444), and keeps the download beside it as `<sha256>.tar.gz` (0444). Program
     copies in `Programs/<name>/<version>/` are sealed the same way once they verify, except their top folder, where
-    Ardia keeps its leases and after-update marks; removing either unseals it first.
+    Solstice keeps its leases and after-update marks; removing either unseals it first.
 - **What makes a copy official.** A copy counts only while its download still has a SHA-256 the signed app vouches
   for, and the payload digest of the copy (`PluginPrograms.payloadDigest`) equals the one computed by streaming that
   download's tar (`OfficialArchive.payloadDigest`, `OfficialVerification`).
@@ -160,7 +160,7 @@ is the only source of which version may be fetched.
     programs link from it.
   - A crash after the record and before the switch is finished at the next scan, because the approval is on record.
   - A failed or offline download leaves no listing and no PATH change. The row says why ("Check your internet
-    connection", "didn't match the copy this version of Ardia trusts", "programs aren't signed by Ardia") and offers
+    connection", "didn't match the copy this version of Solstice trusts", "programs aren't signed by Solstice") and offers
     Try Again, in Settings and in onboarding. Leaving onboarding during a download cancels it.
 - **Updates.** A pin that names a new artifact fetches it in the background once you have the plugin, retrying after
   10 minutes, then doubling up to 6 hours.
@@ -188,7 +188,7 @@ is the only source of which version may be fetched.
       The boundary row is `plugin-update:official-auto`.
     - The record keeps `previous` for a rollback and an `updated` note (`from`, `to`, the consent lines that are
       new, and `runtime` when it added a first `main`). While that copy is the one installed, the plugin's page shows
-      "Updated by itself to 0.6.0", "It added its own code, which runs in Ardia's sandbox, offline, and first starts
+      "Updated by itself to 0.6.0", "It added its own code, which runs in Solstice's sandbox, offline, and first starts
       when you use one of its commands in the command bar" when it did, "Its permissions didn't change", and those lines.
       `official_updates_auto` counts the switch once it took.
       Approving any later update by hand drops the note.
@@ -210,7 +210,7 @@ is the only source of which version may be fetched.
     installing it again picks up where it left off.
   - `"alwaysOn"` now only keeps `installed: true` in the record, so 0.2.47 sees the same install after a rollback.
   - `"autoInstall"` activates nothing: activation always needs the user's approval.
-  - "Let programs control Ardia" in Settings › Advanced still governs control on its own.
+  - "Let programs control Solstice" in Settings › Advanced still governs control on its own.
 - **0.2.47 installs.** 0.2.47 bundled Command Line 0.4.0, approved as `sha256(manifest + "\0bundled")` and copied to
   `Programs/cli/<version>` with `ardia` linked to `Programs/cli/current/bin/ardia`.
   - Until a fetched copy is active, the scan lists that copy as the plugin (folder identity `bundled`, `legacy`), but
@@ -338,13 +338,13 @@ state and the attempt in progress to what a row shows (`officialView.test.mjs`).
 }
 ```
 
-- `manifest` is the schema version, now 2. A newer version than Ardia knows is listed as "needs a newer Ardia" and
+- `manifest` is the schema version, now 2. A newer version than Solstice knows is listed as "needs a newer Solstice" and
   never loads. Unknown keys anywhere are errors, so a typo never silently does nothing. Every problem is reported at
   once, with its path (`plugin.json: contributes.commands[0].tool: hello isn't one of this plugin's tools`); a
   manifest with any problem doesn't load, the Plugins pane shows the problems and `ardia plugins check` prints them.
 - `name`: 1 to 40 lowercase letters, digits and dashes, starting with a letter or digit, and the plugin's folder
   name. `title` up to 60 characters, `description` up to 200, with control and bidi characters refused. `version` and
-  `requires` are `MAJOR.MINOR.PATCH` with an optional `-suffix`; a plugin that requires a newer Ardia doesn't load.
+  `requires` are `MAJOR.MINOR.PATCH` with an optional `-suffix`; a plugin that requires a newer Solstice doesn't load.
   `icon` is an SF Symbol.
 - `main` is a `.js`, `.mjs` or `.cjs` file inside the plugin's folder; `memoryMB` (only with `main`) is the host's
   watchdog threshold. `sidecar` is `{run, memoryMB}` as below. A command with no action of its own (`tool`, `open`,
@@ -353,12 +353,12 @@ state and the attempt in progress to what a row shows (`officialView.test.mjs`).
 - `telemetry` (v2): `{ "title": "…", "items": ["…"] }` (1 to 16 items of up to 800 characters), what the plugin's own
   programs collect. Settings › Privacy › What's Sent shows it under its title for every installed plugin that has one,
   labelled as the plugin's own, under its own heading, "From plugins you added" ("What each plugin says its own programs
-  send. Ardia doesn't send it, and the switch above doesn't control it"). An official plugin whose pinned release has no block yet uses the pin's
-  `telemetry` (the command line's "The ardia command" today), labelled as described by a plugin that ships with Ardia;
+  send. Solstice doesn't send it, and the switch above doesn't control it"). An official plugin whose pinned release has no block yet uses the pin's
+  `telemetry` (the command line's "The ardia command" today), labelled as described by a plugin that ships with Solstice;
   that block also shows while an old standalone install of it is still in place, asked again each time What's Sent
   opens. The pin's `example` is likewise the
-  first command shown until the plugin's manifest gives one. Ardia's own counters
-  about what a plugin does (the `cli_socket_*` and control-pill counts, for one) stay in Ardia's own copy.
+  first command shown until the plugin's manifest gives one. Solstice's own counters
+  about what a plugin does (the `cli_socket_*` and control-pill counts, for one) stay in Solstice's own copy.
 - The app writes `plugin.schema.json` beside `config.schema.json` (`docs/config.md` › Schemas), generated from the
   same rules, for editors and the CLI. The app validates with its own code.
 
@@ -383,7 +383,7 @@ document (`docs/conventions.md`):
 
 ### activationEvents
 
-When main starts. Without the key Ardia derives the list from the contributions (`derivedActivationEvents`):
+When main starts. Without the key Solstice derives the list from the contributions (`derivedActivationEvents`):
 `onCommand:<name>` for each command, `onView:<id>` for each sidebar view, `onPanel:<id>` for each view panel,
 `onToolbar:<id>`, `onOmnibox:<id>`, `onMenu:<slot>` for each menu slot used, and `onStartupFinished` when the plugin
 has hooks (or only a sidecar). Given explicitly, each entry is `*` or `onStartupFinished` (at launch), one of those
@@ -399,11 +399,11 @@ plugin that isn't needed yet costs nothing: no host process, no memory. The firs
 | `fullUrls` | `true` | Those URLs in full (needs `tabs`) |
 | `activePage` | `true` | Read the text and selection of the page you're on when you run one of its commands (`plugin_page_reads`). The read is refused once you switch tabs or the page navigates after that use |
 | `workspace` | `true` | See and arrange every tab, group and folder (needs `tabs: write` and `fullUrls`) |
-| `commands` | `true` | Run Ardia's commands, the same ones with the same refusals as the `ardia` command (`docs/automation.md` › Which commands) |
-| `storage` | `true` | A private key-value store in `PluginData/<name>/storage.json`, at most 2 MB in all and 256 KB a value (`plugin_storage_writes`). `storage.get` answers `{found: true, value}` or `{found: false}`. A file Ardia can't read or parse, an empty one included, fails every call; Ardia never overwrites it with an empty store |
-| `secrets` | `true` | Keychain items of its own (`ardia.plugin.<name>.<key>`, at most 64, 16 KB each; `plugin_secret_writes`). If the Keychain's list of them can't be read, Ardia keeps it, fails secret writes and deletes, and says removing the plugin left its secrets |
+| `commands` | `true` | Run Solstice's commands, the same ones with the same refusals as the `ardia` command (`docs/automation.md` › Which commands) |
+| `storage` | `true` | A private key-value store in `PluginData/<name>/storage.json`, at most 2 MB in all and 256 KB a value (`plugin_storage_writes`). `storage.get` answers `{found: true, value}` or `{found: false}`. A file Solstice can't read or parse, an empty one included, fails every call; Solstice never overwrites it with an empty store |
+| `secrets` | `true` | Keychain items of its own (`ardia.plugin.<name>.<key>`, at most 64, 16 KB each; `plugin_secret_writes`). If the Keychain's list of them can't be read, Solstice keeps it, fails secret writes and deletes, and says removing the plugin left its secrets |
 | `network` | `false`, `"*"`, or 1 to 32 host patterns | main's `fetch` reaches only these hosts (`*.example.com` included); a sidecar gets the network as in v1. A web view the plugin shows (its page, a `file` panel) goes online only with `"*"`: WebKit's traffic can't be held to a list of hosts, so with a list it stays offline and the plugin reaches its hosts through `net.fetch` |
-| `control` | `true` | Turning it on turns on `cliControl`, unless you turned control off yourself: an Off you chose wins, and the consent sheet points to the switch, Settings › Advanced › Let programs control Ardia. While control is on, any program you run has the `ardia` command's reach: the control socket and the engine's token connection, a full DevTools client of the browser (every tab and page, signed-in sites and their cookies, downloads and uploads; `docs/cli.md`). So the consent sheet and the plugin's page in Settings › Plugins put that first ("Turns on control in Settings › Advanced. While it's on, any program you run can fully control Ardia: every tab and page, your signed-in sites and their cookies, and uploads and downloads of any file on this Mac"; "While control is on …" when you turned control off yourself, and naming the commands Ardia runs for it after updates when it has any), and its row in the list, the official ones' included (also while an update has failed), says "Can fully control Ardia" (`fullControlLine`, `FULL_CONTROL_SUMMARY` in `state/plugins/consent.ts`) |
+| `control` | `true` | Turning it on turns on `cliControl`, unless you turned control off yourself: an Off you chose wins, and the consent sheet points to the switch, Settings › Advanced › Let programs control Solstice. While control is on, any program you run has the `ardia` command's reach: the control socket and the engine's token connection, a full DevTools client of the browser (every tab and page, signed-in sites and their cookies, downloads and uploads; `docs/cli.md`). So the consent sheet and the plugin's page in Settings › Plugins put that first ("Turns on control in Settings › Advanced. While it's on, any program you run can fully control Solstice: every tab and page, your signed-in sites and their cookies, and uploads and downloads of any file on this Mac"; "While control is on …" when you turned control off yourself, and naming the commands Solstice runs for it after updates when it has any), and its row in the list, the official ones' included (also while an update has failed), says "Can fully control Solstice" (`fullControlLine`, `FULL_CONTROL_SUMMARY` in `state/plugins/consent.ts`) |
 
 The old list form (`["tabs", "network"]`) still reads, as above. Contributions grant their own reach and are shown on
 the consent sheet too: a toolbar button, a sidebar view, a context-menu item, a theme, a decide hook, site switches in
@@ -411,7 +411,7 @@ Site Controls and a page bar with the actions it names.
 
 ### settings
 
-- `defaults` sets Ardia settings while the plugin is on. Only settings `config.json` may set are accepted (the config
+- `defaults` sets Solstice settings while the plugin is on. Only settings `config.json` may set are accepted (the config
   allowlist, `docs/config.md`), with the same checks, so a plugin can't turn on CLI control, add a search destination
   or change which engine shows a site. When you turn the plugin on, each default that `config.json` doesn't set is
   applied through `updateSettings` and the value it replaced is remembered; turning the plugin off puts that value back
@@ -422,7 +422,7 @@ Site Controls and a page bar with the actions it names.
 - `rows` (at most 20) add rows to the plugin's page in Settings › Plugins: `toggle` (boolean), `text` (up to 200
   characters), `number` (with optional `min`, `max` and `step`; `default` between them), `choice` (2 to 12 `choices`,
   `default` one of their values) and `secret`. `key` is 1 to 40 letters, digits, `-` and `_`; `description` is an
-  optional second line. Values are kept in `plugins.json` and sent to main and the sidecar; nothing in Ardia reads them.
+  optional second line. Values are kept in `plugins.json` and sent to main and the sidecar; nothing in Solstice reads them.
 - A **`secret`** row is a password field whose value never touches `plugins.json`, logs or telemetry: it is a Keychain
   item (`ardia.plugin.<name>.<key>`, `state/plugins/secrets.ts`), the row shows only whether it is set, and main reads
   it with `ardia.secrets.get(key)` (needs `secrets`). Removing the plugin deletes its items.
@@ -479,7 +479,7 @@ from the plugin's folder):
 - `sidecar`: a panel beside the page on the window's right, like Arc's and Dia's sidebars. `retainContext: true` keeps
   it mounted, state and scroll included, when it is hidden, so a chat survives switching away (`plugin_panel_opens`).
   Closing a window drops its panels.
-- `tab` and `split`: the page tab at `ardia://<name>` ([The page](#the-page)); `side` goes with `split`.
+- `tab` and `split`: the page tab at `solstice://<name>` ([The page](#the-page)); `side` goes with `split`.
 
 A popover is a toolbar button's `view`, not a panel mode. Panels, popovers, command views and the surfaces in them
 never open in a private window.
@@ -495,19 +495,19 @@ provider has one or the other, not both. Queries in private windows never reach 
 `contributes.themes`: theme files in the format of `docs/config.md` › Themes, listed by `pluginThemes()` with the
 plugin's title, and picked in `config.json` as `"theme": "plugin:<plugin>/<id>"`. The file is read through the
 approved folder like a page's files, so a changed plugin stops its theme until it is approved again; turning the plugin
-off returns to Ardia's own colours, and the problem shows in the config toast.
+off returns to Solstice's own colours, and the problem shows in the config toast.
 
 ### hooks
 
-Events from Ardia's automation event table (`docs/automation.md` › Events) delivered to main (`ardia.on`) or the
+Events from Solstice's automation event table (`docs/automation.md` › Events) delivered to main (`ardia.on`) or the
 sidecar (`subscribe`). Every event is listed here, so it shows on the consent sheet. Events about windows, tabs, pages,
 media, Peek, pins, splits and profiles need `tabs`.
 
 **Decide hooks.** `tab.opening`, `link.opening` and `permission.requested` (with `tabs`) let a plugin answer before
-Ardia acts: `{cancel: true}` or `{url}` for an opening, `{drop: true}` or `{profile, open}` for a link from another
+Solstice acts: `{cancel: true}` or `{url}` for an opening, `{drop: true}` or `{profile, open}` for a link from another
 app, `{permission: "deny"}` for a permission prompt. The rules:
 
-- Ardia's own `hooks.json` decide hooks and Air Traffic rules come first; a plugin is asked only when they leave the
+- Solstice's own `hooks.json` decide hooks and Air Traffic rules come first; a plugin is asked only when they leave the
   decision open.
 - Never for a private window, an incognito profile or a Peek.
 - Only plugins already running are asked: a decide hook never starts one. Each has at most 250 ms (less when the
@@ -539,7 +539,7 @@ runs. The program file itself is looked up again by that path when it starts: wh
 approved folder can change what runs between the check and the start, as they can change the code at any time; the
 approval covers the manifest's declarations, not the code. An absolute path or a bare name is outside the plugin:
 it is whatever is at that path when the helper starts. The approval names it ("Runs a program in the background:
-/usr/bin/python3 helper.py"), it may not live in Ardia's data or config folder, and beyond that it is trusted as
+/usr/bin/python3 helper.py"), it may not live in Solstice's data or config folder, and beyond that it is trusted as
 installed, like a hook's program in `hooks.json`.
 
 ### The sandbox
@@ -566,9 +566,9 @@ Paths go in as `-D` parameters, never into the profile's text.
   `machAllowedOnline` services and `/etc/hosts` and `resolv.conf`. Without it, no IP at all: no loopback, no listening,
   no names. main's host is always offline.
 - **An official plugin's folder** is its verified, read-only copy, `OfficialPlugins/<name>/<sha256>/`, the one place in
-  Ardia's data folder a plugin may run from: only the copy `OfficialTrust` just verified for that plugin, compared by
+  Solstice's data folder a plugin may run from: only the copy `OfficialTrust` just verified for that plugin, compared by
   real path, so a local plugin linked to a folder there is refused. It can't read or list another copy.
-- **Never:** your home folder, Ardia's data and config folders, `/Users` and `/Volumes` (an absolute program elsewhere
+- **Never:** your home folder, Solstice's data and config folders, `/Users` and `/Volumes` (an absolute program elsewhere
   reads only itself), any other app's temp files, `/Applications`, `/etc` beyond the files above, pathname sockets,
   shared memory, IOKit, Apple Events, Launch Services, launchd jobs, preference writes and notifications.
 
@@ -577,7 +577,7 @@ requests that touch `PluginCore`, `PluginProcess.swift`, `plugin-*` or the impor
 
 ### programs
 
-At most 4. Each is a command Ardia puts on your PATH while the plugin is on: `name` (like a plugin's name) is the
+At most 4. Each is a command Solstice puts on your PATH while the plugin is on: `name` (like a plugin's name) is the
 command and `path` an executable file in the plugin's folder. Two more keys need manifest 2:
 
 - **`example`**: a command to try, up to 120 characters, shown with **Copy** on an official plugin's Settings row once
@@ -592,23 +592,23 @@ command and `path` an executable file in the plugin's folder. Two more keys need
   - Listing (`state/plugins/appChecks.ts`, given the registry by native `programRegistry()`) and the native linker
     (`ProgramRegistry` in `PluginCore/PluginProgramRegistry.swift`) both consult it. A claimed name stays reserved
     while its owner is off, uninstalled or not downloaded, and any other plugin naming it doesn't load ("ardia belongs
-    to Ardia's official cli plugin").
+    to Solstice's official cli plugin").
   - A registry that is damaged, disagrees with the pin, or is missing from a distributed build fails closed, even with
     no official plugin installed: no program is linked at all, and Settings › Advanced › Programs on your PATH says the
     list is missing or damaged. JS does the same.
   - Only a test instance (a scratch data dir and not signed for distribution) may do without one: it derives the
     registry from its pin (`ARDIA_TEST officialPin`).
 
-Ardia never runs a plugin's program itself, with one exception for official plugins:
+Solstice never runs a plugin's program itself, with one exception for official plugins:
 
 - **`afterUpdate`** (official plugins only, from a fetched copy; a plugin you install that declares it doesn't load): up to 4 argument lists,
-  each 1 to 8 arguments, that Ardia runs the program with once per new version, in order, each with a 5 minute limit.
+  each 1 to 8 arguments, that Solstice runs the program with once per new version, in order, each with a 5 minute limit.
   It's a fixed action the app itself declares, not something a plugin can bring: it runs the verified copy by its
-  absolute path in its own version folder (never `current` or PATH), with Ardia's environment minus its own variables,
-  no input and output to nowhere. One Ardia at a time claims the version (`.after-update-claim`, holding its process
+  absolute path in its own version folder (never `current` or PATH), with Solstice's environment minus its own variables,
+  no input and output to nowhere. One Solstice at a time claims the version (`.after-update-claim`, holding its process
   id; a claim from a process that's gone is taken over) and leases it while the commands run. Each command is started
   under the plugin's store lock and only while that version is still `current` and the request that made it the
-  latest, in a process group of its own, which is ended when its time is up and when Ardia quits. Quitting holds new
+  latest, in a process group of its own, which is ended when its time is up and when Solstice quits. Quitting holds new
   commands back from the moment it starts (a cancelled quit picks the list up again at the command it held back or cut
   short, if the version is still current), and before the quit finishes each
   running group gets TERM, then KILL after 1 s, and is reaped; quit gives them one 2.5 s deadline, and Chromium's final shutdown only waits out what's left of it. A
@@ -616,7 +616,7 @@ Ardia never runs a plugin's program itself, with one exception for official plug
   when every command exited 0 is `.after-update` written; otherwise the next launch runs them again. The `cli` plugin runs `skills install --auto`, `skills refresh` and `computer refresh`, as
   `install.sh` did after an upgrade.
 
-- **Turning on** copies the approved folder into a store Ardia owns,
+- **Turning on** copies the approved folder into a store Solstice owns,
   `~/Library/Application Support/Ardia/Programs/<plugin>/<version>-<first 12 hex of the approval>/`. The copy is made
   through the approved, opened folder, one directory descriptor at a time (`openat` with `O_NOFOLLOW`, each file cloned
   with `fclonefileat` from the descriptor it was opened by), never by path, so a folder put in place after the
@@ -629,24 +629,24 @@ Ardia never runs a plugin's program itself, with one exception for official plug
   (`<version>-<approval>-r<random>`), and the old one goes once nothing leases it.
   It gets an empty `.leases/` folder, and `current` is switched to it with one rename (`previous` keeps the version
   before). Then `~/.local/bin/<name>` links to `Programs/<plugin>/current/<path>`, so an update never touches the link.
-  Programs run from Ardia's copy, never from the plugin's folder or the app bundle, so an app update or a replaced
+  Programs run from Solstice's copy, never from the plugin's folder or the app bundle, so an app update or a replaced
   folder never pulls files out from under a running program.
-- **PATH.** When `~/.local/bin` isn't mentioned in your shell's startup files, Ardia adds the line `install.sh` adds:
+- **PATH.** When `~/.local/bin` isn't mentioned in your shell's startup files, Solstice adds the line `install.sh` adds:
   `export PATH="$HOME/.local/bin:$PATH"` to `~/.zprofile` (`~/.bash_profile` for bash), or
   `contains -- $HOME/.local/bin $PATH; or set -gx PATH $HOME/.local/bin $PATH` to `~/.config/fish/conf.d/ardia.fish`.
 - **Never in the way.** A name that is already a program in `/usr/bin`, `/bin`, `/usr/sbin`, `/sbin`,
   `/opt/homebrew/bin` or `/usr/local/bin` isn't linked ("git would hide /usr/bin/git"), since `~/.local/bin` usually
   comes first on PATH.
-- **Whose link.** A name that's free is linked without replacing anything, so two Ardias racing for it can't both
-  win; all of this happens under one lock for the bin folder (`Programs/.bin.lock`). Ardia replaces only a link that
+- **Whose link.** A name that's free is linked without replacing anything, so two Solstice-s racing for it can't both
+  win; all of this happens under one lock for the bin folder (`Programs/.bin.lock`). Solstice replaces only a link that
   already points into that plugin's store, or, for a registry legacy install's owner only, into that old home (below). A file, or a link to
   anywhere else, is left alone and the plugin's page says so ("~/.local/bin/ardia is someone else's; remove it to use
   this one"); a link into another plugin's store names that plugin. Two plugins that are on never share a command.
 - **Leases.** A program that wants its version kept while it runs writes `<its version folder>/.leases/<pid>` at start
   and removes it at exit (the folder above `bin/`; the `ardia` command does). A lease counts
   while that process runs and started no later than the lease's modification time, so a reused process id pins
-  nothing; others are cleared. Ardia keeps `current`, `previous` and every leased version, and deletes the rest each
-  time it links or unlinks, holding `Programs/.<plugin>.lock` while it does, so two Ardias never sweep or link the same
+  nothing; others are cleared. Solstice keeps `current`, `previous` and every leased version, and deletes the rest each
+  time it links or unlinks, holding `Programs/.<plugin>.lock` while it does, so two Solstice-s never sweep or link the same
   plugin at once.
 - **Turning off** removes the links that still point into the plugin's store, `current` and `previous`, and every
   version no running process leases. Remove does the same and then deletes the plugin's store folder once nothing is
@@ -665,28 +665,28 @@ Ardia never runs a plugin's program itself, with one exception for official plug
   folders deleted, each a real folder inside that home and once no running program leases it; its other files stay.
   All of it goes through directory descriptors: the home is opened one folder at a time with `O_NOFOLLOW` (each owned
   by you), the lock must be a regular file you own, and the lock is taken right after the new version is staged,
-  before anything changes, and held through the check of the old layout, Ardia's own `current`, the PATH link and the old
-  home's `current` alike. While the old installer holds it nothing is switched: Ardia's `current` stays where it was (so
+  before anything changes, and held through the check of the old layout, Solstice's own `current`, the PATH link and the old
+  home's `current` alike. While the old installer holds it nothing is switched: Solstice's `current` stays where it was (so
   PATH runs the same file, even through an old home already adopted), no link changes, native answers `busy`, and no
   `afterUpdate` starts. The swap and the pruning are
   `renameat`/`unlinkat` inside the opened folder. A link on PATH is taken over only when it points at the
   exact old launcher, `<root>/<current>/bin/<program>`. Native answers `adoption`: `adopted`, `already` (it was
-  Ardia's), `failed` (the swap didn't take), `busy` (the old installer holds its lock) or `none`. A busy lock is tried
+  Solstice's), `failed` (the swap didn't take), `busy` (the old installer holds its lock) or `none`. A busy lock is tried
   again, for an Install and an automatic adoption alike (6 times, 5 s apart), then shown with **Try Again**, as a
   failed swap is. `plugin_adoptions` counts, and a waiting Install settles, only once native says `adopted` or
   `already`; `usage_counts.program_adoptions` counts the old home switched over.
 - **Official plugins' files** are checked against the download. The fetch records the payload digest of the verified
   copy, derived from the kept download whose SHA-256 the signed pin names (the same digest
-  `scripts/release/plugin-digest.py` computes). Ardia computes it again over its program copy before using it, and
+  `scripts/release/plugin-digest.py` computes). Solstice computes it again over its program copy before using it, and
   again when it reuses one, and refuses one that differs. What goes on PATH is what the pin vouches for, even if the
   store was changed on disk.
-- **Which Ardia writes there.** Only an Ardia on its real data folder links into `~/.local/bin` and the store. A test
+- **Which Solstice writes there.** Only an Solstice on its real data folder links into `~/.local/bin` and the store. A test
   instance (`ARDIA_DATA_DIR`) links only into `ARDIA_INSTANCE cliBinDir=<dir>`, keeps its store in
   `<data dir>/Programs`, adopts an old install only from `ARDIA_INSTANCE cliHome=<dir>` (the old home itself; the key keeps
   its name for the test harnesses, and is passed to `afterUpdate` as `ARDIA_CLI_HOME`) and never from the real home, a
   signed smoke instance included: it keeps the signed claims but adopts nothing without that scratch folder,
   and runs `afterUpdate` with `HOME` at `<data dir>/ProgramsHome`. Plugins belong to the data
-  folder, not to a profile, so one link serves every profile; two copies of Ardia.app on one data folder share
+  folder, not to a profile, so one link serves every profile; two copies of Solstice.app on one data folder share
   `plugins.json`, their version folders never collide, and the last to link wins.
 - **Stale requests.** Each link and unlink takes the plugin's next generation when it's asked for, and does nothing when
   a newer one was asked for before it runs; its answer to JS is only whether it worked, which commands were linked or
@@ -698,7 +698,7 @@ Ardia never runs a plugin's program itself, with one exception for official plug
   `ardia.programs.status()` and `ardia.programs.relink()`. Settings › Advanced › Programs on your PATH lists every plugin
   that is on and owns programs, with the same status and **Try Again**.
 - **PATH line** (`PluginCore/PluginLoginPath.swift`). Each time a plugin's commands are linked into `~/.local/bin`,
-  Ardia reads (never runs) the startup files your login shell reads and, when none has an uncommented line that puts
+  Solstice reads (never runs) the startup files your login shell reads and, when none has an uncommented line that puts
   `.local/bin` on PATH, appends one to that shell's login file:
   - zsh reads `.zshenv`, `.zprofile`, `.zshrc` and `.zlogin`, and gets `.zprofile`;
   - bash (a login shell, as terminals on macOS open) reads the first of `.bash_profile`, `.bash_login` and `.profile`,
@@ -714,13 +714,13 @@ Ardia never runs a plugin's program itself, with one exception for official plug
   read it.
 - **Not sandboxed.** A program isn't a helper: you, or a program you use, run it from a shell, as you, so neither the
   sandbox nor the plugin's other permissions apply to it, and the consent sheet says so ("Adds ardia to your PATH. It runs as you,
-  outside Ardia's sandbox", and "Adds ~/.local/bin to your PATH in your shell's login file"). It reaches Ardia the way any program does, while "Let the ardia command control Ardia" is on: the
+  outside Solstice's sandbox", and "Adds ~/.local/bin to your PATH in your shell's login file"). It reaches Solstice the way any program does, while "Let the ardia command control Solstice" is on: the
   control socket, which checks only that its peer runs as the same user, and the engine's token connection, whose token
   sits in `ArdiaControl.json` for the user's processes to read (`docs/cli.md`, `docs/control-socket.md`). Nothing can
   hold a program running as you to less, so a plugin with programs says so first, whether or not it asks for `control`
-  ("The <name> command runs as you, so while control is on in Settings › Advanced, it can fully control Ardia: …",
-  or "…, as do the commands Ardia runs for it after updates" for `afterUpdate`), and its row in Settings › Plugins says "Can fully
-  control Ardia". A plugin's own code can't reach either. main and a sidecar run under `sandbox-exec`, which denies
+  ("The <name> command runs as you, so while control is on in Settings › Advanced, it can fully control Solstice: …",
+  or "…, as do the commands Solstice runs for it after updates" for `afterUpdate`), and its row in Settings › Plugins says "Can fully
+  control Solstice". A plugin's own code can't reach either. main and a sidecar run under `sandbox-exec`, which denies
   `ArdiaControl.json` and Unix sockets outside the plugin's folder (`PluginSandboxEscapeTests`); a sidecar with the
   network can reach the engine's loopback port, but only the token opens it. Its pages are WebKit views that load the
   plugin's own folder through its scheme handler (`PluginPageView.swift`), with no file access to the data folder, and
@@ -744,43 +744,43 @@ declare one, and each group of profiles that shares browser data picks at most o
 - `fill` (required): `system` is macOS's own Passwords panel at the field, which types the chosen login into the page.
   The panel lists every saved login, not the site's first: macOS takes a site to filter by only from apps holding Apple's
   private `com.apple.textInput.autofillContext` entitlement (AutoFillCore checks it), and AppKit gives native
-  views no site of their own. So once the panel is on screen, Ardia shows a hint beside the key, on the side the panel
+  views no site of their own. So once the panel is on screen, Solstice shows a hint beside the key, on the side the panel
   doesn't cover: "Type github in Passwords to find this site", with the page's registrable domain label. It closes with
   the panel, when focus leaves the field or the page navigates, and a profile stops seeing it after closing it 3 times.
   `tool` is reserved (below) and refused for now ("passwordManager.fill: tool isn't available yet; use system").
 - `fields` (required, 1 or 2): which fields get the key: `login` (username, email and current password) and
   `oneTimeCode`.
 - `verificationCodeSetup` (`system`): when a page in a profile using this plugin shows an `otpauth://` link, or a QR code
-  on a Chromium page, Ardia offers "Set Up Verification Code in <app>?" and opens it with macOS's handler for `otpauth:`
+  on a Chromium page, Solstice offers "Set Up Verification Code in <app>?" and opens it with macOS's handler for `otpauth:`
   (the Passwords app on a stock Mac). QR codes are found on Chromium pages only: WebKit has no `BarcodeDetector`, so a
   WebKit page that shows its setup code only as a QR image gets no offer; its `otpauth://` links still do. The search
   is bounded so it costs pages little: the first 8 `otpauth` links each time the page changes, and QR codes only on a
   page with a text field (a setup page asks for a code to confirm it), at most 12 decodes per page until the provider
   set changes. A setup step that shows its QR code before any text field gets no offer for it. The URL, which holds the code's secret, stays in native code: the page script, JS and the prompt see
   an opaque token, single use, bound to the tab, frame, document, profile, provider generation and handler app.
-- `passkeys` (`system`): accepted for older manifests and ignored. It used to draw Ardia's passkey access row on the plugin's page, but the plugin can't use passkeys: access to the passkeys saved on this Mac is Ardia's own, through Apple's browser passkey entitlement, in Settings › Engines › Passkeys.
+- `passkeys` (`system`): accepted for older manifests and ignored. It used to draw Solstice's passkey access row on the plugin's page, but the plugin can't use passkeys: access to the passkeys saved on this Mac is Solstice's own, through Apple's browser passkey entitlement, in Settings › Engines › Passkeys.
 
-The plugin never sees a secret and never runs code in a page: the key, field detection and code detection are Ardia's
+The plugin never sees a secret and never runs code in a page: the key, field detection and code detection are Solstice's
 own page script, switched on per profile from the manifest.
 
-**Choosing.** Settings › Profiles › Passwords › Password manager lists Ardia (Chrome's password manager, as before),
+**Choosing.** Settings › Profiles › Passwords › Password manager lists Solstice (Chrome's password manager, as before),
 each enabled password-manager plugin by its title, and None (when an extension handles logins). The choice is stored
 on the profile as `ardia`, `none` or `plugin:<name>`; profiles that share browser data share it; a private window
 follows its profile's choice. A stored `plugin:<name>` counts only while the plugin loaded under that name is on and
-its manifest is the approved one; otherwise the profile reads as Ardia, and the stored choice comes back with it.
+its manifest is the approved one; otherwise the profile reads as Solstice, and the stored choice comes back with it.
 
-**Default.** A profile that never chose reads as Ardia, unless an official password-manager plugin is on, in which case
+**Default.** A profile that never chose reads as Solstice, unless an official password-manager plugin is on, in which case
 it reads as that plugin. Turning on an official one also stores it on every profile that never chose (the consent sheet
 says how many, naming the plugin: "Moves 3 profiles that never picked a password manager to <title>"). No official
-password-manager plugin ships today: Apple Passwords was one in 0.2.47 and was retired once Apple approved Ardia for
+password-manager plugin ships today: Apple Passwords was one in 0.2.47 and was retired once Apple approved Solstice for
 Apple Passwords itself (#3357). An installed plugin moves nobody: each profile picks it. Turning a plugin on never
 changes a profile that chose.
 
-**Offer to save.** While a profile's manager is a plugin or None, Ardia's offer to save is off for it; it comes back
-when the profile returns to Ardia, unless you had turned it off yourself. `password-manager.json` in the data folder
-records which profiles Ardia turned off, so the give-back survives a relaunch. Both directions are crash-safe: turning
+**Offer to save.** While a profile's manager is a plugin or None, Solstice's offer to save is off for it; it comes back
+when the profile returns to Solstice, unless you had turned it off yourself. `password-manager.json` in the data folder
+records which profiles Solstice turned off, so the give-back survives a relaunch. Both directions are crash-safe: turning
 off writes the record, then the pref. Giving back is a journal over two launches, because Chrome writes the pref to
-disk later: Ardia turns the pref on, then marks the profile in `offerToSaveRestored`; a later launch reads the pref
+disk later: Solstice turns the pref on, then marks the profile in `offerToSaveRestored`; a later launch reads the pref
 back and clears the profile from the record only once it reads on, and sets it again if Chrome lost it. A launch never
 confirms what it wrote itself. Your own switch wins: turning offer to save on or off yourself clears the profile from
 the record before the pref changes, so no later launch undoes it. Profiles that no longer exist are dropped from the
@@ -790,12 +790,12 @@ it every 30 s, doubling to 5 minutes: turning off waits until its own record wri
 tell a durable record from a save still staged natively, so an entry that's already there doesn't count), and a failed save native still holds for a retry is always replaced by the next write, even one that looks like no
 change, so a stale save can't land later and undo your switch. Each failure counts in `password_manager_record_failed`.
 Confirming a give-back writes the pref on once more before clearing the record: the read sees the effective value, so
-when an extension forces the setting on, a write Chrome lost is still written again before the record goes. Ardia
+when an extension forces the setting on, a write Chrome lost is still written again before the record goes. Solstice
 can't tell a lost write from an Off made in Chrome's own password settings during the launch that gave it back, so
-that Off comes back on at the next launch; an Off made in Ardia's Settings always wins. A record from a newer Ardia (a higher
+that Off comes back on at the next launch; an Off made in Solstice's Settings always wins. A record from a newer Solstice (a higher
 `version`) is never overwritten: offer to save is left as it is for that run.
 
-**Retired plugins.** `RETIRED_OFFICIAL_PLUGINS` in `state/plugins/lifecycle.ts` maps each official plugin Ardia no
+**Retired plugins.** `RETIRED_OFFICIAL_PLUGINS` in `state/plugins/lifecycle.ts` maps each official plugin Solstice no
 longer ships (`apple-passwords`) to the approvals its bundled copies were given (the hash of the bundled manifest with
 folder `bundled`). Once a scan lists no plugin by that name, a record carrying one of those approvals is dropped from
 plugins.json. A record you approved for a plugin of that name you installed yourself never matches, so it stays even
@@ -806,7 +806,7 @@ and when the dropped record was on, so are profiles that never chose, so a rollb
 plugin can't hand them back to it with offer to save off. With no retired record and no such choice nothing is
 written. Offer to save then comes back through the journal above.
 
-**Withdrawn at once.** Ardia pushes the whole set of profiles with a key (`passwords.setFieldProviders {session, generation,
+**Withdrawn at once.** Solstice pushes the whole set of profiles with a key (`passwords.setFieldProviders {session, generation,
 profiles: [{profile, fields, codeSetup}]}`) at launch and whenever it changes. Turning the plugin off, removing it or
 changing its manifest pushes the set without its profiles before the plugin is reported off, so the key leaves every
 live page first. Each push has a new generation; native drops badge clicks, menu requests, code detections and token
@@ -818,14 +818,14 @@ the page's view is first responder and editing text, the top frame last reported
 itself or a same-origin frame it can read) after the latest focus change, and the 0.6 s throttle allows it. A page that
 opens the panel without a click gets what Edit › AutoFill gives it: macOS's panel, then Touch ID and a pick by you,
 filled into the page's own focused field. The menu route asks the top frame for a fresh focus report and opens only on
-its answer within 200 ms. Between the page sampling which field has focus and Ardia opening the panel, focus can still
+its answer within 200 ms. Between the page sampling which field has focus and Solstice opening the panel, focus can still
 move inside the page; the panel then fills whatever field macOS sees as focused, as Edit › AutoFill does.
 
 **Edit › AutoFill › Passwords…** in a profile whose manager is a `fill: "system"` plugin opens the macOS panel at the
 focused field (`passwords.showSystemPanel {tab, generation}`, in Chromium and WebKit tabs; a request from an older generation is refused as `stale`); otherwise Chrome's dropdown as before.
 
 **An otpauth link you click** still goes through the external-app prompt every link to another app gets, which shows
-the address in Ardia's own interface. That's base behaviour, unchanged; no plugin, log or count sees the address.
+the address in Solstice's own interface. That's base behaviour, unchanged; no plugin, log or count sees the address.
 
 **`fill: "tool"` (reserved, #1168).** For managers with their own vault (1Password, Bitwarden, Proton Pass). Not a
 normal tool: a host-only request the CLI and other plugins can never call, versioned, bound to the exact origin and
@@ -851,7 +851,7 @@ Manifest 2, in `contributes`. Up to 4 switches Site Controls shows for each site
 ```
 
 - A row appears in Site Controls for an http(s) page in a tab, never in a private window, a Peek or an internal page
-  (`ardia://…`). Pressing it turns the switch on or off for that page's origin.
+  (`solstice://…`). Pressing it turns the switch on or off for that page's origin.
 - Values are kept per **canonical origin**: scheme, host and port, lowercased, the host's trailing dot dropped, default
   ports left out and IPv6 hosts in brackets, so `http://localhost:8318` and `http://localhost:5173` are separate
   sites. Each value is an explicit on or off; a site you never touched has none (and reads as off).
@@ -863,8 +863,8 @@ Manifest 2, in `contributes`. Up to 4 switches Site Controls shows for each site
 
 ### pageBar
 
-Manifest 2, in `contributes`. One per plugin: a bar Ardia draws for a page whose site switch is on, with buttons that
-run Ardia's own actions on that tab. The plugin declares it; Ardia draws all of it, and no plugin code runs in the
+Manifest 2, in `contributes`. One per plugin: a bar Solstice draws for a page whose site switch is on, with buttons that
+run Solstice's own actions on that tab. The plugin declares it; Solstice draws all of it, and no plugin code runs in the
 browser's interface. It needs no `main` and no permission; the consent sheet lists the switch, the bar and its
 actions.
 
@@ -906,7 +906,7 @@ shows its bar once it has stayed committed for 300 ms (a page that redirects awa
 within the same document keeps the decision and only updates the address, and switching to a tab whose document has
 settled shows it at once. The address shown and every action's target are that confirmed document's.
 
-**Actions.** Only the buttons Ardia draws run them. Ardia resolves the target tab when you press, checks it again after
+**Actions.** Only the buttons Solstice draws run them. Solstice resolves the target tab when you press, checks it again after
 a menu closes (the split menu), and returns nothing to the plugin.
 
 **Several plugins.** When more than one plugin's bar matches a page, the first by plugin name draws it.
@@ -932,9 +932,9 @@ opened in a split or a new window, from a frozen pinned copy, or in a new tab a 
 
 ### The channel
 
-Descriptor 3 is a Unix stream socket to Ardia speaking the control socket's protocol (`docs/automation.md` ›
+Descriptor 3 is a Unix stream socket to Solstice speaking the control socket's protocol (`docs/automation.md` ›
 Protocol: newline-delimited JSON, the same limits), private to this helper: nothing else can connect to it, and it
-works whether or not "Let the ardia command control Ardia" is on. A helper should exit when it closes. A helper that
+works whether or not "Let the ardia command control Solstice" is on. A helper should exit when it closes. A helper that
 closes descriptor 3 itself but keeps running is still the plugin's running helper: it gets no calls, events or page
 messages, its callers' tool calls fail at their deadline, and Restart (or exiting) starts it over.
 
@@ -954,17 +954,17 @@ Requests from the helper (`{"id", "method", "params"}`):
 | `tools.call` `{"plugin", "tool", "input"?}` | every permission the other plugin has | the tool's result, or its error; the plugin must be on and running. A plugin can't reach through another plugin's tools to what it wasn't granted itself |
 | `result` `{"call", "result"? , "error"?}` | | `{"ok": true}`: the answer to a call (below) |
 
-A method the manifest doesn't allow is `refused`. Page messages arrive as `{"pageMessage", "view"}`. Events from Ardia: `plugin.values` (`{"values"}`) when you change a
+A method the manifest doesn't allow is `refused`. Page messages arrive as `{"pageMessage", "view"}`. Events from Solstice: `plugin.values` (`{"values"}`) when you change a
 row, plus the subscribed events. Calls to a tool arrive as `{"call": "c4", "tool": "hello", "input": {…},
 "caller": {"kind": "command" | "cli" | "plugin", "plugin"?}, "deadline": ms}`, where `"cli"` means a call through the
-control socket, whatever program sent it (inside Ardia it is the `socket` caller; the wire keeps `"cli"` for protocol 1
+control socket, whatever program sent it (inside Solstice it is the `socket` caller; the wire keeps `"cli"` for protocol 1
 helpers and protocol 2 runtimes alike); the helper answers with `result`. A
 call past its deadline, or one whose calling plugin's helper stops, is answered with an error for the caller and
 `{"call": "c4", "cancel": true}` is sent; a late `result` is `bad_request`. At most 16 calls wait per helper.
 
 ### Pages and their helper
 
-A plugin's page and its helper talk through Ardia, never over a port:
+A plugin's page and its helper talk through Solstice, never over a port:
 
 - **Page to helper.** `window.ardia.send(value)` sends any JSON value; the helper gets a line
   `{"pageMessage": value, "view": "v3"}`, where `view` names that page tab's view. Only the main frame of the
@@ -984,11 +984,11 @@ A plugin's page and its helper talk through Ardia, never over a port:
   page, and a page that comes back into a window gets a new bridge with a new view id. A bridge exists only while the
   page is in a window: a page rebuilt while a view above it is out of the window (a restart while its pane moves
   between windows or splits) gets no bridge and doesn't load until it is back, then gets its bridge first and loads
-  after. Like Ardia's own pages, a plugin page exists only while its tab shows: switching to another tab unloads it,
+  after. Like Solstice's own pages, a plugin page exists only while its tab shows: switching to another tab unloads it,
   and switching back loads it again with a new bridge. Keep what must survive in the helper or the page's own storage.
   So a helper should answer the `view` of the latest message, or post without one. While no helper runs, `send` does
   nothing.
-- **The boundary is the plugin's origin.** Ardia puts `window.ardia` only into the main frame of the plugin's own
+- **The boundary is the plugin's origin.** Solstice puts `window.ardia` only into the main frame of the plugin's own
   documents, and only that frame's messages are taken. A same-origin child frame (one of the plugin's own files, or an
   `about:blank` frame that inherits the origin) can reach the parent's `window.ardia` through ordinary DOM rules, as
   any same-origin script can: that is the plugin's own code. Nothing from another origin reaches it, and a page can't
@@ -1020,26 +1020,26 @@ whichever profile the tab's window shows:
 - **Its own storage.** Each plugin's page has its own website data store (`WKWebsiteDataStore(forIdentifier:)`, an id
   derived from the plugin's name), apart from every profile's cookies, logins and storage, the WebKit page engine's
   stores and other plugins' pages. Removing the plugin deletes it.
-- **Away from Ardia's interface.** It runs in WebKit's own processes with no script message handlers, so the page can't
+- **Away from Solstice's interface.** It runs in WebKit's own processes with no script message handlers, so the page can't
   reach the interface's JavaScript, the store or any native call, with one exception: `window.ardia.send`, in the main
   frame of the plugin's own documents, which reaches only that plugin's helper, as above. It gets no camera, microphone or location, downloads
   are refused, and its JavaScript dialogs are ignored.
-- **Its network follows the plugin's.** Without `network`, the page reaches only its own files: Ardia sends a Content
+- **Its network follows the plugin's.** Without `network`, the page reaches only its own files: Solstice sends a Content
   Security Policy in every response header (scripts, images, `fetch`, WebSockets, `EventSource`, beacons, preloads and
   form posts go only to its own origin; no workers), turns DNS prefetching off, gives the page's WebKit configuration
   no network hosts at all (so speculative preconnects, which don't consult the policy, open nothing; its own files
-  come through Ardia, not the network), and turns WebRTC off, so `RTCPeerConnection` doesn't exist and no ICE packet
+  come through Solstice, not the network), and turns WebRTC off, so `RTCPeerConnection` doesn't exist and no ICE packet
   leaves. Each of those, `<link rel=preconnect>` and `dns-prefetch` included, was tried from a test page against
   listeners on this Mac's network address, and none reached them (see the proof in the pull request). A file page
   can't send its own response headers, so a `Link` preconnect header can't arise. The network-host and WebRTC switches
-  are WebKit settings that aren't public API. Ardia reads both back after setting them, on the configuration and again
+  are WebKit settings that aren't public API. Solstice reads both back after setting them, on the configuration and again
   on the web view's own copy of it; on a macOS where either is missing or doesn't take, a page without `network` isn't
   shown at all rather than shown with the network open. With `network`, a page is a web page like any
   other.
 - **Stays on its origin.** Its own files may navigate among themselves. Every other navigation is cancelled: a
   link, a `window.open`, a pop-up, a form post or a download never leaves the page, and a plugin page never opens a
   browser tab by itself. To open one, the page asks its helper, and a helper with the `commands` permission (shown on
-  the consent sheet as "Runs Ardia commands, like opening and closing tabs") opens it with `open`:
+  the consent sheet as "Runs Solstice commands, like opening and closing tabs") opens it with `open`:
 
   ```js
   document.addEventListener("click", (event) => {
@@ -1055,21 +1055,21 @@ whichever profile the tab's window shows:
 
 ### Theme tokens on web pages
 
-Every `PluginPageView` (a page tab, a `WebView` node, a web panel) gets Ardia's current colours as CSS custom
+Every `PluginPageView` (a page tab, a `WebView` node, a web panel) gets Solstice's current colours as CSS custom
 properties, in a `<style id="ardia-theme">` that a script in its own content world injects at document start and
 updates live whenever the theme, appearance or profile tint changes (`lib/pluginThemeCss.ts`,
 `components/plugins/pluginThemeCss.ts`). Each theme role becomes `--ardia-<role>` in kebab case (`--ardia-background`,
 `--ardia-text`, `--ardia-accent`, `--ardia-selection`, …), with `color-scheme` set; values pass a strict filter (no
 `url()`, `var()`, `image()` or `expression()`), so a theme file can't load anything into a page. A page styled with
-`var(--ardia-background, Canvas)` matches Ardia in light, dark and every theme with no message passing.
+`var(--ardia-background, Canvas)` matches Solstice in light, dark and every theme with no message passing.
 
 ## The ardia command
 
 The `ardia` command is itself a plugin, the built-in `cli` (`docs/cli.md`). `ardia plugins` works on the plugin folder of the config folder it resolves (`--data-dir`, `$ARDIA_DATA_DIR`, else
-the installed app's); `enable`, `disable` and `call` need Ardia running with CLI control on.
+the installed app's); `enable`, `disable` and `call` need Solstice running with CLI control on.
 
 - `ardia plugins list [--json]`: each plugin, its version, whether it's on and running, what it contributes, and its
-  problems. With Ardia reachable it asks Ardia (`plugins` on the socket); otherwise it reads the files.
+  problems. With Solstice reachable it asks Solstice (`plugins` on the socket); otherwise it reads the files.
 - `ardia plugins install PATH [--force]`: copies a plugin folder (or a lone `plugin.json`) into the plugin folder,
   after checking it against `plugin.schema.json`. `--force` replaces one already there. The plugin arrives off. The
   copy is published with a rename that never replaces anything (`renamex_np` with `RENAME_EXCL` on macOS,
@@ -1079,16 +1079,16 @@ the installed app's); `enable`, `disable` and `call` need Ardia running with CLI
   publishing fails, or, when even that is blocked, keeps it and prints where.
 - `ardia plugins check [NAME|PATH]`: checks manifests.
 
-`check` and `install` hold a manifest to what the app accepts, using the `plugin.schema.json` Ardia wrote for that data
-folder, else the one built into the `ardia` command (`plugins/cli/ts/assets/` in ardia-browser/plugins); settings defaults need Ardia's
+`check` and `install` hold a manifest to what the app accepts, using the `plugin.schema.json` Solstice wrote for that data
+folder, else the one built into the `ardia` command (`plugins/cli/ts/assets/` in ardia-browser/plugins); settings defaults need Solstice's
 `config.schema.json`, and without it a manifest that sets any is refused as unchecked: a version 0 manifest is migrated first and a newer
 version than `plugin.schema.json` knows is refused; then the schema (rows included), the settings defaults against
 `config.schema.json`, and the rules a schema can't state (a command's tool exists, `context` needs `tabs`, a page is a file, names are unique, …), with the app's own lists from the schema's `x-ardia-rules` (events that need
-`tabs`, page names Ardia keeps, settings with approvals of their own). Only the app knows whether `requires` fits the
-Ardia that runs it. `install` checks the copy it is about to publish again. `tests/fixtures/plugins/rejected-manifests.json`
+`tabs`, page names Solstice keeps, settings with approvals of their own). Only the app knows whether `requires` fits the
+Solstice that runs it. `install` checks the copy it is about to publish again. `tests/fixtures/plugins/rejected-manifests.json`
 is a list both the app's tests and the CLI's tests refuse.
-- `ardia plugins remove NAME`: through Ardia when it is reachable (as Settings' Remove), else deletes the folder. If
-  Ardia got the request but its answer was lost, the folder is left alone; run it again.
+- `ardia plugins remove NAME`: through Solstice when it is reachable (as Settings' Remove), else deletes the folder. If
+  Solstice got the request but its answer was lost, the folder is left alone; run it again.
 - `ardia plugins enable NAME`, `ardia plugins disable NAME`. `disable` also works for a plugin that was on when its
   folder was deleted by hand, and puts back the settings it changed.
 - `ardia plugins call NAME TOOL [JSON]`: calls a tool and prints its result as JSON (exit 1 on its error).
@@ -1171,7 +1171,7 @@ and each refusal's reason
 (`no_panel`: macOS took the request but no panel window was on screen 0.6 s later),
 `password_manager_panel_hints_<shown|dismissed>`, `verification_code_setups_<offered|accepted|failed>`,
 `password_manager_chose_<ardia|none|plugin>`, `password_manager_record_failed`, `password_manager_profiles_moved_back`
-(profiles, counted once per shared engine profile, saved as Ardia because their plugin was retired),
+(profiles, counted once per shared engine profile, saved as Solstice because their plugin was retired),
 `password_manager_offer_to_save_restored` (a give-back a later launch read back on),
 `password_manager_offer_to_save_restore_failures` (the pref couldn't be turned on), and the daily
 `password_manager_profiles_<ardia|none|plugin>`.

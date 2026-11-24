@@ -1,6 +1,6 @@
-# Privacy: what Ardia itself contacts
+# Privacy: what Solstice itself contacts
 
-This is the list of every host Ardia (not the pages you open) talks to, how each request travels, and every Google or
+This is the list of every host Solstice (not the pages you open) talks to, how each request travels, and every Google or
 Chromium service that is turned off. `apps/browser/src/privacyEndpoints.test.mjs` keeps it honest: it scans the
 shipped sources of the Mac, Linux and Windows apps for hard-coded `http(s)://` and `ws(s)://` hosts and fails when one
 isn't on this page (in native and engine code also a quoted bare host, such as a redirect allowlist entry; in a patch, the lines it adds and the context it keeps), and it fails when a row below cites a file that's gone or a literal that's no longer in it.
@@ -11,7 +11,7 @@ build scripts and docs aren't shipped and aren't scanned.
 
 - **The profile's Chromium network context.** Chromium's own stack for that profile: it follows the system proxy, an
   extension's `chrome.proxy` setting and a `ProxySettings` policy for that profile, and it can send that profile's
-  cookies. A private window's profile is its own off-the-record context. There is no Ardia proxy setting: `ACMainDelegate`
+  cookies. A private window's profile is its own off-the-record context. There is no Solstice proxy setting: `ACMainDelegate`
   strips `--proxy-server` and `--proxy-pac-url` from the command line (`engine/ardiacore/src/ardia/core/ac_main_delegate.cc`,
   `docs/engine-build.md`), so Chromium follows the system proxy.
 - **Chromium's system network context.** Chromium's stack with no profile: system proxy and policy, no profile's
@@ -19,16 +19,16 @@ build scripts and docs aren't shipped and aren't scanned.
   bang list) this way, with credentials omitted.
 - **URLSession, WinHTTP and the app's `fetch`.** Requests outside Chromium (React Native's `fetch` is `NSURLSession` on
   the Mac and `Windows.Web.Http` on Windows). They follow the system proxy, but no extension or Chromium policy proxy,
-  and they belong to no profile: they never carry a site's Chromium cookies. Ardia's own URLSession sessions are
+  and they belong to no profile: they never carry a site's Chromium cookies. Solstice's own URLSession sessions are
   ephemeral with no cookie store.
 - **`NWConnection`.** Plugins' `net.fetch` opens its own TLS connection after checking the resolved address, so it
   doesn't go through any HTTP proxy.
 
-## Endpoints Ardia contacts
+## Endpoints Solstice contacts
 
 | Host | Purpose | Stack | System proxy | Private windows | Other profiles | Cookies and credentials | Gate | Off switch | Code |
 |---|---|---|---|---|---|---|---|---|---|
-| `ardia.dev` | Usage counts and crash reports (`/otel/v1/logs`), everything but the daily count below | App `fetch` (Mac, Windows); Chromium system context (Linux) | Yes | App-wide counts; a private window adds to counts, never a URL or a title | App-wide, no profile | No Chromium cookies; an ingest key header that is the same in every copy of Ardia, not a per-user credential | Sharing on only | Settings › General › Share anonymous crash reports | `apps/browser/src/state/telemetry/config.ts`, `engine/ardiacore-linux/src/ardia/linux/ac_linux_telemetry_policy.h` |
+| `ardia.dev` | Usage counts and crash reports (`/otel/v1/logs`), everything but the daily count below | App `fetch` (Mac, Windows); Chromium system context (Linux) | Yes | App-wide counts; a private window adds to counts, never a URL or a title | App-wide, no profile | No Chromium cookies; an ingest key header that is the same in every copy of Solstice, not a per-user credential | Sharing on only | Settings › General › Share anonymous crash reports | `apps/browser/src/state/telemetry/config.ts`, `engine/ardiacore-linux/src/ardia/linux/ac_linux_telemetry_policy.h` |
 | `ardia.dev` | One anonymous "opened today" count a day (`daily_active` to `/otel/v1/logs`): app version, update channel, OS version, chip, and whether it's this copy's first day, week or month, with no persistent id | App `fetch` (Mac, Windows); Chromium system context (Linux) | Yes | App-wide, nothing from any window | App-wide | No Chromium cookies; the same app ingest key | Sent by release builds whatever the sharing choice (Settings says so beside the switch); development builds and isolated test instances don't send it by default, unless the `telemetry` dev test value is set to `1` (`DEV_SEND_TEST_KEY`) | None in Settings: turning sharing off doesn't stop it | `apps/browser/src/state/telemetry/daily.ts`, `apps/browser/src/state/telemetry/transport.ts`, `apps/browser/src/state/telemetry/config.ts` |
 | `ardia.dev` | Kill switches (`/switches.json`), once a launch | App `fetch` with `credentials: "omit"`; Chromium system context (Linux) | Yes | App-wide, nothing from the window | App-wide | None (credentials omitted) | Automatic update checks on | Settings › General › Install updates automatically | `apps/browser/src/platform/killSwitches.ts`, `engine/ardiacore-linux/src/ardia/linux/ac_linux_updates_policy.h` |
 | `ardia.dev` | Update feed (`/appcast.xml`), Sparkle on the Mac | Sparkle's URLSession | Yes | App-wide | App-wide | No Chromium cookies | Automatic update checks on, or Check for Updates | Settings › General › Install updates automatically | `apps/browser/macos/Ardia-macOS/Info.plist` |
@@ -39,11 +39,11 @@ build scripts and docs aren't shipped and aren't scanned.
 | `www.google.com`, `api.bing.com`, `duckduckgo.com`, `ac.ecosia.org`, `search.brave.com`, `www.startpage.com`, `search.yahoo.com`, `www.baidu.com`, `suggest.yandex.com` | Search suggestions from the profile's search engine as you type | The window profile's Chromium network context | Yes, plus extension and policy proxies | Off | Each window asks with its own profile | Mac and Windows: that engine's own cookies from the profile, as Chrome does, never saved; Linux: none | Suggest while typing on | Settings › Profiles › Suggest while typing | `packages/core/src/engines.ts`, `engine/chromium/src/chrome/browser/ardia/ac_search_suggest.cc`, `engine/ardiacore-linux/src/ardia/linux/ac_linux_suggest_policy.h` |
 | A page's icon host (from the page) | The icon a page reports, and the icon the app fetches when Chromium hasn't stored one | The tab's own profile's network context (a private tab's is its off-the-record one, as for the page's own requests) | Yes, plus extension and policy proxies | A private tab's reported icon loads through its own off-the-record profile and the app fetches no missing icon for it; the private window does read regular profiles' local icon stores (see below, #3837) | Only the tab's own profile fetches | Mac: no cookies (the profile's icon fetcher); Linux: Chromium's page image download from the tab, which can send the tab profile's cookies for that host like the page's own requests | Shown tabs only | None | `packages/ardiacore/ios/ArdiaFavicons.mm`, `apps/browser/src/state/favicons/favicons.ts`, `engine/ardiacore-linux/src/ardia/linux/ac_linux_favicons.cc` |
 | A search engine's or scoped site's host (from the engine or page) | `https://<host>/favicon.ico` for the icons in Settings › Profiles › Search and the address bar's scope chip, when no bundled or stored icon exists | The given profile's Chromium network context (Default in Settings, the window's own in the address bar) | Yes, plus extension and policy proxies | Not fetched for a private window's profile | That profile only | No cookies | The row is shown | None | `apps/browser/src/components/favicon/Favicon.tsx`, `apps/browser/src/components/settings/panes/ProfileSearch.tsx` |
-| Media artwork hosts (from the page) | The artwork a playing page names for its media, shown in Ardia's media controls | The tab's own profile: on the Mac its icon fetcher (`ArdiaFavicons`), on Linux Chromium's page image download; Windows loads none | Yes, plus extension and policy proxies | A private tab's artwork loads through its own off-the-record profile, as the page's own requests | The tab's own profile only | Mac: no cookies; Linux: may send the tab profile's cookies for that host | Media is playing | None | `apps/browser/src/state/media/artwork.ts`, `packages/ardiacore/ios/ArdiaWebView+PageCommands.mm` |
+| Media artwork hosts (from the page) | The artwork a playing page names for its media, shown in Solstice's media controls | The tab's own profile: on the Mac its icon fetcher (`ArdiaFavicons`), on Linux Chromium's page image download; Windows loads none | Yes, plus extension and policy proxies | A private tab's artwork loads through its own off-the-record profile, as the page's own requests | The tab's own profile only | Mac: no cookies; Linux: may send the tab profile's cookies for that host | Media is playing | None | `apps/browser/src/state/media/artwork.ts`, `packages/ardiacore/ios/ArdiaWebView+PageCommands.mm` |
 | Website notification icons (from the page) | The icon of a site's notification | The tab's own profile's Chromium network context, then a local file or `data:` image; the notification layer refuses anything else | Yes | Private windows post no notifications | The tab's own profile only | No cookies (Mac); Windows and Linux attach no site icon through this path | The site has notification permission | Block the site's notifications | `apps/browser/src/state/site/webNotifications.ts`, `packages/shell/ios/NotificationHub.swift` |
 | Filter list hosts (from the bundled uBlock Origin's asset manifest) | uBlock Origin refreshes the stock lists that are turned on (EasyList, EasyPrivacy, uBO's own, regional, cookie and annoyance lists) from the hosts its pinned release names, on its own update schedule | uBlock Origin, a component extension in each regular profile, on that profile's Chromium network context | Yes, plus extension and policy proxies | One instance serves the profile and its private windows (`incognito: spanning`), so refreshes run in the regular profile, not for a private window | Each regular profile refreshes its own lists | Chromium's rules for an extension's requests | The list is turned on (several are on by default) | Settings › Privacy › Advanced Ad Block Settings, turn the list off | `packages/ardiacore/scripts/ubo.sh`, `packages/ardiacore/ios/ArdiaContentBlocker.mm` |
 | Your filter lists' hosts (user-added) | A list you add by address in Settings › Privacy › Advanced… › Your lists is downloaded at once and refreshed with the others (Mac and Linux, Chromium tabs only) | Same as the stock lists | Yes, plus extension and policy proxies | Same as the stock lists | Every profile copies the default profile's added lists | Chromium's rules for an extension's requests | You add the list | Remove it from Your lists | `packages/ardiacore/ios/ArdiaContentBlocker.mm` |
-| Apple's Safe Browsing service for WebKit pages (from the system's WebKit, not named in Ardia's code) | Checks a WebKit page's address against Google's or Tencent's Safe Browsing lists through Apple's service, and warns before a deceptive site opens (macOS 15.4+, WebKit tabs only) | WebKit's own networking | Yes | Applies to every WebKit view, private ones included, while it's on | App-wide | None of the profile's cookies; Apple's service, not the site | Off until you turn it on | Settings › Advanced › WebKit pages › Warn about fraudulent websites | `packages/ardiacore/ios/WebKitFraudWarnings.swift`, `apps/browser/src/components/settings/rows/advancedRows.ts` |
+| Apple's Safe Browsing service for WebKit pages (from the system's WebKit, not named in Solstice's code) | Checks a WebKit page's address against Google's or Tencent's Safe Browsing lists through Apple's service, and warns before a deceptive site opens (macOS 15.4+, WebKit tabs only) | WebKit's own networking | Yes | Applies to every WebKit view, private ones included, while it's on | App-wide | None of the profile's cookies; Apple's service, not the site | Off until you turn it on | Settings › Advanced › WebKit pages › Warn about fraudulent websites | `packages/ardiacore/ios/WebKitFraudWarnings.swift`, `apps/browser/src/components/settings/rows/advancedRows.ts` |
 | `clients2.google.com`, `chromewebstore.googleapis.com` | Chrome Web Store installs, extension updates, Google's extension kill switch, and the store's item details for an install prompt | Chromium's extension downloader on the profile's network context | Yes, plus extension and policy proxies | Chromium's rules: updates are per regular profile | Per profile | Chromium's rules: retries with the profile's Google cookies only when the store asks for them | You install an extension | Remove the extensions | `engine/patches/chromium-webstore-direct.patch`, `engine/patches/chromium-extension-updates.patch` |
 | `update.googleapis.com`, `dl.google.com`, `gvt1.com` | Security components only: CRLSet, PKI metadata (CT logs, root store), the SSL error assistant. The update check is `update.googleapis.com`; the downloads it answers with come from `dl.google.com`, Google's `gvt1.com` mirrors (such as edgedl.me.gvt1.com) or `www.google.com/dl/`, the only download hosts the patch accepts | Chromium's component updater, system context | Yes | App-wide | App-wide | None | Always | None | `engine/patches/chromium-component-updater-security-only.patch` |
 | `api.github.com`, `github.com`, `api.bitbucket.org`, `bitbucket.org`, `api.notion.com`, `oauth2.googleapis.com`, `www.googleapis.com` | Live Folders: your GitHub, Bitbucket, Notion and Google Drive items, and signing in to them | App `fetch` (Mac, Windows); the app profile's Chromium context with credentials omitted (Linux) | Yes | Refused in private windows | The account you connected, app-wide | The token you granted, no cookies | You connect an account | Settings › Automations › Connected accounts | `apps/browser/src/state/live/net.ts`, `apps/browser/src/state/live/sources.ts`, `engine/ardiacore-linux/src/ardia/linux/ac_linux_live.cc` |
@@ -67,17 +67,17 @@ Sync makes no network request: it writes sealed files to a folder you pick and t
   That read is not read-only today: Chromium marks the icon used in that profile's favicon database
   (`ac_favicons_get` calls `MarkUsed`, which updates `last_requested` and commits), so a private window's lookup writes
   that timestamp to the regular profile's disk, and the answers sit in the regular profiles' in-memory icon caches
-  until Ardia quits. #3837 makes the lookup read-only and keeps the answers with the private window.
-- A private window's own icons, and the themes and accents worked out from them, leave Ardia's icon caches when it
+  until Solstice quits. #3837 makes the lookup read-only and keeps the answers with the private window.
+- A private window's own icons, and the themes and accents worked out from them, leave Solstice's icon caches when it
   closes, even an icon that already left the cache before; a theme or accent asked for one after the close is never
   requested. The native process-wide image caches (the Mac's icon cache of images Chromium reported, artwork, the
   dock's blurred backdrops) evict on their own and aren't cleared at close.
 - A normal window drawing an icon with no profile given (the command bar, history menus) may ask any regular profile's
   local icon store. Chromium then marks that icon used in the profile that answered.
 
-## Hosts named in the source that Ardia doesn't contact
+## Hosts named in the source that Solstice doesn't contact
 
-Pages, links and patterns: Ardia opens these only as pages you navigate to, or matches them as text.
+Pages, links and patterns: Solstice opens these only as pages you navigate to, or matches them as text.
 
 - Search engines' result pages (searches open as pages): `www.google.com`, `www.bing.com`, `duckduckgo.com`,
   `www.ecosia.org`, `search.brave.com`, `www.startpage.com`, `search.yahoo.com`, `www.baidu.com`, `yandex.com`,
@@ -90,10 +90,10 @@ Pages, links and patterns: Ardia opens these only as pages you navigate to, or m
   `repo.new`, `sheets.new`, `slides.new`, `word.new`.
 - The bundled `!bang` list (`packages/core/src/bangList.ts`, generated from Helium's list, about 10,700 entries) is
   not scanned and its hosts aren't listed here: each entry is a search page a bang opens as a page you navigate to,
-  stored without a scheme, and Ardia never contacts one by itself. The list's own refresh is the `services.helium.imput.net` row above.
+  stored without a scheme, and Solstice never contacts one by itself. The list's own refresh is the `services.helium.imput.net` row above.
 - Onboarding's suggested sites (bundled icons, nothing fetched): `app.slack.com`, `calendar.google.com`,
   `docs.google.com`, `linear.app`, `outlook.office.com`.
-- Links Ardia opens as pages: `chromewebstore.google.com` and `chrome.google.com` (an extension's store page),
+- Links Solstice opens as pages: `chromewebstore.google.com` and `chrome.google.com` (an extension's store page),
   `accounts.google.com` (Google's sign-in page for Live Folders, opened in a tab), `www.atlassian.com`,
   `your-team.atlassian.net` (a placeholder), `crbug.com`.
 - Streaming sites matched by name for DRM and media handling (`packages/ardiacore/ios/ArdiaPopupWindow.mm`,
@@ -115,7 +115,7 @@ Pages, links and patterns: Ardia opens these only as pages you navigate to, or m
 
 ## Google and Chromium endpoints that are off
 
-Ardia's engine is Chromium with Helium's and ungoogled-chromium's patches (pinned in
+Solstice's engine is Chromium with Helium's and ungoogled-chromium's patches (pinned in
 `engine/patches/build/helium-pins.ini`) and our own series. Helium's domain substitution rewrites Google hosts in
 Chromium's source to unresolvable `*.qjz9zk` names, except the Web Store and extension update hosts listed in
 `domsub-keep-store.txt`; that covers the many services ungoogled-chromium removes (Google sign-in and sync, metrics
