@@ -164,7 +164,7 @@ export function exportOpenTabs() {
     showToast("No Open Tabs", "warning");
     return;
   }
-  quietly(() => shareLinkList(linkLines(urls.map(cleanUrl), false), "Open Tabs from Ardia"));
+  quietly(() => shareLinkList(linkLines(urls.map(cleanUrl), false), "Open Tabs from Solstice"));
 }
 
 export function openFromSettings(url: string) {
