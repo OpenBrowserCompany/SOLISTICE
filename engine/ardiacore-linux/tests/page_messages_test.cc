@@ -119,7 +119,7 @@ void Normalization() {
   auto peek = NormalizeLinuxPageMessage(LinuxPageMessageKind::kPeek, Dict(base::DictValue().Set("url", "HTTPS://Example.test/a").Set("key", "shift")
       .Set("origin", "HTTPS://Example.test").Set("x", 10).Set("y", 20).Set("moved", 1)));
   Expect(peek && *peek->data.GetDict().FindString("origin") == "https://example.test" && peek->data.GetDict().FindDouble("x"), "peek copied");
-  for (const char* url : {"javascript:alert(1)", "data:text/html,x", "file:///etc/passwd", "chrome://ardia/", "ardia://settings", "http://", "https:/x"}) {
+  for (const char* url : {"javascript:alert(1)", "data:text/html,x", "file:///etc/passwd", "chrome://ardia/", "solstice://settings", "http://", "https:/x"}) {
     Expect(!NormalizeLinuxPageMessage(LinuxPageMessageKind::kPeek, Dict(base::DictValue().Set("url", url).Set("key", "shift"))), url);
   }
   Expect(!NormalizeLinuxPageMessage(LinuxPageMessageKind::kPeek, Dict(base::DictValue().Set("url", "https://a.test/").Set("key", "ctrl"))), "unknown peek key");
@@ -272,7 +272,7 @@ void LinkDrops() {
 
   gate.NotePress(1);
   gate.NoteDragEnded(1, 3.0);
-  Expect(gate.AcceptLinkDrop(1, true, 3.1) == "the drag ended outside the page", "a drag with no drop on an Ardia page opens nothing");
+  Expect(gate.AcceptLinkDrop(1, true, 3.1) == "the drag ended outside the page", "a drag with no drop on an Solstice page opens nothing");
 
   gate.NotePress(1);
   gate.NoteDrop(2);
@@ -700,7 +700,7 @@ void LinkTabs() {
   ledger.Note("https://a.test/clicked", 1.0);
   auto in_place = MatchLinuxLinkTab(ledger, attempt("https://a.test/clicked", "", false, 0, false, true, 1.1));
   Expect(in_place.step == LinuxLinkTabStep::kInPlace && in_place.clicked == "https://a.test/clicked" && in_place.link_wait == "matched",
-         "a clicked link stays in a Little Ardia window");
+         "a clicked link stays in a Little Solstice window");
   ledger.Note("https://a.test/clicked", 2.0);
   auto as_tab = MatchLinuxLinkTab(ledger, attempt("https://a.test/clicked", "", false, 0, false, false, 2.1));
   Expect(as_tab.step == LinuxLinkTabStep::kReport && as_tab.link_wait == "matched", "elsewhere the tab is reported as matched");

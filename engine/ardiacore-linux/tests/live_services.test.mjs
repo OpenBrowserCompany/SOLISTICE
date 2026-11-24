@@ -15,7 +15,7 @@ import { asSecret } from "../../../packages/core/src/secret.ts";
 
 const TOOL = process.env.LIVE_HOST_TOOL;
 const scratch = mkdtempSync(join(tmpdir(), "ardia-live-services-"));
-const keys = join(scratch, "Ardia Live Tokens");
+const keys = join(scratch, "Solstice Live Tokens");
 const services = createLiveServices();
 const lines = [];
 let server;

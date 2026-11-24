@@ -37,7 +37,7 @@ const withGenerated = (value) =>
         : value;
 const PROVIDERS = Object.fromEntries(["github", "bitbucket", "notion", "confluence", "google"].map((name) => [name, withGenerated(JSON.parse(readFileSync(join(FIXTURES, `${name}.json`), "utf8")))]));
 const scratch = mkdtempSync(join(tmpdir(), "ardia-live-contract-"));
-const keys = join(scratch, "Ardia Live Tokens");
+const keys = join(scratch, "Solstice Live Tokens");
 const REDIRECT = "http://127.0.0.1:53682/ardia-oauth";
 const CREDENTIALS = {
   github: fixtureToken("ghp_"),
