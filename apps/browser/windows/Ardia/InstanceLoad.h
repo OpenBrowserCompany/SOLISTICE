@@ -7,7 +7,7 @@
 #include "Host.h"
 #include "LaunchLog.h"
 
-namespace Ardia {
+namespace Solstice {
 
 struct InstanceLoad {
   bool loaded = false;

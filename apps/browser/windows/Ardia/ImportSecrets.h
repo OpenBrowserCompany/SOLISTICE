@@ -17,7 +17,7 @@
 
 #pragma comment(lib, "bcrypt.lib")
 
-namespace Ardia {
+namespace Solstice {
 
 namespace ImportSecrets {
 
