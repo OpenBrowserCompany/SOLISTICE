@@ -29,9 +29,9 @@ public static System.Collections.Generic.List<IntPtr> AppWindows(uint process) {
 '@
 
 $entry = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\{47A92F18-32B0-4548-A1EF-72C217FE1836}_is1"
-$folder = Join-Path $env:LOCALAPPDATA "Programs\Ardia"
+$folder = Join-Path $env:LOCALAPPDATA "Programs\Solstice"
 $exe = Join-Path $folder "Ardia.exe"
-$data = Join-Path $env:LOCALAPPDATA "Ardia"
+$data = Join-Path $env:LOCALAPPDATA "Solstice"
 $log = Join-Path $data "Logs\launch.log"
 $reports = Join-Path $data "User Data\Crashpad\reports"
 $started = Get-Date
@@ -60,7 +60,7 @@ function Assert-ShutDownFinished([int]$processId, [string]$what) {
   $ended = @(Get-Content -LiteralPath $previousLog -ErrorAction SilentlyContinue | Where-Object { $_ -match 'process ending' }).Count
   if (-not $ended) {
     Keep-Log $what
-    throw "$what`: the previous Ardia ($processId) ended without finishing its shutdown (no 'process ending' in its log), so what it hadn't saved was lost"
+    throw "$what`: the previous Solstice ($processId) ended without finishing its shutdown (no 'process ending' in its log), so what it hadn't saved was lost"
   }
 }
 
@@ -74,7 +74,7 @@ function Wait-Window([string]$what, [int]$seconds = 120) {
     Start-Sleep -Milliseconds 250
   }
   Keep-Log $what
-  throw "$what`: no Ardia window within $seconds s (browser processes: $(((Browsers) | ForEach-Object ProcessId) -join ', '))"
+  throw "$what`: no Solstice window within $seconds s (browser processes: $(((Browsers) | ForEach-Object ProcessId) -join ', '))"
 }
 
 function Close-Window($shown) {
@@ -89,7 +89,7 @@ function Wait-Exit([int]$processId, [string]$what, [int]$seconds = 60) {
     if (-not (Get-Process -Id $processId -ErrorAction SilentlyContinue)) { return [int]$watch.Elapsed.TotalMilliseconds }
     Start-Sleep -Milliseconds 100
   }
-  throw "$what`: Ardia ($processId) was still running $seconds s after its window closed"
+  throw "$what`: Solstice ($processId) was still running $seconds s after its window closed"
 }
 
 function Count-LogLines([string]$pattern) { return @(@(Launch-Log) | Where-Object { $_ -match $pattern }).Count }
@@ -117,11 +117,11 @@ function Assert-OneBrowser([string]$what) {
   }
 }
 
-function Start-Ardia { return Start-Process -FilePath $exe -PassThru }
+function Start-Solstice { return Start-Process -FilePath $exe -PassThru }
 
 if (-not (Test-Path -LiteralPath $Setup -PathType Leaf)) { throw "'$Setup' does not exist" }
-if ((Test-Path -LiteralPath $entry) -or (Test-Path -LiteralPath $folder)) { throw "Ardia is already installed for this user: this check installs and removes it" }
-if (@(Running).Count) { throw "Ardia is already running" }
+if ((Test-Path -LiteralPath $entry) -or (Test-Path -LiteralPath $folder)) { throw "Solstice is already installed for this user: this check installs and removes it" }
+if (@(Running).Count) { throw "Solstice is already running" }
 Remove-Item -LiteralPath $data -Recurse -Force -ErrorAction SilentlyContinue
 $env:ARDIA_BACKGROUND = "1"
 
@@ -129,14 +129,14 @@ $install = Start-Process -FilePath (Resolve-Path -LiteralPath $Setup).Path -Argu
 if ($install.ExitCode -ne 0) { throw "the installer exited with $($install.ExitCode)" }
 
 try {
-  Start-Ardia | Out-Null
+  Start-Solstice | Out-Null
   $shown = Wait-Window "first launch" 180
   Assert-OneBrowser "first launch"
   Note "first launch: a window in $([int]((Get-Date) - $started).TotalSeconds) s"
 
   foreach ($round in 1, 2) {
     Close-Window $shown
-    Start-Ardia | Out-Null
+    Start-Solstice | Out-Null
     $previous = $shown.Pid
     $shown = Wait-Window "relaunch $round right after closing"
     if ($shown.Pid -ne $previous) {
@@ -152,7 +152,7 @@ try {
   $exitMs = Wait-Exit $shown.Pid "closing"
   if ($exitMs -gt 15000) { throw "closing: the browser took $exitMs ms to exit after its window closed; it must end once Chromium's shutdown returns (#1706 lingered about 30 s)" }
   Note "closing: the browser exited $exitMs ms after its window closed"
-  Start-Ardia | Out-Null
+  Start-Solstice | Out-Null
   $shown = Wait-Window "relaunch after a full exit"
   Assert-OneBrowser "relaunch after a full exit"
   Note "relaunch after a full exit: a window in browser $($shown.Pid)"
@@ -171,39 +171,39 @@ try {
     Note "lingering exit: attempt $attempt ended before it could be held"
     if ($candidate -and -not $candidate.HasExited) { [RelaunchCheck.Native]::NtResumeProcess($candidate.Handle) | Out-Null }
     Wait-Exit $lingering "lingering exit attempt $attempt" | Out-Null
-    Start-Ardia | Out-Null
+    Start-Solstice | Out-Null
     $shown = Wait-Window "lingering exit attempt $attempt"
   }
   if (-not $held) { throw "lingering exit: the browser ended before it could be held, three times" }
   try {
-    Start-Ardia | Out-Null
+    Start-Solstice | Out-Null
     Start-Sleep -Seconds 26
     $waiting = @((Browsers) | Where-Object { [int]$_.ProcessId -ne $lingering })
     if ($waiting.Count -ne 1) { throw "lingering exit: expected one new launch waiting, found $($waiting.Count)" }
     $children = @(Get-BrowserChildren @(Running) ([int]$waiting[0].ProcessId))
-    if ($children.Count -gt 0) { throw "lingering exit: the new launch started $($children.Count) browser processes while the previous Ardia was still exiting: two browsers on one profile" }
-    if ([RelaunchCheck.Native]::AppWindows([uint32]$waiting[0].ProcessId).Count -gt 0) { throw "lingering exit: the new launch opened a window while the previous Ardia was still exiting" }
+    if ($children.Count -gt 0) { throw "lingering exit: the new launch started $($children.Count) browser processes while the previous Solstice was still exiting: two browsers on one profile" }
+    if ([RelaunchCheck.Native]::AppWindows([uint32]$waiting[0].ProcessId).Count -gt 0) { throw "lingering exit: the new launch opened a window while the previous Solstice was still exiting" }
   } finally {
-    if ([RelaunchCheck.Native]::NtResumeProcess($held.Handle) -ne 0) { throw "lingering exit: Ardia ($lingering) could not be let go" }
+    if ([RelaunchCheck.Native]::NtResumeProcess($held.Handle) -ne 0) { throw "lingering exit: Solstice ($lingering) could not be let go" }
   }
   Wait-Exit $lingering "lingering exit" | Out-Null
   $shown = Wait-Window "relaunch after a lingering exit"
   Assert-OneBrowser "relaunch after a lingering exit"
   $guard = Read-LaunchGuard @(Launch-Log)
   if ($null -eq $guard.WaitedMs -or $guard.WaitedMs -lt 1000) { throw "lingering exit: the launch log doesn't show the new launch waiting for the previous one (waited '$($guard.WaitedMs)' ms)" }
-  Note "relaunch during a lingering exit: waited $($guard.WaitedMs) ms for the previous Ardia, then one browser and a window"
+  Note "relaunch during a lingering exit: waited $($guard.WaitedMs) ms for the previous Solstice, then one browser and a window"
 
   Close-Window $shown
   Wait-Exit $shown.Pid "before the stuck profile" | Out-Null
   Set-Content -LiteralPath (Join-Path $data "launch-starts.txt") -Value "2" -Encoding ascii
   if (-not (Test-Path -LiteralPath (Join-Path $data "session.json"))) { Set-Content -LiteralPath (Join-Path $data "session.json") -Value "{}" -Encoding ascii }
-  Start-Ardia | Out-Null
+  Start-Solstice | Out-Null
   $shown = Wait-Window "stuck profile"
   $guard = Read-LaunchGuard @(Launch-Log)
   if (-not $guard.SetAside -or $guard.UnfinishedBefore -ne 2) { throw "stuck profile: two unfinished starts didn't set the restore state aside (log: unfinished $($guard.UnfinishedBefore), set aside $($guard.SetAside))" }
   $setAside = Get-ChildItem -LiteralPath (Join-Path $data "Recovery") -Recurse -File -Filter "session.json" -ErrorAction SilentlyContinue | Select-Object -First 1
   if (-not $setAside) { throw "stuck profile: no session.json under $data\Recovery" }
-  Note "stuck profile: after two unfinished starts the session went to $($setAside.Directory.Name) and Ardia opened a window"
+  Note "stuck profile: after two unfinished starts the session went to $($setAside.Directory.Name) and Solstice opened a window"
   Close-Window $shown
   Wait-Exit $shown.Pid "after the stuck profile" | Out-Null
   $settled = (Get-Content -LiteralPath (Join-Path $data "launch-starts.txt") -ErrorAction SilentlyContinue | Select-Object -First 1)
@@ -212,30 +212,30 @@ try {
   $library = Join-Path $folder "Microsoft.ReactNative.dll"
   Rename-Item -LiteralPath $library -NewName "Microsoft.ReactNative.dll.hidden"
   try {
-    $failing = Start-Ardia
-    if (-not $failing.WaitForExit(90000)) { throw "start failure: Ardia was still running 90 s after a start that could not succeed" }
+    $failing = Start-Solstice
+    if (-not $failing.WaitForExit(90000)) { throw "start failure: Solstice was still running 90 s after a start that could not succeed" }
     $code = $failing.ExitCode
     $deadline = (Get-Date).AddSeconds(90)
     while (@(Browsers).Count -and (Get-Date) -lt $deadline) { Start-Sleep -Milliseconds 250 }
-    if (@(Browsers).Count) { throw "start failure: an Ardia was still running 90 s after a start that could not succeed" }
+    if (@(Browsers).Count) { throw "start failure: an Solstice was still running 90 s after a start that could not succeed" }
   } finally {
     Rename-Item -LiteralPath "$library.hidden" -NewName "Microsoft.ReactNative.dll"
   }
   $guard = Read-LaunchGuard @(Launch-Log)
   if (-not $guard.StartFailure) { throw "start failure: the launch log doesn't give the reason" }
   if ($guard.Fatal.Count) { throw "start failure: the engine crashed instead of quitting: $($guard.Fatal[0])" }
-  if ($code -ne 0) { throw "start failure: Ardia exited with $code, not 0" }
+  if ($code -ne 0) { throw "start failure: Solstice exited with $code, not 0" }
   Note "start failure: a clean exit (0) with the reason in the log: $($guard.StartFailure)"
 
-  Start-Ardia | Out-Null
+  Start-Solstice | Out-Null
   $shown = Wait-Window "launch after a start failure"
   Close-Window $shown
   Wait-Exit $shown.Pid "launch after a start failure" | Out-Null
   Note "launch after a start failure: a window again"
 
   $events = @(Get-WinEvent -FilterHashtable @{ LogName = "Application"; StartTime = $started } -ErrorAction SilentlyContinue |
-      Where-Object { $_.ProviderName -eq "Application Error" -and $_.Message -match "Ardia\.exe" })
-  if ($events.Count) { throw "Windows logged $($events.Count) Ardia crash(es): $(($events[0].Message -split "`n")[0..3] -join ' | ')" }
+      Where-Object { $_.ProviderName -eq "Application Error" -and $_.Message -match "Solstice\.exe" })
+  if ($events.Count) { throw "Windows logged $($events.Count) Solstice crash(es): $(($events[0].Message -split "`n")[0..3] -join ' | ')" }
   $dumps = @(Get-ChildItem -LiteralPath $reports -Filter *.dmp -ErrorAction SilentlyContinue | Where-Object { $_.LastWriteTime -ge $started })
   if ($dumps.Count) { throw "Crashpad wrote $($dumps.Count) crash dump(s): $($dumps.Name -join ', ')" }
   $fatal = (Read-LaunchGuard @(Launch-Log)).Fatal
@@ -243,7 +243,7 @@ try {
   Note "no crash events, crash dumps or fatal log lines"
 } finally {
   Keep-Log "final"
-  Get-Process -Name Ardia -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+  Get-Process -Name Solstice -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
   Start-Sleep -Seconds 2
   $uninstaller = Join-Path $folder "unins000.exe"
   if (Test-Path -LiteralPath $uninstaller) { Start-Process -FilePath $uninstaller -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART" -Wait | Out-Null }

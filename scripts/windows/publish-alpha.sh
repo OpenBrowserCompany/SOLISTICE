@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Publishes one Windows build as the update the app offers, on the GitHub prerelease windows-alpha (never latest): its
-# two installers under this build's own names (Ardia-Setup-<cpu>-<build>.exe), the engine's source, then the feed
+# two installers under this build's own names (Solstice-Setup-<cpu>-<build>.exe), the engine's source, then the feed
 # windows-update.json that names those installers with their SHA-256, then the same installers under the names people
-# download (Ardia-Setup-<cpu>.exe). The feed only ever names files that are already there and never change. The build
+# download (Solstice-Setup-<cpu>.exe). The feed only ever names files that are already there and never change. The build
 # before this one keeps its files, so an update the app offered from the last feed can still be downloaded; older
 # builds' files go last.
 #
@@ -10,9 +10,9 @@
 #   scripts/windows/publish-alpha.sh [--dry-run] [--out <dir>] [--commit <rev>] --installers <dir>
 #   scripts/windows/publish-alpha.sh -h | --help
 #
-# A run id publishes the Ardia-Setup-x64 and Ardia-Setup-arm64 artifacts of a green Windows workflow run, as an alpha.
+# A run id publishes the Solstice-Setup-x64 and Solstice-Setup-arm64 artifacts of a green Windows workflow run, as an alpha.
 # --installers publishes a release's Windows files, as the Release workflow does after it publishes v<version>:
-# Ardia-<version>-windows-<cpu>-setup.exe for x64 and arm64, Ardia-<version>-windows-source.tar.xz, their .sha256
+# Solstice-<version>-windows-<cpu>-setup.exe for x64 and arm64, Solstice-<version>-windows-source.tar.xz, their .sha256
 # files and Ardia.build.json, as the Windows workflow leaves them in its windows-release-* artifacts when it runs with a
 # version. They were built at --commit (default HEAD). A run id's source is packed here by engine-source.sh, from the
 # engine its commit pins; a release's is the archive it already carries.
@@ -84,15 +84,15 @@ if [ -n "$run_id" ]; then
   git -C "$root" cat-file -e "$commit^{commit}" 2>/dev/null || git -C "$root" fetch -q origin "$commit" || die "commit $commit of run $run_id isn't in this checkout"
   echo "==> Download the installers of run $run_id ($commit)"
   for cpu in x64 arm64; do
-    gh run download "$run_id" -R "$repo" -n "Ardia-Setup-$cpu" -D "$stage/artifact-$cpu"
-    [ -f "$stage/artifact-$cpu/Ardia-Setup-$cpu.exe" ] || die "the Ardia-Setup-$cpu artifact holds no Ardia-Setup-$cpu.exe"
-    [ -f "$stage/artifact-$cpu/Ardia.build.json" ] || die "the Ardia-Setup-$cpu artifact holds no Ardia.build.json: run $run_id predates it, so publish a newer run"
-    mv "$stage/artifact-$cpu/Ardia-Setup-$cpu.exe" "$stage/Ardia-Setup-$cpu.exe"
+    gh run download "$run_id" -R "$repo" -n "Solstice-Setup-$cpu" -D "$stage/artifact-$cpu"
+    [ -f "$stage/artifact-$cpu/Solstice-Setup-$cpu.exe" ] || die "the Solstice-Setup-$cpu artifact holds no Solstice-Setup-$cpu.exe"
+    [ -f "$stage/artifact-$cpu/Ardia.build.json" ] || die "the Solstice-Setup-$cpu artifact holds no Ardia.build.json: run $run_id predates it, so publish a newer run"
+    mv "$stage/artifact-$cpu/Solstice-Setup-$cpu.exe" "$stage/Solstice-Setup-$cpu.exe"
   done
   stamped="$(identity "$stage/artifact-x64/Ardia.build.json")"
   [ "$stamped" = "$(identity "$stage/artifact-arm64/Ardia.build.json")" ] || die "run $run_id's x64 and arm64 installers carry different builds"
   IFS=$'\t' read -r version build <<<"$stamped"
-  about="Ardia for Windows, alpha build $build ($version, commit $commit). For testing: expect rough edges."
+  about="Solstice for Windows, alpha build $build ($version, commit $commit). For testing: expect rough edges."
   status="What works and what is known not to: https://github.com/$repo/blob/main/docs/windows.md"
 else
   [ -d "$installers" ] || die "--installers $installers is not a folder"
@@ -100,17 +100,17 @@ else
   [ -f "$installers/Ardia.build.json" ] || die "$installers has no Ardia.build.json"
   stamped="$(identity "$installers/Ardia.build.json")"
   IFS=$'\t' read -r version build <<<"$stamped"
-  echo "==> Take the installers of Ardia $version, build $build, from $installers"
+  echo "==> Take the installers of Solstice $version, build $build, from $installers"
   for cpu in x64 arm64; do
-    name="Ardia-$version-windows-$cpu-setup.exe"
+    name="Solstice-$version-windows-$cpu-setup.exe"
     [ -f "$installers/$name" ] || die "$installers has no $name"
     [ -f "$installers/$name.sha256" ] || die "$installers has no $name.sha256"
     read -r expected listed <"$installers/$name.sha256"
     [ "$listed" = "$name" ] || die "$name.sha256 is for ${listed:-no file}"
     [ "$(sha256_of "$installers/$name")" = "$expected" ] || die "$name doesn't match its .sha256"
-    cp "$installers/$name" "$stage/Ardia-Setup-$cpu.exe"
+    cp "$installers/$name" "$stage/Solstice-Setup-$cpu.exe"
   done
-  about="Ardia $version for Windows, build $build (commit $commit)."
+  about="Solstice $version for Windows, build $build (commit $commit)."
   status="Its release, with the Mac and Linux downloads and the notes: https://github.com/$repo/releases/tag/v$version"
 fi
 
@@ -127,7 +127,7 @@ out="${out:-$root/dist/$tag-$build}"
 mkdir -p "$out"
 out="$(cd "$out" && pwd -P)"
 [ -z "$(ls -A "$out")" ] || die "$out already holds files: remove it or pass another --out"
-mv "$stage/Ardia-Setup-x64.exe" "$stage/Ardia-Setup-arm64.exe" "$out/"
+mv "$stage/Solstice-Setup-x64.exe" "$stage/Solstice-Setup-arm64.exe" "$out/"
 
 echo "==> Feed"
 python3 -I - "$out" "$published" "$version" "$build" <<'PY'
@@ -135,8 +135,8 @@ import hashlib, json, os, sys
 out, published, version, build = sys.argv[1], sys.argv[2], sys.argv[3], int(sys.argv[4])
 feed = {"version": version, "build": build}
 for cpu in ("x64", "arm64"):
-    name = f"Ardia-Setup-{cpu}-{build}.exe"
-    path = os.path.join(out, f"Ardia-Setup-{cpu}.exe")
+    name = f"Solstice-Setup-{cpu}-{build}.exe"
+    path = os.path.join(out, f"Solstice-Setup-{cpu}.exe")
     digest = hashlib.sha256()
     with open(path, "rb") as file:
         for block in iter(lambda: file.read(1 << 20), b""):
@@ -151,7 +151,7 @@ cat "$out/windows-update.json"
 echo "==> Source"
 name="ardia-windows-source-$build"
 if [ -n "$installers" ]; then
-  release_source="Ardia-$version-windows-source.tar.xz"
+  release_source="Solstice-$version-windows-source.tar.xz"
   [ -f "$installers/$release_source" ] || die "$installers has no $release_source"
   [ -f "$installers/$release_source.sha256" ] || die "$installers has no $release_source.sha256"
   read -r expected listed <"$installers/$release_source.sha256"
@@ -168,11 +168,11 @@ notes="$out/notes.md"
 cat >"$notes" <<EOF
 $about
 
-- Intel or AMD PC: [Ardia-Setup-x64.exe]($published/Ardia-Setup-x64.exe)
-- Snapdragon or other ARM PC: [Ardia-Setup-arm64.exe]($published/Ardia-Setup-arm64.exe)
+- Intel or AMD PC: [Solstice-Setup-x64.exe]($published/Solstice-Setup-x64.exe)
+- Snapdragon or other ARM PC: [Solstice-Setup-arm64.exe]($published/Solstice-Setup-arm64.exe)
 
 The installer is not signed yet, so Windows shows "Windows protected your PC": choose More info, then Run anyway.
-It installs for your user only, with no admin prompt. Once installed, Ardia checks this page for newer builds:
+It installs for your user only, with no admin prompt. Once installed, Solstice checks this page for newer builds:
 Settings, General, Updates, Check Now.
 
 $status
@@ -181,17 +181,17 @@ The engine is Chromium with Helium's patches (GPL-3.0); $name.tar.xz is its sour
 Not a Mac release.
 EOF
 if [ "$dry" = 1 ] || ! gh release view "$tag" -R "$repo" >/dev/null 2>&1; then
-  run gh release create "$tag" -R "$repo" --prerelease --latest=false --target "$commit" --title "Ardia for Windows (alpha)" --notes-file "$notes"
+  run gh release create "$tag" -R "$repo" --prerelease --latest=false --target "$commit" --title "Solstice for Windows (alpha)" --notes-file "$notes"
 fi
 before=""
 [ "$dry" = 1 ] || before="$(gh release view "$tag" -R "$repo" --json assets -q '.assets[].name')"
-for cpu in x64 arm64; do cp "$out/Ardia-Setup-$cpu.exe" "$out/Ardia-Setup-$cpu-$build.exe"; done
-run gh release upload "$tag" -R "$repo" --clobber "$out/Ardia-Setup-x64-$build.exe" "$out/Ardia-Setup-arm64-$build.exe" "$out/$name.tar.xz"
+for cpu in x64 arm64; do cp "$out/Solstice-Setup-$cpu.exe" "$out/Solstice-Setup-$cpu-$build.exe"; done
+run gh release upload "$tag" -R "$repo" --clobber "$out/Solstice-Setup-x64-$build.exe" "$out/Solstice-Setup-arm64-$build.exe" "$out/$name.tar.xz"
 run gh release upload "$tag" -R "$repo" --clobber "$out/windows-update.json"
-run gh release upload "$tag" -R "$repo" --clobber "$out/Ardia-Setup-x64.exe" "$out/Ardia-Setup-arm64.exe"
+run gh release upload "$tag" -R "$repo" --clobber "$out/Solstice-Setup-x64.exe" "$out/Solstice-Setup-arm64.exe"
 run gh release edit "$tag" -R "$repo" --prerelease --latest=false --notes-file "$notes"
-previous="$(printf '%s\n' "$before" | sed -n -E 's/^Ardia-Setup-(x64|arm64)-([0-9]+)\.exe$/\2/p' | grep -v -x "$build" | sort -n | tail -1 || true)"
-for stale in $(printf '%s\n' "$before" | grep -E '^(Ardia-Setup-(x64|arm64)-[0-9]+\.exe|ardia-windows-source-[0-9]+\.tar\.xz)$' | grep -v -E -e "-($build${previous:+|$previous})\.(exe|tar\.xz)$" || true); do
+previous="$(printf '%s\n' "$before" | sed -n -E 's/^Solstice-Setup-(x64|arm64)-([0-9]+)\.exe$/\2/p' | grep -v -x "$build" | sort -n | tail -1 || true)"
+for stale in $(printf '%s\n' "$before" | grep -E '^(Solstice-Setup-(x64|arm64)-[0-9]+\.exe|ardia-windows-source-[0-9]+\.tar\.xz)$' | grep -v -E -e "-($build${previous:+|$previous})\.(exe|tar\.xz)$" || true); do
   run gh release delete-asset "$tag" "$stale" -R "$repo" --yes
 done
 if [ "$dry" = 1 ]; then
@@ -200,4 +200,4 @@ else
   [ "$(gh release view "$tag" -R "$repo" --json isPrerelease -q .isPrerelease)" = true ] || die "$tag isn't a prerelease"
   echo "Published Windows build $build ($version): https://github.com/$repo/releases/tag/$tag"
 fi
-du -sh "$out/Ardia-Setup-x64.exe" "$out/Ardia-Setup-arm64.exe" "$out/$name.tar.xz"
+du -sh "$out/Solstice-Setup-x64.exe" "$out/Solstice-Setup-arm64.exe" "$out/$name.tar.xz"

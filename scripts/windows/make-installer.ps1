@@ -62,10 +62,10 @@ try {
   Write-Host "make-installer: using $iscc"
   & $iscc "/Q" "/DSource=$sourceRoot" "/DOut=$outRoot" "/DCpu=$Cpu" "/DAllowed=$($allowed[$Cpu])" "/DVersion=$Version" "/DIcon=$icon" $script
   if ($LASTEXITCODE -ne 0) { throw "ISCC exited with $LASTEXITCODE" }
-  $setup = Join-Path $outRoot "Ardia-Setup-$Cpu.exe"
+  $setup = Join-Path $outRoot "Solstice-Setup-$Cpu.exe"
   if (-not (Test-Path -LiteralPath $setup -PathType Leaf)) { throw "ISCC wrote no $setup" }
   $size = [Math]::Round((Get-Item -LiteralPath $setup).Length / 1MB)
-  Write-Host "make-installer: Ardia $Version for $Cpu is $setup ($size MB)"
+  Write-Host "make-installer: Solstice $Version for $Cpu is $setup ($size MB)"
 } finally {
   Remove-Item -LiteralPath $scratch -Recurse -Force -ErrorAction SilentlyContinue
 }
