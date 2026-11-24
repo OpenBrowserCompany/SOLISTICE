@@ -127,7 +127,7 @@ test("tabs moved or dragged out of a window into a new one keep that window's hi
   assert.equal(shown(S().moveTabsToWindow([tabs[2]], null)), false, "a window in line with the setting hands on the setting");
 });
 
-test("Little Ardia has no tabs to hide and leaves the setting alone", () => {
+test("Little Solstice has no tabs to hide and leaves the setting alone", () => {
   fresh();
   const small = S().createWindow({ kind: "small", url: "https://example.com" });
   assert.equal(shown(small), false);

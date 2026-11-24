@@ -29,7 +29,7 @@ test("an hour with only Option resizes still sends usage_counts, and the count s
   assert.deepEqual(await sentPlacementCounts(), [[2, 0]]);
 });
 
-test("an hour with only drags Ardia moved itself still sends usage_counts with how many, and the count starts again from zero", async () => {
+test("an hour with only drags Solstice moved itself still sends usage_counts with how many, and the count starts again from zero", async () => {
   client.loadChoice();
   client.setSharing(true, "onboarding");
   const sentDragLoops = async () => {
@@ -49,7 +49,7 @@ test("an hour with only drags Ardia moved itself still sends usage_counts with h
   assert.equal((await sentDragLoops()).length, before + 1, "an hour with no drag sends nothing more");
 });
 
-test("drags macOS moved and drags Ardia took over after asking macOS are counted apart from Ardia's own moves", async () => {
+test("drags macOS moved and drags Solstice took over after asking macOS are counted apart from Solstice's own moves", async () => {
   client.loadChoice();
   client.setSharing(true, "onboarding");
   const sentDrags = async () => {
