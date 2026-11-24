@@ -174,17 +174,17 @@ test("the context sample holds Hermes's JS heap in whole megabytes, null when it
   }
 });
 
-test("the built-in page is the host and first path segment of an ardia:// or chrome:// URL, and null for any web URL", () => {
+test("the built-in page is the host and first path segment of an solstice:// or chrome:// URL, and null for any web URL", () => {
   const page = diagnostics.webuiPage;
   assert.equal(page("chrome://settings/cookies"), "settings/cookies");
-  assert.equal(page("ardia://settings/cookies"), "settings/cookies");
+  assert.equal(page("solstice://settings/cookies"), "settings/cookies");
   assert.equal(page("CHROME://Settings/Cookies/detail?site=https%3A%2F%2Fprivate.example#top"), "settings/cookies");
   assert.equal(page("chrome://settings/?search=private"), "settings");
-  assert.equal(page("ardia://history"), "history");
-  assert.equal(page("ardia://newtab/"), "newtab");
+  assert.equal(page("solstice://history"), "history");
+  assert.equal(page("solstice://newtab/"), "newtab");
   assert.equal(page("chrome://net-internals#dns"), "net-internals");
   assert.equal(page("chrome://settings/some-text-that-is-longer-than-a-page-name-could-be"), "settings");
-  for (const url of ["https://example.com/settings/cookies", "http://localhost:3000/chrome://settings", "https://chrome/settings", "view-source:chrome://settings/cookies", "about:blank", "file:///Users/me/ardia://history", "chrome://user@private.example/x", "chrome://my.private.example/x", "chrome://", "", null, undefined]) {
+  for (const url of ["https://example.com/settings/cookies", "http://localhost:3000/chrome://settings", "https://chrome/settings", "view-source:chrome://settings/cookies", "about:blank", "file:///Users/me/solstice://history", "chrome://user@private.example/x", "chrome://my.private.example/x", "chrome://", "", null, undefined]) {
     assert.equal(page(url), null, String(url));
   }
 });
@@ -231,7 +231,7 @@ test("the context sample records the built-in page the active tab is on, and a n
   }
 });
 
-test("the built-in page comes from the focused window's tab, a Little Ardia window included", async () => {
+test("the built-in page comes from the focused window's tab, a Little Solstice window included", async () => {
   const { useBrowser } = await import("../browser/store.ts");
   const S = () => useBrowser.getState();
   S().hydrate({});
@@ -279,7 +279,7 @@ test("the saved context keeps the last 3 built-in pages, and a native crash send
     await visit("chrome://history", 0);
     await visit("chrome://settings/cookies/detail?site=https%3A%2F%2Fprivate.example", 5);
     await visit("https://private.example/inbox?token=secret", 5);
-    await visit("ardia://downloads", 5);
+    await visit("solstice://downloads", 5);
     await visit("chrome://flags/?q=secret", 5);
     const last = await visit("chrome://flags/", 2);
     assert.equal(last.webui_page, "flags");

@@ -97,7 +97,7 @@ function dailyProperties(flags: DailyFlags, channel: string | null): Record<stri
   return {
     $lib: DAILY_LIB,
     $lib_version: "1",
-    $app_name: "Ardia",
+    $app_name: "Solstice",
     $app_version: info.appVersion,
     $os: telemetryHost().os,
     os_major: (info.osVersion ?? "").split(".")[0] || null,
