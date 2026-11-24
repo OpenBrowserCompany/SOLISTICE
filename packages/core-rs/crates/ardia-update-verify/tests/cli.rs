@@ -106,7 +106,7 @@ impl Release {
             "key.pem",
             pem(&SigningKey::from_bytes(&RELEASE_SEED).verifying_key().to_bytes()),
         );
-        scratch.file("Ardia-0.2.48-linux-x64.deb", &package);
+        scratch.file("Solstice-0.2.48-linux-x64.deb", &package);
         let release = Release { scratch, package };
         release.sign(&release.manifest("0.2.48"), &RELEASE_SEED);
         release
@@ -118,7 +118,7 @@ impl Release {
 
     fn manifest(&self, version: &str) -> String {
         format!(
-            "ardia-linux-update 1\nversion {version}\ndeb Ardia-{version}-linux-x64.deb {} {}\n",
+            "ardia-linux-update 1\nversion {version}\ndeb Solstice-{version}-linux-x64.deb {} {}\n",
             hex(&Sha256::digest(&self.package)),
             self.package.len()
         )
@@ -136,7 +136,7 @@ impl Release {
         let key = self.path("key.pem");
         let manifest = self.path("manifest");
         let signature = self.path("signature");
-        let package = self.path("Ardia-0.2.48-linux-x64.deb");
+        let package = self.path("Solstice-0.2.48-linux-x64.deb");
         let mut args = vec![
             command,
             "--key",
@@ -160,7 +160,7 @@ impl Release {
 
     fn ok_line(&self) -> String {
         format!(
-            "ok Ardia-0.2.48-linux-x64.deb {} {}",
+            "ok Solstice-0.2.48-linux-x64.deb {} {}",
             hex(&Sha256::digest(&self.package)),
             self.package.len()
         )
@@ -262,7 +262,7 @@ fn the_package_must_match_the_signed_size_and_digest() {
     let release = Release::new();
     let mut flipped = release.package.clone();
     *flipped.last_mut().unwrap() ^= 0xff;
-    release.scratch.file("Ardia-0.2.48-linux-x64.deb", &flipped);
+    release.scratch.file("Solstice-0.2.48-linux-x64.deb", &flipped);
     expect(
         release.check("package", "0.2.48", "0.2.47", "deb"),
         "failed checksum",
@@ -271,7 +271,7 @@ fn the_package_must_match_the_signed_size_and_digest() {
     );
     let mut longer = release.package.clone();
     longer.push(b'x');
-    release.scratch.file("Ardia-0.2.48-linux-x64.deb", &longer);
+    release.scratch.file("Solstice-0.2.48-linux-x64.deb", &longer);
     expect(
         release.check("package", "0.2.48", "0.2.47", "deb"),
         "failed checksum",
@@ -280,14 +280,14 @@ fn the_package_must_match_the_signed_size_and_digest() {
     );
     release
         .scratch
-        .file("Ardia-0.2.48-linux-x64.deb", &release.package[1..]);
+        .file("Solstice-0.2.48-linux-x64.deb", &release.package[1..]);
     expect(
         release.check("package", "0.2.48", "0.2.47", "deb"),
         "failed checksum",
         1,
         "a shorter package",
     );
-    fs::remove_file(release.path("Ardia-0.2.48-linux-x64.deb")).unwrap();
+    fs::remove_file(release.path("Solstice-0.2.48-linux-x64.deb")).unwrap();
     expect(
         release.check("package", "0.2.48", "0.2.47", "deb"),
         "failed missing",
@@ -393,16 +393,16 @@ fn links_folders_and_fifos_are_never_read() {
     );
     fs::remove_dir(release.path("manifest")).unwrap();
     fs::rename(release.path("real-manifest"), release.path("manifest")).unwrap();
-    fs::rename(release.path("Ardia-0.2.48-linux-x64.deb"), release.path("real.deb")).unwrap();
-    std::os::unix::fs::symlink(release.path("real.deb"), release.path("Ardia-0.2.48-linux-x64.deb")).unwrap();
+    fs::rename(release.path("Solstice-0.2.48-linux-x64.deb"), release.path("real.deb")).unwrap();
+    std::os::unix::fs::symlink(release.path("real.deb"), release.path("Solstice-0.2.48-linux-x64.deb")).unwrap();
     expect(
         release.check("package", "0.2.48", "0.2.47", "deb"),
         "failed missing",
         1,
         "a symlinked package",
     );
-    fs::remove_file(release.path("Ardia-0.2.48-linux-x64.deb")).unwrap();
-    let fifo = release.path("Ardia-0.2.48-linux-x64.deb");
+    fs::remove_file(release.path("Solstice-0.2.48-linux-x64.deb")).unwrap();
+    let fifo = release.path("Solstice-0.2.48-linux-x64.deb");
     assert!(Command::new("mkfifo").arg(&fifo).status().unwrap().success());
     expect(
         release.check("package", "0.2.48", "0.2.47", "deb"),

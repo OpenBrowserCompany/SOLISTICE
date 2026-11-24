@@ -28,7 +28,7 @@ static int same(const ardia_import_buf *buf, const char *text) {
 
 int main(void) {
   const char *local = "{\"roots\":{\"bookmark_bar\":{\"type\":\"folder\",\"children\":["
-                      "{\"type\":\"url\",\"name\":\"Ardia\",\"url\":\"https://ardia.dev/\",\"date_added\":\"13300000000000000\"},"
+                      "{\"type\":\"url\",\"name\":\"Solstice\",\"url\":\"https://ardia.dev/\",\"date_added\":\"13300000000000000\"},"
                       "{\"type\":\"folder\",\"name\":\"Work\",\"children\":[{\"type\":\"url\",\"name\":\"\xe6\x97\xa5\",\"url\":\"javascript:void(0)\"}]}]}}}";
   const char *account = "{\"roots\":{\"synced\":{\"type\":\"folder\",\"children\":[{\"type\":\"url\",\"url\":\"https://phone.example/\"}]}}}";
   ardia_import_bytes bookmarks = {(const uint8_t *)local, strlen(local)};

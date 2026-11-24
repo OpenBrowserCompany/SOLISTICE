@@ -18,10 +18,10 @@ const USAGE: &str = "usage: ardia-update-verify version <V>
        ardia-update-verify manifest <flags>
        ardia-update-verify package <flags> --package <file>
 
-Checks a signed Ardia update for Linux with ardia-update-core, for
+Checks a signed Solstice update for Linux with ardia-update-core, for
 lib/ardia/ardia-update.
 
-  version <V>  exits 0 when <V> is an Ardia version (<major>.<minor>.<patch>
+  version <V>  exits 0 when <V> is an Solstice version (<major>.<minor>.<patch>
                or <major>.<minor>.<patch>-nightly.<n>, each part 1 to 9 digits)
   manifest     verifies the manifest's Ed25519 signature against the key,
                then that it is a canonical format 1 manifest for --version,
@@ -31,7 +31,7 @@ lib/ardia/ardia-update.
                regular file of the listed size whose SHA-256 is the listed one
 
   --key <pem>        the Ed25519 public key (SubjectPublicKeyInfo PEM)
-  --manifest <file>  Ardia-<V>-linux-update.txt, at most 4096 bytes
+  --manifest <file>  Solstice-<V>-linux-update.txt, at most 4096 bytes
   --signature <file> its 64-byte signature
   --version <V>      the version the manifest's file name gives
   --installed <V>    the version installed now
@@ -372,7 +372,7 @@ fn run(args: Vec<OsString>) -> Result<String, Refusal> {
         Command::Help => Ok(USAGE.to_owned()),
         Command::Version(version) => Version::parse(&version)
             .map(|_| "ok".to_owned())
-            .map_err(|_| refuse(Reason::Version, "not an Ardia version")),
+            .map_err(|_| refuse(Reason::Version, "not an Solstice version")),
         Command::Check(request) => {
             let package = verify(&request)?;
             if let Some(path) = &request.package {
