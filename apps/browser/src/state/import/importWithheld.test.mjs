@@ -37,7 +37,7 @@ const { runImport } = await import("./runImport.ts");
 
 after(() => client.setSharing(false, "settings"));
 
-const HELD_BACK = "what looked like a password, cookie or card number turned up where it shouldn't, so Ardia held it all back to keep it private. Importing again without passwords, cookies and cards should work.";
+const HELD_BACK = "what looked like a password, cookie or card number turned up where it shouldn't, so Solstice held it all back to keep it private. Importing again without passwords, cookies and cards should work.";
 
 async function importFrom(profiles, failures) {
   failing = new Map(Object.entries(failures));

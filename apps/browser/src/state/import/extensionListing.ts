@@ -63,7 +63,7 @@ export function leftOutCounts(listing: ExtensionListing): Record<LeftOutReason, 
 }
 
 const LEFT_OUT_WORDS: Record<LeftOutReason, string> = {
-  installed: "already in Ardia",
+  installed: "already in Solstice",
   manifestV2: "uses Manifest V2, which Chrome no longer runs",
   unpacked: "loaded unpacked in developer mode",
   policy: "installed by your organization's policy",
