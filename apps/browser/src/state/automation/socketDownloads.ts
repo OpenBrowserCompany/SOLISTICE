@@ -64,7 +64,7 @@ async function openOrReveal(params: Record<string, unknown>, reveal: boolean, ca
   const d = downloadOf(params.id);
   if (d.state !== "finished") throw new OpError("refused", `Download ${d.id} is ${d.state}, so there's no file yet.`);
   if (backgroundInstance) {
-    throw new OpError("refused", reveal ? `Download ${d.id} wasn't shown: revealing a download needs the person, and this Ardia runs in the background.` : `Download ${d.id} wasn't opened: opening a download needs the person, and this Ardia runs in the background.`);
+    throw new OpError("refused", reveal ? `Download ${d.id} wasn't shown: revealing a download needs the person, and this Solstice runs in the background.` : `Download ${d.id} wasn't opened: opening a download needs the person, and this Solstice runs in the background.`);
   }
   const done = await (reveal ? revealFile(d.path) : openDownload(d.path, undefined, call.serving));
   expect(done, `${reveal ? "revealing" : "opening"} ${d.filename} failed (the file may be gone).`);
@@ -106,7 +106,7 @@ export const DOWNLOAD_METHODS: MethodSpec[] = [
   { name: "downloads.pause", mutates: true, description: "Pause a download", params: DOWNLOAD, result: "{ok}", run: engineCall(pauseDownload, (d) => inProgress(d) ?? (d.paused ? `Download ${d.id} is already paused.` : null)) },
   { name: "downloads.resume", mutates: true, description: "Resume a paused download", params: DOWNLOAD, result: "{ok}", run: engineCall(resumeDownload, (d) => inProgress(d) ?? (d.paused ? null : `Download ${d.id} isn't paused.`)) },
   { name: "downloads.cancel", mutates: true, description: "Cancel a download", params: DOWNLOAD, result: "{ok}", run: engineCall(cancelDownload, inProgress) },
-  { name: "downloads.keep", mutates: true, description: "Keep a download Ardia held as dangerous", params: DOWNLOAD, result: "{ok}", run: engineCall(keepDownload, (d) => (awaitsKeep(d) ? null : `Download ${d.id} isn't waiting to be kept.`)) },
+  { name: "downloads.keep", mutates: true, description: "Keep a download Solstice held as dangerous", params: DOWNLOAD, result: "{ok}", run: engineCall(keepDownload, (d) => (awaitsKeep(d) ? null : `Download ${d.id} isn't waiting to be kept.`)) },
   { name: "downloads.open", mutates: true, description: "Open a finished download with its app", params: DOWNLOAD, result: "{ok}", run: (p, call) => openOrReveal(p, false, call) },
   { name: "downloads.reveal", mutates: true, description: `Show a finished download in ${PLATFORM_TERMS.fileManager}`, params: DOWNLOAD, result: "{ok}", run: (p, call) => openOrReveal(p, true, call) },
   { name: "downloads.remove", mutates: true, description: "Remove a download from the list (the file stays)", params: DOWNLOAD, result: "{ok}", run: remove },

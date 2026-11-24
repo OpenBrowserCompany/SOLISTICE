@@ -16,7 +16,7 @@ const SITE_ACCESS_STATE: Record<SiteAccess, string> = { allSites: "ON_ALL_SITES"
 
 function stillThere(call: SocketCall, profileId: string, engine: string) {
   call.stillServing();
-  if (!ownValue(now().profiles, profileId) || engineProfile(now(), profileId) !== engine) throw new OpError("no_window", `Profile ${profileId} closed before Ardia made the change, so nothing changed.`);
+  if (!ownValue(now().profiles, profileId) || engineProfile(now(), profileId) !== engine) throw new OpError("no_window", `Profile ${profileId} closed before Solstice made the change, so nothing changed.`);
 }
 
 const NO_FOLDER_INSTALLS = "installing an unpacked folder from the socket isn't supported; use Settings › Extensions › Load Unpacked";
@@ -51,7 +51,7 @@ function checkedChange(ext: InstalledExtension, change: Change) {
   if ("siteAccess" in change && change.siteAccess === "specificSites") throw new OpError("refused", SPECIFIC_SITES_REFUSED);
   if ("userScripts" in change && !ext.userScriptsAvailable) throw new OpError("refused", `${ext.name} doesn't use user scripts.`);
   if (!("incognito" in change)) return;
-  if (typeof ext.incognitoAllowed !== "boolean") throw new OpError("refused", `Ardia can't confirm incognito eligibility for ${ext.name}, so Allow in Incognito stays as it is.`);
+  if (typeof ext.incognitoAllowed !== "boolean") throw new OpError("refused", `Solstice can't confirm incognito eligibility for ${ext.name}, so Allow in Incognito stays as it is.`);
   if (ext.path) throw new OpError("refused", `Allow in Incognito for ${ext.name}, an unpacked extension, needs engine support: Chromium doesn't report whether the loaded copy may run there.`);
   if (change.incognito && !ext.incognitoAllowed) throw new OpError("refused", `${ext.name} says it can't run in Incognito, so Allow in Incognito can't turn on.`);
 }
@@ -60,7 +60,7 @@ async function loaded(engine: string): Promise<InstalledExtension[]> {
   try {
     return await freshExtensions(engine);
   } catch (error) {
-    throw new OpError("failed", `Ardia couldn't read the profile's extensions from Chromium: ${errorText(error)}`);
+    throw new OpError("failed", `Solstice couldn't read the profile's extensions from Chromium: ${errorText(error)}`);
   }
 }
 
@@ -85,12 +85,12 @@ async function configureExtension(params: Record<string, unknown>, call: SocketC
   try {
     list = await configureThenRead(engine, ext.id, change);
   } catch (error) {
-    throw new OpError("failed", `Ardia couldn't read the profile's extensions from Chromium after the change: ${errorText(error)}`);
+    throw new OpError("failed", `Solstice couldn't read the profile's extensions from Chromium after the change: ${errorText(error)}`);
   }
-  if (!list) throw new OpError("failed", `Ardia didn't do that: Chromium refused ${ext.name}'s ${what} change, so nothing changed.`);
+  if (!list) throw new OpError("failed", `Solstice didn't do that: Chromium refused ${ext.name}'s ${what} change, so nothing changed.`);
   const after = list.find((x) => x.id === ext.id);
-  if (!after) throw new OpError("failed", `Ardia didn't do that: ${ext.name} wasn't in the profile's extensions when Ardia read them back after the change.`);
-  if (!expected(after)) throw new OpError("failed", `Ardia didn't do that: Chromium didn't leave ${ext.name}'s ${what} as asked (${after.siteAccess ?? "no site access"}, ${(after.sites ?? []).join(", ") || "no sites"}, incognito ${after.incognito}).`);
+  if (!after) throw new OpError("failed", `Solstice didn't do that: ${ext.name} wasn't in the profile's extensions when Solstice read them back after the change.`);
+  if (!expected(after)) throw new OpError("failed", `Solstice didn't do that: Chromium didn't leave ${ext.name}'s ${what} as asked (${after.siteAccess ?? "no site access"}, ${(after.sites ?? []).join(", ") || "no sites"}, incognito ${after.incognito}).`);
   return { id: after.id, name: after.name, incognito: after.incognito, userScripts: !!after.userScripts, siteAccess: after.siteAccess ?? null, sites: after.sites ?? [] };
 }
 

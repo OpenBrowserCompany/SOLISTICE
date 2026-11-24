@@ -26,10 +26,10 @@ export const DEVTOOLS_METHODS: MethodSpec[] = [
 
 const REFUSALS: Record<Exclude<DevtoolsEndpointOutcome, "given">, [ErrorCode, string]> = {
   control_off: ["failed", CONTROL_OFF],
-  unsupported: ["unknown_method", `There's no method ${DEVTOOLS_ENDPOINT} on this Ardia; read the token from ArdiaControl.json.`],
+  unsupported: ["unknown_method", `There's no method ${DEVTOOLS_ENDPOINT} on this Solstice; read the token from ArdiaControl.json.`],
   server_off: ["failed", "The DevTools token connection isn't running."],
-  unreadable: ["failed", "Ardia couldn't read the DevTools token."],
-  stale: ["failed", "The DevTools token connection restarted while Ardia read it; ask again."],
+  unreadable: ["failed", "Solstice couldn't read the DevTools token."],
+  stale: ["failed", "The DevTools token connection restarted while Solstice read it; ask again."],
   left: ["failed", "The connection closed before the token was ready."],
 };
 
