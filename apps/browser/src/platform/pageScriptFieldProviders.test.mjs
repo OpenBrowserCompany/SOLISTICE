@@ -804,7 +804,7 @@ test("the hint refuses labels that aren't one domain label", () => {
   assert.equal(page.hintShown(), true);
 });
 
-test("the hint closes when focus moves to another field, the key hides, the provider goes or Ardia says so", () => {
+test("the hint closes when focus moves to another field, the key hides, the provider goes or Solstice says so", () => {
   const page = frame();
   page.configure(LOGIN);
   const password = input({ type: "password" });

@@ -28,7 +28,7 @@ export function openSkewWindow() {
   windows.addListener?.("onWindowEvent", (event) => {
     if (event.type === "closeRequest") void windows.closeWindow(event.id);
   });
-  void windows.openWindow("native-api-skew", { kind: "settings", title: "Ardia", focus: false });
+  void windows.openWindow("native-api-skew", { kind: "settings", title: "Solstice", focus: false });
 }
 
 export function answerWithSkew(message: string) {
