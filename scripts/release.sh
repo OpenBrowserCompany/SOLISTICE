@@ -32,10 +32,10 @@ channel="$(channel_of "$version")"
 
 if [ "$rc" = 1 ]; then dist="$root/dist/$version-rc"; else dist="$root/dist/$version"; fi
 [ "$rc" = 1 ] && [ -n "${RC_DIST:-}" ] && dist="$(cd "$root" && mkdir -p "$RC_DIST" && cd "$RC_DIST" && pwd)"
-app="$dist/export/Ardia.app"
+app="$dist/export/Solstice.app"
 build_input="${RELEASE_BUILD_INPUT:-}"
-archive="$dist/Ardia.xcarchive"
-[ "$phase" = sign ] && [ -n "$build_input" ] && archive="$build_input/Ardia.xcarchive"
+archive="$dist/Solstice.xcarchive"
+[ "$phase" = sign ] && [ -n "$build_input" ] && archive="$build_input/Solstice.xcarchive"
 
 if [ "$phase" = check ]; then
   [ -d "$app" ] || die "no $app: run --phase sign first"
@@ -80,7 +80,7 @@ else
 fi
 
 framework_src="$chromium_framework"
-[ "$phase" = sign ] && framework_src="$archive/Products/Applications/Ardia.app/Contents/Frameworks/Chromium Framework.framework"
+[ "$phase" = sign ] && framework_src="$archive/Products/Applications/Solstice.app/Contents/Frameworks/Chromium Framework.framework"
 [ "$phase" = sign ] && { [ -d "$archive" ] || die "no $archive: run --phase build first"; }
 framework_engine="${ARDIACORE_FRAMEWORK_ENGINE:-}"
 provisioning_profile="${RELEASE_PROVISIONING_PROFILE:-}"
@@ -96,7 +96,7 @@ if [ -f "$notes" ]; then
   note body > "$notes_body"
 elif [ "$rc" = 1 ]; then
   headline="Release candidate $version"
-  echo "A release candidate of Ardia $version. Not published." > "$notes_body"
+  echo "A release candidate of Solstice $version. Not published." > "$notes_body"
 else
   die "no release notes: write docs/release-notes/$version.md first"
 fi
@@ -186,7 +186,7 @@ if [ "$notarize" = 1 ]; then
   "$stages/notarize.sh" "$app" "$dist"
 fi
 "$stages/package.sh" "$dist" "$version" "$identity"
-[ "$notarize" = 1 ] && "$stages/notarize.sh" "$dist/Ardia-$version.dmg" "$dist"
+[ "$notarize" = 1 ] && "$stages/notarize.sh" "$dist/Solstice-$version.dmg" "$dist"
 
 echo "==> Release notes"
 notes_args=()
@@ -207,4 +207,4 @@ echo
 [ "$channel" = nightly ] && [ "$rc" = 0 ] && echo "Nightly: publish it with .claude/skills/release/scripts/publish.sh $version (a prerelease; the feed and ardia.dev/nightly follow)."
 [ "$phase" = sign ] && echo "Not launched yet: remove the signing keys, then run the launch check (--phase check)."
 [ -n "$phased" ] && echo "Phased rollout: $phased s between steps (the appcast item has phasedRolloutInterval; the whole release takes $((phased * 7)) s)."
-du -sh "$app" "$dist/Ardia-$version.dmg" "$dist/Ardia-$version.zip" "$dist/appcast.xml" "$dist/release-notes.md"
+du -sh "$app" "$dist/Solstice-$version.dmg" "$dist/Solstice-$version.zip" "$dist/appcast.xml" "$dist/release-notes.md"

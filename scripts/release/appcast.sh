@@ -25,7 +25,7 @@ is_signature() { [[ "$1" =~ ^[A-Za-z0-9+/]{86}==$ ]]; }
 
 echo "==> Appcast"
 channel="$(channel_of "$version")"
-zip="$dist/Ardia-$version.zip"
+zip="$dist/Solstice-$version.zip"
 zip_name="$(basename "$zip")"
 download_prefix="$REPO_URL/releases/download/v$version/"
 updates="$dist/updates"
@@ -38,7 +38,7 @@ fresh_updates() {
   rm -rf "$updates" "$updates.home"
   mkdir -p "$updates" "$updates.home"
   cp "$zip" "$updates/"
-  { printf '**%s**\n\n' "$headline"; cat "$body"; } > "$updates/Ardia-$version.md"
+  { printf '**%s**\n\n' "$headline"; cat "$body"; } > "$updates/Solstice-$version.md"
 }
 
 trusted_key() {
@@ -48,7 +48,7 @@ key = plistlib.load(open(sys.argv[1], "rb")).get("SUPublicEDKey", "")
 if len(base64.b64decode(key, validate=True)) != 32:
     sys.exit(1)
 print(key)
-' "$dist/export/Ardia.app/Contents/Info.plist" 2>/dev/null
+' "$dist/export/Solstice.app/Contents/Info.plist" 2>/dev/null
 }
 
 verifier() {

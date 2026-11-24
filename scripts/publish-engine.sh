@@ -61,20 +61,20 @@ source_archive="$out/ArdiaCore-$short-source.tar.xz"
 symbols_archive="$out/$(engine_symbols_name "$tag")"
 uuids_file="$out/$(engine_uuids_name "$tag")"
 work="$out/pack"
-mkdir -p "$work/Ardia.app/Contents/Frameworks"
+mkdir -p "$work/Solstice.app/Contents/Frameworks"
 echo "==> Copy the engine"
 copy=(bash -c 'cp -cR "$1" "$2" && mkdir -p "$4" && find "$3" -maxdepth 1 -name "*.dSYM" -exec cp -cR {} "$4/" ";"' copy
-  "$framework" "$work/Ardia.app/Contents/Frameworks/" "$(dirname "$framework")" "$out/dsyms")
+  "$framework" "$work/Solstice.app/Contents/Frameworks/" "$(dirname "$framework")" "$out/dsyms")
 case "$framework" in
   "$chromium_src/"*) "$root/scripts/agent/locked" chromium --wait 500 -- "${copy[@]}" ;;
   *) "${copy[@]}" ;;
 esac
 echo "==> Symbols"
-"$root/scripts/lib/pack-symbols.sh" "$work/Ardia.app/Contents/Frameworks/Chromium Framework.framework" "$out/dsyms" "$symbols_archive" "$uuids_file"
+"$root/scripts/lib/pack-symbols.sh" "$work/Solstice.app/Contents/Frameworks/Chromium Framework.framework" "$out/dsyms" "$symbols_archive" "$uuids_file"
 echo "==> Strip"
-"$root/packages/ardiacore/scripts/strip-engine.sh" "$work/Ardia.app" "$out/symbols"
+"$root/packages/ardiacore/scripts/strip-engine.sh" "$work/Solstice.app" "$out/symbols"
 echo "==> Pack"
-tar --no-mac-metadata -cf - -C "$work/Ardia.app/Contents/Frameworks" "Chromium Framework.framework" | xz -T0 -9 >"$archive"
+tar --no-mac-metadata -cf - -C "$work/Solstice.app/Contents/Frameworks" "Chromium Framework.framework" | xz -T0 -9 >"$archive"
 rm -rf "$work"
 sha="$(shasum -a 256 "$archive" | awk '{ print $1 }')"
 echo "$sha  $(basename "$archive")" >"$archive.sha256"
