@@ -333,7 +333,7 @@ for (const [how, act, code] of [
   ["a prep timeout", null, 12],
   ["a normal end", null, 0],
 ]) {
-  test(`through the real lock, after ${how} the app a bench launched like open is gone before the lock is free, and no other instance is signalled: the owner's Ardia, one beside <out>, one inside <out> but outside the gate's folders`, async () => {
+  test(`through the real lock, after ${how} the app a bench launched like open is gone before the lock is free, and no other instance is signalled: the owner's Solstice, one beside <out>, one inside <out> but outside the gate's folders`, async () => {
     const s = setup();
     try {
       const owner = ownersArdia(s);

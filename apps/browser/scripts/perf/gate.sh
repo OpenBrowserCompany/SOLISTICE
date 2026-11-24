@@ -3,7 +3,7 @@
 #
 #   apps/browser/scripts/perf/gate.sh <version> <previous> [--out <dir>] [--port <n>] [--control-bundle <file>]
 #
-# The candidate is dist/<version>-rc/export/Ardia.app, the control dist/<previous>/export/Ardia.app. It takes the perflab
+# The candidate is dist/<version>-rc/export/Solstice.app, the control dist/<previous>/export/Solstice.app. It takes the perflab
 # lock for the whole run, and stops at once with the lock's 75 when it stays busy past GATE_LOCK_WAIT seconds (3600).
 # Then:
 #   1. side by side: smoke.sh <version> <previous> --rc, ratchet.mjs run --own, native-bench --only prepare
@@ -175,7 +175,7 @@ echo $$ > "$GATE_RUN/worker.pid"
 
 awake=()
 command -v caffeinate >/dev/null && awake=(caffeinate -d -i)
-candidate=$root/dist/$version-rc/export/Ardia.app control=$root/dist/$previous/export/Ardia.app
+candidate=$root/dist/$version-rc/export/Solstice.app control=$root/dist/$previous/export/Solstice.app
 
 defer_signals
 start_job "$out/smoke.log" timeout "${GATE_PREP_TIMEOUT:-3600}" "$smoke" "$version" "$previous" --rc
@@ -202,7 +202,7 @@ for r in 1 2; do
   echo "$dir" >> "$GATE_RUN/markers"
   defer_signals
   start_job "$dir.log" timeout "${GATE_ROUND_TIMEOUT:-3600}" ${awake[@]+"${awake[@]}"} node "$perf/native-bench.mjs" --out "$dir" --port "$port" --prepared \
-    --app "$out/prep/rc/app/Ardia.app" --label rc --control "$out/prep/$previous/app/Ardia.app" --control-label "$previous" \
+    --app "$out/prep/rc/app/Solstice.app" --label rc --control "$out/prep/$previous/app/Solstice.app" --control-label "$previous" \
     --only launch,session,windows --launch-runs 6 --runs 2
   round_pid=$job
   take_signals
