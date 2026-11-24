@@ -22,7 +22,7 @@ const isSecretKey = (key: unknown): key is string => typeof key === "string" && 
 
 type Index = { ok: true; keys: string[] } | { ok: false; message: string };
 
-const UNREADABLE_INDEX = "The Keychain's list of this plugin's secrets can't be read, so Ardia leaves it alone.";
+const UNREADABLE_INDEX = "The Keychain's list of this plugin's secrets can't be read, so Solstice leaves it alone.";
 
 type Read = { ok: true; value: string | null } | { ok: false; message: string };
 

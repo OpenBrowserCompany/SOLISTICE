@@ -39,9 +39,9 @@ function queued<T>(name: string, work: (epoch: number) => Promise<StorageOutcome
 function parsedStorage(text: string): Loaded {
   try {
     const parsed: unknown = JSON.parse(text);
-    return isFields(parsed) ? { ok: true, data: parsed } : { ok: false, message: "The plugin's storage file isn't a JSON object, so Ardia leaves it alone." };
+    return isFields(parsed) ? { ok: true, data: parsed } : { ok: false, message: "The plugin's storage file isn't a JSON object, so Solstice leaves it alone." };
   } catch {
-    return { ok: false, message: "The plugin's storage file isn't valid JSON, so Ardia leaves it alone." };
+    return { ok: false, message: "The plugin's storage file isn't valid JSON, so Solstice leaves it alone." };
   }
 }
 

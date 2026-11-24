@@ -66,7 +66,7 @@ export function pluginSocketMethod(method: string, params: Record<string, unknow
       if (!known && !leftOn) return failure("bad_request", `There's no plugin ${String(name)}.`);
       const consent = consentNow();
       return turnOffPlugin(name!, consent).then((off) =>
-        !off ? failure("failed", "Couldn't save plugins.json.") : pluginRecordsSaved(consent).then((saved) => (saved ? { result: { ok: true } } : failure("failed", "It's off for now, but plugins.json couldn't be saved, so it may be on again after Ardia restarts."))),
+        !off ? failure("failed", "Couldn't save plugins.json.") : pluginRecordsSaved(consent).then((saved) => (saved ? { result: { ok: true } } : failure("failed", "It's off for now, but plugins.json couldn't be saved, so it may be on again after Solstice restarts."))),
       );
     }
     case "plugins.remove":
