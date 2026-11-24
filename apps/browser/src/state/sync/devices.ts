@@ -34,5 +34,5 @@ export function deviceSymbol(kind: DeviceKind, name: string): string {
 
 export function deviceDetail(device: Pick<SyncedDevice, "lastSeen" | "version" | "os">, ago: (at: number) => string): string {
   const seen = device.lastSeen ? `last synced ${ago(device.lastSeen)}` : "hasn’t synced yet";
-  return [seen, device.version && `Ardia ${device.version}`, device.os].filter(Boolean).join(" · ");
+  return [seen, device.version && `Solstice ${device.version}`, device.os].filter(Boolean).join(" · ");
 }
