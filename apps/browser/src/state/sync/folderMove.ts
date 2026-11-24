@@ -4,7 +4,7 @@ import { onConsentPeriodChange } from "../telemetry/choice";
 import { APP_SCOPE, type SyncDoc } from "./syncDoc";
 import { PROFILE, profileScope } from "./records";
 
-const SYNC_FOLDER_NAME = "Ardia Sync";
+const SYNC_FOLDER_NAME = "Solstice Sync";
 const DAMAGED_GIVEN_UP_MS = 86_400_000;
 
 export type FolderMoveResult =
@@ -162,7 +162,7 @@ export function folderMoveMessage(result: FolderMoveResult, label: string, previ
     case "unreadable":
       return "The current sync folder can’t be read, so its files can’t be copied. Choose the folder that holds them now.";
     case "notWritable":
-      return "Ardia can’t write to that folder. Choose another one.";
+      return "Solstice can’t write to that folder. Choose another one.";
     case "busy":
       return "Sync is busy. Try again in a moment.";
     case "locked":

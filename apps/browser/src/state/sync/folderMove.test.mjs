@@ -34,7 +34,7 @@ const native = {
   createPhrase: async () => true,
   unlock: async () => true,
   forget: async () => {},
-  folderInfo: async (path) => ({ path, defaultPath: "/home/someone/Ardia Sync", iCloudAvailable: true, inICloud: false, exists: folders.has(path), writable: !readOnly.has(path), hasSyncData: (chainOf(path)?.size ?? 0) > 0 }),
+  folderInfo: async (path) => ({ path, defaultPath: "/home/someone/Solstice Sync", iCloudAvailable: true, inICloud: false, exists: folders.has(path), writable: !readOnly.has(path), hasSyncData: (chainOf(path)?.size ?? 0) > 0 }),
   chooseFolder: async () => null,
   chainStatus: async (folder) => (!folders.has(folder) ? "unavailable" : chainOf(folder).has(OURS) ? "ok" : "missing"),
   createChain: async (folder) => {
@@ -80,16 +80,16 @@ const reset = () => {
 const payloads = (folder, scope) => [...(chainOf(folder).get(OURS).get(scope)?.values() ?? [])].sort();
 const info = (path) => native.folderInfo(path);
 
-test("a picked folder becomes an Ardia Sync folder inside it, unless it already is one or already holds sync data", async () => {
+test("a picked folder becomes an Solstice Sync folder inside it, unless it already is one or already holds sync data", async () => {
   reset();
-  assert.equal(await syncFolderAt("/home/someone/Nextcloud", info), "/home/someone/Nextcloud/Ardia Sync");
-  assert.equal(await syncFolderAt("/home/someone/Nextcloud/", info), "/home/someone/Nextcloud/Ardia Sync");
-  assert.equal(await syncFolderAt("/media/usb/Ardia Sync", info), "/media/usb/Ardia Sync");
-  assert.equal(await syncFolderAt("/", info), "/Ardia Sync");
+  assert.equal(await syncFolderAt("/home/someone/Nextcloud", info), "/home/someone/Nextcloud/Solstice Sync");
+  assert.equal(await syncFolderAt("/home/someone/Nextcloud/", info), "/home/someone/Nextcloud/Solstice Sync");
+  assert.equal(await syncFolderAt("/media/usb/Solstice Sync", info), "/media/usb/Solstice Sync");
+  assert.equal(await syncFolderAt("/", info), "/Solstice Sync");
   plant("/home/someone/Dropbox/Browser", "theirs");
   assert.equal(await syncFolderAt("/home/someone/Dropbox/Browser", info), "/home/someone/Dropbox/Browser", "a folder with sync data in it is used as it is");
-  plant("/home/someone/Sync/Ardia Sync", OURS);
-  assert.equal(await syncFolderAt("/home/someone/Sync", info), "/home/someone/Sync/Ardia Sync", "picking the folder that holds an existing Ardia Sync folder finds it");
+  plant("/home/someone/Sync/Solstice Sync", OURS);
+  assert.equal(await syncFolderAt("/home/someone/Sync", info), "/home/someone/Sync/Solstice Sync", "picking the folder that holds an existing Solstice Sync folder finds it");
 });
 
 test("moving copies every file of the chain to the new folder, byte for byte, and leaves the old folder as it was", async () => {
@@ -101,10 +101,10 @@ test("moving copies every file of the chain to the new folder, byte for byte, an
   await native.write("/old", "p:abc", '{"kind":"log","seq":4}');
   const before = structuredClone([...folders.get("/old")].map(([chain, scopes]) => [chain, [...scopes].map(([s, files]) => [s, [...files]])]));
 
-  assert.deepEqual(await moveChain(native, "/old", "/new/Ardia Sync", ["app", "p:abc", "p:never-written"]), { ok: "moved" });
-  assert.deepEqual(payloads("/new/Ardia Sync", "app"), payloads("/old", "app"));
-  assert.deepEqual(payloads("/new/Ardia Sync", "p:abc"), payloads("/old", "p:abc"));
-  assert.ok(!folders.get("/new/Ardia Sync").has("someone else"), "another phrase's chain isn't copied");
+  assert.deepEqual(await moveChain(native, "/old", "/new/Solstice Sync", ["app", "p:abc", "p:never-written"]), { ok: "moved" });
+  assert.deepEqual(payloads("/new/Solstice Sync", "app"), payloads("/old", "app"));
+  assert.deepEqual(payloads("/new/Solstice Sync", "p:abc"), payloads("/old", "p:abc"));
+  assert.ok(!folders.get("/new/Solstice Sync").has("someone else"), "another phrase's chain isn't copied");
   assert.deepEqual([...folders.get("/old")].map(([chain, scopes]) => [chain, [...scopes].map(([s, files]) => [s, [...files]])]), before, "the old folder is untouched, so devices still using it keep working");
 });
 
@@ -118,8 +118,8 @@ test("pointing at a folder that already holds this chain only re-points, and a f
   assert.deepEqual(await moveChain(native, "/old", "/someone-elses", ["app"]), { error: "otherData" });
   assert.ok(!chainOf("/someone-elses").has(OURS), "nothing is written next to another phrase's chain");
   assert.deepEqual(await moveChain(native, "/old", "/old/", ["app"]), { ok: "same" });
-  assert.deepEqual(await moveChain(native, "/old", "/old/inner/Ardia Sync", ["app"]), { error: "nested" });
-  assert.deepEqual(await moveChain(native, "/home/Ardia Sync", "/home", ["app"]), { error: "nested" });
+  assert.deepEqual(await moveChain(native, "/old", "/old/inner/Solstice Sync", ["app"]), { error: "nested" });
+  assert.deepEqual(await moveChain(native, "/home/Solstice Sync", "/home", ["app"]), { error: "nested" });
 });
 
 test("a move waits for files still downloading, and refuses when the current folder can't be read", async () => {
@@ -151,30 +151,30 @@ test("the engine moves the folder while sync is on: later batches land in the ne
   reset();
   const engine = await import("./engine.ts?move");
   engine.startSync();
-  assert.ok("ok" in (await engine.turnOnSync("/home/someone/Ardia Sync", "picked")));
+  assert.ok("ok" in (await engine.turnOnSync("/home/someone/Solstice Sync", "picked")));
   S().addBookmark({ profileId: "default", url: "https://before.example/", title: "Before" });
   await engine.syncNow();
-  const oldApp = payloads("/home/someone/Ardia Sync", "app");
+  const oldApp = payloads("/home/someone/Solstice Sync", "app");
   assert.ok(oldApp.length > 0);
 
-  const result = await engine.moveSyncFolder("/home/someone/Nextcloud/Ardia Sync");
+  const result = await engine.moveSyncFolder("/home/someone/Nextcloud/Solstice Sync");
   assert.deepEqual(result, { ok: "moved" });
-  assert.equal(engine.useSync.getState().folder, "/home/someone/Nextcloud/Ardia Sync");
-  assert.deepEqual(payloads("/home/someone/Nextcloud/Ardia Sync", "app"), oldApp);
+  assert.equal(engine.useSync.getState().folder, "/home/someone/Nextcloud/Solstice Sync");
+  assert.deepEqual(payloads("/home/someone/Nextcloud/Solstice Sync", "app"), oldApp);
 
   S().addBookmark({ profileId: "default", url: "https://after.example/", title: "After" });
   await engine.syncNow();
   assert.equal(engine.useSync.getState().status, "updated", "the new folder holds the chain, so the cycle doesn't read it as reset");
   const titles = (folder) =>
     [...chainOf(folder).get(OURS).values()].flatMap((files) => [...files.values()]).flatMap((payload) => JSON.parse(payload).ops ?? []).map((op) => op.v?.t);
-  assert.ok(titles("/home/someone/Nextcloud/Ardia Sync").includes("After"));
-  assert.ok(titles("/home/someone/Nextcloud/Ardia Sync").includes("Before"));
-  assert.ok(!titles("/home/someone/Ardia Sync").includes("After"), "the old folder gets nothing new");
+  assert.ok(titles("/home/someone/Nextcloud/Solstice Sync").includes("After"));
+  assert.ok(titles("/home/someone/Nextcloud/Solstice Sync").includes("Before"));
+  assert.ok(!titles("/home/someone/Solstice Sync").includes("After"), "the old folder gets nothing new");
 
   assert.deepEqual(await engine.moveSyncFolder("/home/someone/Nextcloud"), { error: "nested" });
   plant("/elsewhere", "theirs");
   assert.deepEqual(await engine.moveSyncFolder("/elsewhere"), { error: "otherData" });
-  assert.equal(engine.useSync.getState().folder, "/home/someone/Nextcloud/Ardia Sync", "a refused move keeps the folder");
+  assert.equal(engine.useSync.getState().folder, "/home/someone/Nextcloud/Solstice Sync", "a refused move keeps the folder");
 
   const { folders: counts } = engine.takeSnapshotWrites();
   assert.deepEqual(counts, { picked: 1, kept: 0, moved: 1, joined: 0, refused: 2 });
@@ -185,11 +185,11 @@ test("a move is refused while sync is off, and setting the folder while on is ig
   const engine = await import("./engine.ts?off");
   engine.startSync();
   assert.deepEqual(await engine.moveSyncFolder("/new"), { error: "busy" });
-  engine.setSyncFolder("/chosen/Ardia Sync");
-  assert.equal(engine.useSync.getState().folder, "/chosen/Ardia Sync");
-  assert.ok("ok" in (await engine.turnOnSync("/chosen/Ardia Sync")));
+  engine.setSyncFolder("/chosen/Solstice Sync");
+  assert.equal(engine.useSync.getState().folder, "/chosen/Solstice Sync");
+  assert.ok("ok" in (await engine.turnOnSync("/chosen/Solstice Sync")));
   engine.setSyncFolder("/other");
-  assert.equal(engine.useSync.getState().folder, "/chosen/Ardia Sync");
+  assert.equal(engine.useSync.getState().folder, "/chosen/Solstice Sync");
 });
 
 test("every profile the folder knows about moves with it, not just the ones synced here", () => {
@@ -201,9 +201,9 @@ test("every profile the folder knows about moves with it, not just the ones sync
 });
 
 test("each move outcome has a message that says where sync is now", () => {
-  assert.match(folderMoveMessage({ ok: "moved" }, "~/Nextcloud/Ardia Sync", "~/Ardia Sync"), /Sync now uses ~\/Nextcloud\/Ardia Sync\. The old folder at ~\/Ardia Sync stays/);
+  assert.match(folderMoveMessage({ ok: "moved" }, "~/Nextcloud/Solstice Sync", "~/Solstice Sync"), /Sync now uses ~\/Nextcloud\/Solstice Sync\. The old folder at ~\/Solstice Sync stays/);
   assert.match(folderMoveMessage({ error: "otherData" }, "x", "y"), /different recovery phrase/);
-  assert.match(folderMoveMessage({ error: "failed", message: "disk full" }, "x", "~/Ardia Sync"), /disk full\. Sync still uses ~\/Ardia Sync/);
+  assert.match(folderMoveMessage({ error: "failed", message: "disk full" }, "x", "~/Solstice Sync"), /disk full\. Sync still uses ~\/Solstice Sync/);
 });
 
 test("a profile another device added since the last cycle moves too: the move reads the profiles from the old folder's app scope", async () => {
@@ -250,10 +250,10 @@ test("turning Sync off during a move waits for the move, then turns Sync off", a
   reset();
   const engine = await import("./engine.ts?stop");
   engine.startSync();
-  assert.ok("ok" in (await engine.turnOnSync("/home/someone/Ardia Sync", "picked")));
+  assert.ok("ok" in (await engine.turnOnSync("/home/someone/Solstice Sync", "picked")));
   S().addBookmark({ profileId: "default", url: "https://before.example/", title: "Before" });
   await engine.syncNow();
-  const moving = engine.moveSyncFolder("/home/someone/Nextcloud/Ardia Sync");
+  const moving = engine.moveSyncFolder("/home/someone/Nextcloud/Solstice Sync");
   await engine.stopSync();
   assert.deepEqual(await moving, { ok: "moved" });
   assert.equal(engine.useSync.getState().enabled, false, "the stop isn't dropped because a move was running");
@@ -280,13 +280,13 @@ test("Sync Now during a move waits for the move, then runs its cycle in the new 
   reset();
   const engine = await import("./engine.ts?syncnow");
   engine.startSync();
-  assert.ok("ok" in (await engine.turnOnSync("/home/someone/Ardia Sync", "picked")));
+  assert.ok("ok" in (await engine.turnOnSync("/home/someone/Solstice Sync", "picked")));
   await engine.syncNow();
-  const moving = engine.moveSyncFolder("/home/someone/Nextcloud/Ardia Sync");
+  const moving = engine.moveSyncFolder("/home/someone/Nextcloud/Solstice Sync");
   S().addBookmark({ profileId: "default", url: "https://during.example/", title: "During" });
   assert.equal(await engine.syncNow(), true);
   assert.deepEqual(await moving, { ok: "moved" });
-  const titles = [...chainOf("/home/someone/Nextcloud/Ardia Sync").get(OURS).values()].flatMap((files) => [...files.values()]).flatMap((payload) => JSON.parse(payload).ops ?? []).map((op) => op.v?.t);
+  const titles = [...chainOf("/home/someone/Nextcloud/Solstice Sync").get(OURS).values()].flatMap((files) => [...files.values()]).flatMap((payload) => JSON.parse(payload).ops ?? []).map((op) => op.v?.t);
   assert.ok(titles.includes("During"), "the cycle Sync Now asked for ran after the move, in the new folder");
 });
 
@@ -327,34 +327,34 @@ test("Stop and Delete asked for during a move deletes the sync data in the folde
   reset();
   const engine = await import("./engine.ts?stopdelete");
   engine.startSync();
-  assert.ok("ok" in (await engine.turnOnSync("/home/someone/Ardia Sync", "picked")));
+  assert.ok("ok" in (await engine.turnOnSync("/home/someone/Solstice Sync", "picked")));
   await engine.syncNow();
-  const moving = engine.moveSyncFolder("/home/someone/Nextcloud/Ardia Sync");
+  const moving = engine.moveSyncFolder("/home/someone/Nextcloud/Solstice Sync");
   await engine.stopSync({ deleteData: true });
   assert.deepEqual(await moving, { ok: "moved" });
   assert.equal(engine.useSync.getState().enabled, false);
-  assert.ok(!chainOf("/home/someone/Ardia Sync").has(OURS), "the folder the person was looking at doesn't keep the data they asked to delete");
-  assert.ok(!chainOf("/home/someone/Nextcloud/Ardia Sync").has(OURS));
+  assert.ok(!chainOf("/home/someone/Solstice Sync").has(OURS), "the folder the person was looking at doesn't keep the data they asked to delete");
+  assert.ok(!chainOf("/home/someone/Nextcloud/Solstice Sync").has(OURS));
 });
 
 test("a recovery phrase or a Turn On asked for during a move waits for it, so the move can't point sync back at its own folder", async () => {
   reset();
   const engine = await import("./engine.ts?phrase-during-move");
   engine.startSync();
-  assert.ok("ok" in (await engine.turnOnSync("/home/someone/Ardia Sync", "picked")));
+  assert.ok("ok" in (await engine.turnOnSync("/home/someone/Solstice Sync", "picked")));
   await engine.syncNow();
   plant("/elsewhere", OURS);
   const enterPhrase = native.enterPhrase;
   native.enterPhrase = async () => ({ ok: true });
   try {
-    const moving = engine.moveSyncFolder("/home/someone/Nextcloud/Ardia Sync");
+    const moving = engine.moveSyncFolder("/home/someone/Nextcloud/Solstice Sync");
     assert.ok("ok" in (await engine.enterRecoveryPhrase("/elsewhere", asSecret("syncPhrase", "words"))));
     assert.deepEqual(await moving, { ok: "moved" });
     assert.equal(engine.useSync.getState().folder, "/elsewhere");
-    const movingAgain = engine.moveSyncFolder("/home/someone/Dropbox/Ardia Sync");
-    assert.ok("ok" in (await engine.turnOnSync("/home/someone/Fresh/Ardia Sync", "picked")));
+    const movingAgain = engine.moveSyncFolder("/home/someone/Dropbox/Solstice Sync");
+    assert.ok("ok" in (await engine.turnOnSync("/home/someone/Fresh/Solstice Sync", "picked")));
     assert.deepEqual(await movingAgain, { ok: "moved" });
-    assert.equal(engine.useSync.getState().folder, "/home/someone/Fresh/Ardia Sync");
+    assert.equal(engine.useSync.getState().folder, "/home/someone/Fresh/Solstice Sync");
   } finally {
     native.enterPhrase = enterPhrase;
   }
