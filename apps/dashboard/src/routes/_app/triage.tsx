@@ -3,7 +3,7 @@ import { PageHeader } from "@/components/blocks";
 import { TriageTabs } from "@/components/triage/shared";
 
 export const Route = createFileRoute("/_app/triage")({
-  head: () => ({ meta: [{ title: "Triage · Ardia" }] }),
+  head: () => ({ meta: [{ title: "Triage · Solstice" }] }),
   component: TriageLayout,
 });
 

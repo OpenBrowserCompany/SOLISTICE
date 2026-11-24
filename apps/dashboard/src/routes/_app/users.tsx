@@ -14,7 +14,7 @@ import { THRESHOLDS } from "@/lib/thresholds";
 import type { SectionData } from "@/server/sections";
 
 export const Route = createFileRoute("/_app/users")({
-  head: () => ({ meta: [{ title: "Users · Ardia" }] }),
+  head: () => ({ meta: [{ title: "Users · Solstice" }] }),
   component: UsersPage,
 });
 
