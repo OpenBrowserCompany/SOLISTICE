@@ -22,7 +22,7 @@
 #pragma comment(lib, "winhttp.lib")
 #pragma comment(lib, "bcrypt.lib")
 
-namespace Ardia {
+namespace Solstice {
 
 namespace AppUpdate {
 
@@ -130,8 +130,8 @@ inline std::string Fetch(std::wstring const &address, uint64_t largest, Received
     if (path.empty()) path = L"/";
     bool secure = parts.nScheme == INTERNET_SCHEME_HTTPS;
 
-    Connection session{WinHttpOpen(L"Ardia", WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY, WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, 0)};
-    if (!session) session.handle = WinHttpOpen(L"Ardia", WINHTTP_ACCESS_TYPE_DEFAULT_PROXY, WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, 0);
+    Connection session{WinHttpOpen(L"Solstice", WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY, WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, 0)};
+    if (!session) session.handle = WinHttpOpen(L"Solstice", WINHTTP_ACCESS_TYPE_DEFAULT_PROXY, WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, 0);
     if (!session) return Failed("WinHttpOpen");
     WinHttpSetTimeouts(session.handle, 30000, 30000, 30000, 60000);
     Connection server{WinHttpConnect(session.handle, host.c_str(), parts.nPort, 0)};
@@ -281,7 +281,7 @@ inline Downloaded Download(std::wstring const &address, std::string const &sha25
       result.failure = "the updates folder is a link";
       return result;
     }
-    std::filesystem::path target = folder / (L"Ardia-Setup-" + Paths::Wide(sha256.substr(0, 16)) + L".exe");
+    std::filesystem::path target = folder / (L"Solstice-Setup-" + Paths::Wide(sha256.substr(0, 16)) + L".exe");
     if (AlreadyHere(target, sha256)) {
       result.path = Paths::Utf8(target.wstring());
       return result;

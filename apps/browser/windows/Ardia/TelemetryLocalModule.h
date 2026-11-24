@@ -17,7 +17,7 @@
 #include "NativeModules.h"
 #include "Paths.h"
 
-namespace Ardia {
+namespace Solstice {
 
 REACT_STRUCT(TelemetryLocalStats)
 struct TelemetryLocalStats {
@@ -179,7 +179,7 @@ class TelemetryLocalStore {
       if (downloads.empty()) return done(std::nullopt);
       std::error_code ignored;
       std::filesystem::create_directories(downloads, ignored);
-      std::wstring base = L"Ardia data " + Paths::Wide(UtcDay(now));
+      std::wstring base = L"Solstice data " + Paths::Wide(UtcDay(now));
       std::filesystem::path target = downloads / (base + L".jsonl");
       for (int n = 2; GetFileAttributesW(target.c_str()) != INVALID_FILE_ATTRIBUTES && n < 10000; n++) {
         target = downloads / (base + L" " + std::to_wstring(n) + L".jsonl");

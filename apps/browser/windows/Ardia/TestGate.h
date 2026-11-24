@@ -10,7 +10,7 @@
 
 #include "Paths.h"
 
-namespace Ardia::TestGate {
+namespace Solstice::TestGate {
 
 constexpr wchar_t TestBuildMarker[] = L"Ardia.test-build";
 
@@ -60,8 +60,8 @@ inline bool Overlaps(std::wstring_view a, std::wstring_view b) noexcept {
 
 inline std::wstring RealFolderClash(std::initializer_list<std::filesystem::path> checked, std::wstring_view variable) noexcept {
   std::filesystem::path const realFolders[] = {
-      Paths::UserFolder(FOLDERID_LocalAppData, L"LOCALAPPDATA") / L"Ardia",
-      Paths::UserFolder(FOLDERID_RoamingAppData, L"APPDATA") / L"Ardia",
+      Paths::UserFolder(FOLDERID_LocalAppData, L"LOCALAPPDATA") / L"Solstice",
+      Paths::UserFolder(FOLDERID_RoamingAppData, L"APPDATA") / L"Solstice",
   };
   for (std::filesystem::path const &real : realFolders) {
     std::optional<std::wstring> canonicalReal = CanonicalPath(real);
