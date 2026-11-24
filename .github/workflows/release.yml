@@ -11,6 +11,10 @@ on:
         description: Dry run, a release candidate that publishes nothing
         type: boolean
         default: true
+      allow_version_reset:
+        description: Allow a stable version below the feed latest (a new product version line)
+        type: boolean
+        default: false
       iphone:
         description: Also build the pinned iPhone TestFlight version. Enable only when the owner asks for TestFlight. A real run uploads to Internal after the Mac release publishes.
         type: boolean
@@ -52,7 +56,7 @@ jobs:
           channel=$(channel_of "$VERSION") || fail "$VERSION is neither <major>.<minor>.<patch> nor <next stable>-nightly.<n>"
           if [ "$DRY_RUN" = true ]; then mode=dry-run; else mode=release; fi
           values="$RUNNER_TEMP/preflight-values"
-          node scripts/release/preflight.mjs "$VERSION" --mode "$mode" --allow-no-feed --github --values-out "$values"
+          node scripts/release/preflight.mjs "$VERSION" --mode "$mode" --allow-no-feed ${{ inputs.allow_version_reset && '--allow-version-reset' || '' }} --github --values-out "$values"
           lookup() {
             lookup_out=$(gh release view "$@" -R "$GITHUB_REPOSITORY" 2>&1) && return 0
             grep -qx 'release not found' <<<"$lookup_out" && return 1
