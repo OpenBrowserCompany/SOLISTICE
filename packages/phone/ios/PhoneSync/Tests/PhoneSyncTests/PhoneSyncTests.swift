@@ -295,7 +295,7 @@ func received(_ key: String, url: String = "https://sent.example/", sentAt: Date
   @Test func aLegacyStoreWithoutTheMarkerHoldsEveryRead() throws {
     let scratch = try Scratch()
     let gate = gate(scratch)
-    try FileManager.default.createDirectory(at: scratch.root.appending(path: "Ardia"), withIntermediateDirectories: true)
+    try FileManager.default.createDirectory(at: scratch.root.appending(path: "Solstice"), withIntermediateDirectories: true)
     try Data("store".utf8).write(to: scratch.root.appending(path: "Ardia/Browser.store"))
     #expect(gate.holdsSync)
     let source = try source(scratch, gate)
@@ -352,7 +352,7 @@ func received(_ key: String, url: String = "https://sent.example/", sentAt: Date
   @Test func aMarkerThatDoesNotDecodeOrHasAnotherVersionDoesNotRelease() throws {
     let scratch = try Scratch()
     let gate = gate(scratch)
-    try FileManager.default.createDirectory(at: scratch.root.appending(path: "Ardia"), withIntermediateDirectories: true)
+    try FileManager.default.createDirectory(at: scratch.root.appending(path: "Solstice"), withIntermediateDirectories: true)
     try Data("store".utf8).write(to: scratch.root.appending(path: "Ardia/Browser.store"))
     try FileManager.default.createDirectory(at: gate.marker.deletingLastPathComponent(), withIntermediateDirectories: true)
     for text in [

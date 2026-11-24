@@ -26,8 +26,8 @@ public final class PhoneInbox: @unchecked Sendable {
   public static let receivedLimit = 200
   public static let appliedMemory = 1_000
   static let format = 2
-  public static let unreadableMessage = "Ardia couldn’t read the tabs and history changes waiting from your Mac, and set them aside."
-  public static let partlyUnreadableMessage = "Ardia set aside some tabs and history changes from your Mac it couldn’t read."
+  public static let unreadableMessage = "Solstice couldn’t read the tabs and history changes waiting from your Mac, and set them aside."
+  public static let partlyUnreadableMessage = "Solstice set aside some tabs and history changes from your Mac it couldn’t read."
 
   private struct Contents {
     var entries: [Entry] = []

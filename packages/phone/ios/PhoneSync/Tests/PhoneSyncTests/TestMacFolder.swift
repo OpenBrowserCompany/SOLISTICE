@@ -116,7 +116,7 @@ final class TestMac {
   @Test(.enabled(if: target != nil && ProcessInfo.processInfo.environment["PHONE_SYNC_TEST_MAC_MODE"] == "create"))
   func makeATestMacFolder() throws {
     let root = try #require(Self.target)
-    let folder = root.appending(path: "Ardia Sync", directoryHint: .isDirectory)
+    let folder = root.appending(path: "Solstice Sync", directoryHint: .isDirectory)
     try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
     let entropy = RecoveryPhrase.generateEntropy()
     let mac = try TestMac(folder: folder, entropy: entropy, creating: true)
@@ -137,7 +137,7 @@ final class TestMac {
   func inspectATestMacFolder() throws {
     let root = try #require(Self.target)
     let entropy = try #require(Data(base64Encoded: String(contentsOf: root.appending(path: "entropy.txt"), encoding: .utf8)))
-    let mac = try TestMac(folder: root.appending(path: "Ardia Sync", directoryHint: .isDirectory), entropy: entropy, creating: false)
+    let mac = try TestMac(folder: root.appending(path: "Solstice Sync", directoryHint: .isDirectory), entropy: entropy, creating: false)
     let scopes = ["app", "p:\(Self.profile)", "p:\(Self.work)"]
     try mac.sync(scopes)
     var report: [String: Any] = [:]
@@ -160,7 +160,7 @@ final class TestMac {
     let root = try #require(Self.target)
     let entropy = try #require(Data(base64Encoded: String(contentsOf: root.appending(path: "entropy.txt"), encoding: .utf8)))
     let phone = try String(contentsOf: root.appending(path: "phone-id.txt"), encoding: .utf8).trimmingCharacters(in: .whitespacesAndNewlines)
-    let mac = try TestMac(folder: root.appending(path: "Ardia Sync", directoryHint: .isDirectory), entropy: entropy, creating: false)
+    let mac = try TestMac(folder: root.appending(path: "Solstice Sync", directoryHint: .isDirectory), entropy: entropy, creating: false)
     let scope = "p:\(Self.profile)"
     try mac.sync(["app", scope])
     let key = "send:\(UUID().uuidString.lowercased())"
