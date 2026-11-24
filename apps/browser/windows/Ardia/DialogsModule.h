@@ -29,7 +29,7 @@
 #pragma comment(lib, "uuid.lib")
 #pragma comment(lib, "user32.lib")
 
-namespace Ardia {
+namespace Solstice {
 
 REACT_STRUCT(DialogConfirmOptions)
 struct DialogConfirmOptions {
@@ -369,7 +369,7 @@ inline std::string JoinedUtf8(std::vector<std::wstring> const &paths) noexcept {
 #include "NativeDialogs.h"
 #include "SaveDialog.h"
 
-namespace Ardia {
+namespace Solstice {
 
 REACT_MODULE(DialogsModule, L"ArdiaDialogs")
 struct DialogsModule {

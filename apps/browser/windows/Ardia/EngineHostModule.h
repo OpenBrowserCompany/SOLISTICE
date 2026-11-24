@@ -16,7 +16,7 @@
 #include "Paths.h"
 #include "WindowManager.h"
 
-namespace Ardia {
+namespace Solstice {
 
 namespace EngineHostParts {
 
@@ -102,7 +102,7 @@ inline void Remove(EventRoute *route) noexcept {
   delete route;
 }
 
-constexpr std::string_view ProfileFolderPrefix = "Ardia ";
+constexpr std::string_view ProfileFolderPrefix = "Solstice ";
 constexpr wchar_t StagedSuffix[] = L" (removing)";
 constexpr size_t LongestPathComponent = 255;
 constexpr size_t LongestProfileFolder = LongestPathComponent - (sizeof(StagedSuffix) / sizeof(wchar_t) - 1);
@@ -131,7 +131,7 @@ inline bool Gone(std::filesystem::path const &path) noexcept {
 inline std::filesystem::path ProfileDataRoot() noexcept {
   try {
     if (Paths::HasCustomDataDirectory()) return Paths::DataDirectory() / L"Chromium";
-    return Paths::UserFolder(FOLDERID_LocalAppData, L"LOCALAPPDATA") / L"Ardia" / L"User Data";
+    return Paths::UserFolder(FOLDERID_LocalAppData, L"LOCALAPPDATA") / L"Solstice" / L"User Data";
   } catch (...) {
     return {};
   }
