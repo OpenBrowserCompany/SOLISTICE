@@ -58,8 +58,8 @@ target=$(awk -v name="$pod" '
   id != "" { if ($0 ~ /isa = PBXNativeTarget;/) { print id; exit } id = "" }
 ' "$pods/project.pbxproj")
 if [[ -z "$target" ]]; then
-  echo "typecheck-pod: no pod target named $pod in $pods; the Ardia ones:" >&2
-  grep -oE '/\* Ardia[A-Za-z]+ \*/ = \{' "$pods/project.pbxproj" | awk '{print "  " $2}' | sort -u >&2
+  echo "typecheck-pod: no pod target named $pod in $pods; the Solstice ones:" >&2
+  grep -oE '/\* Solstice[A-Za-z]+ \*/ = \{' "$pods/project.pbxproj" | awk '{print "  " $2}' | sort -u >&2
   exit 1
 fi
 

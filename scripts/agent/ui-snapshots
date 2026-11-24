@@ -174,7 +174,7 @@ s.addBookmark({ profileId: "default", url: "${page("docs")}", title: "Design doc
 const dl = (id, filename, total, state) => ({ id, url: "https://downloads.ardia.test/" + filename, filename,
   path: "/Users/test/Downloads/" + filename, state, paused: false, received: state === "finished" ? total : 0, total, speed: 0,
   mimeType: "application/octet-stream", profile: "" });
-s.upsertDownload(dl("d1", "Ardia-0.2.41.dmg", 182000000, "finished"));
+s.upsertDownload(dl("d1", "Solstice-0.2.41.dmg", 182000000, "finished"));
 s.upsertDownload(dl("d2", "quarterly-report.pdf", 2400000, "finished"));
 s.upsertDownload(dl("d3", "photos.zip", 54000000, "failed"));
 return { roots: !!roots, folder: !!folder, downloads: st().downloads.length };
