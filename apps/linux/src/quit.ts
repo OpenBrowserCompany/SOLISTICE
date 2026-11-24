@@ -66,7 +66,7 @@ export function createHostQuit(host: ArdiaHost, ask: QuitAsk, locks: QuitLocks |
   if (!QUIT_ROUTES.every((method) => hostSupports(method, host)))
     return () => Promise.reject(quitError("ERR_UNAVAILABLE", "Quitting isn't available in this Linux build"));
   return createLinuxQuit({
-    appName: () => "Ardia",
+    appName: () => "Solstice",
     warnBeforeQuitting: () => useBrowser.getState().settings.warnBeforeQuitting,
     stopWarning: () => useBrowser.getState().updateSettings({ warnBeforeQuitting: false }),
     ask,

@@ -38,14 +38,14 @@ function fixture({ downloads = 0, supported = capabilities } = {}) {
   return { quit, asked, respond, quits, requests, retire: () => dialogs.retire() };
 }
 
-test("with the setting on, one owned prompt asks with Quit, Cancel and Don't ask again; Cancel keeps Ardia open", async () => {
+test("with the setting on, one owned prompt asks with Quit, Cancel and Don't ask again; Cancel keeps Solstice open", async () => {
   const f = fixture();
   state().updateSettings({ warnBeforeQuitting: true });
   const attempt = f.quit();
   await f.respond({ confirmed: false, suppressed: false });
   assert.equal(await attempt, "cancelled");
   assert.equal(f.asked().length, 1);
-  assert.equal(f.asked()[0].title, "Are you sure you want to quit Ardia?");
+  assert.equal(f.asked()[0].title, "Are you sure you want to quit Solstice?");
   assert.equal(f.asked()[0].message, "Your windows and tabs will be restored the next time you open it.");
   assert.equal(f.asked()[0].confirmTitle, "Quit");
   assert.equal(f.asked()[0].suppression, "Don't ask again");
@@ -89,16 +89,16 @@ test("with the setting off and nothing downloading, quitting asks nothing", asyn
 });
 
 test("active downloads ask before quitting with macOS's wording, after the quit warning", async () => {
-  assert.equal(downloadsWarning("Ardia", 1).message, "You have 1 download in progress. If you quit now, this download will be cancelled.");
-  assert.equal(downloadsWarning("Ardia", 3).message, "You have 3 downloads in progress. If you quit now, these downloads will be cancelled.");
-  assert.equal(downloadsWarning("Ardia", 3).suppression, undefined);
+  assert.equal(downloadsWarning("Solstice", 1).message, "You have 1 download in progress. If you quit now, this download will be cancelled.");
+  assert.equal(downloadsWarning("Solstice", 3).message, "You have 3 downloads in progress. If you quit now, these downloads will be cancelled.");
+  assert.equal(downloadsWarning("Solstice", 3).suppression, undefined);
   const f = fixture({ downloads: 2 });
   state().updateSettings({ warnBeforeQuitting: true });
   const attempt = f.quit();
   await f.respond({ confirmed: true, suppressed: false });
   await f.respond({ confirmed: false, suppressed: false });
   assert.equal(await attempt, "cancelled");
-  assert.deepEqual(f.asked().map((options) => options.message), [quitWarning("Ardia").message, downloadsWarning("Ardia", 2).message]);
+  assert.deepEqual(f.asked().map((options) => options.message), [quitWarning("Solstice").message, downloadsWarning("Solstice", 2).message]);
   assert.equal(f.asked()[1].confirmTitle, "Quit");
   assert.equal(f.quits(), 0);
   const again = f.quit();
@@ -125,7 +125,7 @@ test("pressing quit again while the prompt is open shows no second prompt", asyn
 test("a quit already being asked about in another window is not asked again", async () => {
   const requested = [];
   const quit = createLinuxQuit({
-    appName: () => "Ardia",
+    appName: () => "Solstice",
     warnBeforeQuitting: () => true,
     stopWarning: () => assert.fail("no prompt"),
     ask: async () => assert.fail("no prompt"),
