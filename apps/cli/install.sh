@@ -1,5 +1,5 @@
 #!/bin/sh
-# Installs the ardia command, which controls a running Ardia from the terminal.
+# Installs the ardia command, which controls a running Solstice from the terminal.
 #
 #   install.sh [--version V] [--sha256 DIGEST] [--uninstall]
 #   install.sh -h | --help
@@ -275,7 +275,7 @@ else
   if [ -z "$url" ]; then
     url=$(fetch "https://api.github.com/repos/$repo/releases?per_page=30" 2>/dev/null | grep -o "$pattern" | head -n 1 || true)
   fi
-  [ -n "$url" ] || fail "no Ardia release ships the CLI yet (or GitHub is unreachable)"
+  [ -n "$url" ] || fail "no Solstice release ships the CLI yet (or GitHub is unreachable)"
   name=${url##*/}
   version=${name#ardia-cli-}
   version=${version%"$asset_suffix"}
@@ -283,7 +283,7 @@ fi
 is_version "$version" || fail "bad version: $version"
 case $url in
   file://*) ;;
-  *) [ -n "$pinned_sha" ] || fail "no --sha256: install the ardia command from Ardia (Settings › Advanced), which pins its digest" ;;
+  *) [ -n "$pinned_sha" ] || fail "no --sha256: install the ardia command from Solstice (Settings › Advanced), which pins its digest" ;;
 esac
 printf 'version %s\n' "$version"
 check_bin_free

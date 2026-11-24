@@ -76,10 +76,10 @@ bool Background() {
 
 int Fail(int code, std::wstring message, DWORD error) {
   if (error != 0) message.append(L" (error ").append(std::to_wstring(error)).append(L")");
-  OutputDebugStringW(std::wstring(L"Ardia: ").append(message).append(L"\n").c_str());
+  OutputDebugStringW(std::wstring(L"Solstice: ").append(message).append(L"\n").c_str());
   std::wstring logFile = LogFileFromCommandLine();
   if (logFile.empty()) {
-    if (!Background()) MessageBoxW(nullptr, message.c_str(), L"Ardia", MB_OK | MB_ICONERROR);
+    if (!Background()) MessageBoxW(nullptr, message.c_str(), L"Solstice", MB_OK | MB_ICONERROR);
     return code;
   }
   HANDLE file = CreateFileW(logFile.c_str(), FILE_APPEND_DATA, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
@@ -95,10 +95,10 @@ int Fail(int code, std::wstring message, DWORD error) {
 
 _Use_decl_annotations_ int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR, int) {
   std::wstring directory = OwnDirectory();
-  if (directory.empty()) return Fail(kNoOwnPath, L"Ardia could not find its own folder", GetLastError());
+  if (directory.empty()) return Fail(kNoOwnPath, L"Solstice could not find its own folder", GetLastError());
   std::wstring library = directory + L"ArdiaApp.dll";
   HMODULE app = LoadLibraryExW(library.c_str(), nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
-  if (!app) return Fail(kAppLibraryMissing, L"Ardia could not load ArdiaApp.dll from its folder", GetLastError());
+  if (!app) return Fail(kAppLibraryMissing, L"Solstice could not load ArdiaApp.dll from its folder", GetLastError());
   auto run = reinterpret_cast<ArdiaAppRunFunction>(reinterpret_cast<void *>(GetProcAddress(app, "ArdiaAppRun")));
   if (!run) return Fail(kAppLibraryIncomplete, L"ArdiaApp.dll has no ArdiaAppRun", GetLastError());
   return run();

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Mirror the Ardia SQLite triage DB into ClickHouse (sandbox.ardia_*).
+"""Mirror the Solstice SQLite triage DB into ClickHouse (sandbox.ardia_*).
 
 Usage:
   python3 ch_sync.py                 # ensure schema + views, full sync of every table
