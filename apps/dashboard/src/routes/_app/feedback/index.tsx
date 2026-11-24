@@ -26,7 +26,7 @@ export const Route = createFileRoute("/_app/feedback/")({
     if (typeof search.q === "string" && search.q.trim()) out.q = search.q.slice(0, 80);
     return out;
   },
-  head: () => ({ meta: [{ title: "Feedback · Ardia" }] }),
+  head: () => ({ meta: [{ title: "Feedback · Solstice" }] }),
   component: FeedbackPage,
 });
 

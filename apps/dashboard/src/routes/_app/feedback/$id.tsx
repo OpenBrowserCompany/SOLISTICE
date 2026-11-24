@@ -11,7 +11,7 @@ import { formatAgo, formatDate, formatDateTime } from "@/lib/format";
 import { getFeedbackReport } from "@/lib/people-api";
 
 export const Route = createFileRoute("/_app/feedback/$id")({
-  head: () => ({ meta: [{ title: "Report · Ardia" }] }),
+  head: () => ({ meta: [{ title: "Report · Solstice" }] }),
   component: ReportPage,
 });
 
@@ -109,7 +109,7 @@ function ReportBody({ r }: { r: Report }) {
             ) : null}
           </Panel>
           {recording ? (
-            <Panel title="Recording" description={`${formatBytes(recording.bytes)} · Ardia's windows only, web pages blacked out unless the reporter included them.`}>
+            <Panel title="Recording" description={`${formatBytes(recording.bytes)} · Solstice's windows only, web pages blacked out unless the reporter included them.`}>
               <video controls preload="metadata" src={recording.url} className="aspect-video w-full rounded-lg border bg-black" />
             </Panel>
           ) : null}

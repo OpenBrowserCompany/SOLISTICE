@@ -15,7 +15,7 @@ import { windowFor } from "@/lib/range";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_app/errors")({
-  head: () => ({ meta: [{ title: "Errors · Ardia" }] }),
+  head: () => ({ meta: [{ title: "Errors · Solstice" }] }),
   component: ErrorsPage,
 });
 
