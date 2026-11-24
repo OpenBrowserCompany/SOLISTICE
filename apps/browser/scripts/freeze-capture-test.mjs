@@ -6,7 +6,7 @@ import { launch, sleep } from "../../../scripts/lib/instance.mjs";
 const args = process.argv.slice(2);
 const appArg = args.find((a) => !a.startsWith("--"));
 if (!appArg || args.includes("--help")) {
-  console.error("usage: node freeze-capture-test.mjs <Debug Ardia.app> [--metro=<port>] [--keep]\n" +
+  console.error("usage: node freeze-capture-test.mjs <Debug Solstice.app> [--metro=<port>] [--keep]\n" +
     "  Freezes each thread on purpose in a hidden instance (ARDIA_TEST freezeWatchActive acts the app active) and checks the\n" +
     "  stack samples, the app_freeze event, the local freezes.txt record written 2 s into a freeze, that it survives a kill -9\n" +
     "  in the middle of one, that sharing off sends nothing, and Copy Last Freeze's text.");

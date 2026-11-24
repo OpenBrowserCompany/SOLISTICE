@@ -7,7 +7,7 @@ import { launch, sleep } from "../../../scripts/lib/instance.mjs";
 const args = process.argv.slice(2);
 const appArg = args.find((a) => !a.startsWith("--"));
 if (!appArg || args.includes("--help")) {
-  console.error("usage: node freeze-watch-test.mjs <Debug Ardia.app> [--metro=<port>] [--keep] [--skip-renderer]\n" +
+  console.error("usage: node freeze-watch-test.mjs <Debug Solstice.app> [--metro=<port>] [--keep] [--skip-renderer]\n" +
     "  Blocks the main thread (devBlockMain) and the JS thread (ac.blockJs) for 300 ms, 1.2 s and 6 s, one at a time,\n" +
     "  and checks each lands in its bucket of the hourly freeze counts; a garbage-heavy JS block shows its GC time;\n" +
     "  with sharing off nothing is counted; a page whose input handler spins 22 s after a real click is counted as\n" +
