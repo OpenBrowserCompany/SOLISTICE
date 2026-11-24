@@ -14,7 +14,7 @@
 
 #pragma comment(lib, "ntdll.lib")
 
-namespace Ardia::SyncHandles {
+namespace Solstice::SyncHandles {
 
 constexpr ULONG OpenExisting = 0x1;
 constexpr ULONG CreateNew = 0x2;

@@ -16,7 +16,7 @@
 #include "SyncCrypto.h"
 #include "SyncLogins.h"
 
-namespace Ardia::SyncFiles {
+namespace Solstice::SyncFiles {
 
 constexpr DWORD PlaceholderAttributes = FILE_ATTRIBUTE_RECALL_ON_DATA_ACCESS | FILE_ATTRIBUTE_RECALL_ON_OPEN | FILE_ATTRIBUTE_OFFLINE;
 constexpr std::wstring_view VaultExtension = L".nns";
