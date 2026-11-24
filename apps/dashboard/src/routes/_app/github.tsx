@@ -13,7 +13,7 @@ import { DATA_START_MS } from "@/lib/range";
 import { SourceBadge } from "@/components/source-badge";
 
 export const Route = createFileRoute("/_app/github")({
-  head: () => ({ meta: [{ title: "GitHub · Ardia" }] }),
+  head: () => ({ meta: [{ title: "GitHub · Solstice" }] }),
   component: GitHubPage,
 });
 

@@ -14,7 +14,7 @@ import { compareVersions } from "@/lib/versions";
 import type { SectionData } from "@/server/sections";
 
 export const Route = createFileRoute("/_app/health")({
-  head: () => ({ meta: [{ title: "Health · Ardia" }] }),
+  head: () => ({ meta: [{ title: "Health · Solstice" }] }),
   component: HealthPage,
 });
 
@@ -55,7 +55,7 @@ function HealthPage() {
       <Panel
         source="app"
         title="Protected video"
-        description="Protected video refused in Chromium tabs, by the step it stopped at, whether or not WebKit was offered. Ardia has no Widevine support; protected video plays in WebKit. CDM reported: share of installs whose latest daily snapshot reports a Widevine CDM."
+        description="Protected video refused in Chromium tabs, by the step it stopped at, whether or not WebKit was offered. Solstice has no Widevine support; protected video plays in WebKit. CDM reported: share of installs whose latest daily snapshot reports a Widevine CDM."
       >
         <Loaded query={protectedVideo} skeleton={<TableSkeleton rows={4} columns={7} />}>
           {(p) => <ProtectedVideo p={p} />}

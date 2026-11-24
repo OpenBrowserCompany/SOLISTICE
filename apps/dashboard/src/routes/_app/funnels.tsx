@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import type { SectionData } from "@/server/sections";
 
 export const Route = createFileRoute("/_app/funnels")({
-  head: () => ({ meta: [{ title: "Funnels · Ardia" }] }),
+  head: () => ({ meta: [{ title: "Funnels · Solstice" }] }),
   component: FunnelsPage,
 });
 
