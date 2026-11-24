@@ -50,7 +50,7 @@ concurrency:
 jobs:
   changes:
     name: which checks run
-    runs-on: ubuntu-latest
+    runs-on: namespace-profile-solistice-browser
     timeout-minutes: 5
     permissions:
       actions: read
@@ -311,7 +311,7 @@ jobs:
     concurrency:
       group: checks-repo-${{ github.ref }}
       cancel-in-progress: true
-    runs-on: ubuntu-latest
+    runs-on: namespace-profile-solistice-browser
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
