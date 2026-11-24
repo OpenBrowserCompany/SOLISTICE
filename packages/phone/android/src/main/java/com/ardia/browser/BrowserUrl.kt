@@ -1,7 +1,8 @@
-package com.ardia.browser
+package com.openbrowsercompany.solstice
 
 object BrowserUrl {
-    const val BROWSE_SCHEME = "ardia"
+    const val BROWSE_SCHEME = "solstice"
+    const val LEGACY_BROWSE_SCHEME = "ardia"
 
     fun scheme(url: String): String? {
         val end = url.indexOf(':')
