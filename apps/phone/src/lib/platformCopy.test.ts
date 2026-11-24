@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { copy, copyTable, selectCopy } from "./platformCopy.ts";
 
-test("the iPhone table says iPhone, iCloud Drive, Keychain and Safari where Android says phone, folder and Ardia", () => {
+test("the iPhone table says iPhone, iCloud Drive, Keychain and Safari where Android says phone, folder and Solstice", () => {
   const android = copyTable("android");
   const ios = copyTable("ios");
   assert.equal(ios.thisDevice, "This iPhone");

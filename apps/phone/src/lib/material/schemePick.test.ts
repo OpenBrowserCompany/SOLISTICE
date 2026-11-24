@@ -15,7 +15,7 @@ test("every seeded scheme has exactly Compose's 36 ColorScheme roles as #RRGGBB,
   }
 });
 
-test("the fallback is the tonal-spot scheme of Ardia's green, light surfaces light and dark surfaces dark", () => {
+test("the fallback is the tonal-spot scheme of Solstice's green, light surfaces light and dark surfaces dark", () => {
   assert.equal(SEEDED_SCHEMES[MATERIAL_FALLBACK_SEED].seed, "#3EB489");
   assert.equal(SEEDED_SCHEMES.ardia.light.surface, "#F5FBF5");
   assert.equal(SEEDED_SCHEMES.ardia.dark.surface, "#0F1512");

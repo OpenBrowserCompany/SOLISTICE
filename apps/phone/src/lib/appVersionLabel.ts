@@ -13,8 +13,8 @@ export function parseReleaseVersion(text: string): ReleaseVersion | null {
 
 export function appVersionLabel(release: AppReleaseInfo, isDebug: boolean): string {
   const parsed = isDebug ? null : parseReleaseVersion(release.releaseVersion);
-  if (!parsed) return `Ardia Dev (${release.build})`;
+  if (!parsed) return `Solstice Dev (${release.build})`;
   const nightlyWithoutReceipt = release.receiptName === null && parsed.nightly !== null;
-  if (release.receiptName !== TESTFLIGHT_RECEIPT_NAME && !nightlyWithoutReceipt) return `Ardia ${parsed.appleVersion} (${release.build})`;
-  return parsed.nightly === null ? `Ardia ${parsed.appleVersion} Nightly (${release.build})` : `Ardia ${parsed.appleVersion} Nightly ${parsed.nightly} (${release.build})`;
+  if (release.receiptName !== TESTFLIGHT_RECEIPT_NAME && !nightlyWithoutReceipt) return `Solstice ${parsed.appleVersion} (${release.build})`;
+  return parsed.nightly === null ? `Solstice ${parsed.appleVersion} Nightly (${release.build})` : `Solstice ${parsed.appleVersion} Nightly ${parsed.nightly} (${release.build})`;
 }
