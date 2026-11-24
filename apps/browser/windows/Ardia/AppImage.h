@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace Ardia {
+namespace Solstice {
 
 struct AppImage {
   static HMODULE &Handle() noexcept {

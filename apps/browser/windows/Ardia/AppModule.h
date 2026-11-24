@@ -35,7 +35,7 @@
 #pragma comment(lib, "user32.lib")
 #pragma comment(lib, "advapi32.lib")
 
-namespace Ardia {
+namespace Solstice {
 
 inline winrt::Microsoft::ReactNative::JSValue LaunchSnapshot(AppLaunch::Config const &config) noexcept {
   using winrt::Microsoft::ReactNative::JSValue;
@@ -345,7 +345,7 @@ inline std::vector<std::filesystem::path> Folders() noexcept {
       folders.push_back(Paths::DataDirectory() / L"Chromium" / L"Crashpad" / L"reports");
       folders.push_back(Paths::DataDirectory() / L"Crashpad" / L"reports");
     } else {
-      folders.push_back(Paths::UserFolder(FOLDERID_LocalAppData, L"LOCALAPPDATA") / L"Ardia" / L"User Data" / L"Crashpad" / L"reports");
+      folders.push_back(Paths::UserFolder(FOLDERID_LocalAppData, L"LOCALAPPDATA") / L"Solstice" / L"User Data" / L"Crashpad" / L"reports");
     }
   } catch (...) {
   }
@@ -472,10 +472,10 @@ struct AppModule {
     AppDiagnostics::ExecutableVersion const &version = AppDiagnostics::Version();
 
     SystemInfo info;
-    info.appName = "Ardia";
+    info.appName = "Solstice";
     info.appVersion = version.version;
     info.appBuild = version.build;
-    info.bundleId = "com.ardia.browser";
+    info.bundleId = "com.openbrowsercompany.solstice";
 #if _DEBUG
     info.configuration = "Debug";
 #else
