@@ -52,7 +52,7 @@ export function parseFreezeRecords(file: string | null | undefined): LocalFreeze
 
 export const localFreezes = () => parseFreezeRecords(readDocument(FREEZE_RECORDS_DOC));
 
-const OWN_IMAGE = /^(Ardia|Chromium Framework|hermes)/;
+const OWN_IMAGE = /^(Solstice|Chromium Framework|hermes)/;
 
 export function topOwnFrame(record: LocalFreeze): string | null {
   const frame = record.samples[0]?.find((f) => OWN_IMAGE.test(f.image));
@@ -68,7 +68,7 @@ export function freezeSummaryLine(records: LocalFreeze[], now = Date.now()): str
   const last = records.at(-1);
   if (!last) return "Freezes: none recorded";
   const longest = Math.max(...today.map((r) => r.durationMs), 0);
-  const cause = last.activity !== "none" ? last.activity : (topOwnFrame(last) ?? "no frames from Ardia");
+  const cause = last.activity !== "none" ? last.activity : (topOwnFrame(last) ?? "no frames from Solstice");
   return `Freezes: ${today.length} today${today.length ? `, longest ${seconds(longest)}` : ""}; last ${seconds(last.durationMs)} on the ${last.thread} thread${last.recovered ? "" : " (did not recover)"}, cause ${cause}`;
 }
 

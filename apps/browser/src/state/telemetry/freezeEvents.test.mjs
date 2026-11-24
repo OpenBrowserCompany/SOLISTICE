@@ -41,7 +41,7 @@ const record = (over = {}) => ({
   thermal: 2,
   epoch: client.consentToken() ?? "",
   watchEpoch: native.epoch,
-  samples: [{ state: 1, frames: frames(["hermes", 0x1ae2a0], ["hermes", 0x1ae528], ["Ardia", 0x4400], ["system", 0x123]) }],
+  samples: [{ state: 1, frames: frames(["hermes", 0x1ae2a0], ["hermes", 0x1ae528], ["Solstice", 0x4400], ["system", 0x123]) }],
   images: [
     { name: "hermes", uuid: "11111111-2222-3333-4444-555555555555" },
     { name: "/Users/someone/evil.dylib", uuid: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" },
@@ -71,18 +71,18 @@ test("the frame scrubber keeps our own images and 'system' with offsets and turn
     events.scrubFrames(frames(["Chromium Framework", 10], ["system", 20], ["/usr/lib/libfoo.dylib", 30], ["Evil Helper", 40], ["other", 50], ["hermes", -1])),
     frames(["Chromium Framework", 10], ["system", 20], ["other", 0], ["other", 0], ["other", 0], ["hermes", 0]),
   );
-  assert.equal(events.scrubFrames(Array.from({ length: 40 }, (_, i) => ({ image: "Ardia", offset: i }))).length, 24);
+  assert.equal(events.scrubFrames(Array.from({ length: 40 }, (_, i) => ({ image: "Solstice", offset: i }))).length, 24);
 });
 
 test("a signature is the top three frames from our own images: same place, same signature; elsewhere, different", () => {
-  const a = events.freezeSignature("js", frames(["system", 1], ["hermes", 0x10], ["hermes", 0x20], ["Ardia", 0x30], ["Ardia", 0x40]));
-  const b = events.freezeSignature("js", frames(["system", 9], ["hermes", 0x10], ["hermes", 0x20], ["Ardia", 0x30], ["Ardia", 0x99]));
-  const c = events.freezeSignature("js", frames(["hermes", 0x11], ["hermes", 0x20], ["Ardia", 0x30]));
+  const a = events.freezeSignature("js", frames(["system", 1], ["hermes", 0x10], ["hermes", 0x20], ["Solstice", 0x30], ["Solstice", 0x40]));
+  const b = events.freezeSignature("js", frames(["system", 9], ["hermes", 0x10], ["hermes", 0x20], ["Solstice", 0x30], ["Solstice", 0x99]));
+  const c = events.freezeSignature("js", frames(["hermes", 0x11], ["hermes", 0x20], ["Solstice", 0x30]));
   assert.equal(a, b);
   assert.notEqual(a, c);
   assert.match(a, /^sig_[0-9a-f]{8}$/);
   assert.equal(events.freezeSignature("main", frames(["system", 1])), "none_main");
-  assert.notEqual(events.freezeSignature("main", frames(["Ardia", 1])), events.freezeSignature("js", frames(["Ardia", 1])));
+  assert.notEqual(events.freezeSignature("main", frames(["Solstice", 1])), events.freezeSignature("js", frames(["Solstice", 1])));
 });
 
 test("sharing off: nothing is sent, but the local record still gets the job that was running", async () => {
@@ -131,17 +131,17 @@ test("app_freeze carries buckets, counts, enums, the signature and scrubbed fram
   assert.ok(!text.includes("evil"), "only allowlisted images");
   assert.ok(!/interpretFunction|HadesGC/.test(text), "no symbol names");
   assert.deepEqual(sent.freeze_images, [{ name: "hermes", uuid: "11111111-2222-3333-4444-555555555555" }]);
-  assert.ok(sent.freeze_frames.every((f) => f.lang === "native" && /^(hermes|Ardia|system) \+ 0x[0-9a-f]+$/.test(f.function)));
+  assert.ok(sent.freeze_frames.every((f) => f.lang === "native" && /^(hermes|Solstice|system) \+ 0x[0-9a-f]+$/.test(f.function)));
 });
 
 test("a signature whose hash is all digits survives the property scrub, stays distinct and keeps its one send a day", async () => {
   const { cleanProperties } = await import("./sanitize.ts");
   client.setSharing(true, "settings");
   const offsets = [];
-  for (let offset = 1; offsets.length < 2; offset++) if (/^\d+$/.test(events.freezeSignature("js", frames(["Ardia", offset])).replace(/^sig_/, ""))) offsets.push(offset);
-  const signatures = offsets.map((offset) => events.freezeSignature("js", frames(["Ardia", offset])));
+  for (let offset = 1; offsets.length < 2; offset++) if (/^\d+$/.test(events.freezeSignature("js", frames(["Solstice", offset])).replace(/^sig_/, ""))) offsets.push(offset);
+  const signatures = offsets.map((offset) => events.freezeSignature("js", frames(["Solstice", offset])));
   assert.deepEqual(signatures.map((signature) => cleanProperties({ signature }).signature), signatures);
-  for (const offset of offsets) await reportFreeze(record({ samples: [{ state: 1, frames: frames(["Ardia", offset]) }] }));
+  for (const offset of offsets) await reportFreeze(record({ samples: [{ state: 1, frames: frames(["Solstice", offset]) }] }));
   const sent = (await sentFreezes()).map((p) => p.signature);
   assert.deepEqual(sent, signatures);
   assert.notEqual(sent[0], sent[1]);
@@ -154,8 +154,8 @@ test("a signature whose hash is all digits survives the property scrub, stays di
 });
 
 test("a signature names the build: the same offsets in images with other UUIDs hash apart, an identical record hashes the same", async () => {
-  const top = frames(["hermes", 0x10], ["Ardia", 0x20]);
-  const build = (hermes, ardia) => [{ name: "hermes", uuid: hermes }, { name: "Ardia", uuid: ardia }];
+  const top = frames(["hermes", 0x10], ["Solstice", 0x20]);
+  const build = (hermes, ardia) => [{ name: "hermes", uuid: hermes }, { name: "Solstice", uuid: ardia }];
   const a = events.freezeSignature("js", top, build("11111111-2222-3333-4444-555555555555", "aaaaaaaa-2222-3333-4444-555555555555"));
   assert.match(a, /^sig_[0-9a-f]{8}$/);
   assert.equal(events.freezeSignature("js", top, build("11111111-2222-3333-4444-555555555555", "aaaaaaaa-2222-3333-4444-555555555555")), a);
@@ -177,7 +177,7 @@ test("at most 5 a session, and one of each signature", async () => {
   await reportFreeze(record());
   await reportFreeze(record());
   assert.equal((await sentFreezes()).length, 1, "same signature twice: sent once");
-  for (let i = 1; i <= 6; i++) await reportFreeze(record({ samples: [{ state: 1, frames: frames(["Ardia", 0x1000 * i]) }] }));
+  for (let i = 1; i <= 6; i++) await reportFreeze(record({ samples: [{ state: 1, frames: frames(["Solstice", 0x1000 * i]) }] }));
   assert.equal((await sentFreezes()).length, events.MAX_FREEZES_PER_SESSION);
 });
 
@@ -200,7 +200,7 @@ const slot = (text) => (text + " ".repeat(4096)).slice(0, 4095) + "\n";
 test("the local record parses back, and Copy Diagnostics and Copy Last Freeze describe it", () => {
   const now = Date.now();
   const file =
-    slot(`freeze 7 main recovered\nstarted_ms ${now - 60_000}\nduration_ms 6043\ninput_wait_ms 0\ngc_ms unknown\nactivity none\nthermal 0\nsample 1 state 1\n  system +0x1a\n  Chromium Framework +0x2b3c\n  Ardia +0x44\nimage Chromium Framework 11111111-2222-3333-4444-555555555555\nend\n`) +
+    slot(`freeze 7 main recovered\nstarted_ms ${now - 60_000}\nduration_ms 6043\ninput_wait_ms 0\ngc_ms unknown\nactivity none\nthermal 0\nsample 1 state 1\n  system +0x1a\n  Chromium Framework +0x2b3c\n  Solstice +0x44\nimage Chromium Framework 11111111-2222-3333-4444-555555555555\nend\n`) +
     slot(`freeze 8 js frozen\nstarted_ms ${now - 5_000}\nduration_ms 2000\ninput_wait_ms 0\ngc_ms 1900\nactivity sync\nthermal 1\nsample 1 state 1\n  hermes +0x1ae2a0\nend\n`) +
     slot("garbage slot");
   const parsed = records.parseFreezeRecords(file);
@@ -228,9 +228,9 @@ test("the job a freeze overlapped most is its activity", () => {
 test("a main-thread freeze is charged only to a job that holds the main thread; the JS job it ran beside is js_activity", async () => {
   client.setSharing(true, "settings");
   const save = jobs.beginActivity("sessionSave", Date.now() - 2000);
-  await reportFreeze(record({ thread: "main", samples: [{ state: 1, frames: frames(["Ardia", 0x5100], ["system", 0x1]) }] }));
+  await reportFreeze(record({ thread: "main", samples: [{ state: 1, frames: frames(["Solstice", 0x5100], ["system", 0x1]) }] }));
   const carry = jobs.beginActivity("siteDataCarry", Date.now() - 3200);
-  await reportFreeze(record({ thread: "main", samples: [{ state: 1, frames: frames(["Ardia", 0x5200], ["system", 0x1]) }] }));
+  await reportFreeze(record({ thread: "main", samples: [{ state: 1, frames: frames(["Solstice", 0x5200], ["system", 0x1]) }] }));
   await reportFreeze(record({ thread: "js", samples: [{ state: 1, frames: frames(["hermes", 0x5300], ["system", 0x1]) }] }));
   carry();
   save();
@@ -257,9 +257,9 @@ test("more than 20 freezes in one day across restarts: 20 sent at most, and a si
   };
   for (let i = 1; i <= 30; i++) {
     if (i % 5 === 1) events.resetFreezeEventsForTests();
-    await freezeAt(1000 + i, frames(["Ardia", 0x10000 * i]));
+    await freezeAt(1000 + i, frames(["Solstice", 0x10000 * i]));
   }
   events.resetFreezeEventsForTests();
-  await freezeAt(1031, frames(["Ardia", 0x10000 * 1]));
+  await freezeAt(1031, frames(["Solstice", 0x10000 * 1]));
   assert.equal((await sentFreezes()).length, 20);
 });

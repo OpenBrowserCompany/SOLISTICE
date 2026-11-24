@@ -14,8 +14,8 @@ import { nativeFrames, nativeImages, type NativeImage } from "./sanitize";
 export const MAX_FREEZES_PER_SESSION = 5;
 const FRAMES_SENT = 24;
 const SIGNATURE_FRAMES = 3;
-const OWN_IMAGE = /^(Ardia|Chromium Framework|hermes)/;
-const KNOWN_IMAGE = /^(Ardia(\.debug\.dylib)?|Chromium Framework|hermes|system|other)$/;
+const OWN_IMAGE = /^(Solstice|Chromium Framework|hermes)/;
+const KNOWN_IMAGE = /^(Solstice(\.debug\.dylib)?|Chromium Framework|hermes|system|other)$/;
 const DURATIONS = [
   [1_000, "400ms_1s"],
   [2_000, "1_2s"],
