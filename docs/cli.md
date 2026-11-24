@@ -1,13 +1,13 @@
 # The `ardia` command
 
-The `ardia` command drives a running Ardia from the terminal. It is its own project now: source, tests, CI, version
+The `ardia` command drives a running Solstice from the terminal. It is its own project now: source, tests, CI, version
 and releases live in github.com/ardia-browser/plugins (`plugins/cli`), and its manual is
 [plugins/cli/docs/cli.md](https://github.com/ardia-browser/plugins/blob/main/plugins/cli/docs/cli.md) there. This page
-is what Ardia does for it: how it ships, how it's installed, and the contract the two keep.
+is what Solstice does for it: how it ships, how it's installed, and the contract the two keep.
 
-## How Ardia ships it
+## How Solstice ships it
 
-- **The pin.** `apps/browser/official-plugins.json` names each official plugin Ardia bundles: its version, the GitHub
+- **The pin.** `apps/browser/official-plugins.json` names each official plugin Solstice bundles: its version, the GitHub
   release it comes from and the SHA-256 of each artifact (`macos-arm64`, the plugin folder; `linux-x64`, the command's
   tarball; `installer`, `install.sh`). A `null` SHA-256 means not published yet, and every release step that needs it
   refuses. `scripts/release/official-plugins.py pin cli <version>` writes the hashes of a published release, and
@@ -35,18 +35,18 @@ is what Ardia does for it: how it ships, how it's installed, and the contract th
 On macOS it's the **Command Line** plugin (`docs/plugins.md` › Built-in plugins, › programs, › Official plugins): a
 fresh profile is offered it in Settings › Plugins and onboarding, and one click installs it through the consent sheet.
 Settings › Advanced › Command line has no switch on macOS: it's one line of status ("Not installed." with Open
-Plugins, "On your PATH. It can control Ardia.", or why it isn't on PATH, with Try Again). Once installed it stays: Ardia keeps `~/.local/bin/ardia` linked to its copy in
+Plugins, "On your PATH. It can control Solstice.", or why it isn't on PATH, with Try Again). Once installed it stays: Solstice keeps `~/.local/bin/ardia` linked to its copy in
 `~/Library/Application Support/Ardia/Programs/cli/`, makes a new copy when the app brings a new version (checked against
 the signed digest), and runs its after-update actions once per version (`ardia skills install --auto`,
 `ardia skills refresh`, `ardia computer refresh`). **Installed means control is on**: installing turns `cliControl` on
 (the sheet says so), and each launch turns it back on while Command Line is installed. The control pill's Stop turns
-it off until the next launch. An install you approved moves to the version this Ardia pins by itself when the new version asks
+it off until the next launch. An install you approved moves to the version this Solstice pins by itself when the new version asks
 for nothing you hadn't approved (`docs/plugins.md` › Official plugins, #3868), and Command Line's page in Settings ›
 Plugins then says "Updated by itself" and lists what's new. Python 0.4.0 to Bun 0.6.0 is such a move, and so is any later
 pin with the same surface: the same control and `ardia` with the same after-update steps, plus a sandboxed, offline
 `main` that first starts from the Show Status command. Its note says it added that code. The 0.4.0 daemon keeps running
-beside the new one until Ardia quits (#3472). An `ardia` installed the old way (`~/Library/Application Support/Ardia/CLI/current`) that was never approved
-in Ardia isn't adopted by itself: there's no approval to compare with. It stays on PATH, untouched, and Command Line
+beside the new one until Solstice quits (#3472). An `ardia` installed the old way (`~/Library/Application Support/Ardia/CLI/current`) that was never approved
+in Solstice isn't adopted by itself: there's no approval to compare with. It stays on PATH, untouched, and Command Line
 shows as available, its row in Settings › Plugins saying "An older ardia is installed. Install Command Line to update
 it." Installing it moves the link to the new copy and points `CLI/current` into the store, so paths saved through it
 keep working (`usage_counts.plugin_adoptions_waiting` counts these). There's no uninstall from
@@ -57,11 +57,11 @@ On Linux, Settings › Advanced › Command line installs it from the package (`
 
 `cliControl` (`state/app/cliControl.ts`) stays the stored key, the control pill stays in the app, and on Linux and in
 older data folders it means what it always did; Linux keeps its switch in Settings › Advanced. While it is on, `ardia`
-reaches Ardia two ways (`docs/automation.md`, `docs/control-socket.md`):
+reaches Solstice two ways (`docs/automation.md`, `docs/control-socket.md`):
 - **The control socket** (`ArdiaControl.sock`, mode 0600) carries the owner's methods. It has no token: the server
   checks that the peer runs as the same user (`getpeereid`) and, on macOS, who the program is: a hardened program
-  signed with Ardia's Team ID (the bundled `ardia` and anything else Ardia ships) gets in at once, and any other
-  program waits for you to allow it in the doorbell Ardia shows (`docs/automation.md` › Who the program is). Linux and test instances admit every process of the user.
+  signed with Solstice's Team ID (the bundled `ardia` and anything else Solstice ships) gets in at once, and any other
+  program waits for you to allow it in the doorbell Solstice shows (`docs/automation.md` › Who the program is). Linux and test instances admit every process of the user.
 - **The engine's token connection** carries `ardia browse`. It listens on loopback with a token written to
   `ArdiaControl.json`, which the user's own processes can read. It is a full DevTools client of the browser, the same
   as a `--remote-debugging-port` client (the owner's decision, #2807): every CDP domain and method, every target
@@ -103,30 +103,30 @@ reaches Ardia two ways (`docs/automation.md`, `docs/control-socket.md`):
 
 ## The contract
 
-- **Control protocol.** `hello` carries a protocol number both ways. Ardia answers with `protocol` (today 4) and
+- **Control protocol.** `hello` carries a protocol number both ways. Solstice answers with `protocol` (today 4) and
   `minClientProtocol`, and refuses a `hello` that names an older `protocol` with `unsupported_protocol` ("… update the
   command"); a `hello` with no `protocol` is taken as the current one, as every command before this change sent none.
-  The command sends its `protocol` and refuses an Ardia whose `protocol` is under its `MIN_APP_PROTOCOL` ("… update
-  Ardia"), before it sends anything else. A side raises its minimum only when it needs the other's newer behaviour, so a
-  newer command against an older Ardia, or the reverse, either works or says which one to update. `ardia --version`
+  The command sends its `protocol` and refuses an Solstice whose `protocol` is under its `MIN_APP_PROTOCOL` ("… update
+  Solstice"), before it sends anything else. A side raises its minimum only when it needs the other's newer behaviour, so a
+  newer command against an older Solstice, or the reverse, either works or says which one to update. `ardia --version`
   reports the command's own version.
 - **Methods.** `methods` lists every method the socket answers: `name`, `area`, `mutates`, `description`, `params` (a
   JSON Schema subset the socket checks before it runs anything) and `result`. The command's `ardia methods` prints it
-  and `ardia call <method> [params]` calls any method, so a method Ardia adds is usable from the shell without a new
-  command release. Adding methods doesn't change the protocol: a command that calls one an older Ardia lacks gets
+  and `ardia call <method> [params]` calls any method, so a method Solstice adds is usable from the shell without a new
+  command release. Adding methods doesn't change the protocol: a command that calls one an older Solstice lacks gets
   `unknown_method`. Every area, what it reads and changes, and what stays out of reach (passwords, card numbers,
   cookie values) is in `docs/control-socket.md`. Tile folders (`pins.*`), page icons (`favicons.get`), shared
   and live folders (`sharedFolders.*`, `live.*`), setup codes (`presets.*`) and Air Traffic Control rules
   (`airTraffic.*`) are there too.
-- **One line is at most 1 MiB.** Every line Ardia writes on the socket (a reply, an event, a decide request) is at most
+- **One line is at most 1 MiB.** Every line Solstice writes on the socket (a reply, an event, a decide request) is at most
   1 MiB (1,048,576 bytes, newline included), the limit every shipped command reads (`MAX_LINE` in `control.py` and
-  `control.rs`); a longer line makes the command drop the connection. Old commands can't change, so Ardia keeps to it:
+  `control.rs`); a longer line makes the command drop the connection. Old commands can't change, so Solstice keeps to it:
   pages stop early, a read whose reply wouldn't fit answers `failed` saying what to narrow, a write whose result wouldn't
   fit answers a compact `{ok, oversized, …counts}` so it's never unclear whether the write happened, an event that
-  wouldn't fit goes out summarized with `truncated: true`, and a decide request that wouldn't fit isn't sent (Ardia uses
+  wouldn't fit goes out summarized with `truncated: true`, and a decide request that wouldn't fit isn't sent (Solstice uses
   its default). A reader that falls behind loses its oldest events, never a reply or a decide message and never its connection
   in the middle of a line; the next event it gets carries `dropped: <n>`. Details in `docs/control-socket.md` › The 1 MiB line.
-- **The plugin schema.** `docs/plugin.schema.json` is the manifest schema Ardia writes (`apps/browser/scripts/
+- **The plugin schema.** `docs/plugin.schema.json` is the manifest schema Solstice writes (`apps/browser/scripts/
   write-plugin-schema.mjs`; a test keeps it current). The command ships a copy for `ardia plugins check` offline, and the
   plugins repo's CI compares that copy with ardia main's.
 - **Release smoke.** `scripts/release/cli-bootstrap-smoke.sh` checks that a fresh profile gets no `ardia` until it installs
