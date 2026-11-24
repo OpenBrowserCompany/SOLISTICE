@@ -21,7 +21,7 @@ test("versions keep only their numbers", () => {
   assert.equal(osVersionOf("18.1.1"), "18.1.1");
   assert.equal(osVersionOf("15 (Ada's build)"), "15");
   assert.equal(appVersionOf("1.0.0"), "1.0.0");
-  assert.equal(appVersionOf("Ardia nightly"), "0");
+  assert.equal(appVersionOf("Solstice nightly"), "0");
 });
 
 test("a damaged day of counts starts over rather than sending something odd", () => {

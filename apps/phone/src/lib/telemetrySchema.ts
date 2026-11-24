@@ -18,7 +18,7 @@ export type FieldRule =
 export const CONTEXT_FIELDS = {
   $lib: { kind: "const", value: PHONE_LIB },
   $lib_version: { kind: "const", value: "1" },
-  $app_name: { kind: "const", value: "Ardia" },
+  $app_name: { kind: "const", value: "Solstice" },
   app: { kind: "const", value: "phone" },
   platform: { kind: "enum", values: ["android", "ios"] },
   $app_version: { kind: "pattern", pattern: VERSION },
@@ -201,7 +201,7 @@ export function eventContext(device: DeviceFacts, sessionId: string): Record<str
   return {
     $lib: PHONE_LIB,
     $lib_version: "1",
-    $app_name: "Ardia",
+    $app_name: "Solstice",
     app: "phone",
     platform: device.platform,
     $app_version: device.appVersion,
