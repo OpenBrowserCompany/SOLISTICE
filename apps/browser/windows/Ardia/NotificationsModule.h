@@ -14,7 +14,7 @@
 
 #pragma comment(lib, "shell32.lib")
 
-namespace Ardia {
+namespace Solstice {
 
 REACT_MODULE(NotificationsModule, L"ArdiaNotifications")
 struct NotificationsModule {

@@ -10,7 +10,7 @@
 
 #include "NativeModules.h"
 
-namespace Ardia::NotificationParts {
+namespace Solstice::NotificationParts {
 
 inline void AppendJsonString(std::string &out, std::string_view text) noexcept {
   static constexpr char digits[] = "0123456789abcdef";

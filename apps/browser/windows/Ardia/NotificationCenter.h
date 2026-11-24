@@ -33,7 +33,7 @@
 #pragma comment(lib, "ole32.lib")
 #pragma comment(lib, "shlwapi.lib")
 
-namespace Ardia::NotificationParts {
+namespace Solstice::NotificationParts {
 
 enum class Authorization { NotDetermined, Denied, Granted };
 
@@ -342,10 +342,10 @@ struct NotificationHub {
     if (std::optional<std::wstring> icon = AppIcon::NotificationIconPath()) {
       try {
         manager.Register(AppIcon::kDisplayName, winrt::Windows::Foundation::Uri{*icon});
-        LaunchLog::Write(L"info", L"notifications: registered as Ardia with Ardia's icon");
+        LaunchLog::Write(L"info", L"notifications: registered as Solstice with Solstice's icon");
         return;
       } catch (winrt::hresult_error const &error) {
-        LaunchLog::Write(L"warning", std::wstring(L"notifications: registering with Ardia's name and icon failed, 0x").append(HexCode(error.code())).append(L": ").append(error.message()));
+        LaunchLog::Write(L"warning", std::wstring(L"notifications: registering with Solstice's name and icon failed, 0x").append(HexCode(error.code())).append(L": ").append(error.message()));
       }
     }
     manager.Register();
