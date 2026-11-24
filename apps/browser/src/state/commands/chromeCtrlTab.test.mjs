@@ -9,7 +9,7 @@ test("turning on Chrome's most recently used order picks the recent tabs switche
   assert.equal(presetFollowingChrome({ "": true }, { "": false }, "switcher"), "step");
 });
 
-test("a value already seen changes nothing, so a pick made in Ardia's Settings afterwards stays", () => {
+test("a value already seen changes nothing, so a pick made in Solstice's Settings afterwards stays", () => {
   assert.equal(presetFollowingChrome({ "": true }, { "": true }, "step"), null);
   assert.equal(presetFollowingChrome({ "": false }, { "": false }, "switcher"), null);
 });

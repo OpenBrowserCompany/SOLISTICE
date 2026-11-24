@@ -58,7 +58,7 @@ test("the Bookmarks menu runs a bookmarklet on the page the command targets, not
 });
 
 test("a bookmarklet does nothing on a page that isn't a web page, and Open All skips it", async () => {
-  const { windowId, tabId, loads } = seed("ardia://history");
+  const { windowId, tabId, loads } = seed("solstice://history");
   assert.equal(runBookmarklet(SAKURA, windowId), false);
   await openLinks([{ url: SAKURA }], windowId);
   assert.deepEqual(loads, []);

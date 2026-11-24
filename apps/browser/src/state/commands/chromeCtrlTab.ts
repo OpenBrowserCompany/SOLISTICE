@@ -13,7 +13,7 @@ const DOC = "chrome-ctrl-tab.json";
 const VERSION = 1;
 const FIRST_LOOK_MS = 3000;
 const LOOK_AFTER_LEAVING_MS = 15000;
-const CHROME_SETTINGS = /^(chrome|ardia):\/\/settings(\/|$|\?|#)/;
+const CHROME_SETTINGS = /^(chrome|ardia|solstice):\/\/settings(\/|$|\?|#)/;
 
 type ChromeCtrlTab = Record<string, boolean>;
 
