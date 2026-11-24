@@ -25,7 +25,7 @@
 #include "SyncCrypto.h"
 #include "SyncLogins.h"
 
-namespace Ardia::SyncSystem {
+namespace Solstice::SyncSystem {
 
 using SyncCrypto::WipedString;
 using Answer = std::function<void(std::shared_ptr<WipedString>)>;
@@ -269,7 +269,7 @@ inline std::wstring KitFolder() {
   DWORD size = GetTempPathW(MAX_PATH, temp);
   std::wstring base = size ? std::wstring{temp, size} : std::wstring{};
   while (!base.empty() && (base.back() == L'\\' || base.back() == L'/')) base.pop_back();
-  return base + L"\\Ardia Recovery Kit";
+  return base + L"\\Solstice Recovery Kit";
 }
 
 }

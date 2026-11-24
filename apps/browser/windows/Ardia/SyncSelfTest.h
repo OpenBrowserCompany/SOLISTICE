@@ -14,7 +14,7 @@
 #include "SyncHandles.h"
 #include "SyncVault.h"
 
-namespace Ardia::SyncSelfTest {
+namespace Solstice::SyncSelfTest {
 
 using SyncCrypto::Keys;
 using SyncCrypto::WipedBytes;
