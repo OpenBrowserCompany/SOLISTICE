@@ -58,30 +58,30 @@ int main() {
   assert(LastLine("one\r\ntwo\r\n") == "two");
   assert(LastLine("") == "");
 
-  assert(ManifestName("0.2.48") == "Ardia-0.2.48-linux-update.txt");
-  assert(SignatureName("0.2.48") == "Ardia-0.2.48-linux-update.txt.sig");
-  assert(PackageName("0.2.48", Kind::kDeb) == "Ardia-0.2.48-linux-x64.deb");
-  assert(PackageName("0.2.48", Kind::kTarball) == "Ardia-0.2.48-linux-x64.tar.xz");
-  assert(PackageName("0.2.48-nightly.3", Kind::kAppImage) == "Ardia-0.2.48-nightly.3-linux-x64.AppImage");
-  assert(ValidPackageName("Ardia-0.2.48-linux-x64.deb", "0.2.48", Kind::kDeb));
-  assert(!ValidPackageName("Ardia-0.2.48-linux-x64.deb", "0.2.48", Kind::kTarball));
-  assert(!ValidPackageName("../Ardia-0.2.48-linux-x64.deb", "0.2.48", Kind::kDeb));
-  assert(!ValidPackageName("Ardia-0.2.49-linux-x64.deb", "0.2.48", Kind::kDeb));
-  assert(!ValidPackageName("Ardia-0.2.48-linux-arm64.deb", "0.2.48", Kind::kDeb));
+  assert(ManifestName("0.2.48") == "Solstice-0.2.48-linux-update.txt");
+  assert(SignatureName("0.2.48") == "Solstice-0.2.48-linux-update.txt.sig");
+  assert(PackageName("0.2.48", Kind::kDeb) == "Solstice-0.2.48-linux-x64.deb");
+  assert(PackageName("0.2.48", Kind::kTarball) == "Solstice-0.2.48-linux-x64.tar.xz");
+  assert(PackageName("0.2.48-nightly.3", Kind::kAppImage) == "Solstice-0.2.48-nightly.3-linux-x64.AppImage");
+  assert(ValidPackageName("Solstice-0.2.48-linux-x64.deb", "0.2.48", Kind::kDeb));
+  assert(!ValidPackageName("Solstice-0.2.48-linux-x64.deb", "0.2.48", Kind::kTarball));
+  assert(!ValidPackageName("../Solstice-0.2.48-linux-x64.deb", "0.2.48", Kind::kDeb));
+  assert(!ValidPackageName("Solstice-0.2.49-linux-x64.deb", "0.2.48", Kind::kDeb));
+  assert(!ValidPackageName("Solstice-0.2.48-linux-arm64.deb", "0.2.48", Kind::kDeb));
 
   const std::string v = "0.2.48";
-  const std::string full = Manifest(v, Line("deb", "Ardia-0.2.48-linux-x64.deb", "123") +
-                                           Line("tarball", "Ardia-0.2.48-linux-x64.tar.xz", "456") +
-                                           Line("appimage", "Ardia-0.2.48-linux-x64.AppImage", "789"));
+  const std::string full = Manifest(v, Line("deb", "Solstice-0.2.48-linux-x64.deb", "123") +
+                                           Line("tarball", "Solstice-0.2.48-linux-x64.tar.xz", "456") +
+                                           Line("appimage", "Solstice-0.2.48-linux-x64.AppImage", "789"));
   ManifestRead read = PackageInManifest(full, v, Kind::kTarball);
-  assert(read.package && read.package->name == "Ardia-0.2.48-linux-x64.tar.xz" && read.package->size == 456);
+  assert(read.package && read.package->name == "Solstice-0.2.48-linux-x64.tar.xz" && read.package->size == 456);
   read = PackageInManifest(full, v, Kind::kDeb);
   assert(read.package && read.package->size == 123);
   read = PackageInManifest(full, v, Kind::kAppImage);
-  assert(read.package && read.package->name == "Ardia-0.2.48-linux-x64.AppImage" && read.package->size == 789);
+  assert(read.package && read.package->name == "Solstice-0.2.48-linux-x64.AppImage" && read.package->size == 789);
 
-  const std::string no_deb = Manifest(v, Line("tarball", "Ardia-0.2.48-linux-x64.tar.xz", "456") +
-                                             Line("appimage", "Ardia-0.2.48-linux-x64.AppImage", "789"));
+  const std::string no_deb = Manifest(v, Line("tarball", "Solstice-0.2.48-linux-x64.tar.xz", "456") +
+                                             Line("appimage", "Solstice-0.2.48-linux-x64.AppImage", "789"));
   assert(PackageInManifest(no_deb, v, Kind::kDeb).reason == "kind");
   assert(PackageInManifest(no_deb, v, Kind::kTarball).package);
   assert(PackageInManifest(Manifest(v, ""), v, Kind::kDeb).reason == "kind");
@@ -89,24 +89,24 @@ int main() {
   assert(PackageInManifest(full, "0.2.49", Kind::kDeb).reason == "manifest");
   assert(PackageInManifest(full.substr(0, full.size() - 1), v, Kind::kDeb).reason == "manifest");
   assert(PackageInManifest("ardia-linux-update 2\n" + full.substr(21), v, Kind::kDeb).reason == "manifest");
-  assert(PackageInManifest(Manifest(v, Line("tarball", "Ardia-0.2.48-linux-x64.tar.xz", "1") +
-                                           Line("deb", "Ardia-0.2.48-linux-x64.deb", "1")), v, Kind::kDeb).reason == "manifest");
-  assert(PackageInManifest(Manifest(v, Line("deb", "Ardia-0.2.48-linux-x64.deb", "1") +
-                                           Line("deb", "Ardia-0.2.48-linux-x64.deb", "1")), v, Kind::kDeb).reason == "manifest");
+  assert(PackageInManifest(Manifest(v, Line("tarball", "Solstice-0.2.48-linux-x64.tar.xz", "1") +
+                                           Line("deb", "Solstice-0.2.48-linux-x64.deb", "1")), v, Kind::kDeb).reason == "manifest");
+  assert(PackageInManifest(Manifest(v, Line("deb", "Solstice-0.2.48-linux-x64.deb", "1") +
+                                           Line("deb", "Solstice-0.2.48-linux-x64.deb", "1")), v, Kind::kDeb).reason == "manifest");
   assert(PackageInManifest(Manifest(v, Line("deb", "../../etc/passwd", "1")), v, Kind::kDeb).reason == "manifest");
-  assert(PackageInManifest(Manifest(v, Line("deb", "Ardia-0.2.48-linux-x64.tar.xz", "1")), v, Kind::kDeb).reason == "manifest");
-  assert(PackageInManifest(Manifest(v, Line("rpm", "Ardia-0.2.48-linux-x64.rpm", "1")), v, Kind::kDeb).reason == "manifest");
-  assert(PackageInManifest(Manifest(v, Line("deb", "Ardia-0.2.48-linux-x64.deb", "0")), v, Kind::kDeb).reason == "manifest");
-  assert(PackageInManifest(Manifest(v, Line("deb", "Ardia-0.2.48-linux-x64.deb", "012")), v, Kind::kDeb).reason == "manifest");
-  assert(PackageInManifest(Manifest(v, Line("deb", "Ardia-0.2.48-linux-x64.deb", "-1")), v, Kind::kDeb).reason == "manifest");
-  assert(PackageInManifest(Manifest(v, Line("deb", "Ardia-0.2.48-linux-x64.deb", "99999999999999999999")), v, Kind::kDeb).reason == "manifest");
-  assert(PackageInManifest(Manifest(v, "deb Ardia-0.2.48-linux-x64.deb " + std::string(64, 'A') + " 1\n"), v, Kind::kDeb).reason == "manifest");
-  assert(PackageInManifest(Manifest(v, "deb Ardia-0.2.48-linux-x64.deb " + kSha + " 1 extra\n"), v, Kind::kDeb).reason == "manifest");
-  assert(PackageInManifest(Manifest(v, "deb Ardia-0.2.48-linux-x64.deb  " + kSha + " 1\n"), v, Kind::kDeb).reason == "manifest");
-  assert(PackageInManifest(Manifest(v, "deb Ardia-0.2.48-linux-x64.deb " + kSha + " 1\r\n"), v, Kind::kDeb).reason == "manifest");
-  assert(PackageInManifest(Manifest(v, Line("deb", "Ardia-0.2.48-linux-x64.deb", "1")) + "\n", v, Kind::kDeb).reason == "manifest");
-  assert(PackageInManifest(Manifest(v, Line("deb", "Ardia-0.2.48-linux-x64.deb", "536870912")), v, Kind::kDeb).package);
-  assert(PackageInManifest(Manifest(v, Line("deb", "Ardia-0.2.48-linux-x64.deb", "536870913")), v, Kind::kDeb).reason == "tooLarge");
+  assert(PackageInManifest(Manifest(v, Line("deb", "Solstice-0.2.48-linux-x64.tar.xz", "1")), v, Kind::kDeb).reason == "manifest");
+  assert(PackageInManifest(Manifest(v, Line("rpm", "Solstice-0.2.48-linux-x64.rpm", "1")), v, Kind::kDeb).reason == "manifest");
+  assert(PackageInManifest(Manifest(v, Line("deb", "Solstice-0.2.48-linux-x64.deb", "0")), v, Kind::kDeb).reason == "manifest");
+  assert(PackageInManifest(Manifest(v, Line("deb", "Solstice-0.2.48-linux-x64.deb", "012")), v, Kind::kDeb).reason == "manifest");
+  assert(PackageInManifest(Manifest(v, Line("deb", "Solstice-0.2.48-linux-x64.deb", "-1")), v, Kind::kDeb).reason == "manifest");
+  assert(PackageInManifest(Manifest(v, Line("deb", "Solstice-0.2.48-linux-x64.deb", "99999999999999999999")), v, Kind::kDeb).reason == "manifest");
+  assert(PackageInManifest(Manifest(v, "deb Solstice-0.2.48-linux-x64.deb " + std::string(64, 'A') + " 1\n"), v, Kind::kDeb).reason == "manifest");
+  assert(PackageInManifest(Manifest(v, "deb Solstice-0.2.48-linux-x64.deb " + kSha + " 1 extra\n"), v, Kind::kDeb).reason == "manifest");
+  assert(PackageInManifest(Manifest(v, "deb Solstice-0.2.48-linux-x64.deb  " + kSha + " 1\n"), v, Kind::kDeb).reason == "manifest");
+  assert(PackageInManifest(Manifest(v, "deb Solstice-0.2.48-linux-x64.deb " + kSha + " 1\r\n"), v, Kind::kDeb).reason == "manifest");
+  assert(PackageInManifest(Manifest(v, Line("deb", "Solstice-0.2.48-linux-x64.deb", "1")) + "\n", v, Kind::kDeb).reason == "manifest");
+  assert(PackageInManifest(Manifest(v, Line("deb", "Solstice-0.2.48-linux-x64.deb", "536870912")), v, Kind::kDeb).package);
+  assert(PackageInManifest(Manifest(v, Line("deb", "Solstice-0.2.48-linux-x64.deb", "536870913")), v, Kind::kDeb).reason == "tooLarge");
   assert(PackageInManifest(full + std::string(4096, 'x'), v, Kind::kDeb).reason == "tooLarge");
   assert(PackageInManifest("", v, Kind::kDeb).reason == "manifest");
   assert(PackageInManifest(full, "0.2", Kind::kDeb).reason == "manifest");
@@ -122,9 +122,9 @@ int main() {
     assert(!FeedOverride(bad));
   }
 
-  assert(DownloadUrl(v, "Ardia-0.2.48-linux-update.txt", std::nullopt) ==
-         "https://github.com/ardia-browser/ardia/releases/download/v0.2.48/Ardia-0.2.48-linux-update.txt");
-  assert(DownloadUrl(v, "Ardia-0.2.48-linux-x64.deb", feed) == "http://127.0.0.1:8765/v0.2.48/Ardia-0.2.48-linux-x64.deb");
+  assert(DownloadUrl(v, "Solstice-0.2.48-linux-update.txt", std::nullopt) ==
+         "https://github.com/ardia-browser/ardia/releases/download/v0.2.48/Solstice-0.2.48-linux-update.txt");
+  assert(DownloadUrl(v, "Solstice-0.2.48-linux-x64.deb", feed) == "http://127.0.0.1:8765/v0.2.48/Solstice-0.2.48-linux-x64.deb");
 
   assert(AllowedRedirect("https", "github.com", 443, std::nullopt));
   assert(AllowedRedirect("https", "objects.githubusercontent.com", 443, std::nullopt));
