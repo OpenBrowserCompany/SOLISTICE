@@ -13,7 +13,7 @@
  #include "chrome/browser/ui/tabs/organizer/organizer_panel_utils.h"
  #endif
  
-+// Ardia: ArdiaCore (engine/ardiacore) shows extension side panels in its own
++// Solstice: ArdiaCore (engine/ardiacore) shows extension side panels in its own
 +// panel for the tabs it hosts.
 +bool (*g_ardia_extension_side_panel)(
 +    BrowserWindowInterface* browser_window,
@@ -28,7 +28,7 @@
      return;
    }
  
-+  // Ardia: ArdiaCore may draw extension side panels itself.
++  // Solstice: ArdiaCore may draw extension side panels itself.
 +  if (g_ardia_extension_side_panel &&
 +      g_ardia_extension_side_panel(browser_window, nullptr, extension_id,
 +                                       /*open=*/true)) {
@@ -42,7 +42,7 @@
  void OpenGlobalExtensionSidePanel(BrowserWindowInterface& browser_window,
                                    content::WebContents* web_contents,
                                    const ExtensionId& extension_id) {
-+  // Ardia: ArdiaCore may draw extension side panels itself.
++  // Solstice: ArdiaCore may draw extension side panels itself.
 +  if (g_ardia_extension_side_panel &&
 +      g_ardia_extension_side_panel(&browser_window, web_contents, extension_id,
 +                                       /*open=*/true)) {
@@ -56,7 +56,7 @@
  void OpenContextualExtensionSidePanel(BrowserWindowInterface& browser_window,
                                        content::WebContents& web_contents,
                                        const ExtensionId& extension_id) {
-+  // Ardia: ArdiaCore may draw extension side panels itself.
++  // Solstice: ArdiaCore may draw extension side panels itself.
 +  if (g_ardia_extension_side_panel &&
 +      g_ardia_extension_side_panel(&browser_window, &web_contents, extension_id,
 +                                       /*open=*/true)) {
@@ -70,7 +70,7 @@
      return;
    }
  
-+  // Ardia: ArdiaCore may draw extension side panels itself.
++  // Solstice: ArdiaCore may draw extension side panels itself.
 +  if (g_ardia_extension_side_panel &&
 +      g_ardia_extension_side_panel(browser_window, nullptr, extension_id,
 +                                       /*open=*/false)) {
@@ -84,7 +84,7 @@
      return;
    }
  
-+  // Ardia: ArdiaCore may draw extension side panels itself.
++  // Solstice: ArdiaCore may draw extension side panels itself.
 +  if (g_ardia_extension_side_panel &&
 +      g_ardia_extension_side_panel(browser_window, web_contents, extension_id,
 +                                       /*open=*/false)) {

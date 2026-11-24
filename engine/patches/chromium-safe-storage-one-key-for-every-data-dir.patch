@@ -1,8 +1,8 @@
 Chromium 158 gives a browser on a non-default user data directory its own Safe Storage key: with
 KeychainKeyProviderUserDataDirProtection (on by default) the "v10" key is reported unavailable and new data is
-encrypted as "v11" with another salt. ArdiaCore always passes --user-data-dir, so every Ardia profile counts as
-non-default: the saved passwords and cookies of every user, all encrypted with the "v10" key from "Ardia Safe
-Storage", would stop decrypting. Ardia keeps the one provider and the one key for every data directory, whatever the
+encrypted as "v11" with another salt. ArdiaCore always passes --user-data-dir, so every Solstice profile counts as
+non-default: the saved passwords and cookies of every user, all encrypted with the "v10" key from "Solstice Safe
+Storage", would stop decrypting. Solstice keeps the one provider and the one key for every data directory, whatever the
 feature says.
 
 --- a/chrome/browser/browser_process_impl.cc
