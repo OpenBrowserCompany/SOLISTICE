@@ -1,4 +1,4 @@
-// Copyright 2026 Ardia. Apache-2.0.
+// Copyright 2026 Solstice. Apache-2.0.
 
 #include <map>
 #include <memory>
@@ -296,7 +296,7 @@ class GrantPrompts : public ProfileState {
                 std::make_unique<extensions::InstallPromptData>(
                     extensions::InstallPromptData::PERMISSIONS_PROMPT));
     if (!prompt) {
-      reply.Error("Ardia can't ask for permissions right now.");
+      reply.Error("Solstice can't ask for permissions right now.");
       return;
     }
     const int key = ++next_key_;
