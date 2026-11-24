@@ -172,7 +172,7 @@ for (let i = 0, last = ""; i < 12; i++) {
 const dialog = list.find(isPasskeyDialog);
 if (passkeys) {
   const detail = dialog ? `${dialog.w}x${dialog.h} "${dialog.title}"` : "no passkey window";
-  const name = "passkey dialog shows, offering iCloud Keychain (Passwords) next to Ardia's passkeys";
+  const name = "passkey dialog shows, offering iCloud Keychain (Passwords) next to Solstice's passkeys";
   checkTitles("passkey dialog shows", !!dialog, detail);
   if (locked) {
     checkUnlocked(name, false, `${detail}; Accessibility reads no window contents while the screen is locked, so the choices weren't read`);
@@ -184,7 +184,7 @@ if (passkeys) {
     } catch (error) {
       unread = error.status === 3 ? "untrusted" : String(error.stderr || error.message).trim();
     }
-    const offers = !!texts && ["Save in Passwords", "Save in Ardia Passkeys"].every((choice) => texts.includes(choice));
+    const offers = !!texts && ["Save in Passwords", "Save in Solstice Passkeys"].every((choice) => texts.includes(choice));
     const why = offers ? "both choices offered" : texts ? `choices missing from ${JSON.stringify(texts.filter((t) => /save|passkey/i.test(t)))}` : `its choices couldn't be read: ${unread}`;
     if (unread === "untrusted") needs(false, "this process isn't trusted for Accessibility: give the terminal Accessibility in System Settings › Privacy & Security")(name, false, `${detail}; choices unread`);
     else checkTitles(name, !!dialog && offers, `${detail}; ${why}`);
@@ -215,7 +215,7 @@ adSteps.push(await adsOnPage());
 check("allowing ads on a site, then not, applies on the next load", adSteps.join(" → ") === "blocked → loaded → blocked", adSteps.join(" → "));
 
 await go("chrome://version");
-check("chrome://version", (await evaluate("document.body.innerText")).includes(`Ardia\t${chromiumVersion} (Official Build)`));
+check("chrome://version", (await evaluate("document.body.innerText")).includes(`Solstice\t${chromiumVersion} (Official Build)`));
 
 await send("Network.enable");
 await send("Network.emulateNetworkConditions", { offline: true, latency: 0, downloadThroughput: 0, uploadThroughput: 0 });
@@ -362,8 +362,8 @@ try {
 } catch (error) {
   console.log(`note: ${error.message}`);
 }
-check("a link from another app (a GURL Apple Event) opens in Little Ardia", !!linked && linkedPage,
-  linked ? `${linked}${linkedPage ? "" : ", but no page loaded"}` : "no Little Ardia within 10 s");
+check("a link from another app (a GURL Apple Event) opens in Little Solstice", !!linked && linkedPage,
+  linked ? `${linked}${linkedPage ? "" : ", but no page loaded"}` : "no Little Solstice within 10 s");
 
 const failed = results.filter((r) => !r.ok).length;
 console.log(`\n${results.length - failed}/${results.length} passed`);

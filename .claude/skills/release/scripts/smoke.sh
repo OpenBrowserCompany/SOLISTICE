@@ -7,11 +7,11 @@ here="$(cd "$(dirname "$0")" && pwd)"
 . "$here/lib/harness.sh"
 root="$harness_root"
 if [ "${3:-}" = --rc ]; then dist="$root/dist/$version-rc"; else dist="$root/dist/$version"; fi
-app="${SMOKE_APP:-$dist/export/Ardia.app}"
+app="${SMOKE_APP:-$dist/export/Solstice.app}"
 old="$(ls -d "$root/dist/$previous/export"/*.app 2>/dev/null | head -1)"
-old="${old:-$root/dist/$previous/export/Ardia.app}"
+old="${old:-$root/dist/$previous/export/Solstice.app}"
 [ -d "$app" ] || { echo "error: no $app (run scripts/release.sh $version first)" >&2; exit 1; }
-[ "$(cd "$app" && pwd -P)" != /Applications/Ardia.app ] || { echo "error: never the installed app (/Applications/Ardia.app)" >&2; exit 1; }
+[ "$(cd "$app" && pwd -P)" != /Applications/Solstice.app ] || { echo "error: never the installed app (/Applications/Solstice.app)" >&2; exit 1; }
 
 work="$(mktemp -d "${TMPDIR:-/tmp}/ac-smoke.XXXXXX")"
 server=""
@@ -72,8 +72,8 @@ if [ -d "$old" ]; then
 else
   check "$previous's export to compare with" 0 "no $old"
 fi
-zip="$dist/Ardia-$version.zip"
-dmg="$dist/Ardia-$version.dmg"
+zip="$dist/Solstice-$version.zip"
+dmg="$dist/Solstice-$version.dmg"
 if [ -z "${SMOKE_APP:-}" ]; then
   for f in "$zip" "$dmg" "$dist/appcast.xml"; do [ -f "$f" ] || check "the release has $(basename "$f")" 0; done
   if [ -f "$zip" ] && [ -f "$dist/appcast.xml" ]; then
@@ -172,7 +172,7 @@ else
     sleep 1
     exited="$(grep -o ">:$pid\] termination reported by launchd ([0-9, ]*)" "$work/exit.log" | head -1 | sed 's/.*launchd //' || true)"
     report="$(find ~/Library/Logs/DiagnosticReports ~/Library/Logs/DiagnosticReports/Retired -maxdepth 1 \
-      -name 'Ardia-*.ips' -newer "$work/quit-marker" -exec grep -l "\"pid\" : $pid," {} + 2>/dev/null | head -1 || true)"
+      -name 'Solstice-*.ips' -newer "$work/quit-marker" -exec grep -l "\"pid\" : $pid," {} + 2>/dev/null | head -1 || true)"
     [ -n "$report" ] && break
     [ "$exited" = "(0, 0, 0)" ] && break
   done

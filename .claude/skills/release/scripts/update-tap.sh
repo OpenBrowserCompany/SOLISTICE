@@ -16,7 +16,7 @@ case "$(channel_of "$version")" in
   nightly) cask="Casks/ardia@nightly.rb" ;;
 esac
 
-dmg_name="Ardia-$version.dmg"
+dmg_name="Solstice-$version.dmg"
 local_sum=""
 [ -f "$dist/$dmg_name" ] && local_sum="$(shasum -a 256 "$dist/$dmg_name" | cut -d' ' -f1)"
 published="$(gh release view "v$version" -R "$REPO" --json assets \
