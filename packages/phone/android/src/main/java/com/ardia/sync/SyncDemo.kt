@@ -2,7 +2,7 @@ package com.ardia.sync
 
 object SyncDemo {
     const val DEVICE_NAME = SyncMeta.DEFAULT_DEVICE_NAME
-    const val FOLDER_NAME = "Ardia Sync"
+    const val FOLDER_NAME = "Solstice Sync"
 
     fun snapshot(now: Long = System.currentTimeMillis()): SyncSnapshot {
         val mac = SyncedDevice("demo-mac", "MacBook Pro", SyncedDevice.MAC, (now - 40_000).toDouble(), isCurrent = false, canReceiveTabs = true)
