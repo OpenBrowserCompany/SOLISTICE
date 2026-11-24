@@ -1,4 +1,4 @@
-package com.ardia.browser
+package com.openbrowsercompany.solstice
 
 import kotlin.math.abs
 import kotlin.math.floor
