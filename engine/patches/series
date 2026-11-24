@@ -1,4 +1,4 @@
-# The order Ardia's changes go into the Chromium tree (docs/engine-build.md › "The patch series").
+# The order Solstice's changes go into the Chromium tree (docs/engine-build.md › "The patch series").
 # The tree is Chromium with Helium's series (minus 03-helium.py's skip list), its domain and name substitution and our
 # branding. Nothing of CEF's is left but chromium-cef-carryover.patch, the few CEF patches ArdiaCore relies on.
 #
@@ -65,7 +65,7 @@ chromium chromium-helium-context-menu-cast.patch
 chromium chromium-helium-devtools-inspect-shortcut.patch
 chromium chromium-neterror-game.patch
 chromium chromium-branding.patch
-# Load-bearing for every user's data: the Safe Storage item ("Ardia Safe Storage" / "Ardia") holds the key to
+# Load-bearing for every user's data: the Safe Storage item ("Solstice Safe Storage" / "Solstice") holds the key to
 # their saved passwords and cookies. It must survive any re-sync (plain Chromium for ArdiaCore, a version bump), unchanged.
 chromium chromium-safe-storage-name.patch mac
 chromium chromium-safe-storage-no-silent-reset.patch mac
