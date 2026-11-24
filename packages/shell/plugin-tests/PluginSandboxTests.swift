@@ -53,7 +53,7 @@ final class PluginSandboxTests: XCTestCase {
     XCTAssertNil(refusal(sandbox()))
   }
 
-  func testFoldersThatTakeInArdiasDataOrConfigAreRefused() {
+  func testFoldersThatTakeInSolstice-sDataOrConfigAreRefused() {
     XCTAssertNotNil(refusal(sandbox(plugin: data)))
     XCTAssertNotNil(refusal(sandbox(plugin: config)))
     XCTAssertNotNil(refusal(sandbox(plugin: "\(config)/plugins")))
@@ -155,8 +155,8 @@ final class PluginSandboxTests: XCTestCase {
     let box = sandbox()
     XCTAssertEqual(try run(box, "cat '\(plugin)/plugin.json'"), 0, "reads its own folder")
     XCTAssertEqual(try run(box, "echo hi > '\(pluginData)/home/x'"), 0, "writes its data folder")
-    XCTAssertNotEqual(try run(box, "cat '\(data)/plugins.json'"), 0, "Ardia's data stays unreadable")
-    XCTAssertNotEqual(try run(box, "cat '\(config)/config.json'"), 0, "Ardia's config stays unreadable")
+    XCTAssertNotEqual(try run(box, "cat '\(data)/plugins.json'"), 0, "Solstice's data stays unreadable")
+    XCTAssertNotEqual(try run(box, "cat '\(config)/config.json'"), 0, "Solstice's config stays unreadable")
     XCTAssertNotEqual(try run(box, "cat '\(home)/notes.txt'"), 0, "home stays unreadable")
     XCTAssertNotEqual(try run(box, "echo hi > '\(plugin)/written'"), 0, "its own folder is read-only")
     XCTAssertNotEqual(try run(box, "echo hi > '\(root)/escape'"), 0, "nothing else is writable")

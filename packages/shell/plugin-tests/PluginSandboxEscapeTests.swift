@@ -729,9 +729,9 @@ final class PluginSandboxEscapeTests: XCTestCase {
   }
 
   func testCertificatesKeepOnlyWholeX509BlocksAndExtrasStaySeparate() throws {
-    let a = try makeCertificate("Ardia Test A")
-    let b = try makeCertificate("Ardia Test B")
-    let c = try makeCertificate("Ardia Test C")
+    let a = try makeCertificate("Solstice Test A")
+    let b = try makeCertificate("Solstice Test B")
+    let c = try makeCertificate("Solstice Test C")
     let system = "\(root)/system.pem"
     let corporate = "\(home)/corp.pem"
     try a.pem.write(toFile: system, atomically: true, encoding: .utf8)
@@ -752,8 +752,8 @@ final class PluginSandboxEscapeTests: XCTestCase {
       let certificate = SecCertificateCreateWithData(nil, der as CFData)!
       return SecCertificateCopySubjectSummary(certificate) as String? ?? "?"
     } }
-    XCTAssertEqual(names(kept.replacement), ["Ardia Test A", "Ardia Test B", "Ardia Test C"], "the system roots, then each distinct extra, nothing else")
-    XCTAssertEqual(names(kept.extra), ["Ardia Test B", "Ardia Test C", "Ardia Test A"], "the additive bundle holds every distinct supplied root, even one the system bundle has, since node doesn't read the system bundle")
+    XCTAssertEqual(names(kept.replacement), ["Solstice Test A", "Solstice Test B", "Solstice Test C"], "the system roots, then each distinct extra, nothing else")
+    XCTAssertEqual(names(kept.extra), ["Solstice Test B", "Solstice Test C", "Solstice Test A"], "the additive bundle holds every distinct supplied root, even one the system bundle has, since node doesn't read the system bundle")
     XCTAssertFalse(kept.replacement.contains(b.keyDER), "a key, even labelled CERTIFICATE, is never kept")
     XCTAssertEqual(PluginSandbox.certificateVariables(dataFolder: pluginData, staged: kept), [
       "SSL_CERT_FILE=\(pluginData)/certificates.pem", "GIT_SSL_CAINFO=\(pluginData)/certificates.pem", "NODE_EXTRA_CA_CERTS=\(pluginData)/extra-certificates.pem",
@@ -761,7 +761,7 @@ final class PluginSandboxEscapeTests: XCTestCase {
     XCTAssertEqual(PluginSandbox.certificateVariables(dataFolder: pluginData, staged: nil), ["SSL_CERT_FILE=/etc/ssl/cert.pem", "GIT_SSL_CAINFO=/etc/ssl/cert.pem"], "until a bundle is staged, the system roots")
     let huge = "\(root)/huge.pem"
     try String(repeating: c.pem, count: (PluginSandbox.certificateSourceLimit / c.pem.utf8.count) + 2).write(toFile: huge, atomically: true, encoding: .utf8)
-    XCTAssertEqual(names(PluginSandbox.certificates(from: ["SSL_CERT_FILE": huge], system: system).replacement), ["Ardia Test A"], "a file past the size limit isn't read")
+    XCTAssertEqual(names(PluginSandbox.certificates(from: ["SSL_CERT_FILE": huge], system: system).replacement), ["Solstice Test A"], "a file past the size limit isn't read")
   }
 
   func testCertificateSourcesNeverBlockAndAreReadOffTheCaller() throws {
@@ -771,7 +771,7 @@ final class PluginSandboxEscapeTests: XCTestCase {
     let kept = PluginSandbox.certificates(from: ["SSL_CERT_FILE": fifo], system: "\(root)/none.pem")
     XCTAssertLessThan(Date().timeIntervalSince(started), 1, "a FIFO is refused without waiting for a writer")
     XCTAssertEqual(kept, PluginSandbox.Certificates(replacement: "", extra: ""))
-    let a = try makeCertificate("Ardia Cache")
+    let a = try makeCertificate("Solstice Cache")
     let system = "\(root)/cache.pem"
     try a.pem.write(toFile: system, atomically: true, encoding: .utf8)
     let lifecycle = DispatchQueue(label: "test.lifecycle")
@@ -783,7 +783,7 @@ final class PluginSandboxEscapeTests: XCTestCase {
       XCTAssertNil(answered, "preparing returns at once and answers later on the lifecycle queue")
     }
     guard case .ready(let ready) = prepared(cache, ["NODE_EXTRA_CA_CERTS": fifo], on: lifecycle) else { return XCTFail("a FIFO source still lets preparation answer") }
-    XCTAssertEqual(names(ready.replacement), ["Ardia Cache"])
+    XCTAssertEqual(names(ready.replacement), ["Solstice Cache"])
     XCTAssertEqual(ready.extra, "")
     XCTAssertLessThan(Date().timeIntervalSince(preparing), 2)
   }
@@ -807,8 +807,8 @@ final class PluginSandboxEscapeTests: XCTestCase {
   }
 
   func testPreparationsForTheSameSettingsShareOneLoadAndATimedOutStartLeavesIt() throws {
-    let a = try makeCertificate("Ardia Share A")
-    let b = try makeCertificate("Ardia Share B")
+    let a = try makeCertificate("Solstice Share A")
+    let b = try makeCertificate("Solstice Share B")
     let system = "\(root)/system.pem"
     try a.pem.write(toFile: system, atomically: true, encoding: .utf8)
     let corporate = "\(root)/corp.pem"
@@ -850,14 +850,14 @@ final class PluginSandboxEscapeTests: XCTestCase {
     XCTAssertEqual(cache.waiting(for: given), 0)
     cache.willLoad = nil
     guard case .ready(let after) = prepared(cache, given) else { return XCTFail("not ready") }
-    XCTAssertEqual(names(after.extra), ["Ardia Share B"])
+    XCTAssertEqual(names(after.extra), ["Solstice Share B"])
     XCTAssertEqual(cache.loadsStarted, 2, "a start after the shared load finished starts its own")
   }
 
   func testTheCertificateCacheRereadsChangedSourcesForgetsRemovedRootsAndNeverCachesAFailure() throws {
-    let a = try makeCertificate("Ardia Root A")
-    let b = try makeCertificate("Ardia Root B")
-    let c = try makeCertificate("Ardia Root C")
+    let a = try makeCertificate("Solstice Root A")
+    let b = try makeCertificate("Solstice Root B")
+    let c = try makeCertificate("Solstice Root C")
     let system = "\(root)/system.pem"
     try a.pem.write(toFile: system, atomically: true, encoding: .utf8)
     let corporate = "\(root)/corp.pem"
@@ -874,19 +874,19 @@ final class PluginSandboxEscapeTests: XCTestCase {
     let extraBundle = "\(pluginData)/extra-certificates.pem"
     XCTAssertEqual(extras(), [], "a source that can't be read yet adds nothing")
     try b.pem.write(toFile: corporate, atomically: true, encoding: .utf8)
-    XCTAssertEqual(extras(), ["Ardia Root B"], "a failed read isn't cached: the file is read once it exists")
-    XCTAssertEqual(names(try String(contentsOfFile: extraBundle, encoding: .utf8)), ["Ardia Root B"])
+    XCTAssertEqual(extras(), ["Solstice Root B"], "a failed read isn't cached: the file is read once it exists")
+    XCTAssertEqual(names(try String(contentsOfFile: extraBundle, encoding: .utf8)), ["Solstice Root B"])
     try c.pem.write(toFile: corporate, atomically: true, encoding: .utf8)
-    XCTAssertEqual(extras(), ["Ardia Root C"], "a file replaced at the same path is read again, and the old root is gone")
+    XCTAssertEqual(extras(), ["Solstice Root C"], "a file replaced at the same path is read again, and the old root is gone")
     let handle = try FileHandle(forWritingTo: URL(fileURLWithPath: corporate))
     try handle.truncate(atOffset: 0)
     try handle.write(contentsOf: Data(b.pem.utf8))
     try handle.close()
-    XCTAssertEqual(extras(), ["Ardia Root B"], "a file rewritten in place is read again")
+    XCTAssertEqual(extras(), ["Solstice Root B"], "a file rewritten in place is read again")
     let width = max(b.pem.utf8.count, c.pem.utf8.count)
     let padded = { (pem: String) in pem + String(repeating: " ", count: width - pem.utf8.count) }
     try padded(b.pem).write(toFile: corporate, atomically: false, encoding: .utf8)
-    XCTAssertEqual(extras(), ["Ardia Root B"])
+    XCTAssertEqual(extras(), ["Solstice Root B"])
     var kept = stat()
     XCTAssertEqual(stat(corporate, &kept), 0)
     Thread.sleep(forTimeInterval: 0.05)
@@ -899,16 +899,16 @@ final class PluginSandboxEscapeTests: XCTestCase {
     XCTAssertEqual(stat(corporate, &after), 0)
     XCTAssertEqual(after.st_size, kept.st_size)
     XCTAssertEqual(after.st_mtimespec.tv_nsec, kept.st_mtimespec.tv_nsec, "same inode, size and modification time")
-    XCTAssertEqual(extras(), ["Ardia Root C"], "a rewrite that restores the modification time is still seen through the status-change time")
+    XCTAssertEqual(extras(), ["Solstice Root C"], "a rewrite that restores the modification time is still seen through the status-change time")
     try FileManager.default.removeItem(atPath: corporate)
     XCTAssertEqual(extras(), [], "a deleted file's roots disappear")
     XCTAssertFalse(FileManager.default.fileExists(atPath: extraBundle), "and so does the staged bundle that held them")
-    XCTAssertEqual(names(try String(contentsOfFile: "\(pluginData)/certificates.pem", encoding: .utf8)), ["Ardia Root A"])
+    XCTAssertEqual(names(try String(contentsOfFile: "\(pluginData)/certificates.pem", encoding: .utf8)), ["Solstice Root A"])
     try FileManager.default.removeItem(atPath: system)
     try b.pem.write(toFile: corporate, atomically: true, encoding: .utf8)
     guard case .ready(let systemless) = prepared(cache, given) else { return XCTFail("not ready") }
     XCTAssertEqual(systemless.replacement, "", "without usable system roots there is no replacement bundle, never an extras-only one")
-    XCTAssertEqual(names(systemless.extra), ["Ardia Root B"])
+    XCTAssertEqual(names(systemless.extra), ["Solstice Root B"])
     let staged = PluginSandbox.stage(.ready(systemless), in: folder)
     XCTAssertFalse(FileManager.default.fileExists(atPath: "\(pluginData)/certificates.pem"))
     XCTAssertEqual(PluginSandbox.certificateVariables(dataFolder: pluginData, staged: staged), [
@@ -920,8 +920,8 @@ final class PluginSandboxEscapeTests: XCTestCase {
   }
 
   func testAColdOnlineLaunchWaitsForTheCorporateRootsAndAnOfflineOneDoesNot() throws {
-    let a = try makeCertificate("Ardia Cold A")
-    let b = try makeCertificate("Ardia Cold B")
+    let a = try makeCertificate("Solstice Cold A")
+    let b = try makeCertificate("Solstice Cold B")
     let system = "\(root)/system.pem"
     try a.pem.write(toFile: system, atomically: true, encoding: .utf8)
     let corporate = "\(root)/corp.pem"
@@ -966,7 +966,7 @@ final class PluginSandboxEscapeTests: XCTestCase {
     let cold = try launch(network: true, cache: PluginCertificateCache(system: system))
     guard case .ready = cold.prepared else { return XCTFail("a cold cache still answers before the deadline: \(cold.prepared)") }
     XCTAssertTrue(cold.output.contains("roots=\(pluginData)/extra-certificates.pem"), cold.output)
-    XCTAssertEqual(names(cold.output), ["Ardia Cold B"], "the first online helper already has the corporate root: \(cold.output)")
+    XCTAssertEqual(names(cold.output), ["Solstice Cold B"], "the first online helper already has the corporate root: \(cold.output)")
     XCTAssertTrue(cold.output.contains("replace=\(pluginData)/certificates.pem"), cold.output)
     let late = try launch(network: true, cache: PluginCertificateCache(system: system), limit: 0)
     XCTAssertEqual(late.prepared, .timedOut)
@@ -977,19 +977,19 @@ final class PluginSandboxEscapeTests: XCTestCase {
   }
 
   func testThePEMScanIsLinearHandlesCRLFAndKeepsOnlyCertificateBlocks() throws {
-    let a = try makeCertificate("Ardia PEM A")
-    let b = try makeCertificate("Ardia PEM B")
+    let a = try makeCertificate("Solstice PEM A")
+    let b = try makeCertificate("Solstice PEM B")
     let crlf = a.pem.replacingOccurrences(of: "\n", with: "\r\n")
-    XCTAssertEqual(names(PluginSandbox.certificateBlocks(in: crlf).joined()), ["Ardia PEM A"], "CRLF line ends")
+    XCTAssertEqual(names(PluginSandbox.certificateBlocks(in: crlf).joined()), ["Solstice PEM A"], "CRLF line ends")
     let trusted = b.pem.replacingOccurrences(of: "BEGIN CERTIFICATE", with: "BEGIN TRUSTED CERTIFICATE").replacingOccurrences(of: "END CERTIFICATE", with: "END TRUSTED CERTIFICATE")
-    XCTAssertEqual(names(PluginSandbox.certificateBlocks(in: trusted + a.pem).joined()), ["Ardia PEM A"], "TRUSTED CERTIFICATE blocks are skipped")
+    XCTAssertEqual(names(PluginSandbox.certificateBlocks(in: trusted + a.pem).joined()), ["Solstice PEM A"], "TRUSTED CERTIFICATE blocks are skipped")
     let unended = String(repeating: "-----BEGIN CERTIFICATE-----\nAAAA\n", count: 200_000)
     var visited = 0
     let input = unended + b.pem
-    XCTAssertEqual(names(PluginSandbox.certificateBlocks(in: input, visited: &visited).joined()), ["Ardia PEM B"])
+    XCTAssertEqual(names(PluginSandbox.certificateBlocks(in: input, visited: &visited).joined()), ["Solstice PEM B"])
     XCTAssertEqual(visited, input.split(omittingEmptySubsequences: false, whereSeparator: { $0 == "\n" || $0 == "\r\n" }).count, "unmatched BEGIN lines are scanned once")
     let malformed = ["-----END CERTIFICATE-----", "-----BEGIN CERTIFICATE-----", "-----END PRIVATE KEY-----", Self.body(a.pem), "-----END CERTIFICATE-----", "-----BEGIN CERTIFICATE-----", "@@@", "-----END CERTIFICATE-----", b.pem].joined(separator: "\n")
-    XCTAssertEqual(names(PluginSandbox.certificateBlocks(in: malformed).joined()), ["Ardia PEM B"], "a stray END, a foreign END inside a block and a bad body each drop only their block")
+    XCTAssertEqual(names(PluginSandbox.certificateBlocks(in: malformed).joined()), ["Solstice PEM B"], "a stray END, a foreign END inside a block and a bad body each drop only their block")
   }
 
   func testTheCertificateBundleIsWrittenAtomicallyInsideTheDataFolder() throws {

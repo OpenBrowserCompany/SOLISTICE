@@ -65,7 +65,7 @@ final class PluginProgramsTests: XCTestCase {
     XCTAssertTrue(PluginPrograms.isRealFolder("\(pluginStore)/\(linked.version)/.leases"))
     XCTAssertEqual(run(binPath), "one")
     try "#!/bin/sh\necho changed\n".write(toFile: "\(folder)/bin/hello", atomically: true, encoding: .utf8)
-    XCTAssertEqual(run(binPath), "one", "the program runs from Ardia's copy, not the plugin's folder")
+    XCTAssertEqual(run(binPath), "one", "the program runs from Solstice's copy, not the plugin's folder")
   }
 
   func testOneOpenedFolderCanBeCopiedTwice() throws {
@@ -224,14 +224,14 @@ final class PluginProgramsTests: XCTestCase {
     let folder = try makePlugin("greeter", version: "1.0.0", say: "one")
     let linked = try install(folder, version: "1.0.0", adopt: true)
     XCTAssertTrue(linked.adopted)
-    XCTAssertEqual(PluginPrograms.linkTarget(binPath), "\(pluginStore)/current/bin/hello", "one ardia on PATH, Ardia's")
+    XCTAssertEqual(PluginPrograms.linkTarget(binPath), "\(pluginStore)/current/bin/hello", "one ardia on PATH, Solstice's")
     XCTAssertEqual(PluginPrograms.linkTarget("\(legacy)/current"), "\(pluginStore)/current")
     XCTAssertEqual(run("\(legacy)/current/bin/hello"), "one", "paths saved through the old home keep working")
     let left = try FileManager.default.contentsOfDirectory(atPath: legacy).sorted()
     XCTAssertEqual(left, [".lock", "0.2.40", "cua-driver", "current", "usage.json"], "a running old version and the home's own state stay")
     let again = try install(folder, version: "1.0.0", adopt: true)
     XCTAssertFalse(again.adopted, "adopting twice changes nothing")
-    XCTAssertEqual(again.adoption, .already, "and says it was already Ardia's")
+    XCTAssertEqual(again.adoption, .already, "and says it was already Solstice's")
   }
 
   func testAfterUpdateIsMarkedPerVersion() throws {
@@ -324,7 +324,7 @@ final class PluginProgramsTests: XCTestCase {
     let approved = PluginFiles.approvalHash(text: text, folderId: opened.id)
     let result = PluginPrograms.install(plugin: "greeter", from: opened, approved: approved, version: "1.0.0", programs: [tool], places: places, expectedDigest: signed)
     guard case .failure(let refusal) = result else { return XCTFail("a changed payload installed") }
-    XCTAssertEqual(refusal.reason, "its files don't match the ones Ardia downloaded and checked")
+    XCTAssertEqual(refusal.reason, "its files don't match the ones Solstice downloaded and checked")
     XCTAssertEqual(versions(), [])
     XCTAssertNil(PluginPrograms.linkTarget(binPath))
     XCTAssertEqual(chmod("\(folder)/bin/hello", 0o755), 0)
@@ -360,7 +360,7 @@ final class PluginProgramsTests: XCTestCase {
     try "written by python".write(toFile: "\(pluginStore)/\(linked.version)/lib/__pycache__/y.pyc", atomically: true, encoding: .utf8)
     let again = try install(folder, version: "1.0.0")
     XCTAssertEqual(again.version, linked.version)
-    XCTAssertFalse(again.fresh, "a cache Python wrote into the copy doesn't make Ardia replace it")
+    XCTAssertFalse(again.fresh, "a cache Python wrote into the copy doesn't make Solstice replace it")
   }
 
   func testACopyThatNoLongerVerifiesIsReplacedUnderANewNameAndTheOldOneIsKeptWhileLeased() throws {
@@ -423,7 +423,7 @@ final class PluginProgramsTests: XCTestCase {
     let folder = try makePlugin("greeter", version: "1.0.0", say: "one")
     let busy = try install(folder, version: "1.0.0", adopt: true)
     XCTAssertFalse(busy.adopted)
-    XCTAssertTrue(busy.adoptBusy, "a held lock is reported, so Ardia tries again")
+    XCTAssertTrue(busy.adoptBusy, "a held lock is reported, so Solstice tries again")
     XCTAssertEqual(PluginPrograms.linkTarget(binPath), "\(legacy)/current/bin/hello-tool", "the PATH link isn't taken while the old installer holds its lock")
     XCTAssertEqual(busy.linked, [])
     XCTAssertNil(busy.refused["hello-tool"], "a busy old install isn't reported as someone else's link")
@@ -499,7 +499,7 @@ extension PluginProgramsTests {
     XCTAssertEqual(flock(held, LOCK_EX), 0)
     let busy = try install(second, version: "2.0.0", adopt: true)
     XCTAssertTrue(busy.adoptBusy)
-    XCTAssertEqual(PluginPrograms.linkTarget("\(pluginStore)/current"), adoptedCurrent, "Ardia's own current isn't switched while the old installer holds its lock")
+    XCTAssertEqual(PluginPrograms.linkTarget("\(pluginStore)/current"), adoptedCurrent, "Solstice's own current isn't switched while the old installer holds its lock")
     XCTAssertEqual(PluginPrograms.linkTarget("\(legacy)/current"), "\(pluginStore)/current")
     XCTAssertEqual(run(binPath), "one", "what PATH runs is unchanged")
     XCTAssertFalse(PluginPrograms.shouldRunAfterUpdate(busy, plugin: "greeter", places: places), "no afterUpdate starts on a busy result")
