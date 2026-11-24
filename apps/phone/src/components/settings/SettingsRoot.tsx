@@ -28,7 +28,7 @@ import { refreshPageSummariesEnabled, usePageSummariesEnabled } from "../../stat
 import { destinationWords, dismissWords } from "../../lib/sharedWords";
 
 const APP_LINKS = [
-  { id: "ardia" as const, title: "Ardia" },
+  { id: "ardia" as const, title: "Solstice" },
   { id: "app" as const, title: "App" },
 ];
 
@@ -180,7 +180,7 @@ export function SettingsRoot() {
           <Text style={[font.body, { color: theme.label }]}>Show Onboarding</Text>
         </Pressable>}
         {material ? null : <View style={[styles.divider, { backgroundColor: theme.separator }]} />}
-        <NavRow title="About Ardia" icon="info" tint={settingsTint.neutral} onPress={() => pushSettings({ page: "about" })} />
+        <NavRow title="About Solstice" icon="info" tint={settingsTint.neutral} onPress={() => pushSettings({ page: "about" })} />
       </Group>
       <Text style={[font.footnote, styles.centered, { color: theme.secondaryLabel }]}>{appVersion()}</Text>
     </SettingsPage>

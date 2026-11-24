@@ -139,7 +139,7 @@ export function ExpoSyncConnectPage() {
             </PhraseButtons>
           )}
         </ExpoStep>
-        <ExpoStep number={2} title="Choose the Ardia Sync folder" detail={copy().chooseFolderDetail} progress={hasPhrase ? "current" : "upcoming"}>
+        <ExpoStep number={2} title="Choose the Solstice Sync folder" detail={copy().chooseFolderDetail} progress={hasPhrase ? "current" : "upcoming"}>
           <VStack alignment="leading" spacing={8}>
             {session && picked.folder && !picked.connecting ? <Label title={picked.folder.name} systemImage="folder.fill" modifiers={[font({ textStyle: "subheadline", weight: "medium" }), foregroundStyle(SECONDARY)]} /> : null}
             {session ? (
