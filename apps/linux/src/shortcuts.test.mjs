@@ -59,7 +59,7 @@ test("per-profile shortcut rows are named after their profiles, under the menus 
   const row = (id) => items.find((item) => item.id === id);
   assert.deepEqual([row("switchProfile:default").title, row("switchProfile:default").path], ["Personal", ["Window", "Profiles"]]);
   assert.deepEqual([row("switchProfile:p-mwjexflnk00i-p").title, row("switchProfile:p-mwjexflnk00i-p").defaultKey], ["Gallant AI", "2"]);
-  assert.deepEqual([row("newLittleArdia:p-mwjexflnk00i-p").title, row("newLittleArdia:p-mwjexflnk00i-p").path], ["Gallant AI", ["File", "New Little Ardia Window in Profile"]]);
+  assert.deepEqual([row("newLittleArdia:p-mwjexflnk00i-p").title, row("newLittleArdia:p-mwjexflnk00i-p").path], ["Gallant AI", ["File", "New Little Solstice Window in Profile"]]);
   assert.deepEqual(row("nextProfile").path, ["Window", "Profiles"]);
   assert(!items.some((item) => item.title.includes("p-mwjexflnk00i-p")));
 });
@@ -116,15 +116,15 @@ test("Ctrl+J dispatches the advertised Downloads command", () => {
   assert.equal(commandAt(linuxBindings(), 74, 4)?.command, "downloads");
 });
 
-test("Ctrl+Shift+Q quits Ardia and Settings lists it as a remappable Ardia shortcut", () => {
+test("Ctrl+Shift+Q quits Solstice and Settings lists it as a remappable Solstice shortcut", () => {
   const combo = keyboardCombo(event("KeyQ", { ctrlKey: true, shiftKey: true }));
   const binding = commandAt(linuxBindings(), combo.keyCode, combo.flags);
   assert.equal(binding?.command, "quit");
   assert.equal(binding?.arg, null);
   assert(!commandAt(linuxBindings(), 81, 4));
   const item = linuxMenuShortcuts().find((entry) => entry.id === "std:quit:");
-  assert.equal(item.title, "Quit Ardia");
-  assert.deepEqual(item.path, ["Ardia"]);
+  assert.equal(item.title, "Quit Solstice");
+  assert.deepEqual(item.path, ["Solstice"]);
   assert.equal(item.defaultKey, "q");
   assert.deepEqual([...item.defaultModifiers].sort(), ["command", "shift"]);
   assert.equal(commandAt(linuxBindings({ "std:quit:": ["q", "command", "option"] }), 81, 12)?.command, "quit");
