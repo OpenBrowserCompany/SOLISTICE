@@ -295,7 +295,7 @@
     },
     {
       "scene": "n7helpask",
-      "title": "Help fix Ardia? stays out of the way",
+      "title": "Help fix Solstice? stays out of the way",
       "body": "A new tab on an install that hasn't answered the sharing question. 0.2.45 put the card over the top of the page; now it waits in the bottom-left corner, out of the command bar's way.",
       "cam": [
         0,

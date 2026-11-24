@@ -61,7 +61,7 @@ static void Watch(void) {
 __attribute__((constructor)) static void RevealInit(void) {
   NSString *exe = NSProcessInfo.processInfo.arguments.firstObject.lastPathComponent;
   NSString *dir = NSProcessInfo.processInfo.environment[@"ARDIA_DATA_DIR"];
-  if (![exe isEqualToString:@"Ardia"] || !dir) return;
+  if (![exe isEqualToString:@"Solstice"] || !dir) return;
   gLog = [dir stringByAppendingPathComponent:@"film-pip.log"];
   gSeen = [NSMutableDictionary dictionary];
   dispatch_async(dispatch_get_main_queue(), ^{

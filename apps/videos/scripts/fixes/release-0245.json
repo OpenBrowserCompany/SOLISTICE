@@ -10,7 +10,7 @@
     {
       "scene": "peek", "source": "reuse", "from": "fixes-0245n3", "source_scene": "n3peek", "section": "New",
       "title": "Links from pinned tabs open in a Peek",
-      "body": "A link in a pinned mail app that opens a new tab, as Gmail's do. Before, it opened a tab and took you off the app; now it opens over the app in a Peek. Inside Little Ardia, new-tab links now stay in Little Ardia.",
+      "body": "A link in a pinned mail app that opens a new tab, as Gmail's do. Before, it opened a tab and took you off the app; now it opens over the app in a Peek. Inside Little Solstice, new-tab links now stay in Little Solstice.",
       "beforeVersion": "0.2.45-nightly.2", "afterVersion": "0.2.45-nightly.3"
     },
     {
@@ -53,7 +53,7 @@
     {
       "scene": "privacy", "source": "text", "section": "New",
       "title": "Settings › Privacy shows how you appear to us",
-      "body": "An anonymous name and avatar stand in for your install's random ID, with Reset My Anonymous ID. View My Data saves the last 7 days of what Ardia logged to your Downloads folder.",
+      "body": "An anonymous name and avatar stand in for your install's random ID, with Reset My Anonymous ID. View My Data saves the last 7 days of what Solstice logged to your Downloads folder.",
       "reason": "It lives in the Settings window, and this film records only the browser window of each hidden test instance.",
       "length": 3.4
     },
@@ -88,12 +88,12 @@
     {
       "scene": "lastwindow", "source": "reuse", "from": "fixes-0245n4", "source_scene": "n4close", "section": "Fixed",
       "title": "Closing your last window keeps it",
-      "body": "Pinned tabs, five open tabs and a Weekend group; the red button, then Ardia in the Dock. Before, it asked \"Close 5 tabs?\" and the Dock gave a fresh window; now it closes without asking and comes back as it was.",
+      "body": "Pinned tabs, five open tabs and a Weekend group; the red button, then Solstice in the Dock. Before, it asked \"Close 5 tabs?\" and the Dock gave a fresh window; now it closes without asking and comes back as it was.",
       "beforeVersion": "0.2.45-nightly.3", "afterVersion": "0.2.45-nightly.4"
     },
     {
       "scene": "bmfreeze", "source": "reuse", "from": "fixes-0245n1", "source_scene": "bmfreeze", "section": "Fixed",
-      "title": "Thousands of bookmarks no longer freeze Ardia",
+      "title": "Thousands of bookmarks no longer freeze Solstice",
       "body": "2,500 bookmarks imported with the bar set to Always. 0.2.44 never drew the bar and ignored a tab switch for 40 s; now the import takes half a second and tab switches are instant.",
       "afterVersion": "0.2.45-nightly.1"
     },
@@ -148,7 +148,7 @@
     {
       "scene": "pipwm", "source": "reuse", "from": "fixes-0245n1", "source_scene": "pipwm777", "section": "Fixed", "card": false,
       "title": "Tiling window managers leave it alone",
-      "body": "AeroSpace's rules over a workspace switch. 0.2.44's Picture in Picture counted as a dialog and was pulled back to Ardia's workspace; now it floats over every workspace.",
+      "body": "AeroSpace's rules over a workspace switch. 0.2.44's Picture in Picture counted as a dialog and was pulled back to Solstice's workspace; now it floats over every workspace.",
       "afterVersion": "0.2.45-nightly.1"
     },
     {
