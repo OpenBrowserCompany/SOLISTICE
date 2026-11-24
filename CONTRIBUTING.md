@@ -1,6 +1,6 @@
-# Contributing to Ardia
+# Contributing to Solstice
 
-Ardia is a macOS browser with Dia's polish and Arc's sidebar, running on Chrome's own framework (Chromium 157). Two
+Solstice is a macOS browser with Dia's polish and Arc's sidebar, running on Chrome's own framework (Chromium 157). Two
 people run it, with a lot of help from coding agents, and ship nightlies most days. From outside the team we take bug
 fixes, and only bug fixes. This page is the rules, and what the owner keeps asking for in review, written down so you
 don't have to learn it there.
@@ -17,7 +17,7 @@ you can send depends on who you are.
 | The team, `.github/TEAM.td` | Anything |
 
 A crash, a regression, and something that shipped and behaves wrong are bugs. A new setting, a new shortcut, a
-restyle, a new platform, and a Dia feature Ardia doesn't have yet are features, even when the pull request calls it a
+restyle, a new platform, and a Dia feature Solstice doesn't have yet are features, even when the pull request calls it a
 fix. Feature ideas go in [Ideas](https://github.com/ardia-browser/ardia/discussions/categories/ideas), not in an
 issue or a pull request.
 
@@ -33,7 +33,7 @@ requests opened from 14 November 2026; earlier ones are looked at one by one.
 
 ## What we will and won't take
 
-Ardia copies Dia's look and behaviour on purpose, and uses Arc's layout for the sidebar. A change that makes it
+Solstice copies Dia's look and behaviour on purpose, and uses Arc's layout for the sidebar. A change that makes it
 behave more like Dia is almost always welcome. A change that restyles it to taste is not, unless the owner asked.
 
 Out of scope:
@@ -63,13 +63,13 @@ prebuilt engine that matches your checkout's `engine/` folder
 If you change the engine you need your own Chromium build: `docs/engine-build.md` has the whole thing, and a first
 build takes about five hours.
 
-`pnpm macos` runs the app on its own data folder, `~/Library/Application Support/Ardia Dev`, so it never touches the
-Ardia you browse with. Keep it that way. A Debug build refuses to start without `ARDIA_DATA_DIR`, and every test
+`pnpm macos` runs the app on its own data folder, `~/Library/Application Support/Solstice Dev`, so it never touches the
+Solstice you browse with. Keep it that way. A Debug build refuses to start without `ARDIA_DATA_DIR`, and every test
 instance should get a throwaway one. To run a build without it popping up over your work:
 
 ```sh
 open -g -n --env ARDIA_BACKGROUND=1 --env ARDIA_DATA_DIR=/tmp/ardia-test \
-  --env ARDIA_REMOTE_DEBUGGING_PORT=9333 apps/browser/build/Build/Products/Debug/Ardia.app
+  --env ARDIA_REMOTE_DEBUGGING_PORT=9333 apps/browser/build/Build/Products/Debug/Solstice.app
 ```
 
 A JS-only change doesn't need a rebuild. Metro reloads it, though relaunch the instance before you judge the result.
@@ -117,7 +117,7 @@ Parity covers behaviour too. Most bugs the owner reports are UX that any browser
 
 ### It lets Chrome do the work
 
-Ardia is real Chromium. Before writing our own version of something, check whether Chrome already does it and we're
+Solstice is real Chromium. Before writing our own version of something, check whether Chrome already does it and we're
 getting in the way. "Shouldn't Chrome's default behaviour just work here?" is the first question the owner asks about
 a bug, and the answer is often yes. When a fix needs a hook in Chrome's code, keep it the smallest hook that works.
 
@@ -167,7 +167,7 @@ The end-to-end checks (shortcuts, tab dragging, profile swipes, windowing, sync,
 need a built app and run hidden instances. `docs/testing.md` lists each one with what it guards. When you fix a
 regression, add its case to the matching check so it can't come back quietly.
 
-Never read a real browser profile in a test, Ardia's included. Build fixtures. Screenshots for the site, the README or
+Never read a real browser profile in a test, Solstice's included. Build fixtures. Screenshots for the site, the README or
 a PR use neutral pages, never someone's feed or personal data.
 
 ## Engine changes
@@ -274,7 +274,7 @@ follow `docs/release-notes/README.md`. The site has to look right on a phone.
 
 ## Working with a coding agent
 
-Plenty of Ardia was written by agents, so using one is fine. Point it at `AGENTS.md` and `docs/agent-brief.md`
+Plenty of Solstice was written by agents, so using one is fine. Point it at `AGENTS.md` and `docs/agent-brief.md`
 first. Those files hold the owner's standing rules (hidden test instances, no focus stealing, isolated builds, the
 no-comments rule), and they're why a change goes in without a long back-and-forth. For risky logic (races, object
 lifetimes, security, migrations, sync), get a second model to review the change before and after, and reproduce each
@@ -283,7 +283,7 @@ End the PR description with the model and harness that did the work.
 
 ## License
 
-Ardia's own files are Apache-2.0, and Ardia as distributed is GPL-3.0 (see NOTICE). Before your first pull request
+Solstice's own files are Apache-2.0, and Solstice as distributed is GPL-3.0 (see NOTICE). Before your first pull request
 is merged you sign the [Contributor License Agreement](CLA.md): you keep the copyright in your work and license it to
 the project, including the right to relicense it, commercially as well. The CLA bot asks on your pull request, and
 signing is one comment.
