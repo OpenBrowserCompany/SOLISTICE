@@ -75,7 +75,7 @@ public struct SharedFolderDirectory {
       throw failure(code == ENOENT ? "There’s no folder at \(path)." : "Can’t open “\(name)”: \(String(cString: strerror(code)))")
     }
     guard !refusedFolder(real) else { throw Refused(message: "\(real) is a system or home folder; pick a folder inside it.") }
-    guard let found = identity(of: real) else { throw failure("“\(name)” isn’t a folder Ardia can sync.") }
+    guard let found = identity(of: real) else { throw failure("“\(name)” isn’t a folder Solstice can sync.") }
     guard access(real, R_OK | X_OK) == 0 else { throw failure("Can’t read “\(name)”: \(String(cString: strerror(errno)))") }
     return ["path": real, "device": found["device"]!, "inode": found["inode"]!]
   }
@@ -134,7 +134,7 @@ public struct SharedFolderDirectory {
     return .folder(folder)
   }
 
-  private var replacedMessage: String { "“\(root.lastPathComponent)” isn’t the folder Ardia added any more." }
+  private var replacedMessage: String { "“\(root.lastPathComponent)” isn’t the folder Solstice added any more." }
 
   public func read() -> [String: Any] {
     let folder: Folder
@@ -147,7 +147,7 @@ public struct SharedFolderDirectory {
     let budget = ScanBudget()
     let top = level(folder, depth: 0, budget: budget)
     if budget.exceeded {
-      return ["exists": false, "error": "“\(root.lastPathComponent)” holds more than \(Self.maxEntries) items or \(Self.maxScanBytes / 1024 / 1024) MB of links; Ardia syncs smaller folders."]
+      return ["exists": false, "error": "“\(root.lastPathComponent)” holds more than \(Self.maxEntries) items or \(Self.maxScanBytes / 1024 / 1024) MB of links; Solstice syncs smaller folders."]
     }
     return ["exists": true, "root": top]
   }
