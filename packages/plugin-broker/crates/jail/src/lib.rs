@@ -33,7 +33,7 @@ pub const PROGRAM_IN_JAIL: &str = "/run/ardia/program";
 pub const PROGRAM_FD_IN_JAIL: i32 = 13;
 pub const EXEC_STAGE_IN_JAIL: &str = "/run/ardia/exec";
 pub const LANDLOCK_MISSING: &str =
-    "This system's kernel lacks Landlock, which Ardia needs to sandbox plugins";
+    "This system's kernel lacks Landlock, which Solstice needs to sandbox plugins";
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Level {

@@ -477,7 +477,7 @@ fn run_sdk_bench(level: &str) {
     let seccomp_filters = status_field(main, "Seccomp_filters:");
     let no_new_privs = status_field(main, "NoNewPrivs:");
     let threads = status_field(main, "Threads:");
-    channel.reply(&hello, json!({ "app": "Ardia", "version": "test", "protocol": 2, "plugin": "sdk-bench", "values": {} }));
+    channel.reply(&hello, json!({ "app": "Solstice", "version": "test", "protocol": 2, "plugin": "sdk-bench", "values": {} }));
     let activated = channel.request("storage.set");
     assert_eq!(activated["params"]["key"], "activated");
     channel.reply(&activated, Value::Null);
