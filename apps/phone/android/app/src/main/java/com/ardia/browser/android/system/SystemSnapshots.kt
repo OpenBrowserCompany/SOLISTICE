@@ -1,9 +1,9 @@
-package com.ardia.browser.android.system
+package com.openbrowsercompany.solstice.android.system
 
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import com.ardia.browser.BrowserUrl
+import com.openbrowsercompany.solstice.BrowserUrl
 import com.ardia.sync.SyncSnapshot
 import com.ardia.sync.SyncState
 import com.ardia.sync.SyncedDevice

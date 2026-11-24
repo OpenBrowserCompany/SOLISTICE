@@ -1,4 +1,4 @@
-package com.ardia.browser.android.system
+package com.openbrowsercompany.solstice.android.system
 
 import android.content.Context
 import com.ardia.design.ProfileLook
