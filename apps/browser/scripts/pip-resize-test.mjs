@@ -320,7 +320,7 @@ try {
   }
 
   if (ok) {
-    await r.check("a press or a two-finger move on the window while another app is active asks for Ardia to become active with only that window in front", async () => {
+    await r.check("a press or a two-finger move on the window while another app is active asks for Solstice to become active with only that window in front", async () => {
       const asked = async () => (await engine("tabs.devEvents", { tabId })).filter((e) => e.name === "pictureInPictureActivated");
       const appActive = async (on) => {
         const native = (await engine("windows.list"))[0]?.window;
@@ -333,7 +333,7 @@ try {
       await pip(`mouse:down:${Math.round(s0.width / 2)},${Math.round(s0.height / 2)}`);
       await pip(`mouse:up:${Math.round(s0.width / 2)},${Math.round(s0.height / 2)}`);
       await sleep(400);
-      if ((await asked()).length !== whileActive) throw new Error("a press asked for activation while Ardia was already active");
+      if ((await asked()).length !== whileActive) throw new Error("a press asked for activation while Solstice was already active");
       await appActive(false);
       try {
       const before = (await asked()).length;
