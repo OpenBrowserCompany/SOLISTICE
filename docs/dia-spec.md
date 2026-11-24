@@ -1,4 +1,4 @@
-# Dia reference spec
+  # Dia reference spec
 
 Measured from Dia 1.49.1 on this machine. Sources: asset-catalog color tokens (`assetutil --info`),
 disassembled Metal (`metal-objdump`), 2× screen captures, and a 60 fps recording of the New Tab intro.
@@ -85,7 +85,7 @@ Measured materials (our own non-activating panels over solid backdrops; sRGB; ac
 
 - Frame: x = sidebar width, top 6, right 7, bottom 7. Radius 10.
 - Ours: 9 pt on every side, in every layout, by the owner's choice (2026-10-27): top, right, bottom and left at the
-  window's edge, between split panes and beside an extension's side panel, and in Little Ardia (below its bar). Docked
+  window's edge, between split panes and beside an extension's side panel, and in Little Solstice (below its bar). Docked
   beside the sidebar the card starts at its edge and the sidebar's rows, field and tiles sit 9 pt in from both its
   edges (owner, 2026-11-03: the sidebar's side matches the frame's thickness), so they're 9 pt from the window's edge and
   9 pt from the card. Dia's own inset is 6 with the card at the sidebar's width. The traffic lights
@@ -98,7 +98,7 @@ Measured materials (our own non-activating panels over solid backdrops; sRGB; ac
   (`pageFrameZeroInFullScreen`, `pageFrameZeroWhenTabsHidden`): the first drops the effective inset to 0 in macOS full
   screen; the second only when full screen and Auto-Hide Tabs are both on (`pageFrameInsetOf`); borderless wins over both.
   Otherwise the slider still applies. The inset applies at the window's edges, below the top strip's
-  sides, in Little Ardia below its bar, and to the floating sidebar (the peek), which sits `max(1, frame)` from the window's left, top and bottom, so it lines up with the card at every frame and keeps 1 pt off the edges at 0 (#3381);
+  sides, in Little Solstice below its bar, and to the floating sidebar (the peek), which sits `max(1, frame)` from the window's left, top and bottom, so it lines up with the card at every frame and keeps 1 pt off the edges at 0 (#3381);
   split panes and the extension side panel sit `max(frame, 2)` apart, so two panes still read as two edge to edge.
   Docked beside the sidebar the card starts at the sidebar's edge for any frame up to 9 (the sidebar's rows keep their
   9 pt), and `frame - 9` past it above that. The corner radius scales with the frame, `10 × min(1, frame / 9)` rounded
@@ -168,9 +168,9 @@ the same as top"), so if a Dia capture ever differs, the owner's equal insets wi
   chooser) 14.5 → 16.5 on all four sides; blocked pop-ups 13.5 → 16.5; history 13.5 → 16.5 (its favicons 18 in, a 16 pt
   favicon centred in the slot); Cast 14 → 16; Downloads' header caps and rows 16 / 16.
 - Placement in the page (`POPOVER_MARGIN`): every panel sits **8** from the card's side and 8 below the page's top
-  (the card's top with the address bar in the sidebar and in Little Ardia, the toolbar's hairline otherwise); it was 2
+  (the card's top with the address bar in the sidebar and in Little Solstice, the toolbar's hairline otherwise); it was 2
   (Site Controls, Zoom, pop-ups, history) or 4 (prompts, Cast, Share) below the top (owner, 2026-10-15). A panel taller
-  than the page (Site Controls in Little Ardia) scrolls inside an 8 pt margin at the bottom.
+  than the page (Site Controls in Little Solstice) scrolls inside an 8 pt margin at the bottom.
 
 ## Sidebar
 
@@ -189,13 +189,13 @@ the same as top"), so if a Dia capture ever differs, the owner's equal insets wi
       image at 100%). So YouTube gets a red ring, X a black one.
     - < 0.055, one colour → `template`: the tile filled with the mean colour, the icon drawn as a
       white template, the ring white with a soft-light compositing filter. A near-white icon (WCAG
-      relative luminance > 0.88) gets a black fill and an opaque white 30% ring instead. Ardia also gives
+      relative luminance > 0.88) gets a black fill and an opaque white 30% ring instead. Solstice also gives
       that white 30% ring to a near-black fill (luminance < 0.01, ChatGPT's black glyph): soft light can't
       lighten black, so Dia's ring vanishes along the edges and only the anti-aliased corners show
       (`DockSelection.ringStroke`, classic style only, drawn at render time so cached themes get it too).
     - No theme (a non-RGB image, no opaque pixels, no favicon): fill `TabBackgroundSelectedPrimary`
       (black / white), ring `TabDockItemDefaultSelectionStroke` (white .45 dark / black .48 light).
-      Ardia still draws its older look there (white 25% fill, black rim, `TabOutline` bevel).
+      Solstice still draws its older look there (white 25% fill, black rim, `TabOutline` bevel).
     - Only the primary selection draws the ring; a secondary selection is a
       `TabBackgroundSelectedSecondary` fill with no ring. The dock item has no `TabOutline` bevel
       or `TabSelectedShadow` of its own.
@@ -224,7 +224,7 @@ the same as top"), so if a Dia capture ever differs, the owner's equal insets wi
   2.7 pt from the box's outer edge, read as 3 pt, the row gap). The box appears while the pointer is over the group:
   `TabGroupNeutralBackground` (white 0.10 dark / black 0.05 light), edge `TabGroupSidebarStroke` (white / black 0.10).
   The header gets no hover fill (owner's capture, 2026-11-10), although the binary carries a
-  `TabGroupNeutralBackgroundHovered` colour (white 0.12 dark / 0.40 light). Fade time not recovered; Ardia uses the hover
+  `TabGroupNeutralBackgroundHovered` colour (white 0.12 dark / 0.40 light). Fade time not recovered; Solstice uses the hover
   card's 0.1 s curve.
 
 ### Tab hover card motion (Dia's binary, 2026-10-20)
@@ -245,7 +245,7 @@ corner**, the corner nearest the row.
 - Show delay: the controller sleeps **0.5 s** or **0.1 s** before presenting (a flag in the hover source picks which;
   not identified) and **0** when another card is already up. A click or key down dismisses it (local event monitor).
   The leave delay comes from the hover source's dismissal behaviour; no value in the binary. Both need a recording.
-- Ardia originally used the same curve, spring and scale, anchored at the card's top-left. Unlike Dia,
+- Solstice originally used the same curve, spring and scale, anchored at the card's top-left. Unlike Dia,
   since 2026-11-14 (#1584, #1365) it opens only after the pointer rests 0.8 s on one row (Dia: 0.5 s, then 0 for every
   next row), never moves from row to row with the pointer, leaves at once when the pointer leaves away from it (up, out
   of the far edge, or onto another row) and 160 ms after a leave toward it, and never opens for rows a peeking sidebar
@@ -270,7 +270,7 @@ Regular rows on the 37 pt pitch; the same for "+ New Tab" and ⌘T, and for the 
 - Curves: the slide is Core Animation's default, cubic-bezier(0.25, 0.1, 0.25, 1) over 0.14 s, no overshoot (a
   spring with ω ≈ 40 rad/s and damping ratio 0.9 fits almost as well). The fade is ease-out, cubic-bezier(0, 0, 0.58,
   1) over 0.10 s, opacity 1 → 0.
-- Ardia (`sidebar/ListMotion.tsx`): the same, for every top-level list entry (rows, splits, group blocks, the + row)
+- Solstice (`sidebar/ListMotion.tsx`): the same, for every top-level list entry (rows, splits, group blocks, the + row)
   and inside an expanded group, whose box grows or shrinks with its rows (a tab added as the group's last row: the box
   takes its height at once and what is below the group slides instead); several closes at once fade together. The row
   just under a new one is clipped at the new row's bottom edge while it slides, which gives Dia's look over our
@@ -443,7 +443,7 @@ recording: of three unpinned tabs, the two unselected close and the selected one
   - Open: the panel grows out of the field's box. Its left edge per 60fps frame (px at 2x): 676 (the field) → 674, 624,
     609, 601, 598, 595, 594, i.e. 63%, 82%, 92%, 95%, 99% of the way: an exponential ease-out of about 130ms (we
     copied it with `Easing.out(Easing.exp)`, 130ms, until #3283). Height grows with it. The content doesn't scale or move: the growing shape
-    uncovers it. Ardia doesn't copy this: the command bar is used all day, and the owner's motion rule (AGENTS.md, "Motion follows how often a thing is used") beats matching Dia there, so its panel opens at full size on the first frame (issue #3283; the grow came in with 50a7eeb78 on 2026-10-09).
+    uncovers it. Solstice doesn't copy this: the command bar is used all day, and the owner's motion rule (AGENTS.md, "Motion follows how often a thing is used") beats matching Dia there, so its panel opens at full size on the first frame (issue #3283; the grow came in with 50a7eeb78 on 2026-10-09).
 
 ### Logo (orb), measured from a same-screen capture
 
@@ -620,7 +620,7 @@ Implemented in `apps/browser/src/state/windows/profilePager.ts` (+ `components/w
   page changes.
 - **Wheel mice** (`nonGesturalScrollState`, `0x1005983c4`, events with no phase): scroll deltas add up while they
   come less than ~0.049 s apart; once |Σ| > 1 pt the view pages one page that way (sign flipped by
-  `isDirectionInvertedFromDevice`), then ignores wheel events for 0.25 s. Ardia does not copy the flip: AppKit has
+  `isDirectionInvertedFromDevice`), then ignores wheel events for 0.25 s. Solstice does not copy the flip: AppKit has
   already applied the device's scroll-direction setting to `scrollingDeltaX`, so a scroll left (Δx > 0) shows the
   previous page with Natural scrolling on or off, as the trackpad path does (the flip paged a wheel with it off
   backwards, #325).
@@ -750,7 +750,7 @@ than ours at the same cap height.
   else the stored one) and the page card starts at the sidebar's width. A 2× capture of the user's Dia (2026-09-26,
   inactive, dark) has its card at x 191 and rows at 6 … 185: that window's sidebar is 191 wide (resized), with the
   same 6 pt insets. Rows 34 tall (hairline at y 212.0 and 245.5), tiles 54 … 95, favicon, title and colours identical
-  to Ardia's to the pixel.
+  to Solstice's to the pixel.
 - Header (a horizontal stack, spacing 2, 6 after the window controls; items 34 tall): Dia's traffic lights are centred
   at x 24.75 / 47.75 / 70.75, y 26.75.
   - `SidebarProfileIndicatorButton` (`0x10542e234` …): the profile name, 13 pt semibold (NSFontWeightSemibold), single
@@ -779,7 +779,7 @@ than ours at the same cap height.
   shape), 16 pt wide, white 0.28 in dark over any row state (measured; which asset draws it wasn't traced).
 - The clean-tabs upsell is a borderless child window (not a popover), 316 wide: title at (24, 24), a 21 × 26
   illustration, body 16 below, then one row of 32 pt buttons 21 below: Not Now (or Don't Ask Again) at the left,
-  Clean Up Once and Clean Up Daily (8 apart) at the right (`0x103bca7d0`). Ardia's card lives in the 160–400 pt
+  Clean Up Once and Clean Up Daily (8 apart) at the right (`0x103bca7d0`). Solstice's card lives in the 160–400 pt
   sidebar, so it stacks the three buttons.
 
 ### Top tab strip (1.50.1, 2× capture of the user's window, 2026-09-30)
@@ -809,7 +809,7 @@ classes are `TabStrip.TabStripViewController`, `TabStripDockView` (the pinned gr
   the flares start).
 - **"+"**: a plain `plus` glyph, 10 pt wide, centred at (530.5, 20.5): a 32 pt button 4 after the last tab, white ~0.55.
 - Not captured (it would take clicking in Dia): hover and pressed states in the strip, a selected pinned tab, split
-  tabs, and light mode (groups: below). Ardia uses the sidebar's tokens there (`TabBackgroundHovered` 0.16 / 0.55,
+  tabs, and light mode (groups: below). Solstice uses the sidebar's tokens there (`TabBackgroundHovered` 0.16 / 0.55,
   `TabBackgroundPressed` 0.31 / 0.70, in a 32 pt row with radius 10).
 
 #### Groups (1.50.1, owner's 2× screen recording, 2026-09-30)
@@ -844,7 +844,7 @@ theme, a group "X" of five tabs after the pinned dock. Positions in points from 
 - **Picking a member** of an expanded group (13.29 s) selects it and leaves the group open; the group closed at 14.04 s,
   0.38 s after the pointer came to rest on the chip (the chip click, as at every other collapse in the recording), leaving
   the picked tab out after the chip.
-- Ardia (in-process snapshots, same state): dock 86 … 156, container from 164 (8 after the dock), chip 50, the active
+- Solstice (in-process snapshots, same state): dock 86 … 156, container from 164 (8 after the dock), chip 50, the active
   tab 6.5 after the chip, container 4.5 after it, the next tab 8 after the container; spring sampled in the app: response
   0.31 s / damping 0.81 expanding, 0.30 s / 0.82 collapsing, 1.1 % overshoot.
 
@@ -857,7 +857,7 @@ the layout's inputs, which say what it does: `TabStrip.TabStripLayout` takes a `
 `naturalWidth`, `minWidth` and `hasCloseButton`, plus a `primarySelectedTabID`, `tabsWithExpandedPreviewWidth` and a
 `hoverExitLayoutUnlockTask` (widths held until the pointer leaves after a close, Chrome's rule). A
 `TabStripClippingView` and a `fadeWidth` sit next to it. So: the selected tab has its own minimum, narrow tabs drop ×,
-the strip scrolls inside a clipped, faded view. Ardia (2026-11-15, `tabstrip/tokens.ts`): an even share of the room
+the strip scrolls inside a clipped, faded view. Solstice (2026-11-15, `tabstrip/tokens.ts`): an even share of the room
 down to each tab's own minimum, then scrolling: 32 pt for a tab with its own favicon (favicon only below 52 pt), 64 pt
 for a tab whose favicon is shared or missing, 128 pt for the selected tab, 173 pt at most; × on hover only, and not
 below 84 pt; an 88 pt fade (to 0.25 opacity) at an edge that hides tabs; widths spring on a selection change at Dia's
@@ -866,7 +866,7 @@ group spring (0.30 s, 0.82); drag auto-scroll within 48 pt of an edge, up to 14 
 #### Dragging tabs and split targets (1.50.1, owner's 2× recordings, 2026-10-01)
 
 Two recordings, dark, tabs on top (3024 × 1964, variable frame rate, every frame's own timestamp): one with three
-"New Tab" tabs dragged within and out of the strip (rec1026, 0–8 s; then Ardia 0.2.18), one with the active tab
+"New Tab" tabs dragged within and out of the strip (rec1026, 0–8 s; then Solstice 0.2.18), one with the active tab
 dragged onto the page and into a split (rec1027, 7.6 s). The page card spans x 6 … 1505.5 and y 38 … 908.5 (1499.5 ×
 870.5). Classes: `DragDrop.SplitTargetView` (`leftSplitTarget` / `rightSplitTarget`), titles "Add left split" / "Add
 right split"; the numbers are from the pixels.
@@ -895,7 +895,7 @@ right split"; the numbers are from the pixels.
   tab-shaped pill in ~0.05 s (1.758 → 1.808 s) and that strip makes room for it; let go there, the tab joins it.
 - **The pill** (rec1027, 1.483 s): for a frame or two before the card, the tab itself (its strip look, title and ✕)
   follows the pointer; then it becomes the card (1.508 s).
-- **Ardia** (`split/splitDrop.ts`, `SplitChrome.tsx`; the picture is `DragPreview` in `packages/shell/ios/DragPreview.swift`):
+- **Solstice** (`split/splitDrop.ts`, `SplitChrome.tsx`; the picture is `DragPreview` in `packages/shell/ios/DragPreview.swift`):
   the same target stages as fractions of the pane's card, the same lean, 0.11 s slide, a 0.2 s / 0.9 spring for the
   sizes; the dashes are React Native's (3 × the width: 2 pt → 6 / 6, 2.33 pt → 7 / 7). The picture is a borderless,
   non-activating panel that takes no mouse: the tab's own strip look as the pill (30 ms, then 60 ms into the card),
@@ -905,12 +905,12 @@ right split"; the numbers are from the pixels.
   into the new window in 0.2 s, then fades in 0.1 s. A background tab's card shows its own page: its last picture
   (taken 1.5 s after it was shown or went to another page; memory only, not in private windows), else its icon
   and title.
-- **Reordering, frame by frame** (the owner's 60 fps phone video of Dia and Ardia 0.2.22, 2026-10-02; frame strips in
+- **Reordering, frame by frame** (the owner's 60 fps phone video of Dia and Solstice 0.2.22, 2026-10-02; frame strips in
   `output/tab-drag/`): Dia's tab moves with the pointer from the first move and stays within about a frame of it
   (motion blur limits the reading); it's opaque, so the tab it passes doesn't show through. Once its leading edge
   passes a neighbour's centre, the neighbour slides into the place it left while the drag goes on: 91 % of the way
   in 43 ms, 97 % in 60, all of it by ~76 ms (a critically damped spring, ω ≈ 90 rad/s, ~0.07 s). Let go at its
-  place, nothing else moves. Ardia 0.2.22 in the same video: the tab stood still for 20 frames (333 ms) after the
+  place, nothing else moves. Solstice 0.2.22 in the same video: the tab stood still for 20 frames (333 ms) after the
   pointer set off (the drag picture's window snapshot, 0.13–0.35 s of the main thread at the press), the neighbours
   never moved (the dragged tab, at 0.92 opacity, slid over them), and the drop snapped everything in one frame. Now
   (`tabstrip/stripReorder.ts`): the snapshot waits until the tab leaves the strip and costs ~17 ms (the window at
@@ -953,7 +953,7 @@ in its place at full strength while a translucent copy follows the pointer.
   runs from the ring to 2 pt short of the row's right edge. It jumps between slots.
 - **Split halves**: over a row's middle a lighter rounded rect covers the half under the pointer: the row's height and
   corner radius, 97.5 pt wide on a 209.5 pt row, its inner edge 7 pt past the row's middle (so 14 pt between the
-  halves). Ardia draws it in the row's pressed fill.
+  halves). Solstice draws it in the row's pressed fill.
 - **Top Apps**: over the tiles the copy is a tile of the grid's tile size (the grid already reflowed for it) with the
   icon centred, under the pointer.
 - **The ghost** is see-through, with no border: one white alpha fits it over every background it crosses (sidebar
@@ -996,12 +996,12 @@ in its place at full strength while a translucent copy follows the pointer.
 Measured from a 13 s recording of the user's Dia (3024 × 1964, YouTube video, dark), frame by frame at 60 fps, the
 window 468 × 263 pt at (1034, 43), where the user had left it. Dia draws its own video PiP window (`PIP.VideoPIPContentController`,
 `PIPWindowController`) and keeps where it was last left (`LastVideoPIPPosition`); the first-ever default wasn't
-recovered (Ardia keeps Chrome's: a fifth of the work area, bottom right). Ardia restyles Chrome's own window
+recovered (Solstice keeps Chrome's: a fifth of the work area, bottom right). Solstice restyles Chrome's own window
 to these numbers (`chrome/browser/ardia/pip/` (`engine/chromium`)); a same-crop comparison is in the table.
 - **At rest**: only the video. Corners circular, **6 pt** (the outline fits a circle to 0.1 px at 2×), with a 1 pt rim
   of white **17 %** just inside the edge (content + 32…40 levels) and a faint shadow that follows the rounded corners
   (the backdrop is 3–4 levels darker next to the window, with a 1 px dark contact line). No title, host label or badge.
-  Ardia: Chrome's square, transparent window gets its content view clipped to 6 pt, the rim drawn over it and its
+  Solstice: Chrome's square, transparent window gets its content view clipped to 6 pt, the rim drawn over it and its
   shadow invalidated (`ArdiaPiPController.mm`); measured on a window capture: 6.0 pt radius, rim + 32…36 levels.
 - **Appears** about 125 ms after the tab switch, at full opacity (one black frame, then the video): no fade, no slide.
 - **Hover**: an even black scrim at **35 %** over the whole video (content × 0.645, same pixels before and after),
@@ -1020,7 +1020,7 @@ to these numbers (`chrome/browser/ardia/pip/` (`engine/chromium`)); a same-crop 
 - **Back to tab**: the tab shows at once, and the PiP window fades out over it in ~**70 ms** (84, 40, 11, 0 % at 60 fps)
   while the page swaps YouTube's "Playing in picture-in-picture" placeholder for the video (YouTube's own ~220 ms fade).
 
-| Measured (pt) | Dia | Ardia |
+| Measured (pt) | Dia | Solstice |
 |---|---|---|
 | Scrim (content ×) | 0.645 | 0.647 |
 | Back to tab button / glyph | 12, 12, 28 × 28 / ↖ 22.5–30.5 | same / same |
@@ -1031,11 +1031,11 @@ to these numbers (`chrome/browser/ardia/pip/` (`engine/chromium`)); a same-crop 
 | Controls fade in | ~200 ms ease-in-out | ~190 ms ease-in-out |
 | Fade out: close / back to tab | ~100 / ~70 ms | 100 / 70 ms (Core Animation) |
 
-Ardia differs in: the origin includes a port when the page has one (Chrome's formatting), and the play glyph
+Solstice differs in: the origin includes a port when the page has one (Chrome's formatting), and the play glyph
 (paused) and replay glyph weren't in the recording, so they're a rounded triangle of the same height and Chrome's icon.
-Ardia also has ±10 s buttons, which Dia doesn't (a user's request, issue #129): Chrome's replay 10 / forward 10 icons,
+Solstice also has ±10 s buttons, which Dia doesn't (a user's request, issue #129): Chrome's replay 10 / forward 10 icons,
 32 pt and bare white like the pause glyph, centred 76 pt either side of it; ← and → seek too. Chrome hides the controls
-2.5 s after the pointer stops; Ardia keeps them while the pointer rests on one of its buttons or the progress bar, so a
+2.5 s after the pointer stops; Solstice keeps them while the pointer rests on one of its buttons or the progress bar, so a
 second click on a still pointer (pause, then play) isn't lost as a window drag.
 
 ### Picture in Picture: moving and throwing it (1.53.0, read from the binary, 2026-10-22)
@@ -1074,15 +1074,15 @@ on its window.
   `LastVideoPIPPosition`. A thrown window is remembered by its corner and a dropped one by its frame.
 - **Tilt**: Dia also tilts the window while it's dragged (`dragAngleAnimation`, 0.005 × speed).
 
-**Ardia** (`ArdiaPiPController.mm`, the maths in `ArdiaPiPThrowMath.h`, tested by `pnpm -C packages/ardiacore test`)
+**Solstice** (`ArdiaPiPController.mm`, the maths in `ArdiaPiPThrowMath.h`, tested by `pnpm -C packages/ardiacore test`)
 does the same on Chrome's video PiP window, using the same drag threshold, 10 pt inset and spring. It
 differs in a few places:
 - Chrome's window can't tilt.
 - The window is remembered by its frame (Chrome's `ArdiaPictureInPicture.plist`), not by its corner.
-- A drag or swipe past a screen side keeps Ardia's 28 pt peek stash rather than Dia's off-screen one.
+- A drag or swipe past a screen side keeps Solstice's 28 pt peek stash rather than Dia's off-screen one.
 - A swipe whose fingers rested more than 0.1 s before lifting doesn't throw.
 - A swipe is a flick when its last event moved **10 pt** or more (`kSwipeSureFlingDelta`), or when macOS starts
-  momentum for it at over 350 pt/s. Ardia waits **80 ms** for that momentum (`kMomentumWait`) and accepts it up to
+  momentum for it at over 350 pt/s. Solstice waits **80 ms** for that momentum (`kMomentumWait`) and accepts it up to
   **0.3 s** late (`kMomentumLate`). Dia's 6 pt last-event rule isn't used, with inertia
   off either: a scroll event doesn't say which device sent it, so the inertia setting can't be matched to it.
 - A flick goes to the corner closest to its direction, with no ±45° limit, so it always lands somewhere.
