@@ -63,11 +63,11 @@ using policy::Kind;
 constexpr net::NetworkTrafficAnnotationTag kTrafficAnnotation =
     net::DefineNetworkTrafficAnnotation("ardia_linux_update_download", R"(
       semantics {
-        sender: "Ardia Linux self-update"
+        sender: "Solstice Linux self-update"
         description:
-          "Downloads a newer Ardia release for Linux from GitHub: its signed "
+          "Downloads a newer Solstice release for Linux from GitHub: its signed "
           "update manifest, the manifest's signature and the package for "
-          "the way Ardia is installed (.deb, tarball or AppImage), so Ardia "
+          "the way Solstice is installed (.deb, tarball or AppImage), so Solstice "
           "can install it and finish the update on restart."
         trigger:
           "A newer release found by Check for Updates, or by an automatic "
@@ -85,7 +85,7 @@ constexpr net::NetworkTrafficAnnotationTag kTrafficAnnotation =
       }
       policy {
         cookies_allowed: NO
-        setting: "Settings > General > Automatically update Ardia."
+        setting: "Settings > General > Automatically update Solstice."
         policy_exception_justification: "Not implemented."
       })");
 
@@ -443,7 +443,7 @@ class PackageDownload {
                                 linux_updates::UpdateFeed())) {
       return;
     }
-    LOG(WARNING) << "Ardia's update download refused a redirect to " << target.host();
+    LOG(WARNING) << "Solstice's update download refused a redirect to " << target.host();
     loader_.reset();
     Fail(policy::kNetworkReason);
   }

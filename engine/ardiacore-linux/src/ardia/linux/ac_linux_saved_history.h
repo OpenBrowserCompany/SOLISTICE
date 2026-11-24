@@ -8,8 +8,8 @@
 
 namespace ardiacore::linux_saved_history {
 
-inline constexpr char kTabHistoryDir[] = "Ardia Tab History";
-inline constexpr char kTabHistoryMarker[] = "Ardia Tab History Cleared";
+inline constexpr char kTabHistoryDir[] = "Solstice Tab History";
+inline constexpr char kTabHistoryMarker[] = "Solstice Tab History Cleared";
 inline constexpr char kReadArg[] = "savedHistoryRead";
 inline constexpr size_t kMaxSavedHistoryBytes = 32 * 1024 * 1024;
 
