@@ -12,7 +12,7 @@
 #include "Paths.h"
 #include "PointerLatch.h"
 
-namespace Ardia {
+namespace Solstice {
 
 namespace LaunchArguments {
 

@@ -29,7 +29,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{76B18A5C-106C-4344-A358-074047C30A3D}</ProjectGuid>
     <ProjectName>ArdiaLauncher</ProjectName>
-    <TargetName>Ardia</TargetName>
+    <TargetName>Solstice</TargetName>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>ArdiaLauncher</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
@@ -65,7 +65,7 @@
       <PreprocessorDefinitions>NOMINMAX;WIN32_LEAN_AND_MEAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)..\Ardia;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)..\Solstice;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -85,17 +85,17 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Ardia\EngineApi.h" />
-    <ClInclude Include="..\Ardia\resource.h" />
+    <ClInclude Include="..\Solstice\EngineApi.h" />
+    <ClInclude Include="..\Solstice\resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Launcher.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\Ardia\Ardia.rc" />
+    <ResourceCompile Include="..\Solstice\Ardia.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\Ardia\Ardia.ico" />
+    <Image Include="..\Solstice\Ardia.ico" />
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="Ardia.exe.manifest" />
@@ -105,6 +105,6 @@
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
   <Target Name="RequireWinRTRegistration" BeforeTargets="PrepareForBuild">
-    <Error Condition="!Exists('$(OutDir)ArdiaApp.winrt.manifest')" Text="'$(OutDir)ArdiaApp.winrt.manifest' is missing. The Ardia project writes it when it builds ArdiaApp.dll, so build Ardia.sln rather than this project alone." />
+    <Error Condition="!Exists('$(OutDir)ArdiaApp.winrt.manifest')" Text="'$(OutDir)ArdiaApp.winrt.manifest' is missing. The Solstice project writes it when it builds ArdiaApp.dll, so build Ardia.sln rather than this project alone." />
   </Target>
 </Project>

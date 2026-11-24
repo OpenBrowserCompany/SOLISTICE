@@ -8,7 +8,7 @@
 #include "PageCapture.h"
 #include "WindowManager.h"
 
-namespace Ardia {
+namespace Solstice {
 
 REACT_MODULE(WindowsModule, L"ArdiaAppWindows")
 struct WindowsModule {
