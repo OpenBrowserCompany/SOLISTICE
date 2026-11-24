@@ -4,11 +4,11 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import com.ardia.browser.NightShadeMode
-import com.ardia.browser.PageRequest
-import com.ardia.browser.PageZoom
-import com.ardia.browser.ReadableContentException
-import com.ardia.browser.WebsiteDataKind
+import com.openbrowsercompany.solstice.NightShadeMode
+import com.openbrowsercompany.solstice.PageRequest
+import com.openbrowsercompany.solstice.PageZoom
+import com.openbrowsercompany.solstice.ReadableContentException
+import com.openbrowsercompany.solstice.WebsiteDataKind
 import expo.modules.interfaces.permissions.PermissionsStatus
 import expo.modules.kotlin.Promise
 import expo.modules.kotlin.exception.CodedException
@@ -234,7 +234,7 @@ class PageViewModule : Module() {
         AsyncFunction("snapshot") Coroutine { pageId: String, options: SnapshotOptionsRecord ->
             withContext(Dispatchers.Main) {
                 val covered = options.coveredInsets?.takeIf { it.size == 2 }?.let { it[0] to it[1] }
-                PhonePages.snapshot(pageId, options.maxWidth ?: com.ardia.browser.Page.SNAPSHOT_WIDTH, options.quality ?: SNAPSHOT_QUALITY, covered, options.windowCopy ?: true)
+                PhonePages.snapshot(pageId, options.maxWidth ?: com.openbrowsercompany.solstice.Page.SNAPSHOT_WIDTH, options.quality ?: SNAPSHOT_QUALITY, covered, options.windowCopy ?: true)
             }
         }
 

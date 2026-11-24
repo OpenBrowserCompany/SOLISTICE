@@ -1,7 +1,7 @@
 package com.ardia.phone
 
 import android.content.Context
-import com.ardia.browser.NightShadeVerdictUse
+import com.openbrowsercompany.solstice.NightShadeVerdictUse
 
 object UsageConsent {
     private const val PREFERENCES = "ardia-usage-consent"
