@@ -74,10 +74,10 @@ store but through `storeAction` wrappers in each domain's `actions.ts` (`newTab`
 ## Actions
 - Windows: `createWindow`, `closeWindow`, `switchProfile`, `moveTabsToWindow`, `returnRefusedMove`, `moveTabToProfile`,
   `mergeAllWindows`, `reopenClosed` / `reopenClosedTab` / `reopenClosedWindow`, `restoreClosed`.
-  Little Ardia (Little Arc): `createWindow({ small: true, url })` makes a `kind: "small"` window with one tab (state/windows/small.ts),
+  Little Solstice (Little Arc): `createWindow({ small: true, url })` makes a `kind: "small"` window with one tab (state/windows/small.ts),
   in `lastActiveProfile(s)` unless `profileId` says otherwise; never private.
   `newTab` into it goes to `mainWindowFor(s, profileId)`; `resolveWindowId(s, null)` never picks it; closing it records a
-  `ClosedTab` with `small: true` that reopens in a new Little Ardia; it isn't saved with the session.
+  `ClosedTab` with `small: true` that reopens in a new Little Solstice; it isn't saved with the session.
 - Tabs: `newTab(windowId, { url, background, adoptId, openerId, profileId, pinned, index })`, `closeTabs(ids, { lastClosesWindow })`
   and `closeTab(id)` (the same path with `lastClosesWindow`, for ⌘W and ✕), `activate`, `navigate`, `updateTab(id, patch, live?)` (the live patch lands in the same store update), `updateLive`,
   `togglePin`, `moveTab`, `moveTabBy(id, ±1)` (both within the tab's pin section), `duplicateTab`. The engine's page reports go through `navigated(id, { url, title }, live)` and
@@ -168,7 +168,7 @@ that act on it: translate's detection, the web store's script, a screen-share re
 
 ## Live tabs: Chrome's tab strips (state/tabs/chromeTabs.ts, state/tabs/liveTabs.ts, packages/ardiacore/src/tabs.ts)
 
-One writer per fact. The store owns the **workspace**: sidebar order, pins, groups, splits, Little Ardia, unloaded
+One writer per fact. The store owns the **workspace**: sidebar order, pins, groups, splits, Little Solstice, unloaded
 and parked tiles, and which tab each window shows per profile (`activeTabIds`). Chrome's `TabStripModel` owns
 the **live tabs**: which tabs each Chrome window ("strip": one per engine profile per app window) has, their order,
 the active one, pins (and groups, once the engine reports them). JS never writes a live fact and never guesses who
@@ -280,40 +280,40 @@ ordered transaction that names its cause. There are no echo windows, timers or "
   and `.sidebar(windowId)` play synthetic trackpad gestures through the real tracker (pages scroll and ack for real); `acSwipe.history` opens the back/forward list.
 
 ## Internal pages, Settings, Import (components/pages, settings, import)
-- `ardia://history|bookmarks|downloads` tabs render React pages instead of a web view
+- `solstice://history|bookmarks|downloads` tabs render React pages instead of a web view
   (`openInternalPage(page, windowId)`, `isInternalTab(tab)` in components/pages).
 - Settings (⌘,) and Import are utility NSWindows with ids `settings` / `import` (`openSettings(pane)`,
   `openImport()` in state/settings/settingsWindows.ts); `runCommand` routes ⌘W there to close them.
 
-## ardia:// URLs (core appUrls.ts, like Dia's dia:// and Brave's brave://)
-- **The app's form is `ardia://`**, everywhere: `tab.url`, `navigation.url`, history, bookmarks,
+## solstice:// URLs (core appUrls.ts, like Dia's dia:// and Brave's brave://)
+- **The app's form is `solstice://`**, everywhere: `tab.url`, `navigation.url`, history, bookmarks,
   closed tabs, the bar, AppleScript. Nothing in the store is `chrome://`.
   - Input: `resolveInput` / `fixupUrl` turn `chrome://x`, `chrome:x`, `about:x` and `ardia:x` into
-    `ardia://x`. about:blank and about:srcdoc stay as they are.
-  - The engine boundary is packages/ardiacore `WebView`. Loading maps `ardia://` → `chrome://`
-    (`url` prop, `loadUrl`). Reporting maps `chrome://` → `ardia://` (navigation, open-window,
+    `solstice://x`. about:blank and about:srcdoc stay as they are.
+  - The engine boundary is packages/ardiacore `WebView`. Loading maps `solstice://` → `chrome://`
+    (`url` prop, `loadUrl`). Reporting maps `chrome://` → `solstice://` (navigation, open-window,
     popup, load-error, download and discard events, `navigationEntries`).
-  - Pages linking to `ardia://`: the engine (`ac_page_channel.h`) only follows these from a WebUI page (chrome://,
+  - Pages linking to `solstice://`: the engine (`ac_page_channel.h`) only follows these from a WebUI page (chrome://,
     devtools://) and drops them from web pages, like Chrome does for chrome://. That covers links,
     ⌘-clicks and popups.
-  - Display: `urlForDisplay` / `displayUrl` / `breadcrumb` show `ardia://version`, keeping the
+  - Display: `urlForDisplay` / `displayUrl` / `breadcrumb` show `solstice://version`, keeping the
     scheme and dropping a root "/". `tabLabel` (window title) and `hostLabel` (History / Bookmarks
-    pages) show `ardia://<host>`.
-  - History is Chrome's, which doesn't record its WebUI pages (`ardia://`).
+    pages) show `solstice://<host>`.
+  - History is Chrome's, which doesn't record its WebUI pages (`solstice://`).
 - **Where each host goes** (`appUrlRoute`):
 
   | URL | Opens |
   | --- | --- |
-  | `ardia://history`, `bookmarks`, `downloads` | Our React pages in the tab (components/pages). They take precedence over Chrome's pages, and `chrome://history` typed or reported lands here too. |
-  | `ardia://settings` | Our Settings window (state/pages/appUrls.ts). The tab doesn't change. |
-  | `ardia://settings/<pane>` | Our Settings window at that pane: general, profiles (also `people`, `manageProfile`), sync (also `syncSetup`), tabs, appearance, privacy, passwords, autofill (also `addresses`, `payments`), extensions, search (also `searchEngines`), shortcuts, liveFolders, calendar, advanced. |
-  | `ardia://settings/<anything else>` | Chrome's settings page (e.g. `settings/languages`, `settings/content`). |
-  | `ardia://newtab` | A New Tab page (a new tab). |
-  | `ardia://extensions` | Chrome's extensions page (as dia://extensions is in Dia): developer mode, load unpacked, errors, shortcuts. Our Settings › Extensions stays at `ardia://settings/extensions`. |
-  | Everything else: `version`, `gpu`, `net-internals`, `flags`, `inspect`, `about`, `chrome-urls`, `password-manager`, `downloads-internals`, … | Chrome's WebUI page, shown as `ardia://<host>`. |
+  | `solstice://history`, `bookmarks`, `downloads` | Our React pages in the tab (components/pages). They take precedence over Chrome's pages, and `chrome://history` typed or reported lands here too. |
+  | `solstice://settings` | Our Settings window (state/pages/appUrls.ts). The tab doesn't change. |
+  | `solstice://settings/<pane>` | Our Settings window at that pane: general, profiles (also `people`, `manageProfile`), sync (also `syncSetup`), tabs, appearance, privacy, passwords, autofill (also `addresses`, `payments`), extensions, search (also `searchEngines`), shortcuts, liveFolders, calendar, advanced. |
+  | `solstice://settings/<anything else>` | Chrome's settings page (e.g. `settings/languages`, `settings/content`). |
+  | `solstice://newtab` | A New Tab page (a new tab). |
+  | `solstice://extensions` | Chrome's extensions page (as dia://extensions is in Dia): developer mode, load unpacked, errors, shortcuts. Our Settings › Extensions stays at `solstice://settings/extensions`. |
+  | Everything else: `version`, `gpu`, `net-internals`, `flags`, `inspect`, `about`, `chrome-urls`, `password-manager`, `downloads-internals`, … | Chrome's WebUI page, shown as `solstice://<host>`. |
 - `settings` and `newtab` are handled in the store's `navigate` / `newTab` through `setAppUrlOpener`
   (state/tabs/tabs.ts). That covers every way a URL gets in: the bar, bookmarks, history, AppleScript,
-  opened URLs and links. A restored tab at `ardia://settings/…` loads Chrome's page.
+  opened URLs and links. A restored tab at `solstice://settings/…` loads Chrome's page.
 - The OS doesn't route `ardia:` to us. Like Dia and Brave, the app doesn't register the scheme,
-  so a web page can't open `ardia://quit` through Launch Services. `open -a Ardia 'ardia://version'`
+  so a web page can't open `solstice://quit` through Launch Services. `open -a Solstice 'solstice://version'`
   and AppleScript work, because those go to the app directly.

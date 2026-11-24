@@ -2,8 +2,8 @@
 
 End-to-end-encrypted sync with no server, no account and no Apple entitlement. Every Mac reads
 and writes sealed files in a folder the user picks; any service that syncs a folder carries them
-between Macs. The default is `iCloud Drive › Ardia Sync`
-(`~/Library/Mobile Documents/com~apple~CloudDocs/Ardia Sync`: iCloud Drive syncs any folder
+between Macs. The default is `iCloud Drive › Solstice Sync`
+(`~/Library/Mobile Documents/com~apple~CloudDocs/Solstice Sync`: iCloud Drive syncs any folder
 under it, with no CloudKit container and no entitlement). Dropbox, a NAS or a USB drive work
 the same way. A Mac that turned sync on before the rename keeps `Netnyahoo Sync`, and one setting up after it is
 offered that folder while it holds the data (`SyncModule.defaultFolder`).
@@ -63,7 +63,7 @@ Apple, Dropbox, whoever has the NAS or finds the USB drive, malware that reads c
   (CRIME-style).
 
 What they do see (metadata): how many profiles sync (one folder each) and how many devices; when
-and how much each writes (file count, times, sizes to 1 KiB); and that it's Ardia sync data
+and how much each writes (file count, times, sizes to 1 KiB); and that it's Solstice sync data
 (the `NNS1` magic and `.nns` extension).
 
 What they can do: delete or withhold files (denial of service). Withheld files show as
@@ -75,9 +75,9 @@ within a file, or move data between profiles.
 Not protected against:
 - Someone with the phrase. The phrase is the key, like Dia's.
 - Someone with the unlocked Mac. They have the data in the clear anyway.
-- A compromised Ardia binary.
+- A compromised Solstice binary.
 
-The phrase's entropy is in each Mac's login Keychain (`Ardia Sync Key`, this device only,
+The phrase's entropy is in each Mac's login Keychain (`Solstice Sync Key`, this device only,
 never iCloud Keychain). Losing every Mac and the Recovery Kit loses the synced data. There's no
 reset by email, because there's no one to email.
 
@@ -97,7 +97,7 @@ reset by email, because there's no one to email.
   - `name-key` (HMAC-SHA256) names folders: the chain tag is `HMAC("chain")` and a scope's tag
     is `HMAC("scope/<scope id>")`, each cut to 128 bits and written in base32.
   - The phrase already has 256 bits of entropy, so no password stretching is needed.
-- Where the entropy is kept: the login Keychain, as a generic password (`Ardia Sync Key`,
+- Where the entropy is kept: the login Keychain, as a generic password (`Solstice Sync Key`,
   account = this device's sync id, `kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly`, not
   synchronizable).
   - Test instances (`ARDIA_DATA_DIR`) keep it in a 0600 file in their data folder instead,
@@ -112,7 +112,7 @@ reset by email, because there's no one to email.
   Passwords pane; Stop Syncing ends it early. Cancelling returns nothing and changes nothing.
   The kit preview in the sheet is drawn with dots instead of the words. Hidden test instances
   never prompt: `ARDIA_TEST=reauth=granted` grants, anything else denies (#241).
-- The temporary kit for Copy and Share (`$TMPDIR/Ardia Recovery Kit/`) is deleted at launch.
+- The temporary kit for Copy and Share (`$TMPDIR/Solstice Recovery Kit/`) is deleted at launch.
 
 A wrong phrase is caught in one of two ways. A typo fails the checksum. A valid but different
 phrase derives a chain tag that isn't in the folder: "This recovery phrase doesn’t match the
@@ -317,7 +317,7 @@ Profiles).
 | `ptab:<sync id>` | app | `{ on }`: whether the profile syncs all open tabs | modelled on `pta:` (adopted on joining, by pairing and by Add to This Mac). No released adapter's prefix starts it (`pta:` needs the colon), so older Macs keep it unapplied |
 | `dev:<device id>` | app | `{ n (name), k (kind: "mac" or "phone"), f (what it takes: ["send"]) }` | removed when it stops syncing. `k` and `f` are new (the iPhone, and Macs on this build, which republish their record once); a record without them is a Mac that takes no sent tabs, and older Macs read only `n` |
 | `bm:<sync key>` | profile | `{ k, p (parent: its sync key, "bar" or "other"), t, u, a (added), pos }` | Bookmarks are Chrome's (BookmarkModel). A node's sync key is its Chrome UUID, or, for a bookmark synced before 0.2.20, its old id (`bm-…`, kept on Chrome's node as meta info `ac_sync_key`); every Mac makes an old key the node `bookmarkUuidFor` gives it, so Macs on either version name a bookmark alike (no renames, no duplicates; tested). Favicons stay local. A node whose folder was deleted elsewhere lands in Other Bookmarks; a cycle from two concurrent moves is broken the same way on every Mac (tested). Nothing is published or applied until the tree has been read from Chrome |
-| `h:<url>` | profile | `{ t, n (visits), vt (last 50 visit times) }` for pages visited in the last 90 days | History is Chrome's (HistoryService). Applying a record adds the visits Chrome lacks; a local edit is a visit the record doesn't have, so Macs settle on the union of their visits (tested). Not deletions: older history (it stays on the Mac that has it and is dropped from snapshots), URLs past the newest 100,000 the app reads, and pages Chrome doesn't keep (`ardia://`) |
+| `h:<url>` | profile | `{ t, n (visits), vt (last 50 visit times) }` for pages visited in the last 90 days | History is Chrome's (HistoryService). Applying a record adds the visits Chrome lacks; a local edit is a visit the record doesn't have, so Macs settle on the union of their visits (tested). Not deletions: older history (it stays on the Mac that has it and is dropped from snapshots), URLs past the newest 100,000 the app reads, and pages Chrome doesn't keep (`solstice://`) |
 | `tabs:<device id>` | profile | `{ n (device name), k?, tabs: [{ u, t }] }`: that device's 30 most recent open tabs | only its device writes it. It feeds the overflow menu's "Your Devices". The iPhone adds `k: "phone"`; Macs leave it out and read the kind from `dev:` |
 | `otab:t:<tab key>`, `otab:g:<group key>`, `otab:on` | profile | a regular tab `{ u, t, pos, g, a }` (its page and title, its place in the profile's one order, its innermost regular group's key or `null`, and when it was last selected, to the minute) and a regular group `{ n, i, c, p }` (name, icon, colour, parent group's key or `null`); `otab:on` is `{ on }`, written beside them when the switch goes off or on | only while the profile syncs all open tabs; see All open tabs. The key is the tab's or group's `pinKey`, else its id. No released adapter's prefix starts `otab` (the pinned area's claims `pin…`), so older Macs and the iPhone keep the records in their replica and snapshots and never tombstone them (tested with the 0.2.40 adapters) |
 | `send:<uuid>` | profile | `{ u, t, to (device id), from (device id), at (ms) }`: a tab sent to another device | Send Tab to Device; see below |
@@ -337,7 +337,7 @@ synced profile, or Settings › Profiles › the profile › Sync All Open Tabs.
 `ptab:`. Tab sync runs for a profile when it syncs on this Mac, its switch is on and What Syncs › Open Tabs is on here.
 It covers profiles that share another's data (tabs are each profile's own).
 - **What goes.** The profile's regular tabs in its main windows (not pinned, not in a pinned group, not a peek, not a
-  live folder's item) whose page is http or https. Private windows, Little Ardia, blank New Tab pages and `file:` pages
+  live folder's item) whose page is http or https. Private windows, Little Solstice, blank New Tab pages and `file:` pages
   stay local; a tab that navigates to one keeps its last record. Positions are one order per profile, but a Mac keeps a
   position as long as it's in order within that tab's window, so two Macs that spread the same tabs over different
   windows settle instead of resending the order (tested). Collapsed groups, splits, zoom and mute stay local.
@@ -403,7 +403,7 @@ What Chrome Sync does for extensions, through our folder (`packages/sync/src/ext
 `apps/browser/src/state/sync/extensions.ts`, Chrome's side in `engine/chromium/…/ardia/ac_extensions_sync.cc`).
 - **What syncs.** Extensions from the Chrome Web Store that Chrome itself would sync (`sync_util::ShouldSync`:
   installed by the user from the store, not by default, policy or a component, not blocklisted, no other update
-  URL), and not themes or apps. Unpacked extensions, Ardia Scripts and uBlock Origin (bundled) stay on their Mac. Per
+  URL), and not themes or apps. Unpacked extensions, Solstice Scripts and uBlock Origin (bundled) stay on their Mac. Per
   extension: on or off (the user's choice, Chrome's `DISABLE_USER_ACTION`), allowed in private windows, pinned to
   the toolbar (Chrome's saved pin, not whether it shows now). Not synced: its data and settings (`storage.sync`
   included), site access.
@@ -492,8 +492,8 @@ Settings › General › Sync. Dia puts sync in Account › Sync, with the secti
   Below is the sync folder, with Choose…. If iCloud Drive is off it says so, links to iCloud
   settings, and offers another folder; test instances never default to iCloud Drive.
   On Linux there's no cloud drive to default to: until a folder is chosen, the button is **Turn On…**, which asks
-  where the folder goes and makes an `Ardia Sync` folder inside the one picked. Two picks are used as they are: a
-  folder already named `Ardia Sync`, and a folder that already holds sync data, which goes to **Enter Recovery
+  where the folder goes and makes an `Solstice Sync` folder inside the one picked. Two picks are used as they are: a
+  folder already named `Solstice Sync`, and a folder that already holds sync data, which goes to **Enter Recovery
   Phrase…** instead of starting a second chain (`docs/linux-port.md` › Sync).
 - **Turn On Sync** makes a phrase and shows **Save Your Recovery Kit**, with Dia's copy:
   - "Your Recovery Kit contains all you need to recover your data should you lose access to
@@ -502,7 +502,7 @@ Settings › General › Sync. Dia puts sync in Account › Sync, with the secti
     lose access to this device.", with "another" underlined.
   - A preview of the page.
   - Buttons: Save…, Close, and Other Options (Copy, Share…, Save as Text…).
-  - The PDF is "Ardia Recovery Kit.pdf", US Letter as Dia's, with the 24 words and a QR code.
+  - The PDF is "Solstice Recovery Kit.pdf", US Letter as Dia's, with the 24 words and a QR code.
 - **Connect with Recovery Phrase.**
   - Dia's copy: "Enter your 24-word recovery phrase to sync with another device.", the
     placeholder "Enter your 24-word recovery phrase", the "%d/%d words" counter, "too many
@@ -577,7 +577,7 @@ bookmark, settings, profile or group edit, and on Sync Now. A cycle:
     - `SyncKeyStoreTests`: saving again replaces the key; a save the keychain refuses keeps the key it would have
       replaced; a test instance's key file is never wider than 0600 and nothing is left beside it.
     - `SharedFolderDirectoryTests`: the shared folders' reads and writes (symlinks, conflicts, size caps, permissions).
-    - `LegacyMigrationTests`, `LegacyKeychainTests`, `LegacyDockTileTests`: the Netnyahoo → Ardia migration.
+    - `LegacyMigrationTests`, `LegacyKeychainTests`, `LegacyDockTileTests`: the Netnyahoo → Solstice migration.
   - `node --test` (`packages/sync/src/**/*.test.ts`):
     - `scope.test.ts`, `fileHealth.test.ts`: concurrent edits converge in any order; deletes, re-adds and
       edit-after-delete; clock skew; late, out-of-order, half-copied and given-up files; an edit during a read; an
@@ -663,7 +663,7 @@ bookmark, settings, profile or group edit, and on Sync Now. A cycle:
 
 ## iPhone
 
-Ardia for iPhone is one more device in the same chain, with the same file format: it writes `dev:` (`k: "phone"`),
+Solstice for iPhone is one more device in the same chain, with the same file format: it writes `dev:` (`k: "phone"`),
 `tabs:`, history visits by the union rule, bookmarks it adds to Other Bookmarks and `send:` records, and keeps every
 other record untouched. It never compacts. Its side is in `docs/phone.md` › Sync on iPhone.
 

@@ -1,7 +1,7 @@
 # Naming crash and freeze frames
 
 Mac crashes (`$exception` from `native_crash` / `helper_crash`) and `app_freeze` events send their native frames as
-offsets: `Chromium Framework + 0x318e860`, `Ardia + 0x327180`. Each event also lists the UUID of every image it names
+offsets: `Chromium Framework + 0x318e860`, `Solstice + 0x327180`. Each event also lists the UUID of every image it names
 (`crash_images`, `freeze_images`). The dashboard shows a function name instead of the offset wherever that build's
 symbols are published.
 
@@ -9,7 +9,7 @@ symbols are published.
 
 1. **Symbols ship with each build.** `scripts/publish-engine.sh` uploads `ArdiaCore-<key:12>-symbols.tar.xz` and
    `-uuids.txt` to each `engine-<key:12>` release. Since #2396, `scripts/release.sh` does the same for the app
-   (`Ardia-<version>-symbols.tar.xz` and `-uuids.txt` on `v<version>`). See `docs/releasing.md` › Engines.
+   (`Solstice-<version>-symbols.tar.xz` and `-uuids.txt` on `v<version>`). See `docs/releasing.md` › Engines.
 2. **A job names the frames.** `scripts/symbolicate-frames.mjs` runs every hour (`.github/workflows/symbolicate.yml`):
    - it reads the distinct crash and freeze stacks of the last 14 days (the `reader` ClickHouse user);
    - for each image UUID it hasn't named, it finds the release whose `-uuids.txt` lists it, downloads that release's
@@ -33,7 +33,7 @@ For file and line in the app's own code, use `scripts/symbolicate-crash.sh` (ato
 ## Builds without a dSYM
 
 0.2.47 and 0.2.48 were built and published on a Mac before #2396 landed, and the build artifacts that held their
-archives have expired. No dSYM exists for their `Ardia` binary (`6c57f7df…`, `723e5f9d…`).
+archives have expired. No dSYM exists for their `Solstice` binary (`6c57f7df…`, `723e5f9d…`).
 `scripts/symbols/name-stripped-build.mjs` names such a build from the shipped binary, best evidence first:
 
 - **`objc`**: the binary's own Objective-C class tables (`dyld_info -objc`), which give exact names;
@@ -44,14 +44,14 @@ archives have expired. No dSYM exists for their `Ardia` binary (`6c57f7df…`, `
 On 0.2.47, code matches agreed with the Objective-C names on 3,426 of the 3,427 methods both covered, ignoring category
 labels (`+[ArdiaEarlyWindow pageMoved:]` vs `+[ArdiaEarlyWindow(Pages) pageMoved:]`). The one miss is a method two
 classes implement with byte-identical code, and there the Objective-C name wins. The tool writes a symbol map (source
-`match`); upload it to that version's release as `Ardia-<version>-symbol-map.tsv.gz` and the job picks it up:
+`match`); upload it to that version's release as `Solstice-<version>-symbol-map.tsv.gz` and the job picks it up:
 
 ```sh
-node scripts/symbols/name-stripped-build.mjs --target <shipped Ardia.app>/Contents/MacOS/Ardia \
-  --sibling <nearby Ardia.xcarchive>/Products/Applications/Ardia.app/Contents/MacOS/Ardia \
-  --dsym <nearby Ardia.xcarchive>/dSYMs/Ardia.app.dSYM/Contents/Resources/DWARF/Ardia \
-  --out Ardia-<version>-symbol-map.tsv.gz
-gh release upload v<version> -R ardia-browser/ardia Ardia-<version>-symbol-map.tsv.gz
+node scripts/symbols/name-stripped-build.mjs --target <shipped Solstice.app>/Contents/MacOS/Solstice \
+  --sibling <nearby Solstice.xcarchive>/Products/Applications/Solstice.app/Contents/MacOS/Solstice \
+  --dsym <nearby Solstice.xcarchive>/dSYMs/Solstice.app.dSYM/Contents/Resources/DWARF/Solstice \
+  --out Solstice-<version>-symbol-map.tsv.gz
+gh release upload v<version> -R ardia-browser/ardia Solstice-<version>-symbol-map.tsv.gz
 ```
 
 Hermes frames stay raw: no Hermes dSYM is published. Older engines (0.2.44 to 0.2.46 and early 0.2.47 nightlies)
