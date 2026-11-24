@@ -8,7 +8,7 @@ import { formatExact, formatPercent } from "@/lib/format";
 import type { SectionData } from "@/server/sections";
 
 export const Route = createFileRoute("/_app/")({
-  head: () => ({ meta: [{ title: "Needs attention · Ardia" }] }),
+  head: () => ({ meta: [{ title: "Needs attention · Solstice" }] }),
   component: Overview,
 });
 type Attention = SectionData<"attention">;

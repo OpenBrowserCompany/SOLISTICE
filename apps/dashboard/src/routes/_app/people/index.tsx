@@ -25,7 +25,7 @@ export const Route = createFileRoute("/_app/people/")({
     if (PEOPLE_FILTERS.includes(search.only as PeopleFilter) && search.only) out.only = search.only as PeopleSearch["only"];
     return out;
   },
-  head: () => ({ meta: [{ title: "People · Ardia" }] }),
+  head: () => ({ meta: [{ title: "People · Solstice" }] }),
   component: PeoplePage,
 });
 

@@ -14,7 +14,7 @@ import { getPerson } from "@/lib/people-api";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_app/people/$id")({
-  head: () => ({ meta: [{ title: "Person · Ardia" }] }),
+  head: () => ({ meta: [{ title: "Person · Solstice" }] }),
   component: PersonPage,
 });
 
