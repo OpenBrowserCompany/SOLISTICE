@@ -18,7 +18,7 @@
 #include "SyncVault.h"
 #include "WindowManager.h"
 
-namespace Ardia {
+namespace Solstice {
 
 namespace SyncModuleParts {
 
