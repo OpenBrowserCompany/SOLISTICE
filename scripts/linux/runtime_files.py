@@ -204,7 +204,7 @@ def unpack(archive, into, key):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Selects, copies and checks the Chromium runtime files Ardia ships on Linux.')
+    parser = argparse.ArgumentParser(description='Selects, copies and checks the Chromium runtime files Solstice ships on Linux.')
     commands = parser.add_subparsers(dest='command', required=True)
     listing = commands.add_parser('list', help='print the runtime files present in a Chromium out dir or engine dir')
     listing.add_argument('directory', type=pathlib.Path)

@@ -7,10 +7,10 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 const USAGE = `usage: node scripts/linux/sign-update.mjs --dir DIR --version V (--key PEM | --unsigned) [--public-key PEM]
 
-Writes Ardia-<V>-linux-update.txt, the Linux self-update manifest, for the
-Ardia-<V>-linux-x64.deb, .tar.xz and .AppImage present in DIR (each line
+Writes Solstice-<V>-linux-update.txt, the Linux self-update manifest, for the
+Solstice-<V>-linux-x64.deb, .tar.xz and .AppImage present in DIR (each line
 carries the file's sha256 and size), and with --key its raw Ed25519 signature
-Ardia-<V>-linux-update.txt.sig. --key is a PKCS#8 PEM (openssl genpkey
+Solstice-<V>-linux-update.txt.sig. --key is a PKCS#8 PEM (openssl genpkey
 -algorithm ed25519); the script refuses a key whose public half isn't
 --public-key (default scripts/linux/linux-update.pem, the key installs verify
 with). --unsigned writes only the manifest, for a build without the key.`;
@@ -25,8 +25,8 @@ const MAX_PACKAGE_BYTES = 512 * 1024 * 1024;
 export const MAX_MANIFEST_BYTES = 4096;
 export const DEFAULT_PUBLIC_KEY = fileURLToPath(new URL("./linux-update.pem", import.meta.url));
 
-export const packageName = (version, extension) => `Ardia-${version}-linux-x64.${extension}`;
-export const manifestName = (version) => `Ardia-${version}-linux-update.txt`;
+export const packageName = (version, extension) => `Solstice-${version}-linux-x64.${extension}`;
+export const manifestName = (version) => `Solstice-${version}-linux-update.txt`;
 
 function sha256File(path) {
   return new Promise((done, failed) => {
@@ -66,7 +66,7 @@ export async function buildManifest(dir, version) {
     if (sidecar !== null && sidecar.trim().split(/\s+/)[0] !== digest) throw new Error(`${name} has sha256 ${digest}, but ${name}.sha256 says otherwise`);
     lines.push(`${format} ${name} ${digest} ${info.size}`);
   }
-  if (lines.length === 2) throw new Error(`no Ardia-${version}-linux-x64.deb, .tar.xz or .AppImage in ${dir}`);
+  if (lines.length === 2) throw new Error(`no Solstice-${version}-linux-x64.deb, .tar.xz or .AppImage in ${dir}`);
   const manifest = Buffer.from(lines.map((line) => `${line}\n`).join(""), "ascii");
   if (manifest.length > MAX_MANIFEST_BYTES) throw new Error(`the manifest is ${manifest.length} bytes, over ${MAX_MANIFEST_BYTES}`);
   return manifest;

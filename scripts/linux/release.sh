@@ -2,15 +2,15 @@
 set -euo pipefail
 usage='usage: scripts/linux/release.sh <version> [--engine exact|nearest|<dir>] [--out <dir>] [--update-key <pem>] [--allow-dirty]
 
-Builds the Linux x64 release of Ardia <version> (a -nightly.<n> version is a
+Builds the Linux x64 release of Solstice <version> (a -nightly.<n> version is a
 nightly), the Linux counterpart of scripts/release.sh: it fetches the engine,
 builds apps/linux/dist and the ardia CLI, prepares uBlock Origin, packages
-Ardia-<version>-linux-x64.tar.xz with lib/ardia/VERSION and the CLI, and the
-same build as Ardia-<version>-linux-x64.deb and .AppImage, writes
+Solstice-<version>-linux-x64.tar.xz with lib/ardia/VERSION and the CLI, and the
+same build as Solstice-<version>-linux-x64.deb and .AppImage, writes
 ardia-bin-<version>.src.tar.gz (the Arch PKGBUILD and .SRCINFO pinned to that
 tarball), the .sha256 files and provenance.txt, runs the smoke gate on
 the tarball, the .deb and the AppImage, and writes the self-update manifest
-Ardia-<version>-linux-update.txt (scripts/linux/sign-update.mjs). It never
+Solstice-<version>-linux-update.txt (scripts/linux/sign-update.mjs). It never
 publishes: it prints the gh release upload command for the assets.
 
   --engine exact     the published engine of this commit'"'"'s engine key (default;
@@ -95,11 +95,11 @@ node scripts/lib/release-note.mjs "docs/release-notes/$version.md" headline >/de
 release_output_entry() {
   case $1 in
     provenance.txt|ui-build.log|ubo.log|smoke|smoke-deb|smoke-appimage) return 0 ;;
-    Ardia-*-linux-x64.tar.xz|Ardia-*-linux-x64.tar.xz.sha256) return 0 ;;
-    Ardia-*-linux-x64.deb|Ardia-*-linux-x64.deb.sha256|Ardia-*-linux-x64.AppImage|Ardia-*-linux-x64.AppImage.sha256) return 0 ;;
+    Solstice-*-linux-x64.tar.xz|Solstice-*-linux-x64.tar.xz.sha256) return 0 ;;
+    Solstice-*-linux-x64.deb|Solstice-*-linux-x64.deb.sha256|Solstice-*-linux-x64.AppImage|Solstice-*-linux-x64.AppImage.sha256) return 0 ;;
     ardia-bin-*.src.tar.gz|ardia-bin-*.src.tar.gz.sha256) return 0 ;;
     ardia-cli-*-linux-x64.tar.gz|ardia-cli-*-linux-x64.tar.gz.sha256) return 0 ;;
-    Ardia-*-linux-update.txt|Ardia-*-linux-update.txt.sig) return 0 ;;
+    Solstice-*-linux-update.txt|Solstice-*-linux-update.txt.sig) return 0 ;;
   esac
   return 1
 }
@@ -117,12 +117,12 @@ if [ -e "$out" ]; then
 fi
 mkdir -p "$out"
 out=$(cd "$out" && pwd -P)
-package_name="Ardia-$version-linux-x64.tar.xz"
-deb_name="Ardia-$version-linux-x64.deb"
-appimage_name="Ardia-$version-linux-x64.AppImage"
+package_name="Solstice-$version-linux-x64.tar.xz"
+deb_name="Solstice-$version-linux-x64.deb"
+appimage_name="Solstice-$version-linux-x64.AppImage"
 cli_name="ardia-cli-$version-linux-x64.tar.gz"
 srcpkg_name="ardia-bin-$version.src.tar.gz"
-update_name="Ardia-$version-linux-update.txt"
+update_name="Solstice-$version-linux-update.txt"
 export SOURCE_DATE_EPOCH=${SOURCE_DATE_EPOCH:-$(git log -1 --format=%ct)}
 
 echo "==> Engine ($engine_mode)"
