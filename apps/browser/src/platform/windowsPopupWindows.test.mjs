@@ -585,7 +585,7 @@ test("with pop-ups as tabs on, a pop-up from a pop-up window opens as a tab besi
   unmount();
 });
 
-test("with pop-ups as tabs on, a pop-up from Little Ardia stays a pop-up window, as on the Mac", async () => {
+test("with pop-ups as tabs on, a pop-up from Little Solstice stays a pop-up window, as on the Mac", async () => {
   assert.match(windowsSource("modules.ts"), /openWindow: \(native\) => \(id, options\) => \{\n(?:.*\n){0,2}\s+noteAppWindow\(String\(id\), \(options as OpenWindowOptions \| null\)\?\.kind\);\n(?:.*\n){0,2}\s+return native\(id, options\);/);
   noteAppWindow("little-ardia-1", "small");
   const events = [];

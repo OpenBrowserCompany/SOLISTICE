@@ -74,7 +74,7 @@ test("a failed engine call rejects with the engine's error, through the Windows 
 test("the shared page view reaches the Windows calls with the engine's address", async () => {
   const { call, received } = host({ evaluate: { result: "true" } });
   const shared = webViewHandle({ current: { ...enginePageCalls(call, "page-e"), nativeTag: null } });
-  await shared.loadUrl("ardia://settings", { userInitiated: true });
+  await shared.loadUrl("solstice://settings", { userInitiated: true });
   assert.equal(await shared.evaluate("1"), true);
   assert.deepEqual(received, [
     ["page-e", "loadUrl", { url: "chrome://settings", userInitiated: true }],

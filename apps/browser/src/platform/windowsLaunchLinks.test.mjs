@@ -27,7 +27,7 @@ test("the default browser's --single-argument form opens its whole remainder as 
 });
 
 test("other schemes are refused, as the running app's relaunch refuses them", () => {
-  for (const text of ["javascript:alert(1)", "mailto:a@example.com", "ardia://settings", "data:text/html,hi", "chrome://settings", "localhost:3000", "ftp://example.com/"]) {
+  for (const text of ["javascript:alert(1)", "mailto:a@example.com", "solstice://settings", "data:text/html,hi", "chrome://settings", "localhost:3000", "ftp://example.com/"]) {
     assert.equal(addressOf({ text }), null, text);
   }
 });
