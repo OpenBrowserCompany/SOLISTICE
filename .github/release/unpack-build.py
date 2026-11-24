@@ -14,8 +14,8 @@ VERSION_PATTERN = r"[0-9]+\.[0-9]+\.[0-9]+(-nightly\.[0-9]+)?"
 if not re.fullmatch(VERSION_PATTERN, version):
     sys.exit(USAGE)
 
-ARCHIVE = "Ardia.xcarchive"
-APP = f"{ARCHIVE}/Products/Applications/Ardia.app"
+ARCHIVE = "Solstice.xcarchive"
+APP = f"{ARCHIVE}/Products/Applications/Solstice.app"
 TOP_FILES = {"provenance.txt"}
 ARCHIVE_DIRS = {ARCHIVE, f"{ARCHIVE}/Products", f"{ARCHIVE}/Products/Applications", f"{ARCHIVE}/dSYMs"}
 
@@ -137,8 +137,8 @@ with open(os.path.join(real_dest, APP, "Contents/Info.plist"), "rb") as handle:
         info = plistlib.load(handle)
     except Exception:
         fail("the app's Info.plist isn't a property list")
-expected = {"CFBundleIdentifier": "com.ardia.browser", "CFBundleExecutable": "Ardia", "CFBundleShortVersionString": version}
+expected = {"CFBundleIdentifier": "com.openbrowsercompany.solstice", "CFBundleExecutable": "Solstice", "CFBundleShortVersionString": version}
 for key, value in expected.items():
     if info.get(key) != value:
         fail(f"the app's {key} isn't {value}")
-print(f"unpacked {len(members)} members into {dest}: Ardia.app {version} (com.ardia.browser)")
+print(f"unpacked {len(members)} members into {dest}: Solstice.app {version} (com.openbrowsercompany.solstice)")
