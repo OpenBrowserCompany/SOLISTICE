@@ -1,4 +1,4 @@
-// Copyright 2026 Ardia. Apache-2.0.
+// Copyright 2026 Solstice. Apache-2.0.
 
 #ifndef ARDIA_CORE_AC_WINDOWLESS_PAGE_H_
 #define ARDIA_CORE_AC_WINDOWLESS_PAGE_H_

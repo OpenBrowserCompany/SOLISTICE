@@ -89,7 +89,7 @@ WindowHost::WindowHost(ArdiaCoreWindow* owner, const gfx::Rect& bounds)
   widget_delegate_->SetCanResize(true);
   widget_delegate_->SetCanMaximize(true);
   widget_delegate_->SetCanMinimize(true);
-  widget_delegate_->SetTitle(u"Ardia");
+  widget_delegate_->SetTitle(u"Solstice");
   widget_delegate_->SetClientViewFactory(base::BindOnce(
       [](base::WeakPtr<WindowHost> host, views::Widget* widget,
          views::View* contents) -> std::unique_ptr<views::ClientView> {
