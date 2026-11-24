@@ -5,7 +5,7 @@
     {
       "scene": "n4close",
       "title": "Closing your last window keeps it",
-      "body": "Pinned tabs, five open tabs and a Weekend group; the red button, then Ardia in the Dock. nightly.3 asked \"Close 5 tabs?\" and the Dock gave a fresh window with only the pins; now it closes without asking and comes back as it was.",
+      "body": "Pinned tabs, five open tabs and a Weekend group; the red button, then Solstice in the Dock. nightly.3 asked \"Close 5 tabs?\" and the Dock gave a fresh window with only the pins; now it closes without asking and comes back as it was.",
       "note": "Before's warning drawn from what nightly.3 logged",
       "cam": [0, 0, 920, 600],
       "lead": 1.4,
