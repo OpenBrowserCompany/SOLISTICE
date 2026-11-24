@@ -4,7 +4,7 @@ These tests guard the places where data the user didn't type reaches a privilege
 messages and events, values a page returns from evaluated script, other devices' sync records, links from other apps,
 plugin calls and the control socket. They run in the normal checks (`pnpm -C apps/browser test`, the packages'
 portable tests and CI on every pull request) and add about 9 seconds. [Outbound secrets](#outbound-secrets) covers
-the reverse: secrets Ardia holds never leaving through telemetry, logs, sync files or the control socket.
+the reverse: secrets Solstice holds never leaving through telemetry, logs, sync files or the control socket.
 
 0.2.48 fixed a picked selector with a line break in it, which the content blocker stored as an extra filter line. The
 value had passed a check that was right for the input it expected. These tests check what the privileged
@@ -17,8 +17,8 @@ wrong for an awkward one fails here and not in a release.
 | --- | --- | --- |
 | Boundary table | `apps/browser/src/boundaries.json`, `apps/browser/src/boundaries.test.mjs` | Entry points written in the forms listed under [What the table detects](#what-the-table-detects), plus hand-kept rows for native gates. Each row names its source and its guard, and the files and symbols it cites must still exist. A new entry point in a detected form with no row fails, so does a changed call count, and so does a page script listening for a custom DOM event |
 | Hostile inputs | `scripts/security/hostile-inputs.mjs` | One shared list: CR, LF, CRLF, FF, VT, NEL, U+2028/2029, NUL, BOM, lone surrogates, overlong strings, uBlock filter syntax (scriptlets, exceptions, HTML and header filters, network options, preparser directives, procedural and action operators), script, data, file and engine URL schemes, path traversal, Object prototype keys and wrong types |
-| Validators and sinks | `apps/browser/src/hostileInputs.test.mjs`, `packages/core/src/hostileInputs.test.ts` | Every hostile value through each guard, checked at the sink: a hiding rule is one line that the app, the Mac write guard and the Linux guards all accept, or nothing; a link from another app opens only a web, file, blank or listed Ardia address; plugin URLs are http(s) only, checked at tab creation through the plugin's own `open` and `apply` in `state/plugins/pluginsV2.test.mjs`; no settings write, sync write or synced record leaves a setting outside its spec; search templates stay http(s); Reader and Find take nothing from a page that changes settings; typed text never becomes a script URL. One case per finding id from the 0.2.48 review, named after it |
-| uBlock compile | `apps/browser/src/state/site/hidingRuleSink.test.mjs`, `scripts/lib/ublock-pinned.mjs` | Uses the uBlock Origin release `packages/ardiacore/scripts/ubo.sh` pins. It appends each rule the picker could save to a user list as `appendUserFilters` does, runs Ardia's shipped cleanup from `ubo.sh` in Chromium, then parses as a trusted source (as uBlock treats My filters) and compiles with uBlock's own cosmetic engine. Each rule adds exactly one host-specific plain cosmetic record, or one line uBlock refuses that the blockers' own `querySelector` check refuses too; existing rules compile as before |
+| Validators and sinks | `apps/browser/src/hostileInputs.test.mjs`, `packages/core/src/hostileInputs.test.ts` | Every hostile value through each guard, checked at the sink: a hiding rule is one line that the app, the Mac write guard and the Linux guards all accept, or nothing; a link from another app opens only a web, file, blank or listed Solstice address; plugin URLs are http(s) only, checked at tab creation through the plugin's own `open` and `apply` in `state/plugins/pluginsV2.test.mjs`; no settings write, sync write or synced record leaves a setting outside its spec; search templates stay http(s); Reader and Find take nothing from a page that changes settings; typed text never becomes a script URL. One case per finding id from the 0.2.48 review, named after it |
+| uBlock compile | `apps/browser/src/state/site/hidingRuleSink.test.mjs`, `scripts/lib/ublock-pinned.mjs` | Uses the uBlock Origin release `packages/ardiacore/scripts/ubo.sh` pins. It appends each rule the picker could save to a user list as `appendUserFilters` does, runs Solstice's shipped cleanup from `ubo.sh` in Chromium, then parses as a trusted source (as uBlock treats My filters) and compiles with uBlock's own cosmetic engine. Each rule adds exactly one host-specific plain cosmetic record, or one line uBlock refuses that the blockers' own `querySelector` check refuses too; existing rules compile as before |
 | Real browser | `apps/browser/src/state/site/elementPicker.test.mjs`, `packages/ardiacore/tests/page-script-synthetic-input.test.mjs` | Headless Chromium. Every element the real picker picks on a varied page (ids, test ids, classes, custom and non-ASCII tag names, tables, deep paths) saves; the picker refuses a planted picker object and ignores synthetic input; a page that rewrites the helpers the picker calls still gets only inert rules saved. The real `page_script.js`, with the screen-share picker shim on, sends no gesture-gated message (new-tab link notes, Peek, link drops, screen share) or Hide Element message for dispatched events, scripted clicks, `window.open` or `getDisplayMedia` without activation, or the old Hide Element event; the same harness sees a real click, a real share request and a real link drag get through |
 
 `scripts/lib/test-chromium.mjs` finds the browser: Playwright's own download, `ARDIA_TEST_CHROMIUM`, or the system
@@ -92,7 +92,7 @@ once by reverting the fix's lines in your checkout before you commit the case.
 ## Outbound secrets
 
 The table above guards what comes in. Secrets need the opposite guard: a password, a token or a recovery phrase that
-Ardia holds must never go out through telemetry, a log line, a crash report, a sync file or the control socket.
+Solstice holds must never go out through telemetry, a log line, a crash report, a sync file or the control socket.
 
 **The rule.** Plaintext a secret is made of lives in JS only as a `Secret<kind>` from `@ardia/core`
 (`packages/core/src/secret.ts`), made with `asSecret(kind, text)` where it enters and turned back into text with
@@ -139,7 +139,7 @@ goes through the token scrubber. Google's sign-in callback, whose address holds 
 callback consumer (`state/tabs/callbackUrls.ts`) the moment the page reports it, before tab state, tab events, the
 omnibox or `closed.list` can see it; the tab closes without a recently closed entry, and a sign-in another one replaces closes
 its tab the same way. Nothing listens on the loopback callback port, so the page is an error page, which Chromium never
-adds to history; Ardia doesn't delete it either, since a deletion would announce the address in `history.removed`. Its registry, read with the TypeScript parser so aliased and
+adds to history; Solstice doesn't delete it either, since a deletion would announce the address in `history.removed`. Its registry, read with the TypeScript parser so aliased and
 namespace imports count, fails when:
 
 - a kind in `SECRET_KINDS` has no source and canary in the test;
