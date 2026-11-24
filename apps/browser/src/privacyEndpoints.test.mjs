@@ -127,12 +127,12 @@ function tableRows(text) {
 }
 
 const doc = read(DOC);
-const contacted = tableRows(section(doc, "Endpoints Ardia contacts"));
-const named = section(doc, "Hosts named in the source that Ardia doesn't contact");
+const contacted = tableRows(section(doc, "Endpoints Solstice contacts"));
+const named = section(doc, "Hosts named in the source that Solstice doesn't contact");
 const singleLabel = named.split("\n").filter((line) => line.startsWith("- Single-label")).flatMap(ticked);
 const disabled = tableRows(section(doc, "Google and Chromium endpoints that are off"));
 
-test("every host hard-coded in Ardia's shipped sources, as a URL or as a quoted host in native and engine code, is listed in docs/privacy.md", () => {
+test("every host hard-coded in Solstice's shipped sources, as a URL or as a quoted host in native and engine code, is listed in docs/privacy.md", () => {
   const listed = new Set([...[...contacted.flatMap((row) => ticked(row.Host)), ...ticked(named)].filter(looksLikeHost), ...singleLabel].map((host) => urlHost(host) ?? host));
   const files = shippedFiles();
   assert.ok(files.length > 1000, "the scan still finds the app's sources");
@@ -141,7 +141,7 @@ test("every host hard-coded in Ardia's shipped sources, as a URL or as a quoted 
     for (const host of hostsIn(path))
       if (!listed.has(host)) missing.set(host, [...(missing.get(host) ?? []), path]);
   const report = [...missing].map(([host, paths]) => `${host} (${[...new Set(paths)].slice(0, 3).join(", ")})`);
-  assert.deepEqual(report, [], `add each host to ${DOC}: a row under "Endpoints Ardia contacts" if Ardia itself contacts it, else the "doesn't contact" list`);
+  assert.deepEqual(report, [], `add each host to ${DOC}: a row under "Endpoints Solstice contacts" if Solstice itself contacts it, else the "doesn't contact" list`);
 });
 
 test("each endpoint row names a host and cites code that still names it", () => {
@@ -185,6 +185,6 @@ test("the scan reads hosts the way URL does, brackets, encodings and native quot
     ['"https://intranet/x"', "intranet"],
   ];
   for (const [text, host] of cases) assert.deepEqual(hostsInText(text, false), [host], text);
-  assert.deepEqual(hostsInText('@"tracker.vendor.network" @"api.service.co.uk" @"Ardia.app" @"com.google.chrome.dev"', true), ["tracker.vendor.network", "api.service.co.uk"]);
+  assert.deepEqual(hostsInText('@"tracker.vendor.network" @"api.service.co.uk" @"Solstice.app" @"com.google.chrome.dev"', true), ["tracker.vendor.network", "api.service.co.uk"]);
   assert.deepEqual(hostsInText("`https://www.${input}.com` https://*.example.com https://127.0.0.1:8080/", false), []);
 });

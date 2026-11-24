@@ -56,7 +56,7 @@ function runTourTail(dir, partsScript, extraArgs = []) {
       setup,
       'function Write-Tour { Set-Content -LiteralPath $tourFile -Value ($script:Lines -join "`n") }',
       "function Stop-TourPages {}",
-      "function Stop-Ardia($Session) {}",
+      "function Stop-Solstice($Session) {}",
       partsScript,
       source.slice(tailStart),
     ].join("\n"),
