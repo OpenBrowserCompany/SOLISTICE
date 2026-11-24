@@ -63,7 +63,7 @@ const TRICKS = {
     window[Symbol.for("ardia.elementPicker")] = { start: () => ({ selector: "#away" }), ensure() {} };
     window.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
   },
-  "getDisplayMedia without user activation, through Ardia's picker shim": () => Promise.race([navigator.mediaDevices.getDisplayMedia({ video: true }).then(() => "resolved", (e) => e.name), new Promise((done) => setTimeout(() => done("pending"), 100))]),
+  "getDisplayMedia without user activation, through Solstice's picker shim": () => Promise.race([navigator.mediaDevices.getDisplayMedia({ video: true }).then(() => "resolved", (e) => e.name), new Promise((done) => setTimeout(() => done("pending"), 100))]),
   "a dispatched click on the share button": () => document.getElementById("share").dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, button: 0 })),
 };
 
@@ -92,7 +92,7 @@ test("the same harness sees real input reach each gated message, so the silence 
   assert.deepEqual(await gestures(run), ['newTabLink {"url":"https://elsewhere.test/landing"}'], "a real click on a new-tab link");
   await page.mouse.click(20, 230);
   await settle(page);
-  assert.deepEqual((await gestures(run)).map((g) => g.split(" ")[0]), ["displayMedia"], "a real click that asks to share the screen goes through Ardia's picker shim");
+  assert.deepEqual((await gestures(run)).map((g) => g.split(" ")[0]), ["displayMedia"], "a real click that asks to share the screen goes through Solstice's picker shim");
   await page.mouse.move(20, 130);
   await page.mouse.down();
   await page.mouse.move(160, 220, { steps: 4 });

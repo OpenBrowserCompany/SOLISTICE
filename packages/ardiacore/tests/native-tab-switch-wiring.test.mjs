@@ -132,7 +132,7 @@ test("the address and the page's other identity are hidden only while that page'
   assert.match(sidebarField, /nativeID=\{PAGE_IDENTITY_TAG\}\s*collapsable=\{false\}/);
   assert.match(autoHide, /<Pressable\s*nativeID=\{PAGE_IDENTITY_TAG\}\s*collapsable=\{false\}[\s\S]*?\{host\}/, "the collapsed toolbar's host label");
   const press = body(reveals, "+ (BOOL)revealForPress:(NSEvent *)event");
-  assert.match(press, /isEqualToString:kSmallWindow\] \|\| TypingOutsidePages\(window\) \|\| ArdiaTabInSplit\(key\)\) return NO;/, "Little Ardia, an open address field and split rows keep the JS path");
+  assert.match(press, /isEqualToString:kSmallWindow\] \|\| TypingOutsidePages\(window\) \|\| ArdiaTabInSplit\(key\)\) return NO;/, "Little Solstice, an open address field and split rows keep the JS path");
   assert.match(tabReveal, /!Object\.keys\(useMedia\.getState\(\)\.tabShares\)\.length && !popoverOpen\(\)/, "a page popover names the page under it");
 });
 
