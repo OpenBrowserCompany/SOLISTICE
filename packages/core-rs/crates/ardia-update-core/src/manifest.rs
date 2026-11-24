@@ -47,7 +47,7 @@ impl PackageKind {
     }
 
     pub fn package_name(self, version: &str) -> String {
-        format!("Ardia-{version}-linux-x64.{}", self.extension())
+        format!("Solstice-{version}-linux-x64.{}", self.extension())
     }
 }
 

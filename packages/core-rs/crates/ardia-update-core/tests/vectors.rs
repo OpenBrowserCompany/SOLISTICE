@@ -27,7 +27,7 @@ fn digest(kind: &str, version: &str) -> String {
 fn line(kind: &str, version: &str, size: u64) -> String {
     let extension = PackageKind::from_name(kind).map_or("rpm", PackageKind::extension);
     format!(
-        "{kind} Ardia-{version}-linux-x64.{extension} {} {size}",
+        "{kind} Solstice-{version}-linux-x64.{extension} {} {size}",
         digest(kind, version)
     )
 }
@@ -263,17 +263,17 @@ fn cases() -> Vec<Case> {
         ),
         case(
             "a package named for another version",
-            base.replace("Ardia-0.2.48-linux-x64.deb", "Ardia-0.2.47-linux-x64.deb"),
+            base.replace("Solstice-0.2.48-linux-x64.deb", "Solstice-0.2.47-linux-x64.deb"),
             Err(E::Manifest),
         ),
         case(
             "an arm64 package name",
-            base.replace("Ardia-0.2.48-linux-x64.deb", "Ardia-0.2.48-linux-arm64.deb"),
+            base.replace("Solstice-0.2.48-linux-x64.deb", "Solstice-0.2.48-linux-arm64.deb"),
             Err(E::Manifest),
         ),
         case(
             "a path in the package name",
-            base.replace("Ardia-0.2.48-linux-x64.deb", "../Ardia-0.2.48-linux-x64.deb"),
+            base.replace("Solstice-0.2.48-linux-x64.deb", "../Solstice-0.2.48-linux-x64.deb"),
             Err(E::Manifest),
         ),
         case(
@@ -341,7 +341,7 @@ fn cases() -> Vec<Case> {
         case("a NUL byte", base.replace(" 1000\n", " 1000\0\n"), Err(E::Manifest)),
         case(
             "non-ASCII in a name",
-            base.replace("Ardia-0.2.48-linux-x64.deb", "Ardía-0.2.48-linux-x64.deb"),
+            base.replace("Solstice-0.2.48-linux-x64.deb", "Ardía-0.2.48-linux-x64.deb"),
             Err(E::Manifest),
         ),
         case("the header alone", "ardia-linux-update 1\n", Err(E::Manifest)),

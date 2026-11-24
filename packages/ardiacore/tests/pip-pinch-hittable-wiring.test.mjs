@@ -54,7 +54,7 @@ test("a pinch whose end never arrives, or that a new pinch replaces, never leave
   assert.match(body(zoom, "- (void)tick:(CADisplayLink *)link {"), /if \(!ardia_pip_zoom::KeepsStandIn\(window != nil, window\.visible, \[ArdiaPiPController forWindow:window\]\.stashedEdge != ArdiaPiPEdgeNone\)\)\s*return \[self cancelStandIn\];/);
 });
 
-test("pinches from other apps are followed only while Ardia is in the background with a zoomable Picture in Picture window, and never activate it", () => {
+test("pinches from other apps are followed only while Solstice is in the background with a zoomable Picture in Picture window, and never activate it", () => {
   const follow = body(pip, "void FollowPinchesFromOtherApps() {");
   assert.match(follow, /const BOOL wanted = ardia_pip_zoom::WantsOtherAppPinches\(NSApp\.isActive, \[ArdiaPiPZoom enabled\], \[ArdiaPiPZoom anyZoomable\]\);/);
   assert.match(follow, /addGlobalMonitorForEventsMatchingMask:NSEventMaskMagnify\b/);
