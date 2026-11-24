@@ -43,7 +43,7 @@ fn the_v2_showcase_runs_hello_activate_command_render_and_stop() {
     let folder = repo_dir().join("tests/fixtures/plugins/v2-showcase");
     let mut host = Host::spawn(&folder, "dist/index.js", &[]);
     let hello = host.request("hello", WAIT);
-    host.reply(&hello, json!({ "app": "Ardia", "version": "test", "protocol": 2, "plugin": "v2-showcase", "values": { "countVisits": true } }));
+    host.reply(&hello, json!({ "app": "Solstice", "version": "test", "protocol": 2, "plugin": "v2-showcase", "values": { "countVisits": true } }));
     let toolbar = host.request("toolbar.update", WAIT);
     assert_eq!(toolbar["params"]["itemId"], "showcase");
     host.reply(&toolbar, Value::Null);
@@ -82,7 +82,7 @@ fn the_sdk_bench_commits_a_cap_sized_tree_updates_a_thousand_rows_and_deactivate
     let mut host = Host::spawn(&folder, "dist/index.js", &[]);
     let hello = host.request("hello", WAIT);
     let cold_start = host.spawned.elapsed();
-    host.reply(&hello, json!({ "app": "Ardia", "version": "test", "protocol": 2, "plugin": "sdk-bench", "values": {} }));
+    host.reply(&hello, json!({ "app": "Solstice", "version": "test", "protocol": 2, "plugin": "sdk-bench", "values": {} }));
     let activated = host.request("storage.set", WAIT);
     assert_eq!(activated["params"]["key"], "activated");
     host.reply(&activated, Value::Null);
@@ -143,7 +143,7 @@ fn sigterm_ends_the_host_normally_even_mid_turn() {
 
 fn handshake_with_activation(host: &mut Host) {
     let hello = host.request("hello", WAIT);
-    host.reply(&hello, json!({ "app": "Ardia", "version": "test", "protocol": 2, "plugin": "sdk-bench", "values": {} }));
+    host.reply(&hello, json!({ "app": "Solstice", "version": "test", "protocol": 2, "plugin": "sdk-bench", "values": {} }));
     let activated = host.request("storage.set", WAIT);
     host.reply(&activated, Value::Null);
     let ready = host.request("ready", WAIT);

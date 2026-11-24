@@ -129,7 +129,7 @@ impl Host {
     pub fn answer(&mut self, message: &Value) {
         let (Some(id), Some(method)) = (message.get("id"), message.get("method").and_then(Value::as_str)) else { return };
         let result = match method {
-            "hello" => json!({ "app": "Ardia", "version": "test", "protocol": 2, "plugin": "test", "values": {} }),
+            "hello" => json!({ "app": "Solstice", "version": "test", "protocol": 2, "plugin": "test", "values": {} }),
             "storage.get" => json!({ "found": false }),
             "windows" => json!([]),
             "panel.open" => json!({ "ok": true, "windowId": "w1" }),
