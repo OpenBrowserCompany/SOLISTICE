@@ -28,7 +28,7 @@ export async function offscreenMethod(params: Record<string, unknown>, serving: 
     if (shownTabIds(useBrowser.getState()).has(tab)) return failure("refused", "That tab is shown in a window, so it can't go off-screen.");
     if (!serving()) return failure("failed", STOPPED);
     const moved = await controlMoveOffscreen(tab);
-    if (!moved.ok) return failure("refused", moved.reason ?? "Ardia couldn't take that tab off-screen.");
+    if (!moved.ok) return failure("refused", moved.reason ?? "Solstice couldn't take that tab off-screen.");
   } catch (error) {
     return failure("failed", errorText(error));
   }

@@ -51,7 +51,7 @@ test("offscreen: a hidden tab the command opened leaves the window with no close
 test("offscreen: the shown tab, a tab the command didn't open, one that was shown and a failed move all stay", async () => {
   const { shown, hidden } = await setup();
   const moved = [];
-  globalThis.acTestCliMoveOffscreen = (tabId) => (moved.push(tabId), { ok: false, reason: "Ardia couldn't take that tab off-screen." });
+  globalThis.acTestCliMoveOffscreen = (tabId) => (moved.push(tabId), { ok: false, reason: "Solstice couldn't take that tab off-screen." });
   try {
     globalThis.acTestCliOwns = () => ({ owned: true, shown: false });
     assert.match((await call("offscreen", { tab: shown })).error.message, /shown in a window/);
