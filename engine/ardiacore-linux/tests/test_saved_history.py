@@ -31,8 +31,8 @@ class SavedHistoryTests(unittest.TestCase):
 
     def test_the_engine_writes_the_file_name_and_fields_the_reader_checks(self):
         writer = (ROOT.parent / 'chromium/src/chrome/browser/ardia/ac_tab_restore_history.cc').read_text()
-        self.assertIn('constexpr char kTabHistoryDir[] = "Ardia Tab History";', writer)
-        self.assertIn('constexpr char kTabHistoryCleared[] = "Ardia Tab History Cleared";', writer)
+        self.assertIn('constexpr char kTabHistoryDir[] = "Solstice Tab History";', writer)
+        self.assertIn('constexpr char kTabHistoryCleared[] = "Solstice Tab History Cleared";', writer)
         self.assertIn('constexpr int kTabHistoryVersion = 1;', writer)
         self.assertIn('AppendASCII(base::HexEncode(key_))', writer)
         for field in ('"version"', '"url"', '"virtualUrl"', '"generation"', '"state"'):

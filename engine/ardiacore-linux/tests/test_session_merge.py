@@ -259,23 +259,23 @@ auto& Hosts() { return hosts; }
         main += '\n'.join(f'auto {name} = {cpp_value(value)};' for name, value in [('original', first), ('nav', nav), ('theme', theme), ('expected', expected)])
         main += r'''
   document = base::WriteJsonWithOptions(original, 2);
-  auto first = MergeAndWriteSession("/Profile/Ardia", original.GetDict().Clone(), nav.GetDict().Clone());
+  auto first = MergeAndWriteSession("/Profile/Solstice", original.GetDict().Clone(), nav.GetDict().Clone());
   assert(first.ok && first.previous == original.GetDict() && first.session == nav.GetDict());
-  auto second = MergeAndWriteSession("/Profile/Ardia", original.GetDict().Clone(), theme.GetDict().Clone());
+  auto second = MergeAndWriteSession("/Profile/Solstice", original.GetDict().Clone(), theme.GetDict().Clone());
   assert(second.ok && second.previous == nav.GetDict() && second.session == expected.GetDict());
-  auto final = MergeAndWriteSession("/Profile/Ardia", original.GetDict().Clone(), theme.GetDict().Clone());
+  auto final = MergeAndWriteSession("/Profile/Solstice", original.GetDict().Clone(), theme.GetDict().Clone());
   assert(final.ok && final.previous == expected.GetDict() && final.session == expected.GetDict());
   document = "malformed";
-  assert(!ReadSession("/Profile/Ardia"));
-  auto recovered = MergeAndWriteSession("/Profile/Ardia", base::DictValue(), nav.GetDict().Clone());
+  assert(!ReadSession("/Profile/Solstice"));
+  auto recovered = MergeAndWriteSession("/Profile/Solstice", base::DictValue(), nav.GetDict().Clone());
   assert(recovered.ok && recovered.previous.size() == 0 && recovered.session == nav.GetDict());
   document = base::WriteJsonWithOptions(base::Value(base::ListValue()), 2);
-  assert(!ReadSession("/Profile/Ardia"));
+  assert(!ReadSession("/Profile/Solstice"));
   document = std::string(kLinuxSessionMaxBytes + 1, 'x');
-  assert(!ReadSession("/Profile/Ardia"));
+  assert(!ReadSession("/Profile/Solstice"));
   document = base::WriteJsonWithOptions(original, 2);
   write_failed = true;
-  auto failed = MergeAndWriteSession("/Profile/Ardia", original.GetDict().Clone(), nav.GetDict().Clone());
+  auto failed = MergeAndWriteSession("/Profile/Solstice", original.GetDict().Clone(), nav.GetDict().Clone());
   assert(!failed.ok);
   write_failed = false;
   Profile regular{"/Profile"};
