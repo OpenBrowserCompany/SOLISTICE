@@ -24,7 +24,7 @@ export { MouseArea } from "./web/MouseArea";
 export { showMenu } from "./web/menus";
 
 const SYSTEM_INFO: SystemInfo = {
-  appName: "Ardia",
+  appName: "Solstice",
   appVersion: "demo",
   appBuild: "web",
   bundleId: "dev.ardia.demo",
