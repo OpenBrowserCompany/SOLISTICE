@@ -325,11 +325,11 @@ static NSDictionary<NSString *, id> *OffscreenRefusal(NSString *reason) {
     });
     return;
   }
-  if (adoption != ArdiaCoreAdoptionAdopted) return completion(OffscreenRefusal(@"Ardia couldn't take that tab off-screen."));
+  if (adoption != ArdiaCoreAdoptionAdopted) return completion(OffscreenRefusal(@"Solstice couldn't take that tab off-screen."));
   if (![view releasePageForOffscreen]) return completion(OffscreenRefusal(@"That tab is shown in a window, so it can't go off-screen."));
   if ([window adoptTab:tab] != ArdiaCoreAdoptionAdopted) {
     [tab close];
-    return completion(OffscreenRefusal(@"Ardia couldn't take that tab off-screen, and closed it."));
+    return completion(OffscreenRefusal(@"Solstice couldn't take that tab off-screen, and closed it."));
   }
   NSView *page = tab.view, *host = window.hostView;
   [page removeFromSuperview];
