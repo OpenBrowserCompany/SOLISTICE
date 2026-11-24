@@ -18,7 +18,7 @@ const advertised = [
   ...[...bootstrap.matchAll(/\.Append\("([A-Za-z]+\.[A-Za-z]+)"\)/g)].map((match) => match[1]),
   ...advertisedLoops.flatMap((name) => capabilityArrays.get(name) ?? []),
 ];
-const routedNatively = new Set(engineSources.flatMap((source) => [...source.matchAll(/"(Ardia[A-Za-z]+\.[A-Za-z]+)"/g)].map((match) => match[1])));
+const routedNatively = new Set(engineSources.flatMap((source) => [...source.matchAll(/"(Solstice[A-Za-z]+\.[A-Za-z]+)"/g)].map((match) => match[1])));
 
 const SHELL_SOURCES = new URL("../../../packages/shell/src/", import.meta.url);
 const shellSources = readdirSync(SHELL_SOURCES).filter((file) => /\.tsx?$/.test(file)).map((file) => readFileSync(new URL(file, SHELL_SOURCES), "utf8"));
@@ -150,7 +150,7 @@ const olderEngine = (...missing) => {
 
 const NOTIFICATION_CALLS = ["ArdiaApp.notificationPermission", "ArdiaApp.requestNotificationPermission", "ArdiaApp.postNotification", "ArdiaApp.removeNotifications"];
 
-test("Ardia's notifications and the bang list fetch reach the engine that advertises them", async () => {
+test("Solstice's notifications and the bang list fetch reach the engine that advertises them", async () => {
   for (const name of [...NOTIFICATION_CALLS, "ArdiaShell.fetchBangList"]) {
     assert.ok(advertised.includes(name), name);
     const [module, method] = name.split(".");

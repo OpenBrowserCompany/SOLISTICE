@@ -131,7 +131,7 @@ const LINUX_SHELL_METHODS: Record<string, ShellMethod> = {
   dismissSurface: unavailable("Captured page menus"),
   menuBar: unavailable("The menu bar catalog"),
   performMenuBarItem: unavailable("Running menu bar items"),
-  dismissShownOnly: unavailable("Taking away a question Ardia asked on the control socket's behalf"),
+  dismissShownOnly: unavailable("Taking away a question Solstice asked on the control socket's behalf"),
   choose: () => Promise.resolve({ choice: -1, unshown: true }),
   replyToTerminate: resolved,
   readText: readClipboardText,

@@ -37,7 +37,7 @@ export { setTrafficLightsCenter };
 export { fetchBangList } from "../shellMethods";
 
 const SYSTEM_INFO: SystemInfo = {
-  appName: "Ardia",
+  appName: "Solstice",
   appVersion: "linux-dev",
   appBuild: "host",
   bundleId: "dev.ardia.linux",
