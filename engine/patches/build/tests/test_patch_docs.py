@@ -220,7 +220,7 @@ ENGINE_DOC_SAMPLE = '''# Doc
 | Patch | What it does | Removable when |
 |---|---|---|
 | `chromium-a.patch` | Does a | Upstream fixes a |
-| `chromium-b.patch` | Does b | Never: Ardia feature |
+| `chromium-b.patch` | Does b | Never: Solstice feature |
 
 After.
 '''

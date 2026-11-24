@@ -61,11 +61,11 @@ class BrandingSplitTests(unittest.TestCase):
             entries = (root / 'chrome/browser/helium_flag_entries.h').read_text()
             self.assertIn('kHeliumNoiseCommandLine[] = "ardia-noise";', choices)
             self.assertNotIn('"helium-noise"', choices)
-            self.assertIn('"Ardia Noise"', entries)
+            self.assertIn('"Solstice Noise"', entries)
             self.assertNotIn('{helium::kChannelCommandLine,', entries)
             if platform == 'linux':
                 self.assertIn('"ardia-middle-click-paste-enabled"', choices)
-                self.assertIn('Controls middle click paste functionality. Ardia flag.', entries)
+                self.assertIn('Controls middle click paste functionality. Solstice flag.', entries)
             else:
                 safari = (root / SAFARI).read_text()
                 self.assertIn('return std::u16string();', safari)
