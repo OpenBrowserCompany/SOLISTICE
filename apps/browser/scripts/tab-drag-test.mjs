@@ -10,7 +10,7 @@ import { readPng } from "../../../scripts/lib/png.mjs";
 const args = process.argv.slice(2);
 const appArg = args.find((a) => !a.startsWith("--"));
 if (!appArg) {
-  console.error("usage: node tab-drag-test.mjs <Debug Ardia.app> [--port=<DevTools port>] [--keep-data]");
+  console.error("usage: node tab-drag-test.mjs <Debug Solstice.app> [--port=<DevTools port>] [--keep-data]");
   process.exit(2);
 }
 const appPath = resolve(appArg);
