@@ -3,7 +3,7 @@ import { test } from "node:test";
 
 const { noteLittleArdiaLinkKeptBehind, takeLittleArdiaEscapeCloses } = await import("./littleArdiaEscapes.ts");
 
-test("a link from another app counts when Ardia kept its other windows behind that app, by the moment it did", () => {
+test("a link from another app counts when Solstice kept its other windows behind that app, by the moment it did", () => {
   takeLittleArdiaEscapeCloses();
   noteLittleArdiaLinkKeptBehind("activation");
   noteLittleArdiaLinkKeptBehind("activation");

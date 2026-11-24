@@ -23,7 +23,7 @@ test("a recovered stuck profile is reported with its unfinished starts", () => {
   });
 });
 
-test("a start another Ardia still held the profile for is reported", () => {
+test("a start another Solstice still held the profile for is reported", () => {
   assert.deepEqual(launchGuardProperties(reading('{"waitedForPreviousMs":45012,"unfinishedStartsBefore":0,"restoreStateSetAside":false,"profileHeldByAnother":true}')), {
     launch_waited_for_previous_ms: 45012,
     launch_unfinished_starts_before: 0,
