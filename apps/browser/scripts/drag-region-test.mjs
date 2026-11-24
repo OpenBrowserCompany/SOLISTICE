@@ -7,7 +7,7 @@ import { launch, session } from "../../../scripts/lib/instance.mjs";
 const args = process.argv.slice(2);
 const appArg = args.find((a) => !a.startsWith("--"));
 if (!appArg || args.includes("--help")) {
-  console.error("usage: node drag-region-test.mjs <Debug Ardia.app> [--port=<DevTools port>] [--every-mount]\n" +
+  console.error("usage: node drag-region-test.mjs <Debug Solstice.app> [--port=<DevTools port>] [--every-mount]\n" +
     "  Title-bar drag regions rebuild lazily: after a layout change the pointer wasn't over, the window is stale,\n" +
     "  and it is rebuilt by the time a press can land (the pointer's arrival, a window move under it, or 2 s).\n" +
     "  --every-mount runs the dragRegionEveryMount experiment (the old behaviour) and prints its rebuild count.");

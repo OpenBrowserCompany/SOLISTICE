@@ -6,7 +6,7 @@ import { launch, session, sleep } from "../../../scripts/lib/instance.mjs";
 
 const appArg = process.argv.slice(2).find((a) => !a.startsWith("--"));
 if (!appArg) {
-  console.error("usage: node air-traffic-test.mjs <Debug Ardia.app>");
+  console.error("usage: node air-traffic-test.mjs <Debug Solstice.app>");
   console.error("Checks Air Traffic Control in a hidden instance: a link from another app (a real GURL Apple Event) joins the collapsed tab group its rule names and opens it, and a rule whose group is gone opens a plain tab in its profile, in a window that is already open.");
   process.exit(2);
 }
