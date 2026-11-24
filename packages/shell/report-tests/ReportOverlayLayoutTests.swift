@@ -98,7 +98,7 @@ final class ReportOverlayLayoutTests: XCTestCase {
     XCTAssertEqual(ReportOverlayLayout.fill(for: .app, includePages: true, pictureFresh: false), .layers)
   }
 
-  func testOnlyPictureInPictureDrawsArdiasControls() {
+  func testOnlyPictureInPictureDrawsSolstice-sControls() {
     XCTAssertTrue(ReportOverlayLayout.drawsControls(.pictureInPicture))
     XCTAssertFalse(ReportOverlayLayout.drawsControls(.chrome))
     XCTAssertFalse(ReportOverlayLayout.drawsControls(.app))
@@ -125,7 +125,7 @@ final class ReportPageMaskTests: XCTestCase {
     XCTAssertEqual(ReportPageMask.verdict(traits(.other)), .page)
   }
 
-  func testArdiasAndTheSystemsViewsAreChrome() {
+  func testSolstice-sAndTheSystemsViewsAreChrome() {
     XCTAssertEqual(ReportPageMask.verdict(traits(.app)), .chrome)
     XCTAssertEqual(ReportPageMask.verdict(traits(.system)), .chrome)
   }

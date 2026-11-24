@@ -1191,13 +1191,13 @@
    {
     "base": null,
     "canParse": true,
-    "input": "ardia://plugin/page.html",
+    "input": "solstice://plugin/page.html",
     "result": {
      "hash": "",
      "host": "plugin",
      "hostname": "plugin",
-     "href": "ardia://plugin/page.html",
-     "json": "\"ardia://plugin/page.html\"",
+     "href": "solstice://plugin/page.html",
+     "json": "\"solstice://plugin/page.html\"",
      "origin": "null",
      "password": "",
      "pathname": "/page.html",
@@ -2689,13 +2689,13 @@
    {
     "base": null,
     "canParse": true,
-    "input": "ardia://plugin/page.html",
+    "input": "solstice://plugin/page.html",
     "result": {
      "hash": "",
      "host": "plugin",
      "hostname": "plugin",
-     "href": "ardia://plugin/page.html",
-     "json": "\"ardia://plugin/page.html\"",
+     "href": "solstice://plugin/page.html",
+     "json": "\"solstice://plugin/page.html\"",
      "origin": "null",
      "password": "",
      "pathname": "/page.html",
