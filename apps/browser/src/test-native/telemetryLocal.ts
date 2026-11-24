@@ -87,6 +87,6 @@ export const telemetryLocalModule: ShellNativeModules["ArdiaTelemetryLocal"] = {
   exportToDownloads: async (now) => {
     const text = telemetryLocal.lines().map((l) => `${l}\n`).join("");
     telemetryLocal.exports.push({ now, text });
-    return { ...exported(text), path: "/tmp/fake/Ardia data.jsonl" };
+    return { ...exported(text), path: "/tmp/fake/Solstice data.jsonl" };
   },
 };

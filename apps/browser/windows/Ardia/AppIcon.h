@@ -16,11 +16,11 @@
 #pragma comment(lib, "windowscodecs.lib")
 #pragma comment(lib, "shell32.lib")
 
-namespace Ardia {
+namespace Solstice {
 
 struct AppIcon {
   static constexpr wchar_t kAppUserModelId[] = L"Ardia.Browser";
-  static constexpr wchar_t kDisplayName[] = L"Ardia";
+  static constexpr wchar_t kDisplayName[] = L"Solstice";
 
   static void ClaimAppUserModelId() noexcept {
     PWSTR previous = nullptr;
