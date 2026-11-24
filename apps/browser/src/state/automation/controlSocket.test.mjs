@@ -51,12 +51,12 @@ function fresh() {
 test("hello, unknown methods and malformed lines", async () => {
   fresh();
   await controlOn();
-  assert.deepEqual(call("hello").result, { app: "Ardia", version: "1.0", protocol: 4, minClientProtocol: 4 });
+  assert.deepEqual(call("hello").result, { app: "Solstice", version: "1.0", protocol: 4, minClientProtocol: 4 });
   assert.deepEqual(call("hello", { protocol: 4 }).result.protocol, 4, "a client that names the current protocol is welcome");
   assert.equal(call("hello", { protocol: 9 }).result.protocol, 4, "a newer client gets the app's protocol and decides for itself");
   const old = call("hello", { protocol: 3 });
   assert.equal(old.error.code, "unsupported_protocol");
-  assert.match(old.error.message, /speaks control protocol 3, and Ardia 1\.0 needs 4 or later: update the command/);
+  assert.match(old.error.message, /speaks control protocol 3, and Solstice 1\.0 needs 4 or later: update the command/);
   assert.equal(call("hello", { protocol: "4" }).error.code, "bad_request");
   const unknown = call("dance");
   assert.equal(unknown.error.code, "unknown_method");
@@ -124,11 +124,11 @@ test("a request tagged with an old generation, or arriving after Stop, never run
   assert.equal(stub.controlSocket.running, false);
 });
 
-test("windows lists normal and Little Ardia windows, never private ones, and redacts internal pages", async () => {
+test("windows lists normal and Little Solstice windows, never private ones, and redacts internal pages", async () => {
   fresh();
   await controlOn();
   const w = S().createWindow({ url: "https://a.example/" });
-  S().newTab(w, { url: "ardia://history?q=secret#frag" });
+  S().newTab(w, { url: "solstice://history?q=secret#frag" });
   S().createWindow({ kind: "private", url: "https://secret.example/" });
   const little = S().createWindow({ kind: "small", url: "https://c.example/" });
   const listed = (await callAsync("windows")).result;
@@ -136,8 +136,8 @@ test("windows lists normal and Little Ardia windows, never private ones, and red
   const main = listed.find((x) => x.id === w);
   assert.equal(main.profile, S().windows[w].profileId);
   assert.equal(typeof main.profileName, "string");
-  const history = main.tabs.find((t) => t.url.startsWith("ardia://history"));
-  assert.deepEqual([history.url, history.title], ["ardia://history", "History"]);
+  const history = main.tabs.find((t) => t.url.startsWith("solstice://history"));
+  assert.deepEqual([history.url, history.title], ["solstice://history", "History"]);
   assert.equal(main.tabs.filter((t) => t.active).length, 1);
   for (const t of main.tabs) assert.deepEqual(Object.keys(t).sort(), ["active", "group", "id", "pageGeneration", "pinned", "profile", "targetId", "title", "url"]);
   assert.ok(!JSON.stringify(listed).includes("secret"));
@@ -319,7 +319,7 @@ test("the pill shows for a socket run while CDP is external, and Stop hides it a
   assert.equal(useCliIndicator.getState().shown, false);
 });
 
-test("a Little Ardia target never falls back to a private window", async () => {
+test("a Little Solstice target never falls back to a private window", async () => {
   fresh();
   await controlOn();
   const priv = S().createWindow({ kind: "private", url: "https://secret.example/" });
@@ -386,7 +386,7 @@ test("the owner's apply over the socket still opens file and internal addresses"
   fresh();
   await controlOn();
   const w = S().createWindow({ url: "https://a.example/" });
-  const opened = await callAsync("apply", { ops: [{ op: "open", urls: ["file:///tmp/notes.html", "ardia://history"], window: w }] });
+  const opened = await callAsync("apply", { ops: [{ op: "open", urls: ["file:///tmp/notes.html", "solstice://history"], window: w }] });
   assert.equal(opened.result?.ok, true);
   const urls = opened.result.tabs.map((t) => t.url);
   assert.ok(urls.includes("file:///tmp/notes.html"), urls.join());

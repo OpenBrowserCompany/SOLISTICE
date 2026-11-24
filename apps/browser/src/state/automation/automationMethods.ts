@@ -59,13 +59,13 @@ export function parseRequest(line: string): ParsedRequest | { id: RequestId; err
   return { id, method: doc.method, params: (doc.params as Record<string, unknown> | undefined) ?? {} };
 }
 
-export const hello = (version: string) => ({ app: "Ardia", version, protocol: PROTOCOL, minClientProtocol: MIN_CLIENT_PROTOCOL });
+export const hello = (version: string) => ({ app: "Solstice", version, protocol: PROTOCOL, minClientProtocol: MIN_CLIENT_PROTOCOL });
 
 export function clientProtocolProblem(params: Record<string, unknown>, version: string): MethodError | null {
   const asked = params.protocol === undefined ? PROTOCOL : params.protocol;
   if (typeof asked !== "number" || !Number.isSafeInteger(asked) || asked < 1) return { code: "bad_request", message: "protocol must be a whole number." };
   if (asked >= MIN_CLIENT_PROTOCOL) return null;
-  return { code: "unsupported_protocol", message: `This ardia command speaks control protocol ${asked}, and Ardia ${version} needs ${MIN_CLIENT_PROTOCOL} or later: update the command (Settings › Plugins, or its install.sh).` };
+  return { code: "unsupported_protocol", message: `This ardia command speaks control protocol ${asked}, and Solstice ${version} needs ${MIN_CLIENT_PROTOCOL} or later: update the command (Settings › Plugins, or its install.sh).` };
 }
 
 export const commands = automationCommands;
@@ -103,7 +103,7 @@ export function planRun(s: RunState, params: Record<string, unknown>): RunPlan |
     if (scopeOf(command) !== "page" && !TAB_COMMANDS.has(command)) return failure("bad_request", `${command} doesn't act on a tab, so it takes no tab.`);
     const windowId = s.tabs[tab]!.windowId;
     if (eligibleKind(s, windowId) === "little" && command !== "closeTab" && !LITTLE_ARDIA_PAGE_COMMANDS.has(command)) {
-      return failure("bad_request", `${command} doesn't work on a Little Ardia tab.`);
+      return failure("bad_request", `${command} doesn't work on a Little Solstice tab.`);
     }
     if (window !== undefined && window !== null && window !== windowId) return failure("no_window", `Tab ${tab} isn't in window ${String(window)}.`);
     return { command, arg: given, windowId, tabId: tab };
