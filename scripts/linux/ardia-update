@@ -8,11 +8,11 @@ IFS=$' \t\n'
 usage='usage: ardia-update kind
        ardia-update install <dir>
 
-Installs a signed Ardia update for Linux.
+Installs a signed Solstice update for Linux.
 
-  kind           prints how this Ardia is installed: deb, tarball, appimage,
+  kind           prints how this Solstice is installed: deb, tarball, appimage,
                  managed, or unsupported <reason>
-  install <dir>  verifies Ardia-<V>-linux-update.txt and its .sig in <dir>
+  install <dir>  verifies Solstice-<V>-linux-update.txt and its .sig in <dir>
                  against lib/ardia/linux-update.pem, then installs the package
                  for this kind of install when <V> is newer than lib/ardia/VERSION.
                  A .deb or tarball install runs it as root through pkexec; an
@@ -35,7 +35,7 @@ small_copy_seconds=60
 version_pattern='^([0-9]{1,9})\.([0-9]{1,9})\.([0-9]{1,9})(-nightly\.([0-9]{1,9}))?$'
 version_line_pattern='^version (.+)$'
 package_line_pattern='^(deb|tarball|appimage) ([^ ]+) ([0-9a-f]{64}) ([1-9][0-9]{0,9})$'
-manifest_name_pattern='^Ardia-(.+)-linux-update\.txt$'
+manifest_name_pattern='^Solstice-(.+)-linux-update\.txt$'
 
 reported=0
 install_deadline=0
@@ -255,9 +255,9 @@ parse_manifest() {
     [[ "$line" =~ $package_line_pattern ]] || fail manifest "a manifest line is malformed"
     format=${BASH_REMATCH[1]} name=${BASH_REMATCH[2]} digest=${BASH_REMATCH[3]} size=${BASH_REMATCH[4]}
     case "$format" in
-      deb) rank=0 expected="Ardia-$version-linux-x64.deb" ;;
-      tarball) rank=1 expected="Ardia-$version-linux-x64.tar.xz" ;;
-      appimage) rank=2 expected="Ardia-$version-linux-x64.AppImage" ;;
+      deb) rank=0 expected="Solstice-$version-linux-x64.deb" ;;
+      tarball) rank=1 expected="Solstice-$version-linux-x64.tar.xz" ;;
+      appimage) rank=2 expected="Solstice-$version-linux-x64.AppImage" ;;
     esac
     ((rank > previous)) || fail manifest "the manifest's package lines are out of order"
     previous=$rank
@@ -327,11 +327,11 @@ run_install() {
       exec 9>>/run/ardia-update.lock || fail install "couldn't open the lock"
       ;;
     appimage)
-      launch_ticks=$(caller_start_ticks) || fail install "couldn't tell when Ardia started"
+      launch_ticks=$(caller_start_ticks) || fail install "couldn't tell when Solstice started"
       appimage=$(appimage_target) || fail kind "APPIMAGE no longer names a writable AppImage"
       exec 9<"$(dirname -- "$appimage")" || fail install "couldn't open the lock"
       ;;
-    *) fail kind "this Ardia can't update itself: $kind" ;;
+    *) fail kind "this Solstice can't update itself: $kind" ;;
   esac
   flock -n 9 || fail busy "another update is running"
 
@@ -351,7 +351,7 @@ run_install() {
   fi
 
   local names=() entry
-  for entry in "$dir"/Ardia-*-linux-update.txt; do
+  for entry in "$dir"/Solstice-*-linux-update.txt; do
     [[ -e "$entry" || -L "$entry" ]] && names+=("${entry##*/}")
   done
   ((${#names[@]} == 1)) || fail missing "the update folder holds ${#names[@]} manifests, not one"
@@ -393,7 +393,7 @@ run_install() {
     tarball) install_tarball ;;
     appimage)
       chmod 0755 -- "$staged"
-      ! appimage_changed_since_launch || fail notNewer "$appimage changed after this Ardia started"
+      ! appimage_changed_since_launch || fail notNewer "$appimage changed after this Solstice started"
       install_appimage
       ;;
   esac

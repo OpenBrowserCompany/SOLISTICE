@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-usage='usage: scripts/linux/deb-install-test.sh <Ardia-<version>-linux-x64.deb> [<image>...]
+usage='usage: scripts/linux/deb-install-test.sh <Solstice-<version>-linux-x64.deb> [<image>...]
 
 Installs the .deb with apt in fresh containers (docker or podman) and checks
 that its dependencies resolve, every library chrome needs is found, chrome
