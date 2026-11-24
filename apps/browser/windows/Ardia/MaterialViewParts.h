@@ -12,7 +12,7 @@
 #include <string>
 #include <utility>
 
-namespace Ardia {
+namespace Solstice {
 
 namespace MaterialView {
 

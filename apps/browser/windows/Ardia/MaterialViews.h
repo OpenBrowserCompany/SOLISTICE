@@ -19,7 +19,7 @@
 #include "MaterialViewParts.h"
 #include "VectorGeometry.h"
 
-namespace Ardia {
+namespace Solstice {
 
 REACT_STRUCT(WindowMaterialProps)
 struct WindowMaterialProps : winrt::implements<WindowMaterialProps, winrt::Microsoft::ReactNative::IComponentProps> {

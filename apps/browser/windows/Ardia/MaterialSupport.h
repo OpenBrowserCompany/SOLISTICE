@@ -24,7 +24,7 @@
 #pragma comment(lib, "dwmapi.lib")
 #pragma comment(lib, "gdi32.lib")
 
-namespace Ardia::Materials {
+namespace Solstice::Materials {
 
 constexpr DWORD SystemBackdropAttribute = 38;
 constexpr DWORD BackdropNone = 1;
