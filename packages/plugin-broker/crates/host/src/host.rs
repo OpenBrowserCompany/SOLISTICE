@@ -146,7 +146,7 @@ pub fn prepare(options: &Options) -> Result<Prepared, Exit> {
         return Err(Exit::LoadFailed);
     }
     engine.host().channel.open().map_err(|error| {
-        stderr::note(&format!("[ardia] the channel to Ardia couldn't be set up: {error}"));
+        stderr::note(&format!("[ardia] the channel to Solstice couldn't be set up: {error}"));
         Exit::SandboxSetup
     })?;
     spawn_watchdog(engine.governor().watch.clone(), options.limits.turn_wall).map_err(|error| {
@@ -277,7 +277,7 @@ fn event_loop(engine: &mut Engine, wake: RawFd) -> Exit {
         }
         match outcome {
             ReadOutcome::Violated => {
-                stderr::note(&format!("[ardia] a line from Ardia was over {} MB, so the channel closed", crate::channel::MAX_INCOMING_LINE >> 20));
+                stderr::note(&format!("[ardia] a line from Solstice was over {} MB, so the channel closed", crate::channel::MAX_INCOMING_LINE >> 20));
                 return finish(engine, Exit::ChannelViolated);
             }
             ReadOutcome::Closed => return finish(engine, if engine.governor().stopping() { Exit::Normal } else { Exit::ChannelClosed }),

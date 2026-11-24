@@ -41,7 +41,7 @@
     ["foo://Host.Example/Path?Q#F"],
     ["foo:/path"],
     ["urn:isbn:0451450523"],
-    ["ardia://plugin/page.html"],
+    ["solstice://plugin/page.html"],
     ["chrome://settings"],
     ["https://example.com:65536/"],
     ["https://example.com:abc/"],

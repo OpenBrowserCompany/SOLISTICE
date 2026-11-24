@@ -460,7 +460,7 @@ impl Engine {
                 self.ctx,
                 code.as_ptr() as *const c_char,
                 prelude.len() as q::size_t,
-                c"ardia://plugin-host/prelude.js".as_ptr(),
+                c"solstice://plugin-host/prelude.js".as_ptr(),
                 q::JS_EVAL_TYPE_GLOBAL as c_int,
             ))?;
             let native = self.native_object(&NATIVES);
