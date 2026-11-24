@@ -9,16 +9,16 @@ import { descendants, insideApp, launchedTree, parseTable, processTable, quitTar
 const APP = "/x/Bench.app";
 const T = 1_700_000_000_000;
 const table = [
-  { pid: 10, ppid: 1, started: T, command: `${APP}/Contents/MacOS/Ardia --mute-audio` },
+  { pid: 10, ppid: 1, started: T, command: `${APP}/Contents/MacOS/Solstice --mute-audio` },
   { pid: 11, ppid: 10, started: T + 1000, command: `${APP}/Contents/Frameworks/Helper --type=renderer` },
   { pid: 12, ppid: 11, started: T + 1000, command: `${APP}/Contents/Frameworks/Helper --type=utility` },
   { pid: 20, ppid: 1, started: T - 9000, command: `/usr/bin/timeout 1500 node native-bench.mjs --app ${APP}` },
   { pid: 21, ppid: 20, started: T - 9000, command: `node native-bench.mjs --app ${APP} --label main` },
-  { pid: 30, ppid: 1, started: T - 60_000, command: `${APP}/Contents/MacOS/Ardia --another-bench` },
+  { pid: 30, ppid: 1, started: T - 60_000, command: `${APP}/Contents/MacOS/Solstice --another-bench` },
 ];
 
 test("ps rows parse with their start time, so a process is known by pid, start and command", () => {
-  const rows = parseTable(["  411     1 Thu Nov 20 05:16:37 2026     /x/Bench.app/Contents/MacOS/Ardia --mute-audio",
+  const rows = parseTable(["  411     1 Thu Nov 20 05:16:37 2026     /x/Bench.app/Contents/MacOS/Solstice --mute-audio",
     "  412   411 Thu Nov  5 05:16:38 2026     /x/Bench.app/Contents/Frameworks/Helper --type=gpu-process"].join("\n"));
   assert.deepEqual(rows.map((r) => [r.pid, r.ppid, r.command.split(" ")[1]]), [[411, 1, "--mute-audio"], [412, 411, "--type=gpu-process"]]);
   assert.equal(rows[0].started, new Date(2026, 10, 20, 5, 16, 37).getTime());
@@ -30,7 +30,7 @@ test("the launched tree is the launched pid and its descendants inside the app, 
   assert.deepEqual(descendants(10, table).map((p) => p.pid), [11, 12]);
   assert.deepEqual(launchedTree(10, APP, table).map((p) => p.pid), [10, 11, 12]);
   assert.equal(insideApp(table[4].command, APP), false);
-  assert.equal(insideApp(`${APP}x/Contents/MacOS/Ardia`, APP), false);
+  assert.equal(insideApp(`${APP}x/Contents/MacOS/Solstice`, APP), false);
 });
 
 test("survivors are tree members with the same start and command, so a reused pid is left alone even with identical arguments", () => {

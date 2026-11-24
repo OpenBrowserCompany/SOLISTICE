@@ -90,7 +90,7 @@ test("--runs and --lanes take positive whole numbers only", () => {
 });
 
 test("baseline refuses a fractional --lanes before it runs anything", () => {
-  const r = spawnSync(process.execPath, [new URL("./ratchet.mjs", import.meta.url).pathname, "baseline", "--runs", "8", "--lanes", "2.5", "--app", "/nonexistent/Ardia.app", "--bundle", "/nonexistent.jsbundle", "--out", mkdtempSync(join(tmpdir(), "ratchet-lanes-"))], { encoding: "utf8", timeout: 20_000 });
+  const r = spawnSync(process.execPath, [new URL("./ratchet.mjs", import.meta.url).pathname, "baseline", "--runs", "8", "--lanes", "2.5", "--app", "/nonexistent/Solstice.app", "--bundle", "/nonexistent.jsbundle", "--out", mkdtempSync(join(tmpdir(), "ratchet-lanes-"))], { encoding: "utf8", timeout: 20_000 });
   assert.equal(r.status, 2);
   assert.match(r.stderr, /--lanes must be a positive whole number, got 2.5/);
 });
@@ -338,7 +338,7 @@ test("the replay command run prints gives run's own verdict, Node and instructio
 
 test("--runs or --lanes with no value fails instead of becoming 1", () => {
   assert.throws(() => positiveInteger(true, "--runs"), /--runs needs a value/);
-  const r = spawnSync(process.execPath, [new URL("./ratchet.mjs", import.meta.url).pathname, "baseline", "--runs", "--lanes", "4", "--app", "/nonexistent/Ardia.app", "--bundle", "/nonexistent.jsbundle", "--out", mkdtempSync(join(tmpdir(), "ratchet-bare-"))], { encoding: "utf8", timeout: 20_000 });
+  const r = spawnSync(process.execPath, [new URL("./ratchet.mjs", import.meta.url).pathname, "baseline", "--runs", "--lanes", "4", "--app", "/nonexistent/Solstice.app", "--bundle", "/nonexistent.jsbundle", "--out", mkdtempSync(join(tmpdir(), "ratchet-bare-"))], { encoding: "utf8", timeout: 20_000 });
   assert.equal(r.status, 2);
   assert.match(r.stderr, /--runs needs a value/);
 });

@@ -4,9 +4,9 @@
 //
 // Gate recipe, what each row means and which rows don't compare across engines: docs/perf/README.md.
 //
-//   node apps/browser/scripts/perf/native-bench.mjs --app <Ardia.app> --out <dir> [options]
+//   node apps/browser/scripts/perf/native-bench.mjs --app <Solstice.app> --out <dir> [options]
 //     --label <name>          name of this set of results (default: the folder two levels above the app, so
-//                             dist/0.2.22/export/Ardia.app is "0.2.22")
+//                             dist/0.2.22/export/Solstice.app is "0.2.22")
 //     --bundle <file>         Hermes bundle of scripts/perf/bench-entry.js to run (built from the working tree when
 //                             omitted). Pass the same file to a before and an after run so only native code differs.
 //                             It must match the app's NATIVE_API_VERSION, or every command fails with the skew.
@@ -15,7 +15,7 @@
 //                             candidate; each side's results land in <out>/<its label>/results.json.
 //     --control-bundle <file> the control's bundle (default: --app's bundle); --control-label <name> (default as --label)
 //     --prepared              --app (and --control) are copies this script already prepared (<out>/<label>/app/
-//                             Ardia.app: bundle swapped in, signed for the marker): run them in place, without
+//                             Solstice.app: bundle swapped in, signed for the marker): run them in place, without
 //                             building a bundle, copying or signing. `--only prepare` makes those copies and both templates, and exits.
 //     --runs <n>              session and windows runs (default 3); --launch-runs <n> cold launches (default 5)
 //     --idle <secs>           each idle window (default 60)
@@ -738,9 +738,9 @@ async function launchRun(side, i) {
   if (copy) {
     rmSync(copy, { recursive: true, force: true });
     mkdirSync(copy, { recursive: true });
-    execFileSync("cp", ["-Rc", side.app, join(copy, "Ardia.app")]);
+    execFileSync("cp", ["-Rc", side.app, join(copy, "Solstice.app")]);
   }
-  const app = new Instance(copy ? { ...side, app: join(copy, "Ardia.app") } : side, freshDir(side, `launch-${i}`));
+  const app = new Instance(copy ? { ...side, app: join(copy, "Solstice.app") } : side, freshDir(side, `launch-${i}`));
   const traceFile = join(app.dataDir, "startup-trace.json");
   if (opt["trace-startup"]) {
     app.env.push(`ARDIA_INSTANCE=chromiumSwitches=--trace-startup=${opt["trace-startup"]} --trace-startup-file=${traceFile} --trace-startup-duration=4 --trace-startup-format=json`);
@@ -1355,7 +1355,7 @@ const fail = (message) => {
   console.error(message);
   process.exit(64);
 };
-if (!opt.app) fail("usage: native-bench.mjs --app <Ardia.app> [--control <app>] [--out dir] [--only phases] … (--help)");
+if (!opt.app) fail("usage: native-bench.mjs --app <Solstice.app> [--control <app>] [--out dir] [--only phases] … (--help)");
 const JOURNEY_PHASES = ["newtabkey", "navigate"];
 const FRAME_PHASES = ["frames", "framecounts"];
 const PHASES = ["launch", "session", ...SESSION_PARTS, ...JOURNEY_PHASES, ...FRAME_PHASES, "profiles", "windows", "throttle", "churn", "loading", "sample", "prepare"];
