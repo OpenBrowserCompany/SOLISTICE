@@ -1,8 +1,8 @@
 package com.ardia.phone
 
 import android.content.SharedPreferences
-import com.ardia.browser.NightShadeVerdict
-import com.ardia.browser.NightShadeVerdictUse
+import com.openbrowsercompany.solstice.NightShadeVerdict
+import com.openbrowsercompany.solstice.NightShadeVerdictUse
 import org.json.JSONArray
 
 class NightShadeVerdicts(

@@ -1,8 +1,8 @@
 package com.ardia.phone
 
 import android.content.Context
-import com.ardia.browser.PageEngine
-import com.ardia.browser.PageZoom
+import com.openbrowsercompany.solstice.PageEngine
+import com.openbrowsercompany.solstice.PageZoom
 
 object PageCapabilities {
     fun payload(context: Context): Map<String, Any?> {
