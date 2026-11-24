@@ -40,7 +40,7 @@ using Done = base::OnceCallback<void(bool, base::Value)>;
 constexpr net::NetworkTrafficAnnotationTag kTrafficAnnotation =
     net::DefineNetworkTrafficAnnotation("ardia_linux_bang_list", R"(
       semantics {
-        sender: "Ardia search shortcuts"
+        sender: "Solstice search shortcuts"
         description:
           "Fetches the list of search shortcuts (bangs) the address bar "
           "understands, so the list bundled with the app can be brought up "

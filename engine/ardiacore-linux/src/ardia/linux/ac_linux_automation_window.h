@@ -40,7 +40,7 @@ inline std::optional<std::string_view> OffscreenRefusal(const OffscreenTab& tab)
   if (!tab.found || tab.discarded) return "That tab has no page loaded.";
   if (tab.private_session) return "Private tabs can't go off-screen on Linux.";
   if (tab.presented || tab.shown_before) return "That tab is shown in a window, so it can't go off-screen.";
-  if (!tab.in_strip) return "Ardia couldn't take that tab off-screen.";
+  if (!tab.in_strip) return "Solstice couldn't take that tab off-screen.";
   return std::nullopt;
 }
 
