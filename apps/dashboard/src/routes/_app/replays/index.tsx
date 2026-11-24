@@ -58,7 +58,7 @@ export const Route = createFileRoute("/_app/replays/")({
     if (search.sort === "longest" || search.sort === "clicks") out.sort = search.sort;
     return out;
   },
-  head: () => ({ meta: [{ title: "Replays · Ardia" }] }),
+  head: () => ({ meta: [{ title: "Replays · Solstice" }] }),
   component: ReplaysPage,
 });
 

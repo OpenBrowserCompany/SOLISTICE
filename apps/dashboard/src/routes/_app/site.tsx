@@ -16,7 +16,7 @@ import { THRESHOLDS } from "@/lib/thresholds";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_app/site")({
-  head: () => ({ meta: [{ title: "Site · Ardia" }] }),
+  head: () => ({ meta: [{ title: "Site · Solstice" }] }),
   component: SitePage,
 });
 

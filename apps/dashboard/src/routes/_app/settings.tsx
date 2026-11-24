@@ -20,7 +20,7 @@ type SettingsSearch = { setting?: string };
 export const Route = createFileRoute("/_app/settings")({
   validateSearch: (search: Record<string, unknown>): SettingsSearch =>
     typeof search.setting === "string" && search.setting ? { setting: search.setting.slice(0, 64) } : {},
-  head: () => ({ meta: [{ title: "Settings · Ardia" }] }),
+  head: () => ({ meta: [{ title: "Settings · Solstice" }] }),
   component: SettingsPage,
 });
 
