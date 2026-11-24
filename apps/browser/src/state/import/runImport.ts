@@ -93,9 +93,9 @@ async function destination(target: string, index: number, name: string, color?: 
 type AppTabs = { result: DiaTabsResult } | { note: string };
 
 const NOT_BROUGHT = "Dia's tabs couldn't be brought over:";
-const SIDEBAR_UNREAD = "Dia's sidebar file couldn't be read, so Ardia asked Dia for its open and pinned tabs: their folders, custom names and split views stay in Dia.";
+const SIDEBAR_UNREAD = "Dia's sidebar file couldn't be read, so Solstice asked Dia for its open and pinned tabs: their folders, custom names and split views stay in Dia.";
 const FAVORITES_LOCKED = "Dia's Favorites weren't imported: they're in its sidebar file, which needs the keychain access you skipped.";
-const HELD_BACK = "what looked like a password, cookie or card number turned up where it shouldn't, so Ardia held it all back to keep it private. Importing again without passwords, cookies and cards should work.";
+const HELD_BACK = "what looked like a password, cookie or card number turned up where it shouldn't, so Solstice held it all back to keep it private. Importing again without passwords, cookies and cards should work.";
 
 function readAppTabs(): Promise<AppTabs> {
   return importModule()
@@ -105,7 +105,7 @@ function readAppTabs(): Promise<AppTabs> {
       (e: unknown): AppTabs => {
         const { code } = ardiaError(e);
         if (code === "locked")
-          return { note: `${NOT_BROUGHT} macOS didn't allow Ardia to ask Dia for them. Allow it in System Settings › Privacy & Security › Automation, then import again.` };
+          return { note: `${NOT_BROUGHT} macOS didn't allow Solstice to ask Dia for them. Allow it in System Settings › Privacy & Security › Automation, then import again.` };
         return { note: `${NOT_BROUGHT} ${code === "notRunning" ? "Dia didn't open." : "Dia didn't answer."}` };
       },
     );

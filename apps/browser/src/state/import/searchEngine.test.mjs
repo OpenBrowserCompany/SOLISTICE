@@ -13,7 +13,7 @@ const GOOGLE = {
   prepopulateId: 1,
 };
 const DUCKDUCKGO = { name: "DuckDuckGo", keyword: "duckduckgo.com", url: "https://duckduckgo.com/?q={searchTerms}", prepopulateId: 92 };
-const DOCS = { name: "Ardia Docs", keyword: "docs", url: "https://docs.ardia.example/find?q={searchTerms}&enc={inputEncoding}&{google:RLZ}" };
+const DOCS = { name: "Solstice Docs", keyword: "docs", url: "https://docs.ardia.example/find?q={searchTerms}&enc={inputEncoding}&{google:RLZ}" };
 
 let engines = {};
 globalThis.acTestNativeModules = {
@@ -68,7 +68,7 @@ async function importArc() {
   return useImportFlow.getState().step;
 }
 
-test("Chromium's engines map onto Ardia's: a built-in by its address, anything else as a custom engine, reused when imported again", () => {
+test("Chromium's engines map onto Solstice's: a built-in by its address, anything else as a custom engine, reused when imported again", () => {
   assert.equal(chromiumTemplateUrl(GOOGLE.url), "https://www.google.com/search?q=%s&ie=UTF-8");
   assert.equal(chromiumTemplateUrl(DOCS.url), "https://docs.ardia.example/find?q=%s&enc=UTF-8");
   assert.equal(matchImportedEngine(GOOGLE, BUILT_IN_ENGINES)?.id, "google");
@@ -77,13 +77,13 @@ test("Chromium's engines map onto Ardia's: a built-in by its address, anything e
   assert.deepEqual(matchImportedEngine({ name: "Find", keyword: "google.com", url: "https://search.example/find?q={searchTerms}" }, BUILT_IN_ENGINES), {
     custom: { name: "Find", keyword: "search.example", url: "https://search.example/find?q=%s" },
   });
-  assert.deepEqual(matchImportedEngine(DOCS, BUILT_IN_ENGINES), { custom: { name: "Ardia Docs", keyword: "docs", url: "https://docs.ardia.example/find?q=%s&enc=UTF-8" } });
-  const again = [...BUILT_IN_ENGINES, { id: "docs-1", name: "Ardia Docs", keyword: "docs", url: "https://docs.ardia.example/find?q=%s&enc=UTF-8", custom: true }];
+  assert.deepEqual(matchImportedEngine(DOCS, BUILT_IN_ENGINES), { custom: { name: "Solstice Docs", keyword: "docs", url: "https://docs.ardia.example/find?q=%s&enc=UTF-8" } });
+  const again = [...BUILT_IN_ENGINES, { id: "docs-1", name: "Solstice Docs", keyword: "docs", url: "https://docs.ardia.example/find?q=%s&enc=UTF-8", custom: true }];
   assert.deepEqual(matchImportedEngine(DOCS, again), { id: "docs-1" });
   assert.equal(matchImportedEngine({ name: "Odd", keyword: "odd", url: "ftp://odd.example/{searchTerms}" }, BUILT_IN_ENGINES), null);
 });
 
-test("importing from Arc on DuckDuckGo makes it Ardia's engine, says so, and sends only the outcome", async () => {
+test("importing from Arc on DuckDuckGo makes it Solstice's engine, says so, and sends only the outcome", async () => {
   fresh();
   engines = { Default: DUCKDUCKGO };
   const step = await importArc();
@@ -108,7 +108,7 @@ test("an engine the user chose stays; the done screen offers the source's, and t
   assert.equal(takeImportRuns().import_search_engine_offers_taken, 1);
 });
 
-test("a source on its own default leaves Ardia's engine alone", async () => {
+test("a source on its own default leaves Solstice's engine alone", async () => {
   fresh();
   engines = {};
   const step = await importArc();
