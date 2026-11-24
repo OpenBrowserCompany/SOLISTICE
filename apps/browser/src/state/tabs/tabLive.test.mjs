@@ -77,7 +77,7 @@ test("useTabLive follows a tab and, for a frozen copy, its holder", () => {
   shown.unmount();
 });
 
-test("a closed tab's live state is forgotten; a tab Chrome moves between windows keeps it, one Ardia reloads elsewhere starts over", () => {
+test("a closed tab's live state is forgotten; a tab Chrome moves between windows keeps it, one Solstice reloads elsewhere starts over", () => {
   S().hydrate({});
   const w1 = S().createWindow({ url: "https://a.com" });
   const [a] = S().windows[w1].tabIds;

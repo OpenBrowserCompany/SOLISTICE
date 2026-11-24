@@ -230,7 +230,7 @@ test("past the budget only tabs hidden long enough sleep, oldest first; the most
   S().updateLive(ids[12], { playingAudio: true });
   assert.deepEqual(over(), [ids[13], ids[11], ids[10], ids[9]], "a playing tab stays, and no more recent tab sleeps in its place");
   S().updateLive(ids[12], { playingAudio: false });
-  S().updateTab(ids[11], { url: "ardia://settings" });
+  S().updateTab(ids[11], { url: "solstice://settings" });
   assert.deepEqual(over(), [ids[13], ids[12], ids[10], ids[9]], "only web pages sleep");
   lifecycle.noteDiscarded(ids[13]);
   assert.deepEqual(over(), [ids[12], ids[10], ids[9]], "a sleeping tab doesn't count as loaded");

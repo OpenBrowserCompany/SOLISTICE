@@ -182,7 +182,7 @@ test("F3 main-process work keeps the newest sample as its baseline when two read
   }
 });
 
-test("F3 a consent period change starts a new main-process baseline, so presses that brought Ardia forward before it aren't counted after it", async () => {
+test("F3 a consent period change starts a new main-process baseline, so presses that brought Solstice forward before it aren't counted after it", async () => {
   client.setSharing(true, "settings");
   const app = stub.shellNativeModules.ArdiaApp;
   const original = app.diagnosticsSample;
