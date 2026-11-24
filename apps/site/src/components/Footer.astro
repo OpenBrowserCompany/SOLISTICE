@@ -4,9 +4,6 @@ import { DISCORD, NIGHTLY, RELEASES, REPO } from "../data/release";
 ---
 
 <footer class="foot paint edge edge-b dark" data-paint="midnight" data-shot="footer">
-  <div class="fireflies" aria-hidden="true" data-fireflies>
-    {Array.from({ length: 14 }, (_, i) => <span style={`--x: ${(i * 37 + 11) % 97}%; --y: ${(i * 53 + 7) % 83}%; --d: ${6 + ((i * 7) % 9)}s; --o: ${-((i * 13) % 11)}s`} />)}
-  </div>
   <div class="wrap">
     <p class="poster sign-off">Just a <span>browser.</span></p>
     <div class="cols">
@@ -73,45 +70,6 @@ import { DISCORD, NIGHTLY, RELEASES, REPO } from "../data/release";
 <style>
   .foot {
     padding: clamp(64px, 9vw, 128px) 0 clamp(40px, 5vw, 64px);
-  }
-  .fireflies {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    pointer-events: none;
-  }
-  .fireflies span {
-    position: absolute;
-    left: var(--x);
-    top: var(--y);
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: #f4f2a6;
-    box-shadow: 0 0 10px 3px rgb(230 240 120 / 0.45);
-    opacity: 0.55;
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    .fireflies span {
-      animation: drift var(--d) ease-in-out var(--o) infinite alternate;
-      animation-play-state: paused;
-    }
-    .fireflies.awake span {
-      animation-play-state: running;
-    }
-  }
-  @keyframes drift {
-    0% {
-      transform: translate(0, 0);
-      opacity: 0.1;
-    }
-    40% {
-      opacity: 0.85;
-    }
-    100% {
-      transform: translate(26px, -48px);
-      opacity: 0.2;
-    }
   }
   .foot .wrap {
     position: relative;

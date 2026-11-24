@@ -1,15 +1,13 @@
 ---
 import { base } from "../data/site";
-import { Picture, getImage } from "astro:assets";
+import { Image } from "astro:assets";
 import { getEntry } from "astro:content";
-import hills from "../assets/paint/hills.png";
-import sun from "../assets/paint/sun.png";
+import mark from "../assets/mark-white.png";
 import DownloadButton from "./DownloadButton.astro";
 import MacOnlyNote from "./MacOnlyNote.astro";
 import PcNote from "./PcNote.astro";
 import SendToMac from "./SendToMac.astro";
 import { DISCORD, MIN_MACOS, VERSION } from "../data/release";
-const hillsMask = await getImage({ src: hills, width: 320, format: "webp" });
 const whatsNew = (await getEntry("releaseNotes", VERSION)) ? `${base}/release-notes/${VERSION}/` : `${base}/release-notes/`;
 const formats = import.meta.env.DEV ? [] : ["avif"];
 ---
@@ -27,7 +25,7 @@ const formats = import.meta.env.DEV ? [] : ["avif"];
       <SendToMac location="closing" />
       <div class="cta" data-reveal style="--i: 2">
         <DownloadButton label={`Download ${VERSION}`} meta="DMG" location="closing" class="not-phone not-pc sun-btn" />
-        <DownloadButton label="Nightly" meta="Wet paint" location="closing" class="not-phone not-pc" nightly />
+        <DownloadButton label="Nightly" meta="Nightly build" location="closing" class="not-phone not-pc" nightly />
         <DownloadButton location="closing" platform="windows-x64" class="sun-btn" />
         <DownloadButton location="closing" platform="windows-arm64" class="sun-btn" />
         <DownloadButton location="closing" platform="linux" class="sun-btn" />
@@ -42,32 +40,9 @@ const formats = import.meta.env.DEV ? [] : ["avif"];
       </p>
       <p class="brew not-phone not-pc">Homebrew: <code>brew install ardia-browser/tap/ardia</code></p>
     </div>
-    <div class="closing-stage" data-tilt data-sunset aria-hidden="true">
-      <div class="sunset" data-depth="14,10">
-        <Picture
-          class="sun"
-          src={sun}
-          alt=""
-          formats={formats}
-          fallbackFormat="webp"
-          widths={[160, 260]}
-          sizes="(max-width: 900px) 20vw, 160px"
-          loading="lazy"
-          decoding="async"
-        />
-      </div>
-      <div class="hills-shade" style={`--shade: url("${hillsMask.src}")`}>
-        <Picture
-          class="hills"
-          src={hills}
-          alt=""
-          formats={formats}
-          fallbackFormat="webp"
-          widths={[420, 640, hills.width]}
-          sizes="(max-width: 900px) 72vw, 600px"
-          loading="lazy"
-          decoding="async"
-        />
+    <div class="closing-stage" data-tilt aria-hidden="true">
+      <div class="brand-mark">
+        <Image src={mark} alt="" width={300} />
       </div>
     </div>
   </div>
@@ -217,4 +192,22 @@ const formats = import.meta.env.DEV ? [] : ["avif"];
       margin: 56px 10% 0;
     }
   }
+</style>
+
+<style>
+  .brand-mark {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+  }
+  .brand-mark img {
+    width: min(62%, 300px);
+    height: auto;
+    filter: drop-shadow(0 0 48px rgb(210 215 225 / 0.25));
+  }
+  .closing-stage :global(.sun),
+  .closing-stage :global(.hills),
+  .hills-shade,
+  .sunset { display: none; }
 </style>
