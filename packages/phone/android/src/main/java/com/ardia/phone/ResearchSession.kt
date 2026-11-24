@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.ardia.browser.PageFilter
-import com.ardia.browser.ReadableContent
+import com.openbrowsercompany.solstice.PageFilter
+import com.openbrowsercompany.solstice.ReadableContent
 import com.ardia.chatgpt.ChatGPTFailure
 import com.ardia.research.ResearchDigest
 import com.ardia.research.ResearchLink

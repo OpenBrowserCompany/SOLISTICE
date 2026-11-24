@@ -1,10 +1,10 @@
 package com.ardia.phone
 
 import android.content.SharedPreferences
-import com.ardia.browser.BrowserUrl
-import com.ardia.browser.RememberedSitePermissions
-import com.ardia.browser.SiteOrigin
-import com.ardia.browser.SitePermission
+import com.openbrowsercompany.solstice.BrowserUrl
+import com.openbrowsercompany.solstice.RememberedSitePermissions
+import com.openbrowsercompany.solstice.SiteOrigin
+import com.openbrowsercompany.solstice.SitePermission
 import org.json.JSONArray
 import org.json.JSONObject
 

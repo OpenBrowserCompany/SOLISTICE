@@ -14,10 +14,10 @@ import androidx.webkit.ProfileStore
 import androidx.webkit.WebStorageCompat
 import androidx.webkit.WebViewCompat
 import androidx.webkit.WebViewFeature
-import com.ardia.browser.BrowserUserAgent
-import com.ardia.browser.PageFilter
-import com.ardia.browser.PageScripts
-import com.ardia.browser.ReadableContent
+import com.openbrowsercompany.solstice.BrowserUserAgent
+import com.openbrowsercompany.solstice.PageFilter
+import com.openbrowsercompany.solstice.PageScripts
+import com.openbrowsercompany.solstice.ReadableContent
 import com.ardia.research.ResearchLink
 import com.ardia.research.ResearchSearch
 import java.io.ByteArrayInputStream
