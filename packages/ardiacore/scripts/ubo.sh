@@ -182,7 +182,7 @@ patch("js/background.js", "        compiledMagic: 72,", "        compiledMagic: 
 patch("js/background.js", "        selfieMagic: 72,", "        selfieMagic: 173,")
 for engine in ("Main", "ExtFilteringEngine", "NetFilteringEngine"):
     for call in ("toCache", "fromCache"):
-        patch("js/storage.js", f"io.{call}('selfie/static{engine}'", f"io.{call}('selfie/staticArdia2{engine}'")
+        patch("js/storage.js", f"io.{call}('selfie/static{engine}'", f"io.{call}('selfie/staticSolstice-2{engine}'")
 patch("js/storage.js",
       "            r = await Promise.all([\n"
       "                loadMain(),\n",
