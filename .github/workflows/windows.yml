@@ -62,7 +62,7 @@ concurrency:
 jobs:
   gate:
     if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository
-    runs-on: ubuntu-latest
+    runs-on: namespace-profile-solistice-browser
     timeout-minutes: 5
     permissions:
       contents: read
@@ -86,7 +86,7 @@ jobs:
   identity:
     needs: gate
     if: ${{ !cancelled() && (needs.gate.result == 'skipped' || (needs.gate.result == 'success' && needs.gate.outputs.run == 'true')) }}
-    runs-on: ubuntu-latest
+    runs-on: namespace-profile-solistice-browser
     timeout-minutes: 5
     permissions:
       contents: read
@@ -133,7 +133,7 @@ jobs:
   source:
     needs: identity
     if: ${{ !cancelled() && needs.identity.result == 'success' && inputs.version }}
-    runs-on: ubuntu-latest
+    runs-on: namespace-profile-solistice-browser
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -162,7 +162,7 @@ jobs:
   javascript:
     needs: gate
     if: ${{ !cancelled() && (needs.gate.result == 'skipped' || (needs.gate.result == 'success' && needs.gate.outputs.run == 'true')) }}
-    runs-on: ubuntu-latest
+    runs-on: namespace-profile-solistice-browser
     timeout-minutes: 15
     steps:
       - name: Check the sources out with Windows line endings, as the Windows build has them
