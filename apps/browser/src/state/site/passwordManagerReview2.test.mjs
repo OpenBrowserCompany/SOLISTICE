@@ -93,7 +93,7 @@ test("a4: rejections back off from one second", async () => {
   assert.deepEqual(nativeProfiles(), ["", work].sort());
 });
 
-test("b: plugin → Ardia → plugin whose record write fails leaves saving on until its record lands, and Ardia finds it on", async () => {
+test("b: plugin → Solstice → plugin whose record write fails leaves saving on until its record lands, and Solstice finds it on", async () => {
   assert.equal(offerToSave(""), false);
   stub.heldSaves.on = true;
   pm.choosePasswordManager("default", "ardia");
@@ -114,7 +114,7 @@ test("b: plugin → Ardia → plugin whose record write fails leaves saving on u
   assert.equal(offerToSave(""), true, "saving comes back");
 });
 
-test("c: a record from a newer Ardia is never overwritten; offer to save is left alone and the failure counted once", async () => {
+test("c: a record from a newer Solstice is never overwritten; offer to save is left alone and the failure counted once", async () => {
   const newer = JSON.stringify({ version: 2, offerToSaveHeldOff: ["somewhere"], more: true });
   stub.stagedDocs.delete("password-manager.json");
   stub.docs.set("password-manager.json", newer);

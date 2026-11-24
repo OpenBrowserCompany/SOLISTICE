@@ -29,7 +29,7 @@ async function launch() {
   pm.startPasswordManager();
   await settle();
   return { pm, lifecycle, consentToken };
-}test("removing a leftover folder of that name in Settings moves the old choice to Ardia, though the removal drops the bundled record itself", async () => {
+}test("removing a leftover folder of that name in Settings moves the old choice to Solstice, though the removal drops the bundled record itself", async () => {
   const record = { enabled: true, approved: HASH, values: {}, applied: {} };
   stub.docs.set("plugins.json", JSON.stringify({ version: 1, plugins: { "apple-passwords": record } }));
   usePlugins.setState({ records: { "apple-passwords": record }, listings: {}, order: [], scanned: false });

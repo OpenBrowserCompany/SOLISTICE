@@ -134,7 +134,7 @@ test("3d: a native answer that never comes holds the turn-off for about a second
   await settle();
 });
 
-test("4: plugin → Ardia → plugin before the record write lands keeps Ardia's ownership, so Ardia gets offer to save back later", async () => {
+test("4: plugin → Solstice → plugin before the record write lands keeps Solstice's ownership, so Solstice gets offer to save back later", async () => {
   pm.choosePasswordManager("default", "plugin:first-pm");
   await settle();
   assert.equal(offerToSave(""), false);
@@ -151,7 +151,7 @@ test("4: plugin → Ardia → plugin before the record write lands keeps Ardia's
   pm.choosePasswordManager("default", "ardia");
   await settle();
   await settle();
-  assert.equal(offerToSave(""), true, "back to Ardia gives it back");
+  assert.equal(offerToSave(""), true, "back to Solstice gives it back");
 });
 
 test("5: password-manager.json is a versioned document, and the unversioned form still reads", async () => {
