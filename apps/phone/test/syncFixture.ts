@@ -13,7 +13,7 @@ export function status(patch: Partial<SyncStatus> = {}): SyncStatus {
     isDemo: false,
     pendingDownloads: 0,
     lastSynced: NOW - 5_000,
-    folderName: "Ardia Sync",
+    folderName: "Solstice Sync",
     deviceName: "POCO M3 Pro",
     selectedProfileId: "work",
     showsResetNotice: false,
