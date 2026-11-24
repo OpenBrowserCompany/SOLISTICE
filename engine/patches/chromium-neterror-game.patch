@@ -22,7 +22,7 @@ index ea3b62a023..67fa4b8dd9 100644
        switches::kForceAppMode);
  }
  
-+// Ardia: "Where's the lamb?" takes the dino's place. Wherever Chrome would
++// Solstice: "Where's the lamb?" takes the dino's place. Wherever Chrome would
 +// start the dino (an offline error in a main frame, the easter egg allowed),
 +// the page is IDR_ARDIA_GAME_HTML instead, one self-contained document
 +// whose JSON block receives the failed load.
@@ -111,7 +111,7 @@ index d13a11bfa2..d67bef3692 100644
  <?xml version="1.0" encoding="utf-8"?>
  <grit-part>
    <include name="IDR_NET_ERROR_HTML" file="../neterror/resources/neterror.html" flattenhtml="true" type="BINDATA"/>
-+  <!-- Ardia: "Where's the lamb?", shown instead of the dino. Generated from the app's
++  <!-- Solstice: "Where's the lamb?", shown instead of the dino. Generated from the app's
 +       offline-game folder by its inline.py before each build (untracked here). -->
 +  <include name="IDR_ARDIA_GAME_HTML" file="../neterror/resources/game/game.html" type="BINDATA" compress="brotli"/>
  </grit-part>
@@ -151,7 +151,7 @@ index 75eb817c98..bbd6b1cdea 100644
  inline constexpr char kChromeUIBrowserCrashHost[] =
      "inducebrowsercrashforrealz";
  inline constexpr char kChromeUIDinoHost[] = "dino";
-+// Ardia: chrome://game, the offline game on its own (as chrome://dino).
++// Solstice: chrome://game, the offline game on its own (as chrome://dino).
 +inline constexpr char kChromeUIGameHost[] = "game";
  inline constexpr char kChromeUIGpuHost[] = "gpu";
  inline constexpr char kChromeUIHistogramHost[] = "histograms";

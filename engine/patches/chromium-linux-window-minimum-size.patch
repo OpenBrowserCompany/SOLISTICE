@@ -1,4 +1,4 @@
-The Ardia Linux host may set a browser window's minimum size, so a Little Ardia window keeps the Mac's 420 by 300
+The Solstice Linux host may set a browser window's minimum size, so a Little Solstice window keeps the Mac's 420 by 300
 instead of the tabbed layout's own minimum.
 --- a/chrome/browser/ui/views/frame/browser_view.cc
 +++ b/chrome/browser/ui/views/frame/browser_view.cc
