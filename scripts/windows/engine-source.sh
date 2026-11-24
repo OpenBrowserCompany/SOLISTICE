@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-usage="usage: scripts/windows/engine-source.sh <commit> <version> <build> <out.tar.xz>  (packs the source of the prebuilt Windows engine <commit> ships, from the commit its prebuilt.json names as its source, for Ardia <version> build <build>)"
+usage="usage: scripts/windows/engine-source.sh <commit> <version> <build> <out.tar.xz>  (packs the source of the prebuilt Windows engine <commit> ships, from the commit its prebuilt.json names as its source, for Solstice <version> build <build>)"
 case "${1:-}" in -h | --help) echo "$usage"; exit 0 ;; esac
 commit_rev="${1:?$usage}"
 version="${2:?$usage}"
@@ -45,13 +45,13 @@ fetch() {
 fetch helium-chromium "$helium"
 fetch helium-windows "$helium_windows"
 cat >"$src/README.txt" <<EOF
-The source of Ardia for Windows, build $build ($version), besides Ardia's own repository.
+The source of Solstice for Windows, build $build ($version), besides Solstice's own repository.
 
-Ardia's engine, its patches and build scripts, at the commit this build's engine was built from:
+Solstice's engine, its patches and build scripts, at the commit this build's engine was built from:
   https://github.com/$repo/tree/$engine_source
   How to build the engine: docs/engine-build-windows.md there.
 
-Ardia's app, at this build's commit:
+Solstice's app, at this build's commit:
   https://github.com/$repo/tree/$commit
   How to build the app: docs/windows.md there.
 
