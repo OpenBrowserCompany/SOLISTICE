@@ -28,18 +28,18 @@ test("a switch stays followed until its check settles", () => {
 });
 
 test("Settings says what the switch's check found", () => {
-  assert.equal(switchCheckLine(state({ phase: "checking", channel: "nightly" }), "Ardia"), "Checking Nightly…");
-  assert.equal(switchCheckLine(state({ phase: "waiting", channel: "stable" }), "Ardia"), "Checking Stable once the current update finishes…");
-  assert.equal(switchCheckLine(state({ phase: "found", channel: "nightly", version: "0.2.47 Nightly 1" }), "Ardia"), "Ardia 0.2.47 Nightly 1 is available on Nightly.");
-  assert.equal(switchCheckLine(state({ phase: "upToDate", channel: "stable" }), "Ardia"), "You're up to date on Stable.");
-  assert.equal(switchCheckLine(state({ phase: "failed", channel: "nightly" }), "Ardia"), "Couldn't check Nightly. Try Check Now.");
-  assert.equal(switchCheckLine(state(null), "Ardia"), null);
+  assert.equal(switchCheckLine(state({ phase: "checking", channel: "nightly" }), "Solstice"), "Checking Nightly…");
+  assert.equal(switchCheckLine(state({ phase: "waiting", channel: "stable" }), "Solstice"), "Checking Stable once the current update finishes…");
+  assert.equal(switchCheckLine(state({ phase: "found", channel: "nightly", version: "0.2.47 Nightly 1" }), "Solstice"), "Solstice 0.2.47 Nightly 1 is available on Nightly.");
+  assert.equal(switchCheckLine(state({ phase: "upToDate", channel: "stable" }), "Solstice"), "You're up to date on Stable.");
+  assert.equal(switchCheckLine(state({ phase: "failed", channel: "nightly" }), "Solstice"), "Couldn't check Nightly. Try Check Now.");
+  assert.equal(switchCheckLine(state(null), "Solstice"), null);
 });
 
 test("going back to Stable from a newer nightly never reads as a downgrade", () => {
   assert.equal(
-    switchCheckLine(state({ phase: "newerThanLatest", channel: "stable" }), "Ardia"),
-    "0.2.46 Nightly 5 is newer than the latest Stable, so Ardia stays on it until a newer Stable ships.",
+    switchCheckLine(state({ phase: "newerThanLatest", channel: "stable" }), "Solstice"),
+    "0.2.46 Nightly 5 is newer than the latest Stable, so Solstice stays on it until a newer Stable ships.",
   );
 });
 
@@ -69,14 +69,14 @@ test("Check Now shows a check in progress as progress, never as a dimmed button"
 
 test("an update that installs itself shows its download, its install and Restart to Update", () => {
   const downloading = state({ phase: "downloading", channel: "stable", version: "0.2.48" }, { sessionInProgress: true, canCheck: false });
-  assert.equal(switchCheckLine(downloading, "Ardia"), "Downloading Ardia 0.2.48…");
+  assert.equal(switchCheckLine(downloading, "Solstice"), "Downloading Solstice 0.2.48…");
   assert.equal(updaterBusy(downloading), true);
   assert.deepEqual(checkNowControl(downloading), { title: "Updating…", checking: true, disabled: false, pressable: false });
   const installing = state({ phase: "installing", channel: "stable", version: "0.2.48" });
-  assert.equal(switchCheckLine(installing, "Ardia"), "Installing Ardia 0.2.48…");
+  assert.equal(switchCheckLine(installing, "Solstice"), "Installing Solstice 0.2.48…");
   assert.equal(updaterBusy(installing), true);
   const ready = state({ phase: "ready", channel: "stable", version: "0.2.48" });
-  assert.equal(switchCheckLine(ready, "Ardia"), "Ardia 0.2.48 is ready. Restart to finish updating.");
+  assert.equal(switchCheckLine(ready, "Solstice"), "Solstice 0.2.48 is ready. Restart to finish updating.");
   assert.equal(updaterBusy(ready), false);
   assert.deepEqual(checkNowControl(ready), { title: "Restart to Update", checking: false, disabled: false, pressable: true });
   for (const phase of ["downloading", "installing", "ready"]) assert.equal(switchOutcome({ phase, channel: "nightly" }), "offered", phase);

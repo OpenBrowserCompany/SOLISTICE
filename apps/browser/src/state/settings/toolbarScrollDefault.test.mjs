@@ -48,7 +48,7 @@ test("a saved on the user never touched turns off and stays unchosen, so sync do
   assert.equal(pushed(), false);
 });
 
-test("an on from before Ardia tracked choices (every key chosen and inferred) turns off", () => {
+test("an on from before Solstice tracked choices (every key chosen and inferred) turns off", () => {
   assert.deepEqual(load(doc(SESSION_VERSION, { ...DEFAULT_SETTINGS, [KEY]: true }, { chosen: [KEY, "tabLayout"], inferred: [KEY, "tabLayout"] })), { on: false, chosen: false, inferred: false });
   assert.deepEqual(S().settingsMeta, { chosen: ["tabLayout"], inferred: ["tabLayout", APPLIED] });
   assert.equal(load(doc(6, { ...DEFAULT_SETTINGS, [KEY]: true })).on, false);

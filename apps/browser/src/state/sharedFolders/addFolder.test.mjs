@@ -8,9 +8,9 @@ const refusedPaths = new Set();
 const reads = [];
 
 globalThis.acTestNativeModules = {
-  ArdiaDialogs: { ...shellNativeModules.ArdiaDialogs, pickFolder: async () => "/scratch/Ardia Shared/Team" },
+  ArdiaDialogs: { ...shellNativeModules.ArdiaDialogs, pickFolder: async () => "/scratch/Solstice Shared/Team" },
   ArdiaSharedFolders: {
-    location: () => ({ path: "/scratch/Ardia Shared", iCloudAvailable: true, iCloudPath: "/scratch" }),
+    location: () => ({ path: "/scratch/Solstice Shared", iCloudAvailable: true, iCloudPath: "/scratch" }),
     resolve: async (path) => refusedPaths.has(path) ? Promise.reject(Object.assign(new Error(`${path} is a system or home folder`), { code: "ERR_SHARED_FOLDER_REFUSED" })) : (++resolves === 2 && duringResolve(), { path, device: 1, inode: path.endsWith("Old") ? 23 : 21 }),
     read: async (path) => (reads.push(path), { exists: true, root: { entries: [], manifest: null, manifestPending: false } }),
     apply: async () => ({ conflicts: [] }),
@@ -31,7 +31,7 @@ test("adding a folder while the window switches profile binds nothing to either 
   const windowId = S().createWindow({ url: "https://home.example/" });
   const before = S().windows[windowId].profileId;
   const other = S().createProfile({ name: "Other" });
-  bindFolder(before, "legacy-key", "/scratch/Ardia Shared/Old");
+  bindFolder(before, "legacy-key", "/scratch/Solstice Shared/Old");
   duringResolve = () => S().switchProfile(windowId, other);
   await addSharedFolder(windowId);
   assert.equal(resolves, 2, "the switch landed while the existing bindings were checked");
