@@ -60,7 +60,7 @@ async function evaluateIn(context, expression) {
   }
 }
 
-describe("Ardia launch plumbing and shell driver against a mock host", () => {
+describe("Solstice launch plumbing and shell driver against a mock host", () => {
   let mock;
   let scratch;
   const shells = {

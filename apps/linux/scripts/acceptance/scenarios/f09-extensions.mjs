@@ -6,7 +6,7 @@ import { startBrowser } from "../lib/flows.mjs";
 import { js, nonce, pause, until } from "../lib/util.mjs";
 
 export const FIXTURE_EXTENSION = new URL("../fixtures/extension/", import.meta.url);
-export const FIXTURE_NAME = "Ardia Acceptance Fixture";
+export const FIXTURE_NAME = "Solstice Acceptance Fixture";
 
 const CRC_TABLE = Array.from({ length: 256 }, (_, n) => {
   let c = n;
@@ -86,8 +86,8 @@ export default {
   title: "Extensions management, toolbar action, popup and side panel",
   deadline: 360000,
   manual: [
-    { name: "Web Store install shows Ardia's consent dialog and Cancel installs nothing", steps: ["Open chromewebstore.google.com and choose Add to Ardia on any extension.", "Ardia's own dialog lists the extension's permissions.", "Cancel: nothing is installed and the store page shows Add again.", "Add: the extension appears in Settings › Extensions and on the toolbar."], reason: "needs network access to the Chrome Web Store and its signed CRX" },
-    { name: "A permission-increasing update asks before re-enabling", steps: ["Install a packed CRX from Settings › Extensions › Install from file.", "Install a newer CRX of the same key that adds a permission: Chromium disables it.", "Turning it on shows Ardia's 'needs new permissions' dialog; Cancel keeps it off, Allow turns it on."], reason: "needs two signed CRX files of the same key" },
+    { name: "Web Store install shows Solstice's consent dialog and Cancel installs nothing", steps: ["Open chromewebstore.google.com and choose Add to Solstice on any extension.", "Solstice's own dialog lists the extension's permissions.", "Cancel: nothing is installed and the store page shows Add again.", "Add: the extension appears in Settings › Extensions and on the toolbar."], reason: "needs network access to the Chrome Web Store and its signed CRX" },
+    { name: "A permission-increasing update asks before re-enabling", steps: ["Install a packed CRX from Settings › Extensions › Install from file.", "Install a newer CRX of the same key that adds a permission: Chromium disables it.", "Turning it on shows Solstice's 'needs new permissions' dialog; Cancel keeps it off, Allow turns it on."], reason: "needs two signed CRX files of the same key" },
     { name: "Popup placement, focus and keyboard", steps: ["Pin the fixture and click its toolbar button: the popup opens under the button at its own size.", "Typing goes to the popup; Escape and clicking outside close it; Close in the popup closes it."], reason: "needs a visible compositor and real input" },
   ],
   async run(t) {
@@ -119,7 +119,7 @@ export default {
       return { unknown: unknown.code, malformed: malformed.code };
     });
 
-    await t.check("the omnibox keyword is listed by search.engines and kept out of Ardia's search engines", async () => {
+    await t.check("the omnibox keyword is listed by search.engines and kept out of Solstice's search engines", async () => {
       const engines = (await reply(shell, "search.engines", {})).list.engines;
       const keyword = engines.find((e) => e.extension?.id === ext.id);
       if (!keyword || keyword.isOmniboxExtension !== true || keyword.keyword !== "ardiafixture") throw new Error(JSON.stringify(keyword ?? null));
@@ -188,7 +188,7 @@ export default {
       return report;
     });
 
-    await t.check("tabs and windows an extension opens show in Ardia, and an inactive tab keeps the selection", async () => {
+    await t.check("tabs and windows an extension opens show in Solstice, and an inactive tab keeps the selection", async () => {
       const opened = (hash) => `chrome-extension://${ext.id}/opened.html#${hash}`;
       const tabsAt = (url) => shell.state(`return Object.values(s.tabs).filter((t) => t.windowId === windowId && t.url === ${js(url)}).map((t) => t.id);`);
       const shownOnce = async (url, label) => {
