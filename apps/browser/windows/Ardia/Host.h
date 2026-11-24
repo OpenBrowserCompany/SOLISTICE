@@ -4,7 +4,7 @@
 
 #include "EngineApi.h"
 
-namespace Ardia {
+namespace Solstice {
 
 struct Host {
   winrt::Microsoft::ReactNative::ReactNativeHost reactHost;

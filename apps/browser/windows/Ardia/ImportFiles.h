@@ -21,7 +21,7 @@
 #pragma comment(lib, "crypt32.lib")
 #pragma comment(lib, "winsqlite3.lib")
 
-namespace Ardia {
+namespace Solstice {
 
 namespace ImportFiles {
 

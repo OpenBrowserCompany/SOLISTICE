@@ -13,7 +13,7 @@
 #include "ImportFiles.h"
 #include "ImportSecrets.h"
 
-namespace Ardia {
+namespace Solstice {
 
 namespace ImportAutofill {
 
