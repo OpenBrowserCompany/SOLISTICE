@@ -155,7 +155,7 @@ test("site switch values live beside the record, keyed by origin, and stay out o
   assert.equal(siteSwitchValue(P(), "developer-mode", "on", "https://example.com"), true);
   assert.deepEqual(Object.keys(P().records["developer-mode"].values), ["localAddresses"]);
   assert.deepEqual(siteSwitchRows(P(), "https://example.com/b"), [{ plugin: "developer-mode", key: "on", title: "Developer Mode", icon: "hammer", on: true }]);
-  assert.deepEqual(siteSwitchRows(P(), "ardia://settings"), []);
+  assert.deepEqual(siteSwitchRows(P(), "solstice://settings"), []);
   const parsed = parsePluginRecords(pluginRecordsJson({ x: { enabled: false, approved: null, values: {}, applied: {}, sites: { on: { "https://example.com": true, "not an origin": true, "http://a.test/path": true, "http://b.test": "yes", __proto__: true }, "bad key!": { "https://c.test": true } } } }));
   assert.deepEqual(parsed.x.sites, { on: { "https://example.com": true } });
   assert.equal(siteSwitchValue({ records: parsed }, "x", "constructor", "https://example.com"), undefined);

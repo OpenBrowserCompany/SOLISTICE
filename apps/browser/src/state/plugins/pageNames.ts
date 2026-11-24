@@ -3,10 +3,10 @@ import { isPagePath } from "../../lib/pluginNames";
 import { loadPluginRecords } from "./records";
 import { usePlugins } from "./store";
 
-const PAGE_URL = /^ardia:\/\/([a-z0-9][a-z0-9-]{0,39})(\/[^?#]*)?(\?[^#]*)?(?:#.*)?$/i;
+const PAGE_URL = /^(?:ardia|solstice):\/\/([a-z0-9][a-z0-9-]{0,39})(\/[^?#]*)?(\?[^#]*)?(?:#.*)?$/i;
 export { isPagePath };
 
-export const pluginPageUrl = (name: string, path = "") => `ardia://${name}${path}`;
+export const pluginPageUrl = (name: string, path = "") => `solstice://${name}${path}`;
 
 export function pluginPagePath(url: string): string {
   const m = PAGE_URL.exec(url);

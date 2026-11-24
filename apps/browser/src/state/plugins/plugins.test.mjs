@@ -94,7 +94,7 @@ test("an installed plugin stays off until its consent is accepted, then starts i
 
 test("the consent sheet names every reach the plugin gets", () => {
   const lines = consentLines(P().listings.example.manifest).map((l) => l.text).join("\n");
-  for (const words of ["/usr/bin/python3 helper.py", "can't connect to anything or accept connections", "title of your tabs", "tab.activated", "Runs Ardia commands", "commandBarStart", "ardia://example", "handed the tab you're on", "Say Hello", "Offers tools"]) assert.ok(lines.includes(words), words);
+  for (const words of ["/usr/bin/python3 helper.py", "can't connect to anything or accept connections", "title of your tabs", "tab.activated", "Runs Solstice commands", "commandBarStart", "solstice://example", "handed the tab you're on", "Say Hello", "Offers tools"]) assert.ok(lines.includes(words), words);
 });
 
 test("settings defaults apply on enable and go back on disable, unless changed since", async () => {
@@ -278,7 +278,7 @@ test("a helper can't reach through another plugin's tools to a permission it was
   lifecycle.disablePlugin("other");
 });
 
-test("the page is a tab at ardia://<name>; a command opens it beside the current tab, handing it that tab", async () => {
+test("the page is a tab at solstice://<name>; a command opens it beside the current tab, handing it that tab", async () => {
   await enabled();
   const w = S().createWindow({ url: "https://a.example/read?id=7#top" });
   const reading = S().windows[w].tabIds[0];
@@ -286,8 +286,8 @@ test("the page is a tab at ardia://<name>; a command opens it beside the current
   takePluginCounts();
   await runPluginAction("plugin:example/beside", w);
   const split = Object.values(S().splits ?? {}).find((sp) => JSON.stringify(sp).includes(reading));
-  const page = S().windows[w].tabIds.find((id) => S().tabs[id].url === "ardia://example");
-  assert.ok(page, "a tab at ardia://example");
+  const page = S().windows[w].tabIds.find((id) => S().tabs[id].url === "solstice://example");
+  assert.ok(page, "a tab at solstice://example");
   assert.ok(isInternalTab(S().tabs[page]));
   assert.ok(split && JSON.stringify(split).includes(page), "the page and the tab share a split");
   const context = pageContextOf(page);
@@ -337,14 +337,14 @@ test("pages take a path: each path is its own tab, and a helper opens them with 
   const history = openPluginPage(w, "example", { path: "/history" });
   const chat = openPluginPage(w, "example", { path: "/chats/42?draft=1" });
   assert.notEqual(history, chat);
-  assert.equal(S().tabs[chat].url, "ardia://example/chats/42?draft=1");
+  assert.equal(S().tabs[chat].url, "solstice://example/chats/42?draft=1");
   assert.ok(isInternalTab(S().tabs[chat]));
   assert.equal(openPluginPage(w, "example", { path: "/history" }), history, "the same path goes back to its tab");
   assert.equal(openPluginPage(w, "example", { path: "/../x" }), null);
   assert.match(pageViewUrl(P(), "example", "/chats/42?draft=1"), /\?ardiaPath=%2Fchats%2F42%3Fdraft%3D1$/);
   const opened = await ask("page.open", { path: "/chats/7", split: true, side: "left" }, run);
   assert.ok(opened.result.tabId);
-  assert.equal(S().tabs[opened.result.tabId].url, "ardia://example/chats/7");
+  assert.equal(S().tabs[opened.result.tabId].url, "solstice://example/chats/7");
   assert.equal((await ask("page.open", { path: "nope path" }, run)).error.code, "bad_request");
   lifecycle.disablePlugin("example");
 });
@@ -415,7 +415,7 @@ test("a page's context belongs to the plugin, the address and the approval it wa
   const reading = S().windows[w].tabIds[0];
   S().updateTab(reading, { url: "https://a.example/read?token=1", title: "Reading" });
   await runPluginAction("plugin:example/beside", w);
-  const page = S().windows[w].tabIds.find((id) => S().tabs[id].url === "ardia://example");
+  const page = S().windows[w].tabIds.find((id) => S().tabs[id].url === "solstice://example");
   assert.equal(pageContextOf(page)?.url, "https://a.example/read?token=1");
   await install(FIXTURE);
   assert.ok(lifecycle.requestPluginConsent("example") && lifecycle.enablePlugin("example", P().consent.hash));
@@ -423,9 +423,9 @@ test("a page's context belongs to the plugin, the address and the approval it wa
   S().activate(reading);
   await runPluginAction("plugin:example/beside", w);
   assert.ok(pageContextOf(page));
-  S().updateTab(page, { url: "ardia://other" });
+  S().updateTab(page, { url: "solstice://other" });
   assert.equal(pageContextOf(page), null, "a page that leaves for another address loses it");
-  S().updateTab(page, { url: "ardia://example" });
+  S().updateTab(page, { url: "solstice://example" });
   assert.equal(pageContextOf(page), null, "and coming back doesn't bring it back");
   const anyContext = { tabId: reading, url: "https://a.example/read?token=1", title: "Reading" };
   assert.doesNotMatch(shownContext(P(), "example", anyContext).url, /token=1/, "the context is cut to the plugin's own permissions");
@@ -651,7 +651,7 @@ test("a page opens a tab only by asking its helper, which needs the commands per
 test("open takes only http and https URLs, at most ten, refusing everything else before anything opens", async () => {
   const run = await enabled();
   S().createWindow({ url: "https://a.example/" });
-  const bad = ["file:///etc/passwd", "/abs/path", "ardia:settings", "ardia://settings", "chrome://history", "about:blank", "javascript:alert(1)", "ardia-plugin://example/page/index.html", "data:text/html,hi", "https://user:pass@b.example/", "https://user@b.example/", " https://b.example/", "https://b.example/\u0000", "https://b.example/\n", "HTTPS:b.example", "https:\\\\b.example", "https://", "ht\ttps://b.example/", "https://b.example/ x", 7, "https://b.example:99999/", "https://b.example:0/", "https://b.example:65536/", "https://b\u00fccher.example/", "https://b.example/\u00a0", "https://b.example/\u2028", "https://b.example/\ud800", "https://[::1/", "https://[::ffff:zz]/", "https://exa%6Dple.com/", "https://b.example\\x/", "https://b.example/\u0085", "https://1.2.3/", "https:///b.example/", `https://b.example/${"a".repeat(2048)}`];
+  const bad = ["file:///etc/passwd", "/abs/path", "ardia:settings", "solstice://settings", "chrome://history", "about:blank", "javascript:alert(1)", "ardia-plugin://example/page/index.html", "data:text/html,hi", "https://user:pass@b.example/", "https://user@b.example/", " https://b.example/", "https://b.example/\u0000", "https://b.example/\n", "HTTPS:b.example", "https:\\\\b.example", "https://", "ht\ttps://b.example/", "https://b.example/ x", 7, "https://b.example:99999/", "https://b.example:0/", "https://b.example:65536/", "https://b\u00fccher.example/", "https://b.example/\u00a0", "https://b.example/\u2028", "https://b.example/\ud800", "https://[::1/", "https://[::ffff:zz]/", "https://exa%6Dple.com/", "https://b.example\\x/", "https://b.example/\u0085", "https://1.2.3/", "https:///b.example/", `https://b.example/${"a".repeat(2048)}`];
   for (const url of bad) {
     const tabs = Object.keys(S().tabs).length;
     const reply = await ask("open", { urls: [url] }, run);
@@ -740,7 +740,7 @@ test("Restart stops accepting the retiring run before it asks for the stop, so a
   lifecycle.disablePlugin("example");
 });
 
-test("a start replaced while it was pending never has its helper's lines taken, whenever Ardia hears it was replaced", async () => {
+test("a start replaced while it was pending never has its helper's lines taken, whenever Solstice hears it was replaced", async () => {
   await enabled();
   S().createWindow({ url: "https://a.example/" });
   const before = tabCount();
@@ -792,7 +792,7 @@ test("turning off and removing stop accepting the run before the native stop fin
   host.folders = [];
 });
 
-test("while Ardia is quitting no helper request is taken, and a cancelled quit takes them again", async () => {
+test("while Solstice is quitting no helper request is taken, and a cancelled quit takes them again", async () => {
   const run = await enabled();
   S().createWindow({ url: "https://a.example/" });
   const before = tabCount();
