@@ -23,7 +23,7 @@
 #include "ImportSecrets.h"
 #include "Paths.h"
 
-namespace Ardia {
+namespace Solstice {
 
 namespace ImportParts {
 

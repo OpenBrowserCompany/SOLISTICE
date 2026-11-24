@@ -12,7 +12,7 @@
 #include "ImportNss.h"
 #include "ImportSecrets.h"
 
-namespace Ardia {
+namespace Solstice {
 
 namespace ImportFirefox {
 
