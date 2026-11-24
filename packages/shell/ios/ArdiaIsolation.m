@@ -41,7 +41,7 @@ static void IsolatePasteboard(NSString *dataDirectory) {
 #if DEBUG
   IsolatePasteboard(dataDirectory);
 #endif
-  NSString *domain = NSBundle.mainBundle.bundleIdentifier ?: @"com.ardia.browser";
+  NSString *domain = NSBundle.mainBundle.bundleIdentifier ?: @"com.openbrowsercompany.solstice";
   gDefaults = [[NSUserDefaults alloc]
       initWithSuiteName:[[dataDirectory stringByAppendingPathComponent:@"Preferences"] stringByAppendingPathComponent:domain]];
   if (!gDefaults) return;

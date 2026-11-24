@@ -86,7 +86,7 @@ public final class AppUpdater: NSObject {
       case .release(let waits):
         for wait in waits { quitWaits.removeValue(forKey: wait)?() }
       case .log(let line):
-        NSLog("Ardia: \(line)")
+        NSLog("Solstice: \(line)")
       }
     }
   }
@@ -94,7 +94,7 @@ public final class AppUpdater: NSObject {
   private func checkSwitchedChannel() {
     switchCheck.handle(.started)
     guard updater.canCheckForUpdates else {
-      NSLog("Ardia: Sparkle can't check the \(channel) channel after the switch yet")
+      NSLog("Solstice: Sparkle can't check the \(channel) channel after the switch yet")
       return switchCheck.handle(.finished(failed: true))
     }
     userDriver.quietCheck = !switchCheck.userAsked
@@ -139,7 +139,7 @@ public final class AppUpdater: NSObject {
     return "\(version[..<range.lowerBound]) Nightly \(number)"
   }
 
-  static let aboutNotice = "© 2026 Mantra Patel. Ardia is free software under the GNU General Public License v3, with ABSOLUTELY NO WARRANTY. Its source is at the link below. It's built on Chromium and uBlock Origin, each under its own license."
+  static let aboutNotice = "© 2026 Mantra Patel. Solstice is free software under the GNU General Public License v3, with ABSOLUTELY NO WARRANTY. Its source is at the link below. It's built on Chromium and uBlock Origin, each under its own license."
 
   @objc public func showAbout(_ sender: Any?) {
     NSApp.orderFrontStandardAboutPanel(options: [.applicationVersion: Self.displayVersion, .credits: Self.aboutCredits])
@@ -211,7 +211,7 @@ public final class AppUpdater: NSObject {
     do {
       try updater.start()
     } catch {
-      NSLog("Ardia: couldn't start the updater: \(error.localizedDescription)")
+      NSLog("Solstice: couldn't start the updater: \(error.localizedDescription)")
     }
     sessionObservation = updater.observe(\.sessionInProgress, options: [.new]) { [weak self] _, change in
       guard change.newValue == false else { return }
@@ -224,7 +224,7 @@ public final class AppUpdater: NSObject {
   @objc public func checkForUpdates(_ sender: Any?) {
     guard isConfigured else {
       if LaunchConfig.shared.background {
-        return NSLog("Ardia: update checks are off in this instance")
+        return NSLog("Solstice: update checks are off in this instance")
       }
       return showNotSetUp()
     }
@@ -295,12 +295,12 @@ extension AppUpdater: SPUUpdaterDelegate {
   }
 
   public func updater(_ updater: SPUUpdater, didFindValidUpdate item: SUAppcastItem) {
-    NSLog("Ardia: update found: \(item.displayVersionString) (build \(item.versionString)\(item.channel.map { ", \($0)" } ?? "")) on the \(channel) channel")
+    NSLog("Solstice: update found: \(item.displayVersionString) (build \(item.versionString)\(item.channel.map { ", \($0)" } ?? "")) on the \(channel) channel")
     switchCheck.handle(.found(version: Self.displayVersion(of: item.displayVersionString)))
   }
 
   public func updaterDidNotFindUpdate(_ updater: SPUUpdater, error: Error) {
-    NSLog("Ardia: no update on the \(channel) channel")
+    NSLog("Solstice: no update on the \(channel) channel")
     let reason = ((error as NSError).userInfo[SPUNoUpdateFoundReasonKey] as? NSNumber).flatMap { SPUNoUpdateFoundReason(rawValue: $0.int32Value) }
     switchCheck.handle(.notFound(newerThanLatest: reason == .onNewerThanLatestVersion))
   }
