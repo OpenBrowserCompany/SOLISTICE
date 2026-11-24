@@ -3,7 +3,7 @@ set -euo pipefail
 
 usage="usage: scripts/release/official-signatures.sh <fixtures dir> [team id]
 Reads the code signature of every Mach-O file in each pinned macOS official-plugin tarball in <fixtures dir> (as
-official-plugins.py fixtures writes them). Ardia trusts these programs by their pinned SHA-256, not by signature, so:
+official-plugins.py fixtures writes them). Solstice trusts these programs by their pinned SHA-256, not by signature, so:
   PASS  Developer ID Application of <team id> (default U5L5T3NGVV), hardened runtime, secure timestamp
   WARN  ad hoc, linker-signed or unsigned, or Developer ID of <team id> without the runtime or a timestamp
   FAIL  a signature that doesn't verify (codesign --verify --strict), or one from anyone but <team id>
@@ -73,10 +73,10 @@ for archive in "${archives[@]}"; do
   elif [ "$warned" -gt 0 ]; then
     echo "************************************************************************"
     echo "WARNING  $name: $warned of $total Mach-O files aren't Developer ID signed with the hardened runtime and a timestamp."
-    echo "WARNING  Ardia still installs it (trust is the pinned SHA-256), but release a signed, notarized build of it."
+    echo "WARNING  Solstice still installs it (trust is the pinned SHA-256), but release a signed, notarized build of it."
     echo "************************************************************************"
     annotate warning "$name: $warned of $total Mach-O files aren't Developer ID signed (team $team) with the hardened runtime and a timestamp"
-    summary "- ⚠️ $name: $warned of $total Mach-O files aren't Developer ID signed (team $team) with the hardened runtime and a timestamp. Ardia trusts it by its pinned SHA-256 only."
+    summary "- ⚠️ $name: $warned of $total Mach-O files aren't Developer ID signed (team $team) with the hardened runtime and a timestamp. Solstice trusts it by its pinned SHA-256 only."
   elif [ "$total" -gt 0 ]; then
     echo "PASS  $name: all $total Mach-O files are Developer ID (team $team), hardened runtime, timestamped"
     summary "- $name: all $total Mach-O files Developer ID signed (team $team), hardened runtime, timestamped"

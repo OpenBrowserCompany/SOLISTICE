@@ -30,7 +30,7 @@ function check(dir, env = {}) {
   return { status: result.status, out: result.stdout + result.stderr };
 }
 
-test("an ad hoc or unsigned program is a loud warning, not a failure: the pinned SHA-256 is what Ardia trusts", { skip: !onMac }, () => {
+test("an ad hoc or unsigned program is a loud warning, not a failure: the pinned SHA-256 is what Solstice trusts", { skip: !onMac }, () => {
   const dir = fixtures({
     linked: (path) => compiled(path),
     adhoc: (path) => execFileSync("codesign", ["--force", "--sign", "-", compiled(path)]),
