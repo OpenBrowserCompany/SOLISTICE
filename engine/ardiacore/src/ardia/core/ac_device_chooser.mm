@@ -263,7 +263,7 @@ void DriveTestBluetoothChooser(int chooser_id, bool unauthorized) {
   }
   controller->OnAdapterPresenceChanged(BluetoothChooser::AdapterPresence::POWERED_ON);
   controller->AddOrUpdateDevice("ac-test-device", false,
-                                u"Ardia Test Device", false,
+                                u"Solstice Test Device", false,
                                 false, 3);
   controller->OnDiscoveryStateChanged(BluetoothChooser::DiscoveryState::IDLE);
 }
