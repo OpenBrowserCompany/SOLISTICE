@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Drives the import window through every flow against fake browser data, never a real profile.
 //
-//   node apps/browser/scripts/import-flow-test.mjs <Debug Ardia.app> <scratch dir> [flow…] [--record <file>] [--compare <file>] [--keep]
+//   node apps/browser/scripts/import-flow-test.mjs <Debug Solstice.app> <scratch dir> [flow…] [--record <file>] [--compare <file>] [--keep]
 //
 //   <scratch dir>     home/ is a copy of packages/import/fixtures/home (the fake Chrome, Arc, Dia, Firefox, Safari… data)
 //                     and data/ the instance's ARDIA_DATA_DIR; both are wiped first; Dia's fixture windows get a pinned
