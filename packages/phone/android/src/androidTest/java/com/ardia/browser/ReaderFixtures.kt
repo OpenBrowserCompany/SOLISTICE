@@ -1,4 +1,4 @@
-package com.ardia.browser
+package com.openbrowsercompany.solstice
 
 object ReaderFixtures {
     const val FILLER = "The town grew around its palaces and gardens, drawing painters, poets and travellers who described its misty hills, mossy walls and the strange mix of styles that still define it today."
