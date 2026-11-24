@@ -1,4 +1,4 @@
-# Ardia logo
+# Solstice logo
 
 Two oil-painted hills (sage `#71955A`, forest `#203F32`) under a sun (`#E6BC62`), on a parchment tile (`#F9F5E3`).
 `source/` holds the three paintings, generated with Codex image generation (round 5, "hills"):

@@ -1,4 +1,4 @@
-"""Ardia's logo assets from the oil-painted "hills" (source/, picked 2026-10-10). Run from the repo root;
+"""Solstice's logo assets from the oil-painted "hills" (source/, picked 2026-10-10). Run from the repo root;
 the results go to output/brand/ardia/final/, then to their slots (see README.md)."""
 from pathlib import Path
 import numpy as np
