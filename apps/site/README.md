@@ -1,4 +1,4 @@
-# Ardia site
+# Solstice site
 
 The landing page. Astro, built to static files (`dist/`) and served by nginx on Hexclave (`infra/site`,
 `pnpm run deploy`).
@@ -20,8 +20,8 @@ pnpm preview    # serve dist/
 
 - **A release:** `.claude/skills/release/scripts/site-version.mjs <version>` writes `src/data/release.json` (the
   version and the DMG's size) from the published release. The download button links to
-  `releases/download/v<version>/Ardia-<version>.dmg`. Run it for a nightly too: it moves only `linux`, the version
-  whose `Ardia-<version>-linux-x64.tar.xz` Linux visitors get, and only when that release has the tarball.
+  `releases/download/v<version>/Solstice-<version>.dmg`. Run it for a nightly too: it moves only `linux`, the version
+  whose `Solstice-<version>-linux-x64.tar.xz` Linux visitors get, and only when that release has the tarball.
 - **Who sees which download:** `Device.astro` sets `data-device`, `data-os`, `data-pc` (`windows` or `linux` on a
   desktop) and `data-arch="arm"` (Windows on Arm, when the browser says so through `userAgentData`). The
   `.not-pc`, `.windows-only`, `.linux-only`, `.x64-only` and `.arm-only` classes in `global.css` follow them; Windows
@@ -36,7 +36,7 @@ pnpm preview    # serve dist/
   the meadow's look or the hero text, run `pnpm dev` and `node scripts/hero-posters.mjs --url <dev url>`: it
   captures each frame in headless Chrome on the GPU, works out the text tones the scene picks, and rewrites
   `src/assets/hero/`.
-- **Screenshots:** `src/assets/shots/*.webp` are real window captures of Ardia (2×, transparent outside
+- **Screenshots:** `src/assets/shots/*.webp` are real window captures of Solstice (2×, transparent outside
   the window). Every shot but the Picture in Picture set is a 0.2.35 capture (the export, re-signed to inject
   the dylib): `screencapture -l <windowID> -o` of a hidden test instance drawn as the active window by
   `scripts/draw-active.m` (how to build and inject it is in its header), at 1440 × 900 pt (`address-sidebar` 1360 × 860,
@@ -44,7 +44,7 @@ pnpm preview    # serve dist/
   (dark). The PNGs' Display P3 values go into the WebP as they are (`cwebp -q 85 -m 6 -alpha_q 100`), no colour
   conversion. The profiles are Personal (plum), Work (blue) and Side project (orange). `window.webp` is the
   showcase: the Liquid Glass pinned tiles and Wikipedia's article on The Hay Wain. `tab-group.webp` is a tab
-  dropped on a tab (0.2.34) and `little-ardia.webp` a Little Ardia window. `pip.webp` is 0.2.13 (a hidden
+  dropped on a tab (0.2.34) and `little-ardia.webp` a Little Solstice window. `pip.webp` is 0.2.13 (a hidden
   instance's PiP window never draws): the window on Wikipedia with the Picture in Picture window where Chrome
   opened it, its real shadow from `screencapture -l`. `game/crowd.webp` is the offline game's
   canvas; its hotspot is in `Game.astro`. Replace a file with a new capture of the same name; Astro makes the
