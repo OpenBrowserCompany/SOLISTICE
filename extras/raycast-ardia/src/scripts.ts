@@ -1,4 +1,4 @@
-export const BUNDLE_ID = "com.ardia.browser";
+export const BUNDLE_ID = "com.openbrowsercompany.solstice";
 
 export const APP_TARGET = `application id "${BUNDLE_ID}"`;
 
@@ -116,7 +116,7 @@ export function profileNamed(profiles: Profile[], name: string): Profile {
   if (matches.length === 1) return matches[0];
   const names = (matches.length ? matches : profiles).map((profile) => profile.name).join(", ");
   throw new Error(
-    matches.length ? `“${wanted}” matches ${names}.` : `No profile is named “${wanted}”. Ardia has ${names}.`,
+    matches.length ? `“${wanted}” matches ${names}.` : `No profile is named “${wanted}”. Solstice has ${names}.`,
   );
 }
 

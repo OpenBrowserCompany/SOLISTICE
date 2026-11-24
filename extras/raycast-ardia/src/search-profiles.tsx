@@ -10,8 +10,8 @@ export default function Command() {
       {error ? (
         <List.EmptyView
           icon={Icon.Warning}
-          title="Couldn't read Ardia's profiles"
-          description="Is Ardia running, and may Raycast control it (System Settings › Privacy & Security › Automation)?"
+          title="Couldn't read Solstice's profiles"
+          description="Is Solstice running, and may Raycast control it (System Settings › Privacy & Security › Automation)?"
         />
       ) : (
         <List.EmptyView icon={Icon.PersonCircle} title="No profiles" />

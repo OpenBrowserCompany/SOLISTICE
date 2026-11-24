@@ -12,8 +12,8 @@ export default function Command() {
       {error ? (
         <List.EmptyView
           icon={Icon.Warning}
-          title="Couldn't read Ardia's tabs"
-          description="Is Ardia running, and may Raycast control it (System Settings › Privacy & Security › Automation)?"
+          title="Couldn't read Solstice's tabs"
+          description="Is Solstice running, and may Raycast control it (System Settings › Privacy & Security › Automation)?"
         />
       ) : (
         <List.EmptyView icon={Icon.AppWindowList} title="No open tabs" />
