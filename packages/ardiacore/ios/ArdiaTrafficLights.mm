@@ -506,7 +506,7 @@ void ConfigureWindow(NSWindow *window) {
   if (!NSEqualRects(window.frame, frame)) [window setFrame:frame display:NO];
   window.titlebarAppearsTransparent = YES;
   window.titleVisibility = NSWindowTitleHidden;
-  window.title = @"Ardia";
+  window.title = @"Solstice";
   [ArdiaChromeWindowHost setInterfaceMinSize:NSMakeSize(500, 460) ofWindow:window];
   window.backgroundColor = WindowColor();
   window.releasedWhenClosed = NO;
