@@ -1,0 +1,11 @@
+diff --git a/tools/typescript/validate_tsconfig.py b/tools/typescript/validate_tsconfig.py
+--- a/tools/typescript/validate_tsconfig.py
++++ b/tools/typescript/validate_tsconfig.py
+@@ -302,6 +302,7 @@
+     'third_party/d3/',
+     'third_party/material_web_components/',
+     'third_party/node/node_modules/',
++    'third_party/chromium-bidi/node_modules/',
+     'third_party/polymer/v3_0/',
+     'third_party/typescript/',
+     'tools/typescript/tests/',

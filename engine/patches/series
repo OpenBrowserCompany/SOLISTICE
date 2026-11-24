@@ -137,6 +137,7 @@ chromium chromium-linux-window-state.patch linux
 chromium chromium-linux-borderless-frame.patch linux
 chromium chromium-linux-geolocation.patch linux
 
+chromium chromium-ts-definitions.patch
 layer engine/chromium
 layer engine/ardiacore mac
 layer engine/ardiacore-desktop linux
