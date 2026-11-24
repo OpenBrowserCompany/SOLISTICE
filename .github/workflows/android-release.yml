@@ -77,7 +77,7 @@ jobs:
             echo "code=$code"
             echo "tag=$tag"
           } >> "$GITHUB_OUTPUT"
-          echo "### Ardia for Android $version ($channel, versionCode $code) from $commit, $MODE" >> "$GITHUB_STEP_SUMMARY"
+          echo "### Solstice for Android $version ($channel, versionCode $code) from $commit, $MODE" >> "$GITHUB_STEP_SUMMARY"
       - name: Room for the build
         run: sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/.ghcup /opt/hostedtoolcache/CodeQL /usr/local/share/boost
       - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961
@@ -116,7 +116,7 @@ jobs:
             || { echo "::error::missing the secrets ANDROID_RELEASE_KEYSTORE_B64, ANDROID_RELEASE_KEYSTORE_PASSWORD and ANDROID_RELEASE_KEY_ALIAS"; exit 1; }
           out="$RUNNER_TEMP/android-release"
           mkdir -p "$RUNNER_TEMP/release-keys"
-          TMPDIR="$RUNNER_TEMP/release-keys" apps/phone/scripts/sign-release-apk "$out/android-$VERSION.apk" "$out/Ardia-$VERSION.apk" > /dev/null
+          TMPDIR="$RUNNER_TEMP/release-keys" apps/phone/scripts/sign-release-apk "$out/android-$VERSION.apk" "$out/Solstice-$VERSION.apk" > /dev/null
           rm -f "$out/android-$VERSION.apk"
       - name: Check the signed APK
         env:
@@ -124,7 +124,7 @@ jobs:
           VERSION: ${{ steps.plan.outputs.version }}
         run: |
           set -euo pipefail
-          apps/phone/scripts/check-release-apk "$RUNNER_TEMP/android-release/Ardia-$VERSION.apk" --commit "$COMMIT" --version "$VERSION" --signer "$RELEASE_SIGNER" | tee -a "$GITHUB_STEP_SUMMARY"
+          apps/phone/scripts/check-release-apk "$RUNNER_TEMP/android-release/Solstice-$VERSION.apk" --commit "$COMMIT" --version "$VERSION" --signer "$RELEASE_SIGNER" | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Stamp and checksum
         env:
           COMMIT: ${{ steps.plan.outputs.commit }}
@@ -133,7 +133,7 @@ jobs:
         run: |
           set -euo pipefail
           out="$RUNNER_TEMP/android-release"
-          apk="Ardia-$VERSION.apk"
+          apk="Solstice-$VERSION.apk"
           sum="$(sha256sum "$out/$apk" | cut -d' ' -f1)"
           {
             echo "apk: $apk"
@@ -151,9 +151,9 @@ jobs:
         with:
           name: android-release-${{ steps.plan.outputs.version }}
           path: |
-            ${{ runner.temp }}/android-release/Ardia-${{ steps.plan.outputs.version }}.apk
-            ${{ runner.temp }}/android-release/Ardia-${{ steps.plan.outputs.version }}.apk.txt
-            ${{ runner.temp }}/android-release/Ardia-${{ steps.plan.outputs.version }}.apk.sha256
+            ${{ runner.temp }}/android-release/Solstice-${{ steps.plan.outputs.version }}.apk
+            ${{ runner.temp }}/android-release/Solstice-${{ steps.plan.outputs.version }}.apk.txt
+            ${{ runner.temp }}/android-release/Solstice-${{ steps.plan.outputs.version }}.apk.sha256
           if-no-files-found: error
           retention-days: 14
       - if: inputs.mode == 'draft'
@@ -165,16 +165,16 @@ jobs:
         run: |
           set -euo pipefail
           out="$RUNNER_TEMP/android-release"
-          apk="Ardia-$VERSION.apk"
+          apk="Solstice-$VERSION.apk"
           {
-            echo "Ardia for Android $VERSION, built from $COMMIT."
+            echo "Solstice for Android $VERSION, built from $COMMIT."
             echo
             echo "For Android 10 or newer on a 64-bit Arm phone. Download $apk, check it against $apk.sha256, and let your browser install it."
-            echo "This release doesn't sync with Ardia for Mac yet."
-            echo "A test build of Ardia installed before this one was signed with another key: uninstall it first."
+            echo "This release doesn't sync with Solstice for Mac yet."
+            echo "A test build of Solstice installed before this one was signed with another key: uninstall it first."
           } > "$out/notes.md"
           gh release create "$TAG" -R "$GITHUB_REPOSITORY" --draft --prerelease --latest=false --target "$COMMIT" \
-            --title "Ardia for Android $VERSION" --notes-file "$out/notes.md" "$out/$apk" "$out/$apk.txt" "$out/$apk.sha256"
+            --title "Solstice for Android $VERSION" --notes-file "$out/notes.md" "$out/$apk" "$out/$apk.txt" "$out/$apk.sha256"
           state="$(gh release view "$TAG" -R "$GITHUB_REPOSITORY" --json isDraft,isPrerelease -q '"\(.isDraft) \(.isPrerelease)"')"
           [ "$state" = "true true" ] || { echo "::error::$TAG isn't a draft prerelease ($state)"; exit 1; }
           echo "Draft prerelease $TAG made; the owner publishes it." >> "$GITHUB_STEP_SUMMARY"

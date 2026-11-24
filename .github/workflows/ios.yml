@@ -114,12 +114,12 @@ jobs:
           git diff --exit-code -- apps/phone/ios ':!apps/phone/ios/Pods' || { echo "::error::pod install rewrote the iPhone project (diff above): run pod install locally and commit what it writes"; exit 1; }
       - name: Build the Expo app for the simulator, unsigned
         run: >-
-          xcodebuild -workspace apps/phone/ios/Ardia.xcworkspace -scheme Ardia -configuration Debug
+          xcodebuild -workspace apps/phone/ios/Ardia.xcworkspace -scheme Solstice -configuration Debug
           -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath "$SCRATCH/dd"
           ARCHS=arm64 CODE_SIGNING_ALLOWED=NO COMPILER_INDEX_STORE_ENABLE=NO
           COMPILATION_CACHE_ENABLE_CACHING=YES COMPILATION_CACHE_CAS_PATH="$SCRATCH/cas" -quiet build
       - name: Every API the app calls has its purpose string, and none Apple refuses in a default browser
-        run: apps/phone/scripts/check-privacy-keys "$SCRATCH/dd/Build/Products/Debug-iphonesimulator/Ardia.app" --default-browser
+        run: apps/phone/scripts/check-privacy-keys "$SCRATCH/dd/Build/Products/Debug-iphonesimulator/Solstice.app" --default-browser
       - if: always() && github.event_name == 'push' && steps.cas.outputs.cache-hit != 'true'
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:

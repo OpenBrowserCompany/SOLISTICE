@@ -13,7 +13,7 @@ on:
         type: string
         default: ""
       default_browser:
-        description: Sign with the default-browser entitlement, which lists Ardia as a browser in iOS Settings
+        description: Sign with the default-browser entitlement, which lists Solstice as a browser in iOS Settings
         type: boolean
         default: true
       public_testers:
@@ -307,7 +307,7 @@ jobs:
           build="$BUILD_INPUT"
           [ -n "$build" ] || build="$(node apps/phone/scripts/asc.mjs next-build)"
           echo "build=$build" >> "$GITHUB_OUTPUT"
-          echo "### Ardia for iPhone ${RELEASE_VERSION:-from MARKETING_VERSION}, build $build ($MODE)" >> "$GITHUB_STEP_SUMMARY"
+          echo "### Solstice for iPhone ${RELEASE_VERSION:-from MARKETING_VERSION}, build $build ($MODE)" >> "$GITHUB_STEP_SUMMARY"
       - if: inputs.mode == 'device'
         name: Register the iPhone
         env:
