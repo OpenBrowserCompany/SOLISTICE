@@ -99,6 +99,37 @@ jobs:
             if [ "$IPHONE" = true ]; then echo "- iPhone: TestFlight's pinned version, $([ "$DRY_RUN" = true ] && echo "built and signed, not uploaded" || echo "sent to TestFlight's Internal group after the Mac release")"; fi
           } >> "$GITHUB_STEP_SUMMARY"
 
+  engine:
+    name: Build and publish macOS engine
+    needs: preflight
+    runs-on: xcode-27
+    timeout-minutes: 480
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Build the engine
+        run: scripts/agent/engine-build --as release --wait 3600 chrome_framework
+      - name: Publish the engine
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: scripts/publish-engine.sh
+      - name: Commit the prebuilt engine row
+        env:
+          TREE: ${{ needs.preflight.outputs.tree }}
+        run: |
+          if git diff --quiet -- packages/ardiacore/prebuilt-engines.tsv; then
+            echo "engine table unchanged"
+            exit 0
+          fi
+          git add packages/ardiacore/prebuilt-engines.tsv
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -m "chore: add prebuilt macOS engine ${TREE:0:12}"
+          git push origin HEAD:main
+
   checks:
     needs: preflight
     runs-on: xcode-27
@@ -125,7 +156,7 @@ jobs:
         run: pnpm shaders:check
 
   build:
-    needs: preflight
+    needs: [preflight, engine]
     runs-on: xcode-27
     timeout-minutes: 120
     env:
@@ -135,6 +166,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
+          ref: main
           persist-credentials: false
       - id: paths
         run: |
