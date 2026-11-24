@@ -12,10 +12,10 @@ function Process([int]$Id, [int]$Parent, [string]$CommandLine) {
 }
 
 $running = @(
-  (Process 10 1 '"C:\Users\a\AppData\Local\Programs\Ardia\Ardia.exe" '),
-  (Process 11 10 'C:\Users\a\AppData\Local\Programs\Ardia\Ardia.exe --type=crashpad-handler "--user-data-dir=C:\x"'),
-  (Process 12 10 '"C:\Users\a\AppData\Local\Programs\Ardia\Ardia.exe" --type=gpu-process --field-trial-handle=1'),
-  (Process 20 1 '"C:\Users\a\AppData\Local\Programs\Ardia\Ardia.exe" --single-argument https://example.com/--type=x'),
+  (Process 10 1 '"C:\Users\a\AppData\Local\Programs\Solstice\Ardia.exe" '),
+  (Process 11 10 'C:\Users\a\AppData\Local\Programs\Solstice\Ardia.exe --type=crashpad-handler "--user-data-dir=C:\x"'),
+  (Process 12 10 '"C:\Users\a\AppData\Local\Programs\Solstice\Ardia.exe" --type=gpu-process --field-trial-handle=1'),
+  (Process 20 1 '"C:\Users\a\AppData\Local\Programs\Solstice\Ardia.exe" --single-argument https://example.com/--type=x'),
   (Process 30 1 $null)
 )
 Check "a process without --type is a browser process" "10,20" ((Get-BrowserProcesses $running | ForEach-Object ProcessId) -join ",")
@@ -28,15 +28,15 @@ Check "a waiting launch with only its crash handler has no browser children" 0 @
 
 $waited = Read-LaunchGuard @(
   "launch 270 process started inside the engine",
-  "engine 0 launch guard: waited 2875 ms for the previous Ardia on this profile to finish exiting",
-  "engine 0 launch guard: waited 2875 ms for a previous Ardia, 0 unfinished starts before this one, restore state kept"
+  "engine 0 launch guard: waited 2875 ms for the previous Solstice on this profile to finish exiting",
+  "engine 0 launch guard: waited 2875 ms for a previous Solstice, 0 unfinished starts before this one, restore state kept"
 )
-Check "the wait for a previous Ardia is read" 2875 $waited.WaitedMs
+Check "the wait for a previous Solstice is read" 2875 $waited.WaitedMs
 Check "unfinished starts are read" 0 $waited.UnfinishedBefore
 Check "kept restore state is not set aside" $false $waited.SetAside
 Check "a clean log has no fatal lines" 0 $waited.Fatal.Count
 
-$recovered = Read-LaunchGuard @("engine 0 launch guard: waited 0 ms for a previous Ardia, 2 unfinished starts before this one, restore state set aside")
+$recovered = Read-LaunchGuard @("engine 0 launch guard: waited 0 ms for a previous Solstice, 2 unfinished starts before this one, restore state set aside")
 Check "two unfinished starts are read" 2 $recovered.UnfinishedBefore
 Check "set-aside restore state is read" $true $recovered.SetAside
 

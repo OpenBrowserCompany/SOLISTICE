@@ -14,7 +14,7 @@ function Read-LaunchGuard([string[]]$Lines) {
   $facts = [pscustomobject]@{ WaitedMs = $null; UnfinishedBefore = $null; SetAside = $false; StartFailure = $null; Fatal = @() }
   foreach ($line in $Lines) {
     if (-not $line) { continue }
-    if ($line -match 'launch guard: waited (\d+) ms for a previous Ardia, (\d+) unfinished starts before this one, restore state (kept|set aside)') {
+    if ($line -match 'launch guard: waited (\d+) ms for a previous Solstice, (\d+) unfinished starts before this one, restore state (kept|set aside)') {
       $facts.WaitedMs = [int]$Matches[1]
       $facts.UnfinishedBefore = [int]$Matches[2]
       $facts.SetAside = $Matches[3] -eq 'set aside'
