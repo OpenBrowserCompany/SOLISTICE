@@ -10,7 +10,7 @@ Copies the browser-agent bench summaries (plugins/cli/bench in ardia-browser/plu
 keeping only what the Computer use section needs. Rerun it whenever the bench writes a new summary.
 
 RESULTS_DIR         one or more plans' results folders with summary.json and runs/. A contender comes from the
-                    first folder that ran it, so list the newest Ardia run first. Default:
+                    first folder that ran it, so list the newest Solstice run first. Default:
                     ~/ardia-scratch/bench-proper/results/{full-3,full-1,opencode-1}
 --aside-version     the Aside version the bench ran against (default 1.26.1107)
 --opencode-version  the OpenCode Browse extension version (default 0.0.10)`;
