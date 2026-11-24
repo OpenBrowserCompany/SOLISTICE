@@ -12,7 +12,7 @@ enum OfficialInstaller {
     guard let held = OfficialArchive.snapshot(archive, in: scratch) else { return .failure(Failure(code: "failed", reason: "the download couldn't be read")) }
     defer { held.close() }
     guard held.sha == entry.sha256 else {
-      return .failure(Failure(code: "verify", reason: "the download doesn't match the copy this Ardia pins (SHA-256 \(held.sha.prefix(12))…, not \(entry.sha256.prefix(12))…)"))
+      return .failure(Failure(code: "verify", reason: "the download doesn't match the copy this Solstice pins (SHA-256 \(held.sha.prefix(12))…, not \(entry.sha256.prefix(12))…)"))
     }
     guard let stage = store.makeScratch(entry.name, prefix: ".stage-") else { return .failure(Failure(code: "failed", reason: "its folder couldn't be made")) }
     func refuse(_ failure: Failure) -> Result<(copy: OfficialCopy, manifest: String), Failure> {
@@ -29,9 +29,9 @@ enum OfficialInstaller {
     opened.close()
     guard case .text(let text) = read else { return refuse(Failure(code: "verify", reason: "its plugin.json can't be read")) }
     if let problem = OfficialPin(entries: [entry]).refusal(manifest: text, of: entry) { return refuse(Failure(code: "verify", reason: problem)) }
-    if registry.failClosed { return refuse(Failure(code: "verify", reason: "Ardia's list of official program names is missing or damaged")) }
+    if registry.failClosed { return refuse(Failure(code: "verify", reason: "Solstice's list of official program names is missing or damaged")) }
     for program in ProgramRegistry.claimedPrograms(manifest: Data(text.utf8)) where registry.claims[program] != entry.name {
-      return refuse(Failure(code: "verify", reason: "it claims \(program), which Ardia's signed list doesn't give it"))
+      return refuse(Failure(code: "verify", reason: "it claims \(program), which Solstice's signed list doesn't give it"))
     }
     guard OfficialStore.stripQuarantine(tree: stage) else { return refuse(Failure(code: "failed", reason: "its files couldn't be cleared for use")) }
     switch store.publish(entry.name, staged: stage, archive: held, sha: entry.sha256) {
@@ -41,7 +41,7 @@ enum OfficialInstaller {
   }
 
   static func promote(_ name: String, folderId: String, approved: String, store: OfficialStore, pin: OfficialPin) -> String? {
-    guard let entry = pin.entry(name), let sha = OfficialPin.sha(ofFolderId: folderId) else { return "It isn't an official plugin this Ardia pins." }
+    guard let entry = pin.entry(name), let sha = OfficialPin.sha(ofFolderId: folderId) else { return "It isn't an official plugin this Solstice pins." }
     guard store.active(name)?.sha == sha || sha == entry.sha256, let copy = store.copy(name, sha: sha, fresh: true) else { return "Its download is gone or changed. Try again." }
     guard let opened = PluginFiles.openFolder(copy.path) else { return "Its download is gone. Try again." }
     let read = PluginFiles.readManifest(in: opened)

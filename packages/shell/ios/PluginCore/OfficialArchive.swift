@@ -440,7 +440,7 @@ enum OfficialArchive {
       let padded = Int((entry.size + Int64(block) - 1) / Int64(block)) * block
       if entry.type == UInt8(ascii: "x") {
         guard nextPath == nil, entry.size <= 64 * 1024, let body = readExactly(padded) else { return "the archive is damaged" }
-        guard let path = paxPath(Data(body.prefix(Int(entry.size)))) else { return "the archive has an extended header Ardia doesn't accept" }
+        guard let path = paxPath(Data(body.prefix(Int(entry.size)))) else { return "the archive has an extended header Solstice doesn't accept" }
         nextPath = path ?? ""
         continue
       }
@@ -448,7 +448,7 @@ enum OfficialArchive {
       nextPath = nil
       guard let relative = parts(path, top: top, depth: limits.depth) else { return "\(path) isn't inside \(top)/ or is more than \(limits.depth) folders deep" }
       if relative.contains(where: { PluginPrograms.folded($0) == PluginPrograms.caches }) || relative.first.map(PluginPrograms.isReserved) == true {
-        return "\(path) is a name Ardia keeps for itself"
+        return "\(path) is a name Solstice keeps for itself"
       }
       let joined = relative.joined(separator: "/")
       guard !seen.contains(joined) else { return "\(path) is in the archive twice" }
