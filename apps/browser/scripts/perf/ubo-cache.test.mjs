@@ -14,7 +14,7 @@ test("the engine counts as saved only when all three selfies are in both storage
   assert.equal(engineSaved({ local: [...UBO_ENGINE_KEYS, "selfieMagic"], indexedDB: UBO_ENGINE_KEYS }), true);
 });
 
-test("Ardia's uBO saves its engine under its own selfie names (ubo.sh renames them), and those count too, but never a mix", () => {
+test("Solstice's uBO saves its engine under its own selfie names (ubo.sh renames them), and those count too, but never a mix", () => {
   const [stock, ardia] = UBO_ENGINE_KEY_SETS;
   assert.deepEqual(ardia, ["cache/selfie/staticArdia2Main", "cache/selfie/staticArdia2NetFilteringEngine", "cache/selfie/staticArdia2ExtFilteringEngine"]);
   assert.equal(engineSaved({ local: ardia, indexedDB: ardia }), true);
