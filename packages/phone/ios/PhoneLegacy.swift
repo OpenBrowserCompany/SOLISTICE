@@ -14,7 +14,7 @@ enum LegacyPaths {
     if let group = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: BrowserStore.appGroupIdentifier) {
       return group.appending(path: "Library/Application Support", directoryHint: .isDirectory)
     }
-    return URL.applicationSupportDirectory.appending(path: "Ardia", directoryHint: .isDirectory)
+    return URL.applicationSupportDirectory.appending(path: "Solstice", directoryHint: .isDirectory)
   }
 
   static var store: URL { storeFolder.appending(path: "Browser.store") }

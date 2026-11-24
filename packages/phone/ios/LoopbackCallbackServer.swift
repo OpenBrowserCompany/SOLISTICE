@@ -11,7 +11,7 @@ nonisolated final class LoopbackCallbackServer: @unchecked Sendable {
     case socket(Int32)
   }
 
-  private let queue = DispatchQueue(label: "com.ardia.browser.ios.chatgpt.loopback")
+  private let queue = DispatchQueue(label: "com.openbrowsercompany.solstice.ios.chatgpt.loopback")
   private let listenSocket: Int32
   private let acceptSource: DispatchSourceRead
   private var clients: [Int32: (source: DispatchSourceRead, buffer: Data)] = [:]
