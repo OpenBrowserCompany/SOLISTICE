@@ -119,7 +119,7 @@ test("overlay telemetry counts each time one becomes visible, not each mount, an
 
 test("a pane finds a share to show only while it can show the bar, and not for a tab the share skips", () => {
   const profiles = { personal: { id: "personal", name: "Personal" } };
-  useBrowser.setState({ profiles: { ...useBrowser.getState().profiles, ...profiles }, tabs: { ...useBrowser.getState().tabs, capturer: fakeTab("capturer", "https://meet.example/"), viewer: fakeTab("viewer", "https://news.example/"), internal: fakeTab("internal", "ardia://history") } });
+  useBrowser.setState({ profiles: { ...useBrowser.getState().profiles, ...profiles }, tabs: { ...useBrowser.getState().tabs, capturer: fakeTab("capturer", "https://meet.example/"), viewer: fakeTab("viewer", "https://news.example/"), internal: fakeTab("internal", "solstice://history") } });
   useMedia.setState({ tabShares: { capturer: { capturedTabId: "viewer", origin: "https://meet.example", dismissed: { dismissed: true } } } });
   patchPage("capturer", { mediaAccess: { camera: false, microphone: false, screen: true } });
   try {
