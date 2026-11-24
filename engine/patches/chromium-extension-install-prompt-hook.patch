@@ -12,7 +12,7 @@
  #include "ui/gfx/image/image_skia.h"
  #include "ui/gfx/image/image_skia_rep.h"
  
-+// Ardia: ArdiaCore (engine/ardiacore) may ask with its own install prompt.
++// Solstice: ArdiaCore (engine/ardiacore) may ask with its own install prompt.
 +bool (*g_ardia_extension_install_prompt)(
 +    Profile* profile,
 +    content::WebContents* parent,
@@ -27,7 +27,7 @@
    if (AutoConfirmPromptIfEnabled())
      return;
  
-+  // Ardia: ArdiaCore may show its own install prompt.
++  // Solstice: ArdiaCore may show its own install prompt.
 +  if (g_ardia_extension_install_prompt &&
 +      g_ardia_extension_install_prompt(
 +          profile_, show_params_->GetParentWebContents(), *prompt_,

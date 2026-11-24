@@ -13,7 +13,7 @@
  
  static_assert(BUILDFLAG(ENABLE_EXTENSIONS_CORE));
 +
-+// Ardia: ArdiaCore (engine/ardiacore) keeps the windows of its own pages (its
++// Solstice: ArdiaCore (engine/ardiacore) keeps the windows of its own pages (its
 +// popups, side panels, the content blocker's page) from extensions.
 +bool (*g_ardia_hidden_from_extensions)(
 +    const BrowserWindowInterface* browser) = nullptr;
@@ -24,7 +24,7 @@
      return false;
    }
  
-+  // Ardia: windows ArdiaCore uses internally.
++  // Solstice: windows ArdiaCore uses internally.
 +  if (extension && g_ardia_hidden_from_extensions &&
 +      g_ardia_hidden_from_extensions(&*browser_)) {
 +    return false;
