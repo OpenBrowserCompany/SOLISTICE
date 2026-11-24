@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Ardia plugin",
+  "title": "Solstice plugin",
   "type": "object",
   "if": {
     "properties": {
@@ -42,7 +42,7 @@
       "requires": {
         "type": "string",
         "pattern": "^\\d{1,6}\\.\\d{1,6}\\.\\d{1,6}(-[0-9A-Za-z.-]{1,40})?$",
-        "description": "The first Ardia version the plugin works with"
+        "description": "The first Solstice version the plugin works with"
       },
       "icon": {
         "type": "string",
@@ -116,7 +116,7 @@
         "required": [
           "run"
         ],
-        "description": "A program Ardia runs beside the plugin; a plugin has main or sidecar, not both"
+        "description": "A program Solstice runs beside the plugin; a plugin has main or sidecar, not both"
       },
       "activationEvents": {
         "type": "array",
@@ -152,7 +152,7 @@
           },
           "commands": {
             "type": "boolean",
-            "description": "Run Ardia commands"
+            "description": "Run Solstice commands"
           },
           "storage": {
             "type": "boolean",
@@ -184,7 +184,7 @@
           },
           "control": {
             "type": "boolean",
-            "description": "Let programs you run fully control Ardia, including your signed-in sites"
+            "description": "Let programs you run fully control Solstice, including your signed-in sites"
           }
         },
         "additionalProperties": false
@@ -367,7 +367,7 @@
             "properties": {
               "defaults": {
                 "type": "object",
-                "description": "Ardia settings, as in config.json"
+                "description": "Solstice settings, as in config.json"
               },
               "rows": {
                 "type": "array",
@@ -455,7 +455,7 @@
           "programs": {
             "type": "array",
             "maxItems": 4,
-            "description": "Commands Ardia puts on your PATH while the plugin is on",
+            "description": "Commands Solstice puts on your PATH while the plugin is on",
             "items": {
               "type": "object",
               "properties": {
@@ -481,7 +481,7 @@
                       "pattern": "^[^\\u0000]{1,1024}$"
                     }
                   },
-                  "description": "Built-in plugins only: argument lists Ardia runs the program with, once per new version"
+                  "description": "Built-in plugins only: argument lists Solstice runs the program with, once per new version"
                 },
                 "example": {
                   "type": "string",
@@ -871,7 +871,7 @@
               "when",
               "buttons"
             ],
-            "description": "A bar Ardia draws above the pages the plugin's site switch is on for, with buttons that run Ardia's own actions on that tab"
+            "description": "A bar Solstice draws above the pages the plugin's site switch is on for, with buttons that run Solstice's own actions on that tab"
           }
         },
         "additionalProperties": false
@@ -882,7 +882,7 @@
       },
       "official": {
         "const": true,
-        "description": "Built-in plugins only: listed among Ardia's official plugins"
+        "description": "Built-in plugins only: listed among Solstice's official plugins"
       },
       "autoInstall": {
         "const": true,
@@ -905,7 +905,7 @@
         "type": "integer",
         "minimum": 0,
         "maximum": 1,
-        "description": "Version 1 manifests still load; Ardia reads them as version 2"
+        "description": "Version 1 manifests still load; Solstice reads them as version 2"
       },
       "name": {
         "type": "string",
@@ -927,7 +927,7 @@
       "requires": {
         "type": "string",
         "pattern": "^\\d{1,6}\\.\\d{1,6}\\.\\d{1,6}(-[0-9A-Za-z.-]{1,40})?$",
-        "description": "The first Ardia version the plugin works with"
+        "description": "The first Solstice version the plugin works with"
       },
       "permissions": {
         "type": "array",
@@ -947,7 +947,7 @@
         "properties": {
           "defaults": {
             "type": "object",
-            "description": "Ardia settings, as in config.json"
+            "description": "Solstice settings, as in config.json"
           },
           "rows": {
             "type": "array",
@@ -1015,7 +1015,7 @@
           }
         },
         "additionalProperties": false,
-        "description": "Version 1: defaults and rows. A file without manifest (version 0) gives Ardia settings here directly."
+        "description": "Version 1: defaults and rows. A file without manifest (version 0) gives Solstice settings here directly."
       },
       "commands": {
         "type": "array",
@@ -1139,7 +1139,7 @@
       "programs": {
         "type": "array",
         "maxItems": 4,
-        "description": "Commands Ardia puts on your PATH while the plugin is on",
+        "description": "Commands Solstice puts on your PATH while the plugin is on",
         "items": {
           "type": "object",
           "properties": {
@@ -1165,7 +1165,7 @@
                   "pattern": "^[^\\u0000]{1,1024}$"
                 }
               },
-              "description": "Built-in plugins only: argument lists Ardia runs the program with, once per new version"
+              "description": "Built-in plugins only: argument lists Solstice runs the program with, once per new version"
             }
           },
           "additionalProperties": false,
@@ -1222,7 +1222,7 @@
       },
       "official": {
         "const": true,
-        "description": "Built-in plugins only: listed among Ardia's official plugins"
+        "description": "Built-in plugins only: listed among Solstice's official plugins"
       },
       "autoInstall": {
         "const": true,

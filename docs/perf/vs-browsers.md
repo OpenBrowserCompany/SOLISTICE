@@ -1,4 +1,4 @@
-# Ardia against Dia, Helium and Chrome
+# Solstice against Dia, Helium and Chrome
 
 A cross-browser benchmark for ardia.dev on the release gate's rows (docs/perf/0.2.36-to-0.2.37.md) that can be
 measured the same way in any Chromium browser. Harness: `apps/browser/scripts/perf/xbench.mjs` (`--help`). Results:
@@ -10,7 +10,7 @@ Five rounds, interleaved and rotated. Each round has 2 launches of each kind and
 median (min–max, n) over runs, measured with the Mac in normal use by the owner (see Method). Out dir:
 `/tmp/ac-xbench/final`.
 
-| Row | Ardia 0.2.37 | Dia 1.53.0 | Helium 0.19.2.1 | Google Chrome 155.0.8059.85 |
+| Row | Solstice 0.2.37 | Dia 1.53.0 | Helium 0.19.2.1 | Google Chrome 155.0.8059.85 |
 |---|---|---|---|---|
 | Cold launch → page painted (link opened from another app) | 543 ms (513–817, n=10) | 2643 ms (2307–3076, n=10) | 527 ms (455–805, n=10) | **484 ms** (434–738, n=10) |
 | Cold launch → window on screen | **358 ms** (329–590, n=10) | 2262 ms (2003–2547, n=10) | 499 ms (431–724, n=10) | 424 ms (405–681, n=10) |
@@ -27,22 +27,22 @@ median (min–max, n) over runs, measured with the Mac in normal use by the owne
 | Idle wakeups, 1 tab | 6.9 /s (6.5–7.4, n=5) | 14.4 /s (13.5–19.9, n=5) | 6.5 /s (6.2–12.0, n=5) | 6.8 /s (6.4–7.3, n=5) |
 | Idle wakeups, 20 tabs | 29.8 /s (29.1–31.7, n=5) | 38.7 /s (36.3–45.0, n=5) | 34.1 /s (26.8–42.4, n=5) | 30.9 /s (28.4–32.2, n=5) |
 
-Bold is the best median. Ardia wins outright (ranges apart from every competitor) on memory at 1 tab and back to 1
+Bold is the best median. Solstice wins outright (ranges apart from every competitor) on memory at 1 tab and back to 1
 tab, and its median is best on window on screen and idle wakeups at 20 tabs, with ranges overlapping. The rest are
 listed with margins and diagnoses below.
 
 Context, not a gate row (not in bench.json):
 
-| | Ardia 0.2.37 | Dia 1.53.0 | Helium 0.19.2.1 | Chrome 155 |
+| | Solstice 0.2.37 | Dia 1.53.0 | Helium 0.19.2.1 | Chrome 155 |
 |---|---|---|---|---|
 | Download (DMG) | 187 MB | 854 MB | 115 MB (arm64) | 276 MB (universal) |
 | App on disk | 446 MB | 1414 MB | 355 MB (arm64) | 758 MB (universal) |
 
-### Where Ardia loses or ties, and why
+### Where Solstice loses or ties, and why
 
 Margins are against the best competitor; "apart" means the ranges don't overlap.
 
-| Row | Ardia | Best | Margin | Verdict |
+| Row | Solstice | Best | Margin | Verdict |
 |---|---|---|---|---|
 | Tab switch → shown | 40 ms | Chrome 8 ms | +32 ms (5×) | loses, apart; Helium 8.5 and Dia 24 also beat it |
 | New tab → first paint | 80 ms | Chrome 54 ms | +26 ms | loses, apart; Helium 71 (ranges overlap) also better |
@@ -53,12 +53,12 @@ Margins are against the best competitor; "apart" means the ranges don't overlap.
 | Cold launch → page painted (link) | 543 ms | Chrome 484 ms | +59 ms | loses on median, ranges overlap; Helium 527 also better |
 | Idle wakeups, 1 tab | 6.9 /s | Helium 6.5 /s | +0.4 /s | ties (overlap); Chrome 6.8 |
 | Idle CPU, 1 tab | 0.20 % | Chrome 0.20 % | 0 | ties |
-| New window → first paint | – | Helium 95 ms | – | not measurable: Ardia opens no window (below) |
+| New window → first paint | – | Helium 95 ms | – | not measurable: Solstice opens no window (below) |
 | Download, on disk (context) | 187 / 446 MB | Helium 115 / 355 MB | +72 / +91 MB | loses |
 
 **Tab switch (+32 ms).** Chrome activates a tab natively in a few milliseconds: 8 ms here is visibilitychange plus two
-frames. In Ardia, `Target.activateTarget` changes Chrome's tab strip, then:
-- Ardia's JS mirror (`state/tabs/chromeTabs.ts`) updates the store;
+frames. In Solstice, `Target.activateTarget` changes Chrome's tab strip, then:
+- Solstice's JS mirror (`state/tabs/chromeTabs.ts`) updates the store;
 - React re-renders the window;
 - the native view is swapped in and shown.
 
@@ -70,7 +70,7 @@ Update (2026-10-17): the page is now shown natively as JS picks the tab (state/t
 against Helium's 8.5. A probe with xbench's method (CDP activate, then visibilitychange, then two rAFs) plus a
 Chrome trace (viz, cc, begin_frame, scheduler) of 6 switches each:
 
-| | Ardia | Helium |
+| | Solstice | Helium |
 |---|---|---|
 | CDP activate to visibilitychange | 2 ms | 5 ms |
 | display-link callbacks in the 20 ms before the show | 0 every time | 2, in 4 of 6 shows |
@@ -82,7 +82,7 @@ Chrome trace (viz, cc, begin_frame, scheduler) of 6 switches each:
 Our pages live in our own NSViews, so each tab's view has its own compositor (`BrowserCompositorMac` in
 HasOwnCompositor), recycled on hide and taken again on show: a new frame sink and begin-frame source each time, off
 the vsync grid. More to the point, the display link is always stopped when the page is shown (it stops after 20
-idle callbacks, about 170 ms, and nothing in Ardia wakes it first), and starting it costs one or two refreshes.
+idle callbacks, about 170 ms, and nothing in Solstice wakes it first), and starting it costs one or two refreshes.
 In Helium the switch first redraws Chrome's own tab strip on the window's compositor, which starts the link before
 the tab is visible. Parked:
 - keeping the link alive longer (`kMaxKeepAliveCount`) would fix the bench row but costs up to 120 wakeups/s for
@@ -120,7 +120,7 @@ full white. A second navigation within 100 ms of the first, while the first new 
 the root colour (5 of 8 rounds, mostly one or two frames): that page never drew, and Chrome's fallback hand-off then
 points at its empty surface.
 
-**New tab (+26 ms).** In Chrome, `Target.createTarget` adds a tab that is already in its window. In Ardia the
+**New tab (+26 ms).** In Chrome, `Target.createTarget` adds a tab that is already in its window. In Solstice the
 WebContents is made and starts loading in Chrome's strip, but it is only shown once the JS adopts it and React mounts
 its view. Until then it is hidden, so its first paint waits for the mount. Same cause as the switch: the page isn't
 on screen until a React commit puts it there.
@@ -145,18 +145,18 @@ the hidden page (load 52 against 32), and 67 → 65 / 93 → 92 ms when the bar'
 gain is several ms under this machine's load, not a precise figure. Main thread busy between Enter and commit fell
 53 → 45 and 55 → 49 ms (acframes).
 
-**Memory at 10 and 20 tabs (+71 / +264 MB).** Every browser has the same process count, 1 renderer per tab: Ardia 25
-processes at 20 tabs, Chrome 27. GPU (142 against 291 MB) and network/storage are smaller in Ardia; the browser
-process is 168 against 132 MB. The gap is the renderers: 827 MB in Ardia against 475 MB in Chrome, 41 against
+**Memory at 10 and 20 tabs (+71 / +264 MB).** Every browser has the same process count, 1 renderer per tab: Solstice 25
+processes at 20 tabs, Chrome 27. GPU (142 against 291 MB) and network/storage are smaller in Solstice; the browser
+process is 168 against 132 MB. The gap is the renderers: 827 MB in Solstice against 475 MB in Chrome, 41 against
 24 MB per tab, and Helium is in between at 692 MB, 35 MB per tab. The browsers with a built-in content blocker
-(Ardia's uBlock Origin Lite, Helium's uBlock Origin, Dia's own) all have fat renderers; Chrome, which has none, is
-lean. Ardia also injects `page_script.js` into every frame. Suspects, in order:
+(Solstice's uBlock Origin Lite, Helium's uBlock Origin, Dia's own) all have fat renderers; Chrome, which has none, is
+lean. Solstice also injects `page_script.js` into every frame. Suspects, in order:
 - uBlock Lite's content scripts (cosmetic filtering, scriptlets) in each renderer;
 - the page script;
-- a renderer-side flag that differs from Chrome's. Ardia runs with `--enable-features=WebContentsDiscard,…`, Chrome
+- a renderer-side flag that differs from Chrome's. Solstice runs with `--enable-features=WebContentsDiscard,…`, Chrome
   with its Finch seed.
 
-The next run records each renderer's footprint by pid and can turn the blocker off for Ardia
+The next run records each renderer's footprint by pid and can turn the blocker off for Solstice
 (`--env ardia=…`), which isolates the first two.
 
 Update (2026-10-17, full uBlock Origin in place of uBO Lite): renderers at 20 tabs are 730 MB (Helium 692), and the
@@ -174,7 +174,7 @@ it with an NSVisualEffectView): its CAMetalLayer kept two 2560×1600 drawables, 
 now 1×1 (26a7a7fb). The retention after closing was mostly Hermes, not
 PartitionAlloc: its heap grows from 8 to 29 MB over the session and keeps the freed segments (9 MB live), and each
 forced full GC compacts one segment. state/tabs/memoryTrim.ts (25c2d1da) runs gc() until the heap stops shrinking, 5 s after
-the tab count settles and only while Ardia isn't taking input, then `ac_memory_trim` (PartitionAlloc's ReclaimAll,
+the tab count settles and only while Solstice isn't taking input, then `ac_memory_trim` (PartitionAlloc's ReclaimAll,
 off the main thread). Browser process, hidden
 Release, the session's flow: 1 tab 122 → 90 MB, back to 1 tab 121 (trim off) → 105 MB. xbench session A/B against
 0.2.38-nightly.4 (`/tmp/ac-mem/xb1`, 3 rounds, totals): 1 tab 338 → 306, 10 tabs 773 → 739, 20 tabs 1142 → 1116,
@@ -182,18 +182,18 @@ back to 1 tab 423 → 391 MB; idle CPU and wakeups equal or lower. That build al
 capture that adds about 17 MB to the browser process after closing; without it the trim's own build reads 105 MB
 back at 1 tab.
 
-**Idle CPU at 20 tabs (+0.80 points).** Wakeups are the same (Ardia 29.8, Chrome 30.9 /s): every page's 1 s timer
-wakes it in every browser. Ardia's renderers spend about 3× the CPU per wakeup: renderer CPU 1.17 % against
+**Idle CPU at 20 tabs (+0.80 points).** Wakeups are the same (Solstice 29.8, Chrome 30.9 /s): every page's 1 s timer
+wakes it in every browser. Solstice's renderers spend about 3× the CPU per wakeup: renderer CPU 1.17 % against
 Chrome's 0.39 %. Helium, with uBlock Origin, is at 0.89 %. The same suspects as memory. Chrome may also be applying
 a Finch-enabled background-tab policy that 154 with our switches doesn't, so this needs the blocker-off A/B and the
 settled idle window (2 minutes after the last load) the next run adds.
 
-**Launch, restored tab and link (+56 / +59 ms on median, ranges overlap).** Ardia's window is on screen first (358
+**Launch, restored tab and link (+56 / +59 ms on median, ranges overlap).** Solstice's window is on screen first (358
 against Chrome's 424 ms), but the page paints later. In 0.2.37 the restored tab's WebContents is created only after
 the window's React content mounts (launch-critical-path.md: "the tab's WebContents is created after the window's
 content mounts", ~115 ms window → FCP). The `launchTab` kill switch starts the page loading as the app starts, but
-it is off in 0.2.37. The next run's Ardia template names the tab as `launchTab`, so a build with the switch on is
-measured the way its users will have it. A link launch opens Little Ardia (a 900×640 window) beside the restored
+it is off in 0.2.37. The next run's Solstice template names the tab as `launchTab`, so a build with the switch on is
+measured the way its users will have it. A link launch opens Little Solstice (a 900×640 window) beside the restored
 main window, and pays the same.
 
 **Download and on disk (context).** Helium is also arm64-only. The difference:
@@ -201,11 +201,11 @@ main window, and pays the same.
 - a framework binary 24 MB larger (265 against 241 MB);
 - React Native: main executable 9.1, hermes 4.6, JS bundle 3.9, assets 9.2 MB.
 
-**New window.** `Target.createTarget({ newWindow: true })` gives Ardia a new normal Chrome Browser, which
+**New window.** `Target.createTarget({ newWindow: true })` gives Solstice a new normal Chrome Browser, which
 `ArdiaHostEngineDelegate.mm -engineWindowForNewBrowserOfProfile:type:` hosts in a stray window
 (`ArdiaWindowController.mm +strayWindowForProfile:`). Its tab ends up in the existing main window and no window
 opens. The same path serves an extension's `chrome.windows.create`, so this is a parity bug, and its fix is in
-progress separately. The row is null for Ardia until then; xbench counts a window when the target's window id differs
+progress separately. The row is null for Solstice until then; xbench counts a window when the target's window id differs
 from the restored tab's.
 
 **uBlock Origin's own cost (2026-10-17).** An A/B of 0.2.38-nightly.4 with and without its bundled uBO (both
@@ -235,7 +235,7 @@ Chrome's freeze drops their WebSocket at the next thaw (`chromium-thaw-live-conn
 main frames at 60 Hz while the compositor scrolled at 120, and a trackpad scroll got main frames at the cadence of its
 input events. Whatever script or rAF placed from the scroll position lagged a draw behind in 38-47 % of frames
 (`scroll-frames.mjs`). Main frames now stay at the display rate while a scroll is active and for 1 s after it or after
-any input (`chromium-main-frame-full-rate-on-input.patch`). On battery, Battery Saver, which Ardia turned on there until 0.2.39 (now at 20 % battery or less by default),
+any input (`chromium-main-frame-full-rate-on-input.patch`). On battery, Battery Saver, which Solstice turned on there until 0.2.39 (now at 20 % battery or less by default),
 capped every frame at 30 Hz, scrolling included. Input now lifts that cap for 1 s
 (`chromium-battery-saver-full-rate-on-input.patch`). Cost: nothing measurable in energy.mjs's mains rows (idle, scroll,
 switch, video, 3 rounds against the change switched off). On battery, an idle page is unchanged (18-19 mW) and
@@ -253,20 +253,20 @@ generation in the manifest version), so it's parked; the diffs and reviews are i
 
 ### Per process kind (medians over the 5 sessions)
 
-| | Ardia | Dia | Helium | Chrome |
+| | Solstice | Dia | Helium | Chrome |
 |---|---|---|---|---|
 | memory at 1 tab, MB | browser 125, GPU 51, renderer 70, network 24, storage 19 | browser 185, GPU 120, renderer 82, AI utility 54, network 23, storage 17 | browser 76, GPU 132, renderer 61, extension 58, network 23, storage 19 | browser 98, GPU 172, renderer 78, network 12, storage 6 |
 | memory at 20 tabs, MB | browser 168, GPU 142, renderers 827 | browser 317, GPU 564, renderers 822, extension 27, AI 54 | browser 111, GPU 209, renderers 692, extension 60 | browser 132, GPU 291, renderers 475 |
 | idle wakeups/s at 1 tab | browser 3.3, renderer 2.0, GPU 0.8 | browser 9.5, renderer 2.0, GPU 1.2 | browser 1.7, renderer 1.5, GPU 0.9, extension 0.8 | browser 2.1, renderer 2.4, GPU 1.0 |
 | idle CPU % at 20 tabs | browser 0.22, renderers 1.17 | browser 0.46, renderers 0.43 | browser 0.30, renderers 0.89 | browser 0.17, renderers 0.39 |
 
-Ardia's browser process wakes 3.3/s at 1 tab against Chrome's 2.1 and Helium's 1.7: React Native's timers and
+Solstice's browser process wakes 3.3/s at 1 tab against Chrome's 2.1 and Helium's 1.7: React Native's timers and
 display link in the browser process (docs/perf/README.md, idle 5 s: 12–18 timers).
 
 ## Method
 
 - **One harness, from outside the app.** Each browser is launched with `open -g -n`. The URL for a link launch is
-  handed over by `open`, and Ardia ignores URLs in argv. Each is driven over CDP (`Target.createTarget`,
+  handed over by `open`, and Solstice ignores URLs in argv. Each is driven over CDP (`Target.createTarget`,
   `activateTarget`, `closeTarget`, `Browser.getWindowForTarget`, `Runtime.evaluate`); the test pages report their own
   paint timing.
 - **Process measurements.** Memory, CPU and wakeups are `proc_pid_rusage` (acperf) over every process of the
@@ -277,25 +277,25 @@ display link in the browser process (docs/perf/README.md, idle 5 s: 12–18 time
 - **The same profile state.** A template profile is made once per browser: one launch, the test page opened over CDP,
   every other page closed, 90 s to settle (components, filter lists, first-run work), quit. Every run starts from
   its own APFS clone of that template.
-  - All four restore the same one-tab session. Ardia and Dia restore by default; Chrome and Helium get
+  - All four restore the same one-tab session. Solstice and Dia restore by default; Chrome and Helium get
     `--restore-last-session` (their "Continue where you left off").
-  - Ardia's template drops its blank tab and gets the same 1280×800 frame.
+  - Solstice's template drops its blank tab and gets the same 1280×800 frame.
   - Dia's template starts from a copy of a profile the owner signed in to once by hand, with a throwaway Atlassian
     account (Dia can't get past onboarding otherwise).
 - **The same flags.**
   - Every instance: HOME and CFFIXED_USER_HOME point into its run folder, so nothing reaches the real `~/Library`.
-    It also gets Ardia's background-mode switches `--disable-backgrounding-occluded-windows --mute-audio`, plus
+    It also gets Solstice's background-mode switches `--disable-backgrounding-occluded-windows --mute-audio`, plus
     `--no-first-run --no-default-browser-check --password-store=basic`.
   - Chromium competitors also get `--user-data-dir --remote-debugging-port --remote-allow-origins=* --use-mock-keychain
     --window-size=1280,800 --window-position=40,80`. Dia ignores the window size and opens at 1512×949.
-  - Ardia gets `ARDIA_BACKGROUND=1`, `ARDIA_DATA_DIR`, `ARDIA_REMOTE_DEBUGGING_PORT`, onboarding done,
+  - Solstice gets `ARDIA_BACKGROUND=1`, `ARDIA_DATA_DIR`, `ARDIA_REMOTE_DEBUGGING_PORT`, onboarding done,
     `ARDIA_INSTANCE` `updateFeed` at the local server, and `-NSAppSleepDisabled YES` (as native-bench).
 - **How each runs.** This is where the setups differ.
   - **Chrome and Helium run as shipped:** they bring themselves to the front at launch and at every
     `Target.activateTarget`. They fetch their Finch (variations) seed and components as usual: no
     `--disable-background-networking`, which would remove background work Chrome really does.
   - **Dia runs in view without taking focus.**
-  - **Ardia runs background-only,** in its test mode: it can't become the active app, its windows sit behind the
+  - **Solstice runs background-only,** in its test mode: it can't become the active app, its windows sit behind the
     owner's and report themselves as not occluded, and App Nap is off for it.
   - Background-only copies of Chrome were tried and rejected (A/B below): with their window behind the owner's,
     macOS treats them as occluded and switched-to tabs never get frames.
@@ -309,7 +309,7 @@ display link in the browser process (docs/perf/README.md, idle 5 s: 12–18 time
   - Helium is a clone of `/Applications/Helium.app`.
   - Dia is 1.53.0 from the vendor's DMG (S6N382Y83G, notarized), chmod a-w so Sparkle can't replace it. A 1.52.0
     copy updated itself to 1.53.0 within a minute. 1.53.0 is current.
-  - Ardia is a clone of `dist/0.2.37/export/Ardia.app`.
+  - Solstice is a clone of `dist/0.2.37/export/Solstice.app`.
 - **Dia's defaults.** Dia writes its real defaults domain (`company.thebrowser.dia`) through cfprefsd, which ignores
   CFFIXED_USER_HOME. Each Dia instance runs between `defaults export` (to a 0600 file) and `defaults delete` +
   `defaults import`, so the owner's domain ends as it started; its contents are never read. Dia keeps its sign-in in
@@ -342,12 +342,12 @@ display link in the browser process (docs/perf/README.md, idle 5 s: 12–18 time
   "machine": { "model": "MacBook Pro (Mac17,9)", "chip": "Apple M5 Pro", "cores": 15, "ram": "48 GB", "macOS": "27.2 (26B5112a)" },
   "harness": 1,
   "browsers": {
-    "ardia": { "name": "Ardia", "version": "0.2.46", "chromium": "155.0.8059.84", "measured": "2026-11-09" },
+    "ardia": { "name": "Solstice", "version": "0.2.46", "chromium": "155.0.8059.84", "measured": "2026-11-09" },
     "dia": { "name": "Dia", "version": "1.53.0", "chromium": "155.0.8059.80", "measured": "2026-10-16" }, "helium": {}, "chrome": {}
   },
   "rows": [
     { "id": "newtab", "label": "New tab → first paint", "unit": "ms", "lowerIsBetter": true, "best": "ardia",
-      "browsers": { "ardia": { "name": "Ardia", "version": "0.2.46", "chromium": "155.0.8059.84", "median": 54.9, "min": 52.1, "max": 57, "n": 3, "measured": "2026-11-09" } } }
+      "browsers": { "ardia": { "name": "Solstice", "version": "0.2.46", "chromium": "155.0.8059.84", "median": 54.9, "min": 52.1, "max": 57, "n": 3, "measured": "2026-11-09" } } }
   ],
   "method": "docs/perf/vs-browsers.md",
   "notes": ["…"]
@@ -362,9 +362,9 @@ display link in the browser process (docs/perf/README.md, idle 5 s: 12–18 time
 - A variant run under its base name (`chrome-bg` as `chrome`) has `variant` set.
 - `date` is the newest measurement. `browsers.<name>.measured` is the day that browser's xbench rows were measured, and
   each row entry carries its own `measured` once a merge has written it; a file without them means every browser was
-  measured on `date`. The site shows one date while they agree and "Ardia 0.2.46 measured Nov 9 · Dia 1.53.0 and Helium
-  0.19.3.1 measured Oct 19, 2026" once they don't, and a row whose Ardia entry is older than Ardia's headline date (a row
-  xbench doesn't measure, like Speedometer 3 or power) says "Ardia 0.2.38-nightly.8 from Oct 19" in its meta line.
+  measured on `date`. The site shows one date while they agree and "Solstice 0.2.46 measured Nov 9 · Dia 1.53.0 and Helium
+  0.19.3.1 measured Oct 19, 2026" once they don't, and a row whose Solstice entry is older than Solstice's headline date (a row
+  xbench doesn't measure, like Speedometer 3 or power) says "Solstice 0.2.38-nightly.8 from Oct 19" in its meta line.
 - `harness` is xbench's `HARNESS` revision. Bump it in the same commit as any change to what a row measures or how
   (pages, flags, timings, the processes counted); a merge refuses rivals stored under another revision.
 
@@ -382,13 +382,13 @@ signed, restricted entitlements and hardened runtime dropped; it starts and runs
 | New tab, new window, idle CPU and wakeups | overlap | overlap |
 
 A background-only app can't come to the front, so its window stays behind the owner's (100 % covered) and macOS
-treats it as occluded. Switched-to tabs never get frames, and the GPU process holds more. Ardia's test mode avoids
+treats it as occluded. Switched-to tabs never get frames, and the GPU process holds more. Solstice's test mode avoids
 this only because its windows say they aren't occluded. The rows don't overlap, so the normal copies were used.
 
-## Ardia: the harness against native-bench (cross-check)
+## Solstice: the harness against native-bench (cross-check)
 
 Same app, same day, owner at work. native-bench ran with `--only launch,session --launch-runs 6 --runs 2` and 0.2.37's
-bench bundle. xbench ran Ardia alone with `--gate off`.
+bench bundle. xbench ran Solstice alone with `--gate off`.
 
 | Row | xbench | native-bench |
 |---|---|---|
@@ -403,27 +403,27 @@ bench bundle. xbench ran Ardia alone with `--gate off`.
 Memory, idle CPU and wakeups agree: the same processes are measured the same way. The gaps come from the paths:
 - **Launch.** native-bench runs a re-signed copy with `acmark.dylib` injected; xbench runs the notarized copy as
   shipped.
-- **New tab.** `createTarget` starts the navigation in Chrome before Ardia's JS adopts the tab; the store's `newTab`
+- **New tab.** `createTarget` starts the navigation in Chrome before Solstice's JS adopts the tab; the store's `newTab`
   goes through JS first.
 - **Tab switch.** `activateTarget` goes through Chrome's tab strip and back through the JS mirror; native-bench calls
   the store directly.
 
-Paint timing over CDP works with the screen locked: a locked-screen round of Ardia matched the unlocked one.
+Paint timing over CDP works with the screen locked: a locked-screen round of Solstice matched the unlocked one.
 
 ## Running it
 
-Every stable release re-measures Ardia alone and keeps the stored rivals; Dia and Helium are measured again only when
+Every stable release re-measures Solstice alone and keeps the stored rivals; Dia and Helium are measured again only when
 a full rerun is due.
 
-### Ardia alone, every stable release
+### Solstice alone, every stable release
 
 The release skill's step 4d (`.claude/skills/release/SKILL.md`), after the perf gate, on the build that passed it:
 
 ```sh
-V=<version>; A=dist/$V-rc/export/Ardia.app   # dist/$V/export without an rc
+V=<version>; A=dist/$V-rc/export/Solstice.app   # dist/$V/export without an rc
 X=$HOME/ardia-scratch/xbench-$V-$(plutil -extract CFBundleVersion raw $A/Contents/Info.plist)-$(codesign -dvvv $A 2>&1 | sed -n 's/^CDHash=//p' | cut -c1-12)
-mkdir -p $X/apps/ardia && { [ -e $X/apps/ardia/Ardia.app ] || cp -Rc $A $X/apps/ardia/; }
-codesign --force --deep --sign - $X/apps/ardia/Ardia.app   # ad hoc, as the stored rows' Ardia and Helium ran
+mkdir -p $X/apps/ardia && { [ -e $X/apps/ardia/Solstice.app ] || cp -Rc $A $X/apps/ardia/; }
+codesign --force --deep --sign - $X/apps/ardia/Solstice.app   # ad hoc, as the stored rows' Solstice and Helium ran
 node apps/browser/scripts/perf/xbench.mjs run --out $X/out --apps $X/apps --browsers ardia --rounds 3 --launches 2 \
   --gate off --deadline 60   # run_in_background; about 35 min; rerun to resume
 node apps/browser/scripts/perf/xbench.mjs report --out $X/out --apps $X/apps --browsers ardia \
@@ -432,9 +432,9 @@ node apps/browser/scripts/perf/xbench.mjs clean --out $X/out --apps $X/apps --br
 ```
 
 - **What the merge keeps.** `--rivals-from` takes every browser the run didn't measure from the stored file with its
-  own figures, version and `measured` date, replaces Ardia's entries on the rows it measured, recomputes `best`, keeps
+  own figures, version and `measured` date, replaces Solstice's entries on the rows it measured, recomputes `best`, keeps
   the rows xbench doesn't make (Speedometer 3, power) as they were, and keeps the stored `notes`.
-- **3 rounds of 2 launches** gives Ardia the stored rows' n (6 per launch row, 3 sessions).
+- **3 rounds of 2 launches** gives Solstice the stored rows' n (6 per launch row, 3 sessions).
 - **It refuses** (exit 65, nothing written) when this Mac's model or chip differ from the file's `machine`, or the
   harness revision differs: measure every browser again then. `--force` merges anyway and records why in `forced`.
 - **It flags a full rerun, and never blocks.** The report prints `full rerun due: …` when a kept rival is over 60 days
@@ -460,7 +460,7 @@ node apps/browser/scripts/perf/xbench.mjs clean --out $OUT --apps $APPS --browse
 power rows, which then show their own dates.
 
 - **Run time.** A full run takes about 2 h 10 min, plus about 2.5 min per session for the settled idle windows.
-- **A new Ardia build.** Add it as `--app ardia-main=<app>` beside `ardia` for a drift check against at least one
+- **A new Solstice build.** Add it as `--app ardia-main=<app>` beside `ardia` for a drift check against at least one
   competitor.
 - **A/Bs.** `--env ardia=ARDIA_INSTANCE=chromiumSwitches=…` (or any K=V) runs a variant without touching the others.
 - **Waiting for the owner.** `--gate away` (the default) waits for the owner to be away (screen locked for 60 s, or

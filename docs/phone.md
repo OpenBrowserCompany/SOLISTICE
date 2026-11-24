@@ -1,4 +1,4 @@
-# Ardia for phones (Expo)
+# Solstice for phones (Expo)
 
 One Expo app for both phones, replacing the SwiftUI iPhone app and the Compose Android app (issue #1556). On this
 branch the old Android app is gone ("The old Android app, cleaned out" below); `main` keeps it until the merge.
@@ -10,17 +10,17 @@ Swift code that already exists. Both phones run it: Android and the iPhone.
 ```
 apps/phone/                 the app, and the root of its own pnpm workspace with packages/phone: Expo 58, React
                             Native 0.88.1, React 19.3, Reanimated 4.7, Worklets 0.13, Gesture Handler 3.3, Hermes V1
-  android/                  the Android project, checked in (application id com.ardia.browser.android, minSdk 29,
+  android/                  the Android project, checked in (application id com.openbrowsercompany.solstice.android, minSdk 29,
                             arm64-v8a and x86_64)
   src/                      the Mac's folder rules (docs/conventions.md): components/ui, components/<feature>,
                             state/<domain>, platform, lib
-  ios/                      the iPhone and iPad project, checked in (bundle id com.ardia.browser.ios, the SwiftUI
+  ios/                      the iPhone and iPad project, checked in (bundle id com.openbrowsercompany.solstice.ios, the SwiftUI
                             app's, iOS 27, React Native's prebuilt core)
   scripts/gradle-locked     Gradle under one lock, so one Android build runs at a time
 packages/phone/             @ardia/phone-native, the Expo module package
   src/                      the TypeScript side: PageView and its types
   android/                  the Kotlin side: the module (com.ardia.phone) and the engine it owns, the page engine
-                            (com.ardia.browser), content blocking, the script runtime and sync, with their tests
+                            (com.openbrowsercompany.solstice), content blocking, the script runtime and sync, with their tests
   ios/                      the Swift side, pod ArdiaPhoneNative. It builds against ArdiaKit's ArdiaBrowser, so the
                             SwiftUI app and this app run one WebEngine and WebTab
 ```
@@ -48,7 +48,7 @@ macOS and react-native-macos stops at 0.83):
 
 ## The page view
 
-`PageView` (`packages/phone/src`) is the page. Android backs it with `PageEngine` (`com.ardia.browser` in `packages/phone/android`)
+`PageView` (`packages/phone/src`) is the page. Android backs it with `PageEngine` (`com.openbrowsercompany.solstice` in `packages/phone/android`)
 (`DevelopmentWebViewEngine` over the system WebView today). The iPhone backs it with `WebEngine` and `WebTab` from
 `packages/phone/ios/ArdiaKit` (WKWebView with the SwiftUI app's content blocking, popups, downloads and page requests),
 in an in-memory tab store until this app takes over the SwiftUI app's data. Its tone is `PageTone.resolve` and
@@ -163,12 +163,12 @@ says what happened, and no tab or removed visit is lost or shows up twice.
    Repeat three times. Sync keeps cycling, the checks still pass, and nothing crashes (`adb logcat -b crash`).
 5. **A slow or revoked folder.** Point sync at a folder on a provider that lags (a cloud drive's folder with
    the phone on a slow network): status shows `updating`, then `updated` or `stalled`, never a hang past a
-   minute. Then revoke the grant (Settings › Apps › Ardia › clear the folder permission, or remove the folder in
+   minute. Then revoke the grant (Settings › Apps › Solstice › clear the folder permission, or remove the folder in
    the provider): status turns `needsFolderAccess`, and Change folder recovers it.
 6. **WorkManager with the app process dead.** Make a change on the Mac, leave the app, run
-   `adb shell am kill com.ardia.browser.android.dev`, then
-   `adb shell cmd jobscheduler run -f com.ardia.browser.android.dev <job id>` (ids from
-   `adb shell dumpsys jobscheduler com.ardia.browser.android.dev`). Open the app: the change is there before the
+   `adb shell am kill com.openbrowsercompany.solstice.android.dev`, then
+   `adb shell cmd jobscheduler run -f com.openbrowsercompany.solstice.android.dev <job id>` (ids from
+   `adb shell dumpsys jobscheduler com.openbrowsercompany.solstice.android.dev`). Open the app: the change is there before the
    first foreground cycle, and the inbox holds any tabs the Mac sent.
 7. **Stalled age.** Turn on airplane mode and wait three minutes: the status reads `Last synced N minutes ago`
    and N moves each minute.
@@ -182,13 +182,13 @@ The Expo app has the Compose app's entry points, beside the iPhone's:
 
 | iPhone | Android |
 | --- | --- |
-| Default browser and http/https links | the browser role and `VIEW` intent filters for http, https and `ardia://` |
+| Default browser and http/https links | the browser role and `VIEW` intent filters for http, https and `solstice://` |
 | Home Screen widgets (search, the Mac's tabs) | Glance widgets: Search, and Your Mac's Tabs where sync is offered |
 | Lock Screen widgets | none |
 | Control Center controls: Search, Voice Search, New Incognito Tab | Quick Settings tiles: Search, Voice Search, Incognito Tab, each opening what its launcher shortcut opens, after an unlock on a locked phone |
 | Home Screen quick actions | app shortcuts: Search, Voice Search, New Incognito Tab, and Open Synced Tabs where sync is offered |
-| Share extension | a share target (`ShareActivity`): Open in Ardia, Search in Ardia, and Send to Your Mac where sync is offered |
-| Open in Ardia action | the same share target, and Search in Ardia in the text selection menu (`PROCESS_TEXT`) |
+| Share extension | a share target (`ShareActivity`): Open in Solstice, Search in Solstice, and Send to Your Mac where sync is offered |
+| Open in Solstice action | the same share target, and Search in Solstice in the text selection menu (`PROCESS_TEXT`) |
 | App Intents and Siri phrases | `WEB_SEARCH` intents; no assistant phrases |
 | Spotlight for open and archived tabs | none |
 | Handoff of the current page | none: Android has no counterpart |
@@ -197,8 +197,8 @@ Where it can be shared, it is the app's own code:
 - **Links.** `MainActivity` hands every intent to `PhoneSystemLinks` (`@ardia/phone-native`), which maps it to
   a `SystemLink` with the Compose app's `SystemLink` parser and queues it until the app listens
   (`system.initialLink()`, `system.addLinkListener`). http and https `VIEW` (default browser) is `open`, source
-  `web`; `ardia://` from widgets and the tile is its kind, source `system`, and from launcher shortcuts, source
-  `shortcut`; `WEB_SEARCH` and `PROCESS_TEXT` (Search in Ardia on selected text) search, or open a web
+  `web`; `solstice://` from widgets and the tile is its kind, source `system`, and from launcher shortcuts, source
+  `shortcut`; `WEB_SEARCH` and `PROCESS_TEXT` (Search in Solstice on selected text) search, or open a web
   address, source `intent`; `SEND` text opens its first link or searches the text, source `share`. A link is
   delivered once, not again on recreate or from Recents, and a new activity drops links an earlier one left
   untaken (50824c133). `system.setHidesFromRecents(hidden)` is the Compose
@@ -215,7 +215,7 @@ Where it can be shared, it is the app's own code:
   off or following it (`setOpensLinksInApps(host, null)`).
 
 **What the Codex review of 15 November changed.**
-- A share sent with Ardia cold waits for sync to load before it gives up. It is recorded before the wait, and a
+- A share sent with Solstice cold waits for sync to load before it gives up. It is recorded before the wait, and a
   WorkManager job resumes it if the process dies. The sheet's ViewModel holds one key, so rotation never sends
   twice. Only sane extras are read (e8b5c7798).
 - Native counts, such as the share sheet's tabs_sent, are kept only while usage sharing is on and within its
@@ -229,11 +229,11 @@ Where it can be shared, it is the app's own code:
 - **Sync is not offered in Android release builds** (the first Android release ships without it; lab builds keep
   it). One value, `SyncOffer.isOffered` in `packages/phone` (true in a lab build, false in a release build), decides
   every native entry point; JavaScript reads the same through `system.syncOffered()`. In a release build:
-  - the share sheet offers Open in Ardia and Search in Ardia only, no Send to Your Mac and no hint to turn sync on;
+  - the share sheet offers Open in Solstice and Search in Solstice only, no Send to Your Mac and no hint to turn sync on;
   - the Your Mac's Tabs widget is not in the widget picker: its receiver is disabled by the build's
     `@bool/ardia_sync_offered`. A Your Mac's Tabs widget placed by a Compose tester build loses its provider, and
     the launcher shows that it can't be loaded until it is removed; no released build ever placed one;
-  - the Your Mac's Tabs launcher shortcut is disabled the same way, and an `ardia://mac-tabs` link does nothing;
+  - the Your Mac's Tabs launcher shortcut is disabled the same way, and an `solstice://mac-tabs` link does nothing;
   - no sync controller is made, so nothing syncs, in front or in the background. Sync work a Compose tester left
     queued (`ardia-sync`, `ardia-sync-flush`) is cancelled at start, and a worker that runs anyway holds;
   - the sync code scanner reports the camera as unsupported and never opens it;
@@ -244,36 +244,36 @@ Where it can be shared, it is the app's own code:
 #### Entry points tester script (lab build)
 
 Before any run, prove the phone has the build you were sent:
-- Clear old Ardia APKs from the phone's Downloads first, so an on-phone installer cannot pick an old one
+- Clear old Solstice APKs from the phone's Downloads first, so an on-phone installer cannot pick an old one
   (sync13 on the M3 once installed sync12 that way): `adb shell ls /sdcard/Download | grep -i ardia`, then
   `adb shell rm /sdcard/Download/<each old ardia apk>`.
 - After installing, hash what is installed and compare it with the `sha256:` line of the build's `.txt`:
-  `adb shell sha256sum $(adb shell pm path com.ardia.browser.android.dev | sed -n 's/^package://p' | grep base.apk)`.
+  `adb shell sha256sum $(adb shell pm path com.openbrowsercompany.solstice.android.dev | sed -n 's/^package://p' | grep base.apk)`.
   An `adb install` of a single APK keeps it byte for byte as `base.apk`.
 - On the first launch logcat has `PAGELAB build <commit> dirty: no …`, and the commit must be the one sent
   with the APK. If the hash or the commit differs, stop and reinstall: nothing measured on the wrong build
   counts.
 
-`P=com.ardia.browser.android.dev/com.ardia.browser.android.MainActivity`. Open the lab
+`P=com.openbrowsercompany.solstice.android.dev/com.openbrowsercompany.solstice.android.MainActivity`. Open the lab
 (`adb shell am start -n $P --ez com.ardia.phone.PAGE_LAB true`), tap System, and watch
 `adb logcat -s PAGELAB | grep "PAGELAB system"`. Each command should print one `PAGELAB system link`
 line with the kind and source shown. The lab also prints `PAGELAB system default browser` once when it opens
 and again only when that status changes.
 
 1. **Web link:** `adb shell am start -a android.intent.action.VIEW -d https://example.com/a -n $P`: open, web.
-2. **Ardia links:** the same with `-d ardia://search?q=otters` (search, query otters), `ardia://voice`
-   (voiceSearch), `ardia://incognito`, `ardia://mac-tabs` (macTabs), `ardia://tab/t1` (tab, id t1),
-   `ardia://open?url=https%3A%2F%2Fexample.com%2F` (open), `ardia://inbox`: each with source system.
+2. **Solstice links:** the same with `-d solstice://search?q=otters` (search, query otters), `solstice://voice`
+   (voiceSearch), `solstice://incognito`, `solstice://mac-tabs` (macTabs), `solstice://tab/t1` (tab, id t1),
+   `solstice://open?url=https%3A%2F%2Fexample.com%2F` (open), `solstice://inbox`: each with source system.
 3. **Shortcuts:** long-press the app icon: Search, Voice Search, Incognito Tab, Synced Tabs each give their kind
    with source shortcut.
 4. **Web search:** `adb shell am start -a android.intent.action.WEB_SEARCH --es query "red pandas" -n $P`:
    search, intent. With `--es query https://example.com/`: open.
-5. **Selected text:** select words in any app, choose Search in Ardia: search with the words, intent. Or
+5. **Selected text:** select words in any app, choose Search in Solstice: search with the words, intent. Or
    `adb shell am start -a android.intent.action.PROCESS_TEXT -t text/plain --es android.intent.extra.PROCESS_TEXT "two words" -n $P`.
-6. **Share:** share a page from another app and pick Ardia: open, share. Or
+6. **Share:** share a page from another app and pick Solstice: open, share. Or
    `adb shell am start -a android.intent.action.SEND -t text/plain --es android.intent.extra.TEXT "Look https://example.com/b." -n $P`
    (open https://example.com/b) and with `"just words"` (search).
-7. **Once only:** after a link, go to Recents and back to Ardia, and rotate if the screen allows: no new line.
+7. **Once only:** after a link, go to Recents and back to Solstice, and rotate if the screen allows: no new line.
 8. **Cold start:** force-stop the app, then run step 1 with `--ez com.ardia.phone.PAGE_LAB true` added: open
    System; the initial link line shows the link.
    Expected on every cold start, as in both native apps, and not a failure: with Auto-Open Keyboard on the app
@@ -282,10 +282,10 @@ and again only when that status changes.
    selected tab. Report only a white or empty frame behind the tray, which e10082e90 removed.
 9. **Default browser:** the status line shows isDefault and canAsk; Request role shows the system dialog and
    the line follows the answer; Default apps settings opens the settings page.
-   `adb shell cmd role get-role-holders android.app.role.BROWSER` agrees. With Ardia as the default, step 1
-   without `-n` opens Ardia directly.
-10. **Recents:** Hide from Recents, then open Recents: Ardia's card is blank. Show in Recents restores it.
-11. **Quick Settings tile:** add Ardia's Search tile; tapping it opens Ardia with a search link (system). With
+   `adb shell cmd role get-role-holders android.app.role.BROWSER` agrees. With Solstice as the default, step 1
+   without `-n` opens Solstice directly.
+10. **Recents:** Hide from Recents, then open Recents: Solstice's card is blank. Show in Recents restores it.
+11. **Quick Settings tile:** add Solstice's Search tile; tapping it opens Solstice with a search link (system). With
     the phone locked it asks to unlock first.
 12. **Widgets:** add Search and Your Mac's Tabs from the launcher's widget picker. Search: the field gives
     search, the mic gives voiceSearch. Your Mac's Tabs with sync off: "Sync With Your Mac"; with real sync
@@ -308,12 +308,12 @@ and again only when that status changes.
     shows its notice; after a force-stop and relaunch the notice is still there, until sync next writes the
     inbox.
 16. **Shortcuts with the app in the background:** open the System section, press Home (don't swipe the app
-    away), and use each launcher shortcut. Ardia comes back without restarting (the lab is still open, no
+    away), and use each launcher shortcut. Solstice comes back without restarting (the lab is still open, no
     splash) and prints one link line with source shortcut. `adb logcat -b main | grep -c "Unable to find viewState"`
     stays 0.
 17. **Not yet covered:** the tile with the phone locked behind a PIN (it asks to unlock, then opens the
     search); the Search widget's mic (at its medium size, 4×2: the Compose widget shows the mic only from 250 dp
-    wide); Search in Ardia on text selected in a real app; a share from a real app (Chrome's Share › Ardia).
+    wide); Search in Solstice on text selected in a real app; a share from a real app (Chrome's Share › Solstice).
 18. **Widgets and dark mode:** with the app in the background, switch the phone between light and dark: both
     widgets' backdrops follow within a second.
 19. **Scanner:** Scanner section › Ask for camera, then point at the Mac's sync code: one
@@ -335,7 +335,7 @@ and again only when that status changes.
     airplane mode on and off: `network lost`, then `online again` once.
 23. **Accessibility dump:** in the app (not the lab), open the tray, the page menu, a long-press menu, Spaces
     and the Archive sheet in turn, and with each open run
-    `adb shell am broadcast -a com.ardia.phone.A11Y_DUMP -p com.ardia.browser.android.dev` and
+    `adb shell am broadcast -a com.ardia.phone.A11Y_DUMP -p com.openbrowsercompany.solstice.android.dev` and
     `adb logcat -d -s PAGELAB | grep "PAGELAB a11y"`. The lines between `begin` and `end` are what TalkBack can
     reach; the surface behind a cover should not be among them.
 Look checks (24, 25, 32, 33, 38) start from the look on. The lab's Look on/Look off switch lasts across launches
@@ -363,14 +363,14 @@ off in the lab`.
     steps (Settings › Show Onboarding). Settings › What’s Sent lists what is counted. A lab release build sends to
     ardia.dev with environment test.
 27. **Memory after tabs close** (the lab broadcasts here and below, MEMORY, FRAMES, TRIM and DECK_PARTS, are
-    answered while Ardia is in front. From sync20d its receiver also stays registered in the background, but
+    answered while Solstice is in front. From sync20d its receiver also stays registered in the background, but
     Android 14 and later, and MIUI's freezer, hold a broadcast to a cached app until it is back on screen. For the
     background itself use `adb shell dumpsys gfxinfo $P` and `dumpsys meminfo $P`.)
-    `adb shell am broadcast -a com.ardia.phone.MEMORY -p com.ardia.browser.android.dev`
+    `adb shell am broadcast -a com.ardia.phone.MEMORY -p com.openbrowsercompany.solstice.android.dev`
     and `adb logcat -d -s PAGELAB | grep "PAGELAB memory"` (or System › Memory) at four points, after a
     force-stop and cold start each time you start over: with one tab; after opening nine tabs and visiting each;
     after closing eight of them; and after `adb shell am broadcast -a com.ardia.phone.TRIM -p
-    com.ardia.browser.android.dev` (System › Trim, the same clear Android's low-memory signal does). Report the four
+    com.openbrowsercompany.solstice.android.dev` (System › Trim, the same clear Android's low-memory signal does). Report the four
     lines; the image cache's MB should fall when tabs close.
 28. **Scanner without a camera:** Scanner section with the camera allowed: Feed a phrase code gives
     `code: … 24 words, valid true`, Feed another code gives `rejected`; no recovery phrase in
@@ -392,9 +392,9 @@ off in the lab`.
     `widget search|macTabs update on API N: the launcher picks day or night …; the app sees day|night`. A switch
     with the app closed needs no update line at all. If a widget doesn't follow, report whether any line
     appeared and what it said.
-    With TalkBack on, each widget reads its name from the moment it is placed, before its first update: "Ardia
-    Search" and "Ardia, Your Mac’s Tabs", never "Ardianull".
-    MIUI's launcher reads its own frame around a widget as "Ardianull"; the Compose app's widgets read the same on
+    With TalkBack on, each widget reads its name from the moment it is placed, before its first update: "Solstice
+    Search" and "Solstice, Your Mac’s Tabs", never "Solstice-null".
+    MIUI's launcher reads its own frame around a widget as "Solstice-null"; the Compose app's widgets read the same on
     the same launcher (F4, sync12), so it is the launcher's and is not checked further.
 32. **Deck backdrop:** in the app's deck, three slow blobs in lighter shades of the profile colour drift over the base
     (two screenshots 10 s apart differ). In the lab, Look: the stage above the frosted bar shows the mesh and blobs
@@ -435,7 +435,7 @@ off in the lab`.
     when the delete wins, the close says `no snapshot files left (…)` and the delete line carries the drops. For
     a tab that had a card, one of the two lines drops 1 or more; report any close of a carded tab where both say
     0. The image cache after closing eight is no larger than with nine open. Then run
-    `adb shell am send-trim-memory com.ardia.browser.android.dev RUNNING_CRITICAL` (Android's own signal, which
+    `adb shell am send-trim-memory com.openbrowsercompany.solstice.android.dev RUNNING_CRITICAL` (Android's own signal, which
     also trims the system's GPU caches; the lab's Trim only clears the image cache) and tap Memory again. Report
     all the lines, graphics included.
     - Each Memory line now ends with `look on|off: N of M frost(s) blurring, about X MB of blur layers (largest …),
@@ -444,7 +444,7 @@ off in the lab`.
       between), so the look's share of graphics shows.
     - Android only releases GPU caches, the WebViews' tiles included, at "UI hidden" or deeper, not at
       `RUNNING_CRITICAL` with the app in front. So also press Home, run
-      `adb shell am send-trim-memory com.ardia.browser.android.dev UI_HIDDEN`, come back and tap Memory.
+      `adb shell am send-trim-memory com.openbrowsercompany.solstice.android.dev UI_HIDDEN`, come back and tap Memory.
 38. **Frames with and without the look:** measure twice, look on and look off, doing the same thing each time.
     - In the lab's Look, set the toggle (Look on or Look off; it logs `PAGELAB look views off|on` and lasts across
       launches), then `adb shell am force-stop $P` and open the app normally.
@@ -510,7 +510,7 @@ off in the lab`.
     connected folder's grant, not the one left unused.
 41. **Launch arguments** (lab build): run the capture commands from "Launch arguments on Android" against the Expo
     app, for example
-    `adb shell am start -S -n $P/com.ardia.browser.android.MainActivity --ez ArdiaDemo true --es BrowseQuery otters`,
+    `adb shell am start -S -n $P/com.openbrowsercompany.solstice.android.MainActivity --ez ArdiaDemo true --es BrowseQuery otters`,
     `… --ez ArdiaDemo true --ez BrowseDeck true`, `… --ez ArdiaDemo true --es ArdiaOpenSheet settings` and
     `… --ez ArdiaOnboarding true`. Each does what it does in the Compose app, and with `ArdiaDemo` the sync view
     shows the demo Macs, not the real ones. Lab builds log `PAGELAB launch arguments {…}` once per launch
@@ -615,7 +615,7 @@ off in the lab`.
     - System settings win: with Remove animations on (Settings › Accessibility), the deck stands still whatever
       the budget says, and no sample is taken (nothing moves to measure).
 52. **An idle app draws nothing** (sync11's look-off deck drew 1825 frames in 30 s with nothing changing). With the
-    deck open and untouched, run `adb shell am broadcast -a com.ardia.phone.FRAMES -p com.ardia.browser.android.dev
+    deck open and untouched, run `adb shell am broadcast -a com.ardia.phone.FRAMES -p com.openbrowsercompany.solstice.android.dev
     --ei seconds 5` and keep hands off for 5 s. Logcat (`-s PAGELAB`) has `PAGELAB idle frames: N frame(s) drawn in
     5.0 s, … draw pass(es), … layout pass(es), … with no view redrawn; look views redrawn: <view> xN, …; redrawn:
     <view> xN, … and K more`. The look views (backdrops, frosts, frost sources) are listed first and in full,
@@ -625,7 +625,7 @@ off in the lab`.
     chase.
 53. **The look lets go when the app is hidden.** Look on, nine tabs, tap Memory (step 37) and note the look part
     (`… frost(s) holding a blur layer, about X MB …`). Press Home, then
-    `adb shell am send-trim-memory com.ardia.browser.android.dev HIDDEN` (this Android's name for UI_HIDDEN). Logcat
+    `adb shell am send-trim-memory com.openbrowsercompany.solstice.android.dev HIDDEN` (this Android's name for UI_HIDDEN). Logcat
     has `PAGELAB memory trim received: level 20 (UI_HIDDEN); …; look released for the hidden app: N frost
     layer(s) …`; every trim the app receives now logs one such line, whatever its level, so a missing line means
     the app never got it. Come back and tap Memory: graphics should be near the look-off figure until the deck is
@@ -667,41 +667,41 @@ off in the lab`.
       appears only after Android grants. Allow it: the camera picture shows.
     - Open a map and tap its "my location" button. Android's location dialog first; approximate location is
       enough for the site's dialog to follow.
-    - Clear Ardia's permissions (Settings › Apps), open the camera test again and refuse in Android's dialog: no site
+    - Clear Solstice's permissions (Settings › Apps), open the camera test again and refuse in Android's dialog: no site
       dialog follows, and logcat has `PAGELAB page request camera refused by Android: the site's request ends
       without a dialog`.
     - A permission Android already holds goes straight to the site's dialog with no Android dialog.
-57. **Pull to refresh** (from sync18). Pull a page down past the trigger and let go: the spinner is the Ardia blue
+57. **Pull to refresh** (from sync18). Pull a page down past the trigger and let go: the spinner is the Solstice blue
     (#6395FC, #4A77D4 in dark), the pull holds at 56 dp while the page reloads and springs back with a slight
     overshoot when it is done. A short pull that doesn't reach the trigger springs back the same way. On a page with
     no background colour of its own, swipe back from the edge: what shows behind is the profile's surface colour,
     not plain white or black.
 58. **The widgets take the Color setting** (from sync19b). With the Search and Your Mac's Tabs widgets on the home
     screen, set Settings › Color to green: both widgets turn green within a few seconds; set it back to the
-    profile's colour: they follow. Force-stop Ardia and switch the phone between light and dark: they keep the
+    profile's colour: they follow. Force-stop Solstice and switch the phone between light and dark: they keep the
     chosen colour.
 59. **The pager rounds pages to the display's corner** (from sync18). On Android 12 or later, swipe slowly between
     tabs on the bar: the moving page's corners match the screen's own rounded corners. On an older phone they stay
     at 55. Report the phone and whether the corners line up.
 60. **Share sheet** (from sync19b).
-    - Signed in (sync connected to the Mac): in Chrome, open a page, then Share › Ardia. A sheet rises over Chrome
-      with "Open in Ardia" and "Send to Your Mac" ("Your Devices" when another phone receives tabs). Tap Send to
+    - Signed in (sync connected to the Mac): in Chrome, open a page, then Share › Solstice. A sheet rises over Chrome
+      with "Open in Solstice" and "Send to Your Mac" ("Your Devices" when another phone receives tabs). Tap Send to
       Your Mac: "Sent to …" shows and the sheet closes itself after about 1.4 s, Chrome still in front; the tab
-      arrives on the Mac. Repeat with Ardia force-stopped first: the send still arrives (it waits up to 20 s for
+      arrives on the Mac. Repeat with Solstice force-stopped first: the send still arrives (it waits up to 20 s for
       sync to load).
-    - Share again and tap Open in Ardia: Ardia opens the page as a new tab.
-    - Share plain text from a notes app: the sheet offers "Search in Ardia", which runs that search.
-    - Signed out (sync off): sharing a page offers Open in Ardia and the sync hint, no Send.
-    - Back or a tap outside closes the sheet; Chrome is untouched and Ardia doesn't appear in Recents.
+    - Share again and tap Open in Solstice: Solstice opens the page as a new tab.
+    - Share plain text from a notes app: the sheet offers "Search in Solstice", which runs that search.
+    - Signed out (sync off): sharing a page offers Open in Solstice and the sync hint, no Send.
+    - Back or a tap outside closes the sheet; Chrome is untouched and Solstice doesn't appear in Recents.
 61. **The tray follows predictive back** (from sync19b, Android 14 or later). Open the tray and swipe back slowly
     from the screen's edge: the tray moves down with the finger, up to 72 dp. Let go early: it springs back and
     stays open. Swipe all the way: it closes as Back did before. With the tray closed, Back works as before
     everywhere else (menus, dialogs, the Archive). Before Android 14, Back simply closes the tray.
-62. **A cold share** (from sync20). Signed in, force-stop Ardia. In Chrome, open a page, then Share › Ardia › Send
-    to Your Mac. "Sent to …" shows and the tab reaches the Mac although Ardia wasn't running. Share the same page
+62. **A cold share** (from sync20). Signed in, force-stop Solstice. In Chrome, open a page, then Share › Solstice › Send
+    to Your Mac. "Sent to …" shows and the tab reaches the Mac although Solstice wasn't running. Share the same page
     again: the Mac gets one tab for each share, never two.
-63. **A rotation in the middle of a send** (from sync20). Share › Ardia, tap Send to Your Mac and rotate the phone
-    at once. The sheet comes back in the new orientation, and the Mac gets exactly one tab. Repeat with Ardia
+63. **A rotation in the middle of a send** (from sync20). Share › Solstice, tap Send to Your Mac and rotate the phone
+    at once. The sheet comes back in the new orientation, and the Mac gets exactly one tab. Repeat with Solstice
     force-stopped first.
 64. **Back with a menu or voice search over the tray** (from sync20). Open the tray, long-press a row so its menu
     opens, then press or swipe Back: the menu closes and the tray stays open; Back again closes the tray. A slow
@@ -730,12 +730,12 @@ off in the lab`.
     - the tray open: ◁ closes it; with voice search over the tray, ◁ closes voice search first;
     - nothing open over the page and no page history: ◁ opens the deck, and ◁ on the deck reopens that tab, as
       Compose's does (BackOrder.next ends at the tab switcher; DeckState.back reopens the selected tab). Only on the
-      start screen with no tab does ◁ send Ardia to the background. Reopen it from Recents and try the menu and
+      start screen with no tab does ◁ send Solstice to the background. Reopen it from Recents and try the menu and
       Settings again: ◁ still closes them;
     - rotate with the page menu open, then ◁: the menu closes.
     With gesture navigation, the same with an edge swipe.
-69. **Remove animations is followed while Ardia runs** (from sync20b). Open the deck: the blobs move. Without
-    closing Ardia, turn on Settings › Accessibility › Remove animations (or Developer options › Animator duration
+69. **Remove animations is followed while Solstice runs** (from sync20b). Open the deck: the blobs move. Without
+    closing Solstice, turn on Settings › Accessibility › Remove animations (or Developer options › Animator duration
     scale › Animation off) and come back. The deck stands still at once, and the lab line reads `still (reduce
     motion…)`. Turn it off and come back: the blobs move again, with no relaunch. Open a sheet each time: it fades
     while the setting is on and springs while it is off. That half needs the screens' hook; until it lands, only the
@@ -749,7 +749,7 @@ off in the lab`.
     While using the app. The site's dialog follows; tap Allow. The map centres on you, and Android asks nothing more
     (no "change to precise" dialog).
 72. **A fullscreen video turns with the phone** (from the build after sync20b). With auto-rotate on, play a video
-    fullscreen and turn the phone: the video goes landscape and back. Exit fullscreen while landscape: Ardia goes
+    fullscreen and turn the phone: the video goes landscape and back. Exit fullscreen while landscape: Solstice goes
     back to portrait. With auto-rotate off, the video stays as the phone's rotation lock says.
 
 #### R8 pass (sync19-r8 and later R8 builds)
@@ -783,17 +783,17 @@ Start the pass where R8 is most likely to have broken something, then run the wh
 7. Fullscreen video (media3).
 8. The lab: the deck-parts, frames and memory broadcasts and the Look section's buttons.
 
-## Ardia Dev on Android
+## Solstice Dev on Android
 
-Every build without a release version (corex-build, build-apk without `--version`, lab builds) is a separate app, Ardia
-Dev, `com.ardia.browser.android.dev`, so it installs beside the published Ardia (`com.ardia.browser.android`) and
+Every build without a release version (corex-build, build-apk without `--version`, lab builds) is a separate app, Solstice
+Dev, `com.openbrowsercompany.solstice.android.dev`, so it installs beside the published Solstice (`com.openbrowsercompany.solstice.android`) and
 neither replaces the other's data. Its activities keep their class names, so launch it with
-`com.ardia.browser.android.dev/com.ardia.browser.android.MainActivity`. `--compose-key` builds keep the release package,
+`com.openbrowsercompany.solstice.android.dev/com.openbrowsercompany.solstice.android.MainActivity`. `--compose-key` builds keep the release package,
 since they must install over the Compose app.
 
 ## Upgrade from the Compose app on Android
 
-Both apps are `com.ardia.browser.android`, so the Expo app installs over the Compose app and finds its files.
+Both apps are `com.openbrowsercompany.solstice.android`, so the Expo app installs over the Compose app and finds its files.
 Nothing in the Compose app's data is changed or deleted, so installing the Compose app back still works.
 
 - **The gate** (`UpgradeGate.kt`, 9cc21830b). An import is pending while any Compose source (`databases/browser.db`,
@@ -837,7 +837,7 @@ Nothing in the Compose app's data is changed or deleted, so installing the Compo
     rows and setting values must match what was written, or the transaction rolls back. The log line
     (`ardia-legacy imported …` or `ardia-legacy failed reason=…`) holds counts and reason codes only.
   - It refuses the in-memory store (a store from a newer version): `failed reason=memory`, nothing marked.
-  - Any failure shows a screen in place of the app: Ardia couldn't bring over the tabs and settings, they are still
+  - Any failure shows a screen in place of the app: Solstice couldn't bring over the tabs and settings, they are still
     on the phone, Try Again. After a second failure, and only where the native module has `startFresh()`, it
     also offers Start Without Them: native opens the gate first, then `legacy.startedFresh` is recorded (not a
     receipt), and the app starts; if either fails the screen stays. The old data is left alone so a later
@@ -858,7 +858,7 @@ Nothing in the Compose app's data is changed or deleted, so installing the Compo
 - **Names that must survive.** A placed widget, a pinned shortcut, the tile, a share target pinned in Android's share
   sheet and a job WorkManager queued all name a class, so the Expo app keeps every component the Compose app exports
   under the same name. The Compose app's `.share.ShareActivity` is an activity-alias of `.share.PhoneShareActivity`,
-  and the alias is the only share target, so Ardia shows once in the share sheet. `apps/phone/test/r8/check-upgrade.py
+  and the alias is the only share target, so Solstice shows once in the share sheet. `apps/phone/test/r8/check-upgrade.py
   <compose apk> <expo apk>` checks the pair:
   - every exported component's name, kind, export and intent actions, and its class (or an alias's target) in the R8
     dex;
@@ -873,10 +873,10 @@ Nothing in the Compose app's data is changed or deleted, so installing the Compo
 
 #### A Mac for a phone without one
 
-The phones are on corex; the Mac is a hidden Ardia for Mac on shiv. `apps/phone/scripts/phone-sync-mac.mjs` runs on
+The phones are on corex; the Mac is a hidden Solstice for Mac on shiv. `apps/phone/scripts/phone-sync-mac.mjs` runs on
 shiv (a hidden instance with its own data folder and a sync folder in its work folder), and
 `apps/phone/scripts/phone-sync-relay.mjs` runs on corex, where it keeps that folder and the phone's
-`Documents/Ardia Sync` the same over ssh and the phone's own adb. Each has `start`, `status`, `sync` and `stop`
+`Documents/Solstice Sync` the same over ssh and the phone's own adb. Each has `start`, `status`, `sync` and `stop`
 (`--help` on either). On corex, per phone:
 
 ```sh
@@ -913,9 +913,9 @@ relay start --mac shiv:$W/folder   # checks the phone's folder with a probe file
   (`keyboardType` `visible-password`, no autocorrect, autofill or spell check), and so does the Compose one
   (`KeyboardType.Password`, which keeps it out of the keyboard's learning but has no visual transformation). Only a
   private tab sets the Recents and screenshot protection. A screen read of that page captures the words. Step 2, Choose
-  Folder…: in the system picker open Documents › Ardia Sync, then Use This Folder and Allow.
+  Folder…: in the system picker open Documents › Solstice Sync, then Use This Folder and Allow.
 - When done: `relay stop`, then `mac stop` (it quits the instance and deletes `$W`), then
-  `adb -s $S shell 'rm -rf "/sdcard/Documents/Ardia Sync"'` (the inner quotes are for the phone's shell, which
+  `adb -s $S shell 'rm -rf "/sdcard/Documents/Solstice Sync"'` (the inner quotes are for the phone's shell, which
   would otherwise split at the space).
 
 Checked without a phone: the Mac side started with the AGENTS.md rules (a Debug build, never the installed app,
@@ -932,7 +932,7 @@ pass.
 Use the Compose APK and the Expo upgrade APK built for this run (same key), named here `$COMPOSE_APK` and
 `$EXPO_APK`. Watch `adb logcat -s ReactNativeJS:I ArdiaJS PAGELAB` throughout (the lab's own lines are all under
 `PAGELAB`), and `adb logcat -b crash` for crashes.
-`P=com.ardia.browser.android`. The lab is `adb shell am start -n $P/com.ardia.browser.android.MainActivity --ez com.ardia.phone.PAGE_LAB true`,
+`P=com.openbrowsercompany.solstice.android`. The lab is `adb shell am start -n $P/com.openbrowsercompany.solstice.android.MainActivity --ez com.ardia.phone.PAGE_LAB true`,
 then Upgrade; opening the lab never runs the import, and while the import waits its page area stays blank ("no
 state"). A launch intent reaches a process that is already running, so to get from the app to the lab (or back)
 force-stop first.
@@ -942,7 +942,7 @@ fresh Compose setup (steps 1 to 3): pass A (steps 4 to 10: the reader, the kills
 back), pass B (step 11: the failure screen, then an import) and pass C (step 12: Start Without Them).
 
 1. **Start from the Compose app.** MIUI refuses a fresh `adb install` (`INSTALL_FAILED_USER_RESTRICTED`), so
-   install `$COMPOSE_APK` through the phone's own installer. If Ardia is on the phone, remove it in the phone's
+   install `$COMPOSE_APK` through the phone's own installer. If Solstice is on the phone, remove it in the phone's
    settings first (an Expo build has another key). `adb install -r` works over adb for every later update.
 2. **Set up the Compose app as a tester has it.** Finish onboarding, then:
    - Open at least eight tabs and open the deck so each gets a thumbnail.
@@ -956,7 +956,7 @@ back), pass B (step 11: the failure screen, then an import) and pass C (step 12:
    - The Reader's size, serif and theme.
    - Connect sync. With no Mac of the tester's own, start the Mac on shiv and the relay as in "A Mac for a phone
      without one" (`mac start`, `relay start`) and leave both running for the whole pass. In the Compose app, connect
-     with that phrase and Documents › Ardia Sync. Within a minute `mac sync` lists a `phone` device with the phone's
+     with that phrase and Documents › Solstice Sync. Within a minute `mac sync` lists a `phone` device with the phone's
      name and an id, and its open tabs; the Compose app's Sync page lists the Mac. Send one tab each way:
      `mac send https://example.com/before-upgrade` arrives on the phone once, and a page opened on the phone shows
      under the phone's tabs in `mac sync`.
@@ -983,9 +983,9 @@ Pass A
    - The lab's page area stays blank with "no state": the page engine waits for the import. Force-stop.
 6. **A kill at each durable step.** A lab build can hold the import for 20 s at a step, through
    `--es ArdiaImportPause <step>`. Do these three in order, each from a stopped app:
-   - `adb shell am start -n $P/com.ardia.browser.android.MainActivity --es ArdiaImportPause afterReceipt`. When logcat says
+   - `adb shell am start -n $P/com.openbrowsercompany.solstice.android.MainActivity --es ArdiaImportPause afterReceipt`. When logcat says
      `PAGELAB upgrade paused at settingsStart`, send a link to the held app:
-     `adb shell am start -a android.intent.action.VIEW -d https://example.com/held-a -n $P/com.ardia.browser.android.MainActivity`. It does
+     `adb shell am start -a android.intent.action.VIEW -d https://example.com/held-a -n $P/com.openbrowsercompany.solstice.android.MainActivity`. It does
      not open; the import is still waiting. Then run `adb shell am force-stop $P`. The SQL receipt is written, and
      the native settings and the marker are not. The link was kept on disk, so it survives the kill: it must open
      in step 7, once. (Don't send the link from a stopped app: that launch runs the import with no pause.)
@@ -1049,7 +1049,7 @@ Pass B (after steps 1 to 3 again)
     - The "Couldn’t Bring Over Your Tabs" screen shows in place of the deck, and logcat has
       `ardia-legacy failed reason=unusable_io`.
     - Send a link while the screen is up:
-      `adb shell am start -a android.intent.action.VIEW -d https://example.com/held-b -n $P/com.ardia.browser.android.MainActivity`. It does
+      `adb shell am start -a android.intent.action.VIEW -d https://example.com/held-b -n $P/com.openbrowsercompany.solstice.android.MainActivity`. It does
       not open.
     - Tap Try Again: the same screen, now with Start Without Them and its note under it. Don't tap it.
     - Force-stop, open the lab, tap Make source usable, force-stop, then open the app normally. The import runs,
@@ -1547,7 +1547,7 @@ JavaScript is shared; it turns on wherever the native module is registered.
   `http://127.0.0.1:<port>/auth/callback`: a BSD socket listener takes the code and answers with a 302 to
   `ardia-chatgpt://signed-in`, which closes the `ASWebAuthenticationSession` sheet (at most eight clients, ten seconds
   each). The ID token's RS256 signature is checked against the issuer's JWKS, failing closed, with its claims, and a
-  later sign-in must return the same account. Tokens live in the Keychain (`com.ardia.browser.ios.chatgpt`, this
+  later sign-in must return the same account. Tokens live in the Keychain (`com.openbrowsercompany.solstice.ios.chatgpt`, this
   device only, after first unlock); the hour-long access token refreshes two minutes early, one refresh at a time,
   and a rotated refresh token is saved before anything else. Answers stream from `POST /v1/responses` with exactly
   `model`, `instructions`, `input`, `store: false` and `stream: true`, and count only on `response.completed`. Any
@@ -1555,10 +1555,10 @@ JavaScript is shared; it turns on wherever the native module is registered.
   Apple Intelligence (Gemini Nano on Android) writes the answer, with the reason in the note. A model that lists reasoning levels
   (`supported_reasoning_levels`) gets a Thinking picker, sent as `reasoning.effort`; Automatic sends nothing.
   Disconnect waits for a refresh in flight, then revokes the latest refresh token and says so when OpenAI doesn't
-  confirm it. On Android the sign-in opens in a Custom Tab, or another browser when there is none (never Ardia itself
+  confirm it. On Android the sign-in opens in a Custom Tab, or another browser when there is none (never Solstice itself
   while another browser exists), and `ChatGPTReturnActivity` takes `ardia-chatgpt://signed-in` back to the app;
   coming back with no code inside two seconds counts as cancelled. The connection is sealed with AES-GCM under an
-  Android Keystore key (`KeystoreKeyStore`, alias `Ardia ChatGPT Key`, in `noBackupFilesDir`). Every ChatGPT request
+  Android Keystore key (`KeystoreKeyStore`, alias `Solstice ChatGPT Key`, in `noBackupFilesDir`). Every ChatGPT request
   goes through an OkHttp client with no cookies, no cache and no redirects. Closing the page, or disconnecting while
   ChatGPT is writing, cancels the request at once; a disconnect mid-answer rewrites it on the phone.
 - **In Settings.** Settings › Experimental lists Browse for Me. Its row reads "ChatGPT" when connected and "On
@@ -1643,7 +1643,7 @@ phone. The owner chose Phonon over Apple's voices and Kokoro, and the model must
   `-ArdiaTalkToMeRecord <path.wav>` also writes what was generated to a 24 kHz WAV, finished when the answer ends or
   the page closes, with `<path.wav>.txt` listing each block (time, output, index, text). `-ArdiaProximity
   "4:near,12:far"` plays proximity changes at those seconds after the page opens, and `xcrun simctl --set <set> spawn
-  <udid> notify_post com.ardia.browser.ios.proximity.near` (or `.far`) sends one by hand. `-ArdiaTalkToMeOn YES`
+  <udid> notify_post com.openbrowsercompany.solstice.ios.proximity.near` (or `.far`) sends one by hand. `-ArdiaTalkToMeOn YES`
   turns Talk to Me on for the run (the setting's own key, through the launch argument domain). The app logs
   `TALKTOME first audio after … (earpiece|speaker|sample)`, `TALKTOME utterance: …`, `TALKTOME voice installed after …` and
   `TALKTOME download failed: …`.
@@ -1748,11 +1748,11 @@ Events (service `ardia-phone`, `$lib` `ardia-phone-telemetry`, tags `app: phone`
 | Event | Fields | When |
 | --- | --- | --- |
 | `sharing_turned_on` | `source` (settings, onboarding) | turning sharing on |
-| `app_launched` | `legacy_import` (imported, started_fresh, none), `legacy_import_failures` (failed tries before the app opened), `look_mode` (full, no_blur, no_motion, neither: the look this launch shows, after the look's budget and the system's Reduce Motion and Reduce Transparency), `interface_style` (match_mac, glass, classic) and `color_scheme` (match_mac, system, light, dark): the redesign's Appearance choices, and `material_colors` (wallpaper, profile, fallback, not_material): where Android's Material design took its colours, from the wallpaper, from a picked profile colour, or from Ardia's own palette on phones that give none; not_material on iPhone and in the original design, and `color_choice` (match_mac, preset, custom): the colour row's choice, and `glass_render` (lens, frost, solid, classic, native, none): the best glass this phone can draw this launch, not what each surface drew (the page bar stays solid even on a `lens` phone): on Android the Liquid Glass lens and rim (Android 13+), plain frost (Android 12 or `ArdiaFlatGlass`) or without blur (below Android 12, over the look budget or with the look off), and otherwise Classic (Classic or Reduce Transparency), iPhone's own glass, or none in Material You | each launch with sharing on |
+| `app_launched` | `legacy_import` (imported, started_fresh, none), `legacy_import_failures` (failed tries before the app opened), `look_mode` (full, no_blur, no_motion, neither: the look this launch shows, after the look's budget and the system's Reduce Motion and Reduce Transparency), `interface_style` (match_mac, glass, classic) and `color_scheme` (match_mac, system, light, dark): the redesign's Appearance choices, and `material_colors` (wallpaper, profile, fallback, not_material): where Android's Material design took its colours, from the wallpaper, from a picked profile colour, or from Solstice's own palette on phones that give none; not_material on iPhone and in the original design, and `color_choice` (match_mac, preset, custom): the colour row's choice, and `glass_render` (lens, frost, solid, classic, native, none): the best glass this phone can draw this launch, not what each surface drew (the page bar stays solid even on a `lens` phone): on Android the Liquid Glass lens and rim (Android 13+), plain frost (Android 12 or `ArdiaFlatGlass`) or without blur (below Android 12, over the look budget or with the look off), and otherwise Classic (Classic or Reduce Transparency), iPhone's own glass, or none in Material You | each launch with sharing on |
 | `perf_launch` | `launch_ms`, `js_ms` | each launch, once the module gives the process start (`ArdiaPhoneSystem.processStartedAt()`, epoch ms) |
 | `perf_backdrop` | `backdrop_ms` | each launch on iPhone, once the native launch backdrop has shown (`system.launchBackdropShownAt()`, epoch ms on the process start's clock) |
 | `perf_launch_tray` | `tray_ms` | each launch with Auto-Open Keyboard on, once the launch tray is up (process start on `ArdiaPhoneSystem.processStartedAt()`'s clock) |
-| `usage_counts` | `tabs_opened`, `searches`, `pins_to_mac`, `tabs_sent`, `page_processes_gone`, `links_given_up` (a link whose handling passed its 8 s deadline), `pages_reloaded_online` (a failed page reloaded when the phone came back online), `find_opened_system` and `find_opened_bar` (Find on Page opened in WebKit's own panel, or in the app's find bar), `spaces_swiped` (a swipe in Spaces or on the start page that changed the profile), `tray_hidden_rows_opened` (a tray row opened while it peeked or sat under the keyboard), `deck_pictures_at_press` (a Tabs tap or bar swipe that had to copy the page at the press), `deck_opens_while_landing`, `tab_writes_stalled`, `page_covers_capped`, `search_opens_cold` (a card tapped while the deck was still landing), `deck_pictures_late` (a deck that took over while the leaving tab's card had a picture that hadn't painted; a tab with no picture isn't counted, and nothing waits for it), `search_tabs_opened` (the deck's Search Tabs field focused, in the redesign), `spaces_picked` (a space picked from the deck's switcher menu, or by a VoiceOver adjustment of the start page's dots, that changed the profile, in the redesign), `tabs_moved_to_space` (a tab moved to another space with the deck card menu's Move to Space, in the redesign), `pages_printed` (a page printed from the page menu's Print, counted when the print sheet opened, in the redesign; on iPhone, where Print lives in the page's Share sheet as in Safari, counted when a print from that sheet finished), `pages_translated` (a page sent to Google Translate from the page menu's Translate, never from an Incognito tab), `pinned_tabs_refound` (a pinned site's tile or row switched to the tab it had opened after that tab had left the pinned address, where it used to open a second copy), `site_permissions_revoked` (a site's camera, microphone or location access revoked from Site Settings, by swipe or by its dialog, on iPhone's Expo UI Settings), `tray_back_swiped` (a search tray closed with Android's predictive back swipe), `card_opens_waited` (a card opened from the deck whose page didn't lay out within 250 ms, so the open was held until that cap), `native_menus_opened` (a menu opened as the system's own: a deck card's long press, the deck's ···, the space switchers, the + menus, Reader's Text Appearance, the page menu's Send to Device, the tabs button's recent tabs, on iPhone), `drawn_menus_opened` (a menu or confirmation card the app draws itself opened: every menu and confirmation card on Android, and on iPhone the few that have no system counterpart, such as a page link's long press; neither menu count is taken on the deck's Incognito side, on an Incognito page or for an Incognito card), `drawn_menu_actions_chosen` (a final choice in a drawn menu on Android, not a submenu step or a dismissal; never counted while browsing privately), `library_opened` (History, Bookmarks or Downloads opened from the page menu), `deck_grid_shown` (Grid picked for the deck in Settings › Appearance › Tabs, on iPhone), `landscape_shown` (a launch in which the phone was turned to landscape at least once, counted once a launch), `duo_layout_shown` (a launch on a Duo in any pose, or that used the wide or split layout at least once, counted once a launch, on iPhone), `list_sheets_late` (an Archive or History sheet whose rows were drawn more than 400 ms after it was asked for, on iPhone), `list_pages_added` (Archive or History adding its next 200 rows as you scroll, on iPhone), `search_reveals_late` (a search panel opened whose content had not laid out within 250 ms, so the stage revealed it on its deadline, on iPhone), `address_field_scrolled` (a long address in the search field scrolled sideways with a swipe, on iPhone), `deck_bar_swipes` (the deck opened by swiping up on the browsing bar, the second way in beside the tabs button), `tabs_swiped_closed` and `tabs_swiped_reopened` (a back swipe on a page with no history that closed its tab, and a forward swipe with no forward history that reopened the last closed tab), `page_menu_tapped_away` (the page menu closed by a tap on the page above it, on iPhone), `new_tab_search_opened` (search opened on a new tab in the iPhone's full-height search panel), `deck_incognito_switches` (a tap on the deck bar's Incognito switch that went from the normal tabs to the Incognito tabs, on iPhone), `deck_bar_swipes_returned` (a swipe up on the browsing bar let go before its commit point, so the page grew back), `tabs_bar_swiped` (a sideways swipe on the browsing bar that switched tabs), `tab_swipe_hints_shown` (the one-time hint for that swipe shown, on Android), `deck_pulls_hitched` (a swipe up or a tabs tap during whose shrink into the deck two UI-thread frames were more than 50 ms apart), `browse_for_me_opened` (Browse for Me opened from the tray, voice search or a launch argument), `browse_answers_chatgpt`, `browse_answers_on_device`, `browse_answers_excerpts` and `browse_answers_failed` (a Browse for Me answer by who wrote it, or a page that found or read nothing), `browse_chatgpt_fallbacks` (a ChatGPT answer that failed, so Apple Intelligence, Gemini Nano or the excerpts wrote it instead), `talk_to_me_answers_read`, `talk_to_me_ear_listens`, `talk_to_me_voice_downloads`, `talk_to_me_download_failed` and `talk_to_me_failed` (Talk to Me reading a Browse for Me answer aloud once per answer, and of those the ones started by raising the phone to the ear, its voice download finishing or failing, and its models or speech failing, on iPhone), `page_summaries_pinched` and `page_summaries_from_menu` (a page summary opened by pinching in or from the page menu's Summarize Page), `page_summaries_chatgpt`, `page_summaries_on_device`, `page_summaries_excerpts` and `page_summaries_failed` (a page summary by who wrote it, or a page it couldn't read or summarize; ChatGPT on Android only), `page_summaries_chatgpt_fallbacks` (a ChatGPT summary that failed, so Gemini Nano wrote it instead, on Android), `gemini_nano_downloading`, `gemini_nano_not_offered`, `gemini_nano_needs_update` and `gemini_nano_errors`, `gemini_nano_download_failed` and `gemini_nano_write_failed` (a Browse for Me answer or page summary that couldn't use Gemini Nano, by why: still downloading, not offered to apps on this phone, needing an AICore or system update, busy, out of space or failed to start, its download stopped, or it was available but couldn't write, on Android; the settled events carry it as `geminiNanoMissing`), `gemini_nano_download_rewrites` (a search answer rewritten with the Rewrite with Gemini Nano button after its download finished, on Android; the settled event carries `rewroteAfterGeminiNanoDownload`), `paste_and_go_links`, `paste_and_go_texts` and `paste_and_go_unread` (a Paste and Go tap with a link, with text, or that read nothing because the paste prompt was refused or the clipboard emptied; never counted while browsing privately), `search_tile_taps`, `voice_tile_taps` and `incognito_tile_taps` (Ardia opened from its Quick Settings tiles, on Android, counted on the phone and sent with the next day's counts), `start_logo_taps`, `find_closed_bar` (the app's find bar closed, once per find), `material_you_turned_on` and `material_you_turned_off` (Settings › General › Material You switched, on Android), `custom_theme_chosen` (Custom picked in Settings › Appearance when it wasn't the choice) and `theme_edits` (a change saved on the Theme page, one per release of a slider, the pad or the dial, or one per tap), and, with Material You on: `card_close_tapped` (a deck card closed with its ×), `material_back_swiped` (a back swipe out of a Material sheet, dialog or the library), `archive_bar_opened` (Archive opened from the bottom bar), `site_settings_sheet_opened` and `site_settings_sheet_expanded` (the address bar's page menu opened, and pulled to full screen; with Material You off, `site_settings_sheet_expanded` also counts Android's ··· page menu dragged from half height to full), `search_sheet_expanded` (the search sheet pulled to full screen), `archive_card_reoffers` (the deck's Archive card offered again on a return from the Incognito tabs) | at most once a day, for the last UTC day the app was used before today, when anything was counted; private tabs are never counted |
+| `usage_counts` | `tabs_opened`, `searches`, `pins_to_mac`, `tabs_sent`, `page_processes_gone`, `links_given_up` (a link whose handling passed its 8 s deadline), `pages_reloaded_online` (a failed page reloaded when the phone came back online), `find_opened_system` and `find_opened_bar` (Find on Page opened in WebKit's own panel, or in the app's find bar), `spaces_swiped` (a swipe in Spaces or on the start page that changed the profile), `tray_hidden_rows_opened` (a tray row opened while it peeked or sat under the keyboard), `deck_pictures_at_press` (a Tabs tap or bar swipe that had to copy the page at the press), `deck_opens_while_landing`, `tab_writes_stalled`, `page_covers_capped`, `search_opens_cold` (a card tapped while the deck was still landing), `deck_pictures_late` (a deck that took over while the leaving tab's card had a picture that hadn't painted; a tab with no picture isn't counted, and nothing waits for it), `search_tabs_opened` (the deck's Search Tabs field focused, in the redesign), `spaces_picked` (a space picked from the deck's switcher menu, or by a VoiceOver adjustment of the start page's dots, that changed the profile, in the redesign), `tabs_moved_to_space` (a tab moved to another space with the deck card menu's Move to Space, in the redesign), `pages_printed` (a page printed from the page menu's Print, counted when the print sheet opened, in the redesign; on iPhone, where Print lives in the page's Share sheet as in Safari, counted when a print from that sheet finished), `pages_translated` (a page sent to Google Translate from the page menu's Translate, never from an Incognito tab), `pinned_tabs_refound` (a pinned site's tile or row switched to the tab it had opened after that tab had left the pinned address, where it used to open a second copy), `site_permissions_revoked` (a site's camera, microphone or location access revoked from Site Settings, by swipe or by its dialog, on iPhone's Expo UI Settings), `tray_back_swiped` (a search tray closed with Android's predictive back swipe), `card_opens_waited` (a card opened from the deck whose page didn't lay out within 250 ms, so the open was held until that cap), `native_menus_opened` (a menu opened as the system's own: a deck card's long press, the deck's ···, the space switchers, the + menus, Reader's Text Appearance, the page menu's Send to Device, the tabs button's recent tabs, on iPhone), `drawn_menus_opened` (a menu or confirmation card the app draws itself opened: every menu and confirmation card on Android, and on iPhone the few that have no system counterpart, such as a page link's long press; neither menu count is taken on the deck's Incognito side, on an Incognito page or for an Incognito card), `drawn_menu_actions_chosen` (a final choice in a drawn menu on Android, not a submenu step or a dismissal; never counted while browsing privately), `library_opened` (History, Bookmarks or Downloads opened from the page menu), `deck_grid_shown` (Grid picked for the deck in Settings › Appearance › Tabs, on iPhone), `landscape_shown` (a launch in which the phone was turned to landscape at least once, counted once a launch), `duo_layout_shown` (a launch on a Duo in any pose, or that used the wide or split layout at least once, counted once a launch, on iPhone), `list_sheets_late` (an Archive or History sheet whose rows were drawn more than 400 ms after it was asked for, on iPhone), `list_pages_added` (Archive or History adding its next 200 rows as you scroll, on iPhone), `search_reveals_late` (a search panel opened whose content had not laid out within 250 ms, so the stage revealed it on its deadline, on iPhone), `address_field_scrolled` (a long address in the search field scrolled sideways with a swipe, on iPhone), `deck_bar_swipes` (the deck opened by swiping up on the browsing bar, the second way in beside the tabs button), `tabs_swiped_closed` and `tabs_swiped_reopened` (a back swipe on a page with no history that closed its tab, and a forward swipe with no forward history that reopened the last closed tab), `page_menu_tapped_away` (the page menu closed by a tap on the page above it, on iPhone), `new_tab_search_opened` (search opened on a new tab in the iPhone's full-height search panel), `deck_incognito_switches` (a tap on the deck bar's Incognito switch that went from the normal tabs to the Incognito tabs, on iPhone), `deck_bar_swipes_returned` (a swipe up on the browsing bar let go before its commit point, so the page grew back), `tabs_bar_swiped` (a sideways swipe on the browsing bar that switched tabs), `tab_swipe_hints_shown` (the one-time hint for that swipe shown, on Android), `deck_pulls_hitched` (a swipe up or a tabs tap during whose shrink into the deck two UI-thread frames were more than 50 ms apart), `browse_for_me_opened` (Browse for Me opened from the tray, voice search or a launch argument), `browse_answers_chatgpt`, `browse_answers_on_device`, `browse_answers_excerpts` and `browse_answers_failed` (a Browse for Me answer by who wrote it, or a page that found or read nothing), `browse_chatgpt_fallbacks` (a ChatGPT answer that failed, so Apple Intelligence, Gemini Nano or the excerpts wrote it instead), `talk_to_me_answers_read`, `talk_to_me_ear_listens`, `talk_to_me_voice_downloads`, `talk_to_me_download_failed` and `talk_to_me_failed` (Talk to Me reading a Browse for Me answer aloud once per answer, and of those the ones started by raising the phone to the ear, its voice download finishing or failing, and its models or speech failing, on iPhone), `page_summaries_pinched` and `page_summaries_from_menu` (a page summary opened by pinching in or from the page menu's Summarize Page), `page_summaries_chatgpt`, `page_summaries_on_device`, `page_summaries_excerpts` and `page_summaries_failed` (a page summary by who wrote it, or a page it couldn't read or summarize; ChatGPT on Android only), `page_summaries_chatgpt_fallbacks` (a ChatGPT summary that failed, so Gemini Nano wrote it instead, on Android), `gemini_nano_downloading`, `gemini_nano_not_offered`, `gemini_nano_needs_update` and `gemini_nano_errors`, `gemini_nano_download_failed` and `gemini_nano_write_failed` (a Browse for Me answer or page summary that couldn't use Gemini Nano, by why: still downloading, not offered to apps on this phone, needing an AICore or system update, busy, out of space or failed to start, its download stopped, or it was available but couldn't write, on Android; the settled events carry it as `geminiNanoMissing`), `gemini_nano_download_rewrites` (a search answer rewritten with the Rewrite with Gemini Nano button after its download finished, on Android; the settled event carries `rewroteAfterGeminiNanoDownload`), `paste_and_go_links`, `paste_and_go_texts` and `paste_and_go_unread` (a Paste and Go tap with a link, with text, or that read nothing because the paste prompt was refused or the clipboard emptied; never counted while browsing privately), `search_tile_taps`, `voice_tile_taps` and `incognito_tile_taps` (Solstice opened from its Quick Settings tiles, on Android, counted on the phone and sent with the next day's counts), `start_logo_taps`, `find_closed_bar` (the app's find bar closed, once per find), `material_you_turned_on` and `material_you_turned_off` (Settings › General › Material You switched, on Android), `custom_theme_chosen` (Custom picked in Settings › Appearance when it wasn't the choice) and `theme_edits` (a change saved on the Theme page, one per release of a slider, the pad or the dial, or one per tap), and, with Material You on: `card_close_tapped` (a deck card closed with its ×), `material_back_swiped` (a back swipe out of a Material sheet, dialog or the library), `archive_bar_opened` (Archive opened from the bottom bar), `site_settings_sheet_opened` and `site_settings_sheet_expanded` (the address bar's page menu opened, and pulled to full screen; with Material You off, `site_settings_sheet_expanded` also counts Android's ··· page menu dragged from half height to full), `search_sheet_expanded` (the search sheet pulled to full screen), `archive_card_reoffers` (the deck's Archive card offered again on a return from the Incognito tabs) | at most once a day, for the last UTC day the app was used before today, when anything was counted; private tabs are never counted |
 
 On the dashboard they are kept out of every Mac section by source and lib (`PHONE_APP_SOURCE` in `apps/dashboard/src/server/sql.ts`).
 
@@ -1786,7 +1786,7 @@ Every count and timing the phone can send, for the owner to read as one set and 
 | `tabs_bar_swiped` | the tab switching pass on Android (Discord, 2026-11-22: "switching tabs is still fucked, and there seems no easy gesture to switch tabs") | Whether people switch tabs with the bar swipe at all. Read it against `tabs_opened`: on Android it should rise after the release with the hint; zero across testers means the swipe stopped switching |
 | `tab_swipe_hints_shown` | the same pass | How many phones saw the one-time hint (once per install, only when a page has a neighbour). Read `tabs_bar_swiped` per phone on the days after the hint's day: counts are daily, so on the hint's own day they can't tell whether the swipe came before or after it, and a phone with no swipes on later days only suggests the hint didn't teach |
 | `deck_pulls_hitched` | the swipe that follows the finger (#2607; on Android too since the deck parity of 2026-11-19) | Whether the shrink into the deck drops frames in the field. Read it against `deck_bar_swipes` plus `deck_bar_swipes_returned`: it should stay near zero, and a share that grows after a release means something on the pull's path again blocks the UI thread. It sees only UI-thread gaps over 50 ms, not frames the GPU drops |
-| `duo_layout_shown` | a launch on a Duo in any pose (the probe reports a hinge), or in `wide` or `split` | Whether anyone runs Ardia on a Duo or a full-screen iPad; zero after a release reaching Duo owners means the layout probe stopped reporting. Since #2840 it counts the closed and open Duo too, which now take `phone` |
+| `duo_layout_shown` | a launch on a Duo in any pose (the probe reports a hinge), or in `wide` or `split` | Whether anyone runs Solstice on a Duo or a full-screen iPad; zero after a release reaching Duo owners means the layout probe stopped reporting. Since #2840 it counts the closed and open Duo too, which now take `phone` |
 | `landscape_shown` | landscape on both phones | How often people turn the phone; zero across testers after a release that rotates means the orientation lock came back |
 | `card_opens_waited` | the card open's hand-over | Whether the page laid out within 250 ms of being made, from when the card's growth lands (it no longer waits for its cover's picture, and an open whose page lays out in time isn't counted); a share of card opens that grows after a release means pages are again slow to lay out and the open is held at full size |
 | `deck_pictures_at_press` | a Tabs tap or bar swipe, as the pull starts (iPhone; an Android pull never copies) | Whether the page's picture had to be copied at the press because it wasn't current; that copy holds the first frame about 33 ms. The quiet-page copy keeps it current, so this should stay a small share of `deck_bar_swipes` plus Tabs taps, and a share that grows after a release means the quiet-page copy stopped running |
@@ -1860,7 +1860,7 @@ iPhone follows the SwiftUI app on main since the merge of main (8203d0b3c, 2026-
 - Later on 2026-11-19 the owner asked for Android's own character instead of iPhone's glass ("we don't really want it to look like Apple Glass … have a solid background"). Android keeps the drawn menus' structure (placement on the trigger or at the finger, Back, tap outside, TalkBack, submenus as pages) and draws them as Material 3; iPhone's drawn menus and action sheet are unchanged. The Android values sit beside iPhone's in `menuLook`, `menuInk` (picked by platform), `materialDialogLook`, `materialDialogInk` and `materialMenuMotion`:
   - a menu is a solid surface (#F3EDF0 light; dark #1E1B1D with a 0.5 dp white 12 % edge, since a shadow doesn't show on the dark deck) with 16 dp corners and level-2 elevation, no frost or dim; 48 dp rows with one-line 16 sp labels at 16 dp, or at 52 dp beside a 24 dp icon slot; icons show only when every row has one (the owner, 2026-11-19: a lone icon, as on a card's Send to MacBook Pro, misaligns the menu), and a submenu page keeps the slot for its Back chevron; icons in on-surface-variant, a full-width ripple, groups split by an 8 dp gap with no line (the owner, 2026-11-19: the horizontal rules between groups read as clutter; headings and the order of actions stay), the check at the trailing edge, and M3 error red (#BA1A1A, #FFB4AB) for destructive rows;
   - it fades in and grows from 80 % over 250 ms (emphasized decelerate) from its trigger's corner, and fades out in 150 ms (emphasized accelerate) without shrinking. Replaced on 2026-11-20 by the iPhone's motion (below);
-  - a confirmation is an M3 basic dialog: 24 dp from the screen edges up to 560 dp wide, 28 dp corners, 24 dp padding, a 24 sp title and 14 sp message, Cancel (on-surface-variant) and the action (Ardia's plum primary, or the error red when destructive) as right-aligned text buttons, over a 32 % black scrim; it fades and grows from 92 % in 250 ms and fades out in 150 ms (replaced on 2026-11-20 by the iPhone's: shown at once, fading out in 270 ms). Cancel is neutral because the dark theme's primary and error are both pale pinks.
+  - a confirmation is an M3 basic dialog: 24 dp from the screen edges up to 560 dp wide, 28 dp corners, 24 dp padding, a 24 sp title and 14 sp message, Cancel (on-surface-variant) and the action (Solstice's plum primary, or the error red when destructive) as right-aligned text buttons, over a 32 % black scrim; it fades and grows from 92 % in 250 ms and fades out in 150 ms (replaced on 2026-11-20 by the iPhone's: shown at once, fading out in 270 ms). Cancel is neutral because the dark theme's primary and error are both pale pinks.
   - Android's dark mode uses one near-black, #1E1B1D, for the chrome (the bars, Search Tabs and the round buttons, `chromeInk.dark.surface`, #000000 before), the menus and the dialogs, so nothing reads as a blacker black than its neighbour (the owner, 2026-11-19). iPhone's chrome stays #000000 where it isn't native glass.
   - Material You colours (the wallpaper palette and a Dynamic Colors switch, #2692 and Sai Charan's #2693) are a separate PR; these neutral surfaces are the fallback they would tint.
 - The rest of iPhone's deck and page parity comes to Android in the same PR (the owner, 2026-11-19: everything left except Material You):
@@ -1920,7 +1920,7 @@ What the switch changes, and what it leaves alone:
 - Menus and confirmations stay main's drawn ones in both designs, already Android's Material 3 look since 2026-11-19.
   The branch's native Material menus (`MenusModule`, `MaterialMenus.kt`) and their `native_menu_actions` count are not
   carried over: the owner turned down the native dropdowns on 2026-11-17, and main removed the module.
-- Material Symbols replace Ardia's drawn symbols only while the switch is on (`Symbol` and `MaterialSymbol`); Ardia's
+- Material Symbols replace Solstice's drawn symbols only while the switch is on (`Symbol` and `MaterialSymbol`); Solstice's
   eyes, closed eyes and Browse for Me glyph stay its own. The Compose screens (Settings UI, the share sheet, summary cards)
   keep main's `ArdiaSymbols`, and the app's window colours stay main's, so the launch backdrop is the same with the switch
   on or off.
@@ -1935,7 +1935,7 @@ What the switch changes, and what it leaves alone:
 
 With the switch on:
 
-- Settings › General › Dynamic Colors switches between the wallpaper palette and a custom color (2026-11-18). Turning it off shows the existing color picker; turning it on keeps the custom color saved. The choice is stored in `settings.dynamicColors`, applies immediately to the app, its menus and Incognito, and survives relaunches. Phones without a wallpaper palette use Ardia's fallback when enabled. Existing installs retain their current theme until the switch changes. Watch the existing `app_launched.material_colors` values for adoption; no new telemetry fields.
+- Settings › General › Dynamic Colors switches between the wallpaper palette and a custom color (2026-11-18). Turning it off shows the existing color picker; turning it on keeps the custom color saved. The choice is stored in `settings.dynamicColors`, applies immediately to the app, its menus and Incognito, and survives relaunches. Phones without a wallpaper palette use Solstice's fallback when enabled. Existing installs retain their current theme until the switch changes. Watch the existing `app_launched.material_colors` values for adoption; no new telemetry fields.
 - Incognito start, search sheet and tab switcher use pitch-black backgrounds with the selected palette’s dark controls in both light and dark appearance (2026-11-18). They no longer invert the current scheme, which made dark-mode Incognito white. The page address field, native search capsule and tab-switcher search field also use black backgrounds with light text and icons. Incognito activity stays uncounted.
 - The Material bottom bar is one 64 dp capsule, inset 16 dp from the sides and 8 dp above the navigation inset. The page extends behind it, with no full-width background band; touches outside the capsule reach the page. Scrolling down a page slides the capsule out below the bottom edge and scrolling up brings it back; Settings › Site Settings › Collapse Bottom Bar defaults on in Android’s Material design and keeps an explicit off choice. Tabs is on the left, search/address in the center, and add on the right. Hold Tabs for recent tabs, or hold the address for the page menu. In the tab switcher, the same capsule has Archive Tabs on the left, Search Tabs in the center and add on the right. Its 48 dp targets stay above the keyboard while filtering tabs. `Surfaces` mounts one `MaterialBottomBar` above the page and tab switcher. `isTabOverview` switches its controls without replacing the capsule. The page and deck controllers register their actions, page collapse, gestures and keyboard lift with the scoped `MaterialBarProvider`; neither screen nor its transition ghost mounts another bar. Search, fullscreen and overlays disable or hide this same instance. Watch `archive_bar_opened` (the Archive button, never while browsing privately) beside `search_tabs_opened` and `tabs_opened`, and `card_close_tapped` for the × on a deck card.
 - Android's More options and search results use the same Material sheet and docked URL capsule. The docked bar supplies the fill and corners in both modes, including while the URL is editable. Tapping the URL in More options keeps the sheet and bar mounted, switches the body to search suggestions, and moves the bar as the keyboard opens. The existing URL or search query is selected for editing. Direct search uses the same sheet and moves the capsule up from the bottom bar. The Compose field keeps inline completion, clear, voice and Incognito controls inside the capsule. The sheet stays raised when the keyboard closes or becomes shorter, giving results more space. Turning the device resets the retained keyboard height when the width changes. Swipe up to expand the results, down to return to compact height, and down again to dismiss. Results can scroll independently after expansion. Remove animations skips the transition. Watch `search_sheet_expanded` against `searches`, and `site_settings_sheet_expanded` against `site_settings_sheet_opened` for the address bar menu pulled to full screen; none counts Incognito.
@@ -1961,7 +1961,7 @@ and drawn-menu usage counts; no new telemetry fields are sent.
 - Android Settings subpages change instantly on push and Back. The top-level Settings sheet opens and dismisses
   with its own motion. With Material You on, Settings is full screen with a Close button in its medium top app bar.
 - The Material tab switcher header is transparent, including in Incognito. The Tabs title and Space name use Material's 16 sp title style. The tab switcher still uses the existing `tabs_opened` count for new tabs.
-- With no open tabs, both Android designs show the same Ardia app icon on Start. Tap it to open Search. Sync
+- With no open tabs, both Android designs show the same Solstice app icon on Start. Tap it to open Search. Sync
   setup is available in Settings. Watch `start_logo_taps` in `usage_counts` for how often people use the logo to
   start a search. Incognito taps are excluded.
 - The deck's ··· menu has one row height throughout on Android, including when sync and recently closed tabs add
@@ -2109,7 +2109,7 @@ Owner: **screens** (JS), **iPhone** (native), **decision** (needs the owner).
 | Page | Collapsed bar (host pill) | match | Main's glass host pill on scroll down, tap or scroll up to expand, 3fa565c4f | |
 | Page | Tabs button menu | match | Main's BarControls: up to eight recent tabs, a divider, Close Tab; Previous and Next Tab are its VoiceOver actions, not menu items. Ours is the system menu with the same items. Since the owner's tabs pass a swipe up on the bar also opens the deck | |
 | Page | Find on Page | match by decision | The system find navigator by default since ec6f9bc52 | |
-| Page menu | Rows and groups | match | The sheet now reaches the safe top as main's large detent does, and rows land at main's places; the action glyphs are main's size; Open in Default Browser shows, as main's does, only when Ardia can ask to be the default and isn't (hidden in builds without the entitlement) | |
+| Page menu | Rows and groups | match | The sheet now reaches the safe top as main's large detent does, and rows land at main's places; the action glyphs are main's size; Open in Default Browser shows, as main's does, only when Solstice can ask to be the default and isn't (hidden in builds without the entitlement) | |
 | Page menu | History, Bookmarks, Downloads rows | match | Main's group after Find, Send and Print, opening the Library sheet | |
 | Page menu | Translate | match | Main's #2259: the first Translate asks "Translate with Google?", the answer stands, and the row then names the remembered language. Seen on the iPhone 17 at e3be236e1: the question once, then "Translate to English" going straight to translate.goog; an Incognito tab always asks (`ports/06-translate-ask.png`, `08-menu-second.png`). Android has the same through its own `PageTranslation.kt` | |
 | Reader | Article | match | | |
@@ -2134,11 +2134,11 @@ Owner: **screens** (JS), **iPhone** (native), **decision** (needs the owner).
 | Settings | Trusted Sites | match | Empty state the same | |
 | Settings | Filter Lists | match | The demo now uses main's demo lists (`FilterLists.demo`, as main's AppModel does): a fresh demo install shows 11 lists and 271,481 rules at once, no downloads. Neither app bundles list files: a real install downloads them, and the built-in seed rules block from the first page, network or not (`PhoneBlockingTests`); on the simulator 46 requests were blocked within 5 s of a fresh launch | |
 | Settings | My Filters | match | Same editor and footer; the page now takes the settings chrome (the bar in the space's colour) and Apply is the prominent glass capsule, as main's `role: .confirm` draws it, seen on the simulator (`dialogs/ours-myfilters.png`) | |
-| Settings | About | match | The app icon since 042a23ace (main's asset catalog); the version reads "Ardia Dev (1)", as current main's AppVersionLabel does for a build without a release version (the reference SwiftUI build predates it) | |
+| Settings | About | match | The app icon since 042a23ace (main's asset catalog); the version reads "Solstice Dev (1)", as current main's AppVersionLabel does for a build without a release version (the reference SwiftUI build predates it) | |
 | Settings | Licenses | match | | |
 | Settings | Connect pages | match | The connect flow worked end to end on 2026-11-16 | |
 | Toasts | Copy Link | match | Neither app shows a toast half a second after Copy Link in the page menu; both keep the menu open. Other kinds not seen | |
-| Extensions, widgets, intents | | partly | The Expo project compiles main's own sources for these. Seen on our build 2026-11-17 (`unseen/widgets/`): the gallery offers main's four widgets (Search small and medium, Your Mac's Tabs medium and large, with the demo Mac's tabs in the previews); the large one on the home screen shows "Sync With Your Mac" without a synced snapshot (demo mode writes none) and a tap opens the app on the Spaces sheet with the Mac's tabs. Main's tap does the same (`unseen/widgets/ref-p4/`). The share sheet, seen 2026-11-17 on the iPhone 17 at e3be236e1 beside main's from Safari with no Mac connected: the same sheet in both, the page's title and host, Open in Ardia and the line about turning on Sync With Your Mac, its top edge on the same pixel row (`ports/30-ref-share-1.png`, `32-ours-share-b.png`). Not seen: the widgets in dark, and the share sheet's Send to Your Mac row with a Mac connected (the demo writes no snapshot; the row and the exporter are main's own sources) | iPhone |
+| Extensions, widgets, intents | | partly | The Expo project compiles main's own sources for these. Seen on our build 2026-11-17 (`unseen/widgets/`): the gallery offers main's four widgets (Search small and medium, Your Mac's Tabs medium and large, with the demo Mac's tabs in the previews); the large one on the home screen shows "Sync With Your Mac" without a synced snapshot (demo mode writes none) and a tap opens the app on the Spaces sheet with the Mac's tabs. Main's tap does the same (`unseen/widgets/ref-p4/`). The share sheet, seen 2026-11-17 on the iPhone 17 at e3be236e1 beside main's from Safari with no Mac connected: the same sheet in both, the page's title and host, Open in Solstice and the line about turning on Sync With Your Mac, its top edge on the same pixel row (`ports/30-ref-share-1.png`, `32-ours-share-b.png`). Not seen: the widgets in dark, and the share sheet's Send to Your Mac row with a Mac connected (the demo writes no snapshot; the row and the exporter are main's own sources) | iPhone |
 | Duo | Closed and open take `phone`; only a half-open horizontal fold takes `split` | partly | Since #2840 (2026-11-20) the closed and open Duo show the page full screen, as any iPhone, seen on the Duo simulator. Their bottom bars follow Safari's on the closed Duo, with our page still full screen (the owner, 2026-11-20): closed, `+` and Tabs stacked in the strip with the address capsule along the bottom 24 to 370, never squeezing; open, three fixed slots in the strip (`+`, Tabs, and the `···` the 400-wide capsule grows out of, 527 to 927), the capsule squeezing into that `···` on scroll by default; the deck's Search Tabs is a circle in that slot that grows into the field, keyboard-wide while typing; on either Duo the search panel ends 8 short of the strip so it clears the clock. Checked in `bottomBarSpan.test.ts` and `landscape.render.test.tsx`, not yet seen on the simulator. `split` is not seen yet: Simlock leases the iPhone Duo folded only: `fold open` needs a simulator in the default set and Simlock's are in a scoped one (2026-11-17). Later the same day Simlock's Duo did not boot at all (two tries: a boot timeout, then a closed connection), and a Duo simulator made in the default set is not offered by the Device panel, so the layouts are still seen only under `-ArdiaDuoCanvas` on the iPhone 18 Pro (the row below) | |
 | iPhone in landscape, Duo layouts | | partly | Decided 2026-11-16. Built to the specification below. `phone` in landscape (db4823c0f and this change): every bar pads by `max(left, right)`, the deck takes main's landscape card, and the archive capsule now swaps the deck to main's archive geometry (407.6×188 at 852×393; 273.2 wide in portrait on a 402×874 iPhone), springing from the old card as main animates it. Seen on the iPhone 18 Pro simulator turned on its side: browsing, the deck with and without the capsule. `wide` (a full-screen iPad) and `split` (a half-open Duo) are built (components/duo) and switch from the native probe (44797e4ed); under `-ArdiaDuoCanvas` on the iPhone 18 Pro each draws, but the 669×951 canvas overflows that screen, so their sizes still need the iPhone Duo simulator. The closed and open Duo take `phone` since #2840 (the owner, 2026-11-20); the `column` layout that the closed Duo had is gone. Simlock's Duo can't fold or turn (its scoped simulator set has no hinge), so `wide` and `split` are checked by tests only (duoLayout.test.ts, duoWide.render.test.tsx, main's numbers), not yet seen at their real size: this Mac's default-set Duo holds someone's install of main and is left as it is, until the owner names a Duo that may be folded. The command bar keeps its greatest height as main's does (main's rows take `rowsBudget`). Not matched yet: the status bar in `wide` follows the backdrop rather than the page's top tone | screens |
 
@@ -2466,11 +2466,11 @@ simulator, the list under "The iPhone redesign".
 - [ ] Watch the tray as you type and clear. Expect: the caption, rows and empty tray crossfade; the Incognito label fades and grows from 0.9 at the toggle's edge; the field's text grows with the text size; past 1.5x rows wrap.
 - [ ] Copy a link, open the tray; copy plain text, open it again. Expect: "Link You Copied", then "Text You Copied".
 - [ ] **iPhone:** with a link copied, open the tray. Expect: Paste and Go with no paste prompt; tap it: iOS asks to Allow Paste, Allow opens the link. Tap it again and refuse: the row goes and nothing opens.
-- [ ] **Android:** add Ardia's three Quick Settings tiles and tap each, also on a locked phone. Expect: Search opens the tray, Voice Search the voice screen, Incognito Tab an Incognito tray; a locked phone asks to unlock first.
+- [ ] **Android:** add Solstice's three Quick Settings tiles and tap each, also on a locked phone. Expect: Search opens the tray, Voice Search the voice screen, Incognito Tab an Incognito tray; a locked phone asks to unlock first.
 - [ ] Tap the incognito chip. Expect: what Compose's `IncognitoChip` does on Android; on iPhone a one-item menu, as SwiftUI shows.
 - [ ] With TalkBack or VoiceOver on, move to a row's refine arrow. Expect: reachable, read as "Refine" and the row's title; each row's menu items are listed as actions; Close Search can be activated.
 - [ ] Tap the mic in the tray, then Cancel. Expect: the keyboard goes down over the voice screen and comes back on the tray. **iPhone:** allow speech and the microphone and say "otters": the words appear as you speak and the search runs; say nothing: after a few seconds it says it didn't hear anything. Watch the voice screen: the transcript crossfades as words arrive, the logo has a soft shadow, on iPhone the waveform eases.
-- [ ] Select text in another app and choose Search in Ardia, and run a web search into Ardia (Android steps 4 and 5). Expect: results open at once. Open the voice shortcut: the voice screen opens over the tray. Open a tab widget's link to an archived tab: it is restored; to a private tab: nothing happens. **iPhone:** share a page to Ardia from Safari: it opens in a new tab, as shared.
+- [ ] Select text in another app and choose Search in Solstice, and run a web search into Solstice (Android steps 4 and 5). Expect: results open at once. Open the voice shortcut: the voice screen opens over the tray. Open a tab widget's link to an archived tab: it is restored; to a private tab: nothing happens. **iPhone:** share a page to Solstice from Safari: it opens in a new tab, as shared.
 
 **4. A page**
 - [ ] **iPhone:** on a page with history, drag right from the middle. Expect: the previous page slides in with a tick under your thumb as it commits; a short drag springs back with no tick; a drag on a sideways carousel scrolls it and doesn't go back. (Android: steps 21, 29 and 35.)
@@ -2518,7 +2518,7 @@ simulator, the list under "The iPhone redesign".
 **7. Sync and Spaces**
 - [ ] **iPhone:** leave the app for an hour with the Mac open, then open it. Expect: the Mac's tabs are current without waiting.
 - [ ] Send a tab from the Mac. Expect: a toast names it for about two seconds on both phones, and tapping it opens the tab.
-- [ ] Settings › Sync › Connect to Your Mac › Scan Code, at the Mac's code. Expect: the scanner covers the whole screen with four corner arms; "Not an Ardia sync code." fades in for a wrong code; Cancel and Android's Back stop the camera; the status bar reads. **iPhone:** the code is outlined when found, pinch zooms, and it connects without typing. (Android: steps 19 and 28.)
+- [ ] Settings › Sync › Connect to Your Mac › Scan Code, at the Mac's code. Expect: the scanner covers the whole screen with four corner arms; "Not an Solstice sync code." fades in for a wrong code; Cancel and Android's Back stop the camera; the status bar reads. **iPhone:** the code is outlined when found, pinch zooms, and it connects without typing. (Android: steps 19 and 28.)
 - [ ] Enter Recovery Phrase (the scanner's button says the same). Expect: it slides in from the right over the connect page; the counter and footer crossfade as you type; on iPhone the keyboard is ASCII and a drag on the list dismisses it. **iPhone:** copy the phrase on the Mac and tap Paste: the words fill in with no "Allow Paste" question; Add a List does the same with an address.
 - [ ] Open Spaces with the Mac connected. Expect: pinned tabs show their symbols; what you open or expand is kept when you come back; new rows fade in; the header crossfades; at 1.5x text size tab icons grow, titles take three lines and tiles drop their titles; a long press offers its menu to TalkBack and VoiceOver. With sync off, the empty state opens Connect. **iPhone:** the banner icons are the system's.
 - [ ] Open a Spaces row, then type its host in the tray. Expect: it is offered as a visit you typed (`AppModel.kt` `openRemote`).
@@ -2530,20 +2530,20 @@ simulator, the list under "The iPhone redesign".
 - [ ] **iPhone:** Clear Browsing Data from Settings. Expect: the "Cleared" toast shows above the sheet. Sign in to a site, use the phone for a day, then clear Last Hour with Cookies and Site Data on: you are still signed in.
 - [ ] **iPhone:** Restore Defaults and Remove List. Expect: today centred dialogs; action sheets once the native menus land ("Decided by the owner").
 - [ ] **iPhone:** tap About's links and a filter list's link. Expect: they open where SwiftUI's `Link` opens them.
-- [ ] **iPhone:** once the build carries the web-browser entitlement, Settings › Default Browser › Open Default Apps. Expect: the system's Default Apps page; choose Ardia and come back: the page says Ardia is your default browser.
+- [ ] **iPhone:** once the build carries the web-browser entitlement, Settings › Default Browser › Open Default Apps. Expect: the system's Default Apps page; choose Solstice and come back: the page says Solstice is your default browser.
 
 **9. Toasts**
 - [ ] Raise a toast, hold it, then drag or flick it down; raise the same one twice; raise one with the keyboard up. Expect: it slides up from slightly smaller and slides down as it leaves; a finger holds it; a drag or flick down dismisses it; a short drag springs back and it leaves 1.2 s later; the same toast doesn't replay; with the keyboard up it sits at the top; VoiceOver reads it; a tab from an iPhone shows a phone.
 
 **10. Outside the app (iPhone; Android's are steps 1 to 18 and 31)**
 - [ ] With a page open, look at the Mac's Dock. Expect: a Handoff icon offers the same page; private tabs never offer one.
-- [ ] Say "Open Otter in Ardia" for an open tab; add Shortcuts' Open Tab action and run it. Expect: Ardia switches to the tab; the action lists your tabs with their sites.
-- [ ] In Spotlight, type a word from an open tab's title and tap the result; do the same for an archived tab. Expect: Ardia opens that tab; the archived one comes back from the Archive.
+- [ ] Say "Open Otter in Solstice" for an open tab; add Shortcuts' Open Tab action and run it. Expect: Solstice switches to the tab; the action lists your tabs with their sites.
+- [ ] In Spotlight, type a word from an open tab's title and tap the result; do the same for an archived tab. Expect: Solstice opens that tab; the archived one comes back from the Archive.
 - [ ] Touch and hold the app icon. Expect: Search, Voice Search and New Incognito Tab each open what they say.
 - [ ] Add a Lock Screen widget and a Control Center control, and the search widget. Expect: each opens the right link; the search widget follows the profile colour and Match My Mac.
 
 **11. Lab builds only**
-- [ ] Launch with `ArdiaDemo`, then each `Browse…` and `Ardia…` argument in "Launch arguments on Android" and "Launch arguments on iPhone" below (Android: step 41). Expect: eight demo tabs with Sintra selected, nothing written to the real store, the demo Macs in Spaces; each argument does what it does in the native apps at the same delays (6 s browse delay, 600 ms sheet, 1.5 s toast, 3 s deck open, 1.2 s deck script start); `ArdiaDeck` steps play in order; the pager freeze and script hold and swipe as Compose's do.
+- [ ] Launch with `ArdiaDemo`, then each `Browse…` and `Solstice…` argument in "Launch arguments on Android" and "Launch arguments on iPhone" below (Android: step 41). Expect: eight demo tabs with Sintra selected, nothing written to the real store, the demo Macs in Spaces; each argument does what it does in the native apps at the same delays (6 s browse delay, 600 ms sheet, 1.5 s toast, 3 s deck open, 1.2 s deck script start); `ArdiaDeck` steps play in order; the pager freeze and script hold and swipe as Compose's do.
 
 Not audited at all: Compose's `SyncSetupContent` internals inside onboarding.
 
@@ -2553,7 +2553,7 @@ Not audited at all: Compose's `SyncSetupContent` internals inside onboarding.
   the first build, 2026-11-18: the page must not shrink past its card and grow back).
   - **Safari:** during the pull the page stays centred and shrinks to about 56% of the screen; on release it grows
     into its tile and moves there.
-  - **Ardia:** the page's frame goes from the full screen toward its card's frame as the finger travels, so in the
+  - **Solstice:** the page's frame goes from the full screen toward its card's frame as the finger travels, so in the
     stack it moves right as it shrinks, and it is never smaller than the card.
   - **Kept from Safari:** only the page shows during the pull, over the deck's backdrop; the other cards and the tab
     view's controls come in at release; the commit distance; the return.
@@ -2590,7 +2590,7 @@ Not audited at all: Compose's `SyncSetupContent` internals inside onboarding.
   space is shown (build 19, the owner: "as different spaces have different bg we shouldn't carry that everywhere").
   - **Main** tints every one of these pages with the shown space's window tint, so Settings changed colour with the
     space behind it.
-  - **Ardia:** the space's colour stays where the space is: the start page, the deck and the Spaces sheet. The
+  - **Solstice:** the space's colour stays where the space is: the start page, the deck and the Spaces sheet. The
     Appearance row's icon still takes the chosen colour, and the colour picker is unchanged.
   - **Where:** `SettingsChrome` in ArdiaDesign's `SettingsPieces.swift`, which every Expo UI settings page, the Archive
     and the library pages apply.
@@ -2781,7 +2781,7 @@ gh run watch --exit-status                                     the run's summary
 - **What a run does.** It builds the shrunk arm64 APK on `ubuntu-latest` with `build-apk --store` from the commit's
   export, so the lab is off and `ardia_sync_offered` is false. Then it runs `sign-release-apk.test.sh`, signs the APK
   with the release key through `apps/phone/scripts/sign-release-apk`, and runs `check-release-apk`.
-  - **dry-run** keeps `Ardia-<version>.apk`, its `.txt` stamp and `.sha256` as a workflow artifact for 14 days.
+  - **dry-run** keeps `Solstice-<version>.apk`, its `.txt` stamp and `.sha256` as a workflow artifact for 14 days.
   - **draft** attaches the same three files to a new draft prerelease `android-v<version>`.
   - Neither publishes, and neither marks a release as latest.
 - **The release key.** It lives only in the repository secrets: `ANDROID_RELEASE_KEYSTORE_B64` (PKCS12),
@@ -2811,7 +2811,7 @@ gh run watch --exit-status                                     the run's summary
 
 **The checks** (`apps/phone/scripts/check-release-apk`). The run fails if any of these fail:
 - the signer equals the pinned fingerprint, and the signature verifies;
-- the package is `com.ardia.browser.android`;
+- the package is `com.openbrowsercompany.solstice.android`;
 - the versionName and versionCode are what `android-version.ts` gives;
 - there's no debuggable flag, and the native code is exactly `arm64-v8a`;
 - the stamps: the commit, a clean tree, and the JS from the export;
@@ -2833,9 +2833,9 @@ commit, as `release-ios` takes it.
 - The candidates before the formula changed (rc1 204702, rc2 204703) are below every release under it, so a release
   updates over them.
 - `build-apk --version` passes both to Gradle. `appRelease()` gives the release version, empty for a Dev build. The
-  Settings footer should read as `main`'s does: "Ardia 0.2.47 Nightly 2 (2047002)", "Ardia 0.2.47 (2047999)", or
-  "Ardia Dev". The JS label shows "Nightly" only for a TestFlight receipt, so this is the screens agent's change.
-- The iPhone build of the same release reads "Ardia 0.2.47 Nightly 4 (n)". Its build number counts uploads; Android's
+  Settings footer should read as `main`'s does: "Solstice 0.2.47 Nightly 2 (2047002)", "Solstice 0.2.47 (2047999)", or
+  "Solstice Dev". The JS label shows "Nightly" only for a TestFlight receipt, so this is the screens agent's change.
+- The iPhone build of the same release reads "Solstice 0.2.47 Nightly 4 (n)". Its build number counts uploads; Android's
   versionCode comes from the version alone.
 
 **Existing installs.**
@@ -2987,10 +2987,10 @@ Expo app builds from and what comparisons need. `main` keeps it until this branc
 |---|---|---|---|
 | `Packages/ArdiaKit` (ArdiaShared, ArdiaSync, ArdiaBrowser, ArdiaDesign) and its tests | the `ArdiaPhoneNative` pod (ArdiaBrowser, ArdiaDesign, through the Podfile's `link_ardia_kit`); the widgets and the share extension (ArdiaDesign); the PhoneMotion and PhoneSync test packages; Android's sync bundle (`ArdiaShared/Scripts/ardia-sync.js`); `ios.yml` | keep | `packages/phone/ios/ArdiaKit` |
 | `Share`, `Action`, `Widgets` | the Expo project's three extension targets, compiled in place as synchronized folders | keep | `apps/phone/ios/{Share,Action,Widgets}` |
-| `Config`: `Share`, `Open` and `Widgets` Info.plists and entitlements, `Ardia.entitlements`, `Ardia-DefaultBrowser.entitlements` | the Expo project's build settings; `defaultBrowserSwitch.test.ts` | keep | `apps/phone/ios/Config` |
+| `Config`: `Share`, `Open` and `Widgets` Info.plists and entitlements, `Ardia.entitlements`, `Solstice-DefaultBrowser.entitlements` | the Expo project's build settings; `defaultBrowserSwitch.test.ts` | keep | `apps/phone/ios/Config` |
 | `Config/ExportOptions-TestFlight.plist` | `release-ios` | keep | `apps/phone/ios/Config` |
 | `Config/TestFlight-WhatToTest.txt` | `ios-release.yml`'s public link step | keep | `apps/phone/ios/Config` |
-| `Config/Ardia-Info.plist` | the SwiftUI app only (the Expo app has `apps/phone/ios/Ardia/Info.plist`) | delete | |
+| `Config/Solstice-Info.plist` | the SwiftUI app only (the Expo app has `apps/phone/ios/Ardia/Info.plist`) | delete | |
 | `App/AppIcon.icon`, `App/Assets.xcassets` | the Expo app's icon and asset catalog | keep | `apps/phone/ios/App` |
 | The rest of `App` (screens, app model, intents, its PrivacyInfo) | the SwiftUI app only; the Expo app has its own intents and `PrivacyInfo.xcprivacy` | delete | |
 | `Ardia.xcodeproj`, `project.yml` | the SwiftUI app only | delete | |
@@ -3074,7 +3074,7 @@ The iPhone's launch arguments are intent extras on Android, with the same names.
 (`LaunchExtras.allowedInThisBuild`); a store build ignores them.
 
 ```
-adb shell am start -S -n com.ardia.browser.android.dev/com.ardia.browser.android.MainActivity --ez ArdiaDemo true --es BrowseQuery otters
+adb shell am start -S -n com.openbrowsercompany.solstice.android.dev/com.openbrowsercompany.solstice.android.MainActivity --ez ArdiaDemo true --es BrowseQuery otters
 ```
 
 `ArdiaDemo` runs on demo data (two Macs, two profiles) and never touches real data. The rest drive captures without
@@ -3197,7 +3197,7 @@ By part, installed (deflated):
 | App binary | 12.7 MB (4.7) | 5.9 MB (2.4) |
 | React Native's frameworks: React 11.6, hermesvm 6.1, ReactNativeDependencies 1.2, ExpoModulesJSI 1.2 | 20.1 MB as shipped, 16.5 after the Release strip: React 10.1, hermesvm 4.2, ReactNativeDependencies 1.1, ExpoModulesJSI 1.2 | none |
 | JS bundle (Hermes bytecode) | 5.4 MB (2.2) | none |
-| The three extensions (Share, Open in Ardia, Widgets) | 11.2 MB (4.4) | 11.2 MB (4.4) |
+| The three extensions (Share, Open in Solstice, Widgets) | 11.2 MB (4.4) | 11.2 MB (4.4) |
 | Asset catalog | 9.4 MB (9.3) | 9.5 MB (9.4) |
 | ArdiaKit's resource bundles | 1.0 MB | 0.9 MB |
 
@@ -3231,7 +3231,7 @@ icon, so it doesn't change the difference between them.
      frameworks ship no dSYMs (only ExpoModulesJSI has one), so these names are what makes their frames in a
      crash report readable. Proof on the stripped device archive: `atos` names a React and a Hermes local function
      from the stripped binaries. Our own code goes through the archive's dSYMs, which stay with the archive: the app
-     binary's UUID matches `Ardia.app.dSYM`, and an address in it resolves to `SettingsShortcutsView.body.getter
+     binary's UUID matches `Solstice.app.dSYM`, and an address in it resolves to `SettingsShortcutsView.body.getter
      (SettingsUIModule.swift:148)`.
    - `strip -x -S` would save 5.5 MB more installed, but it removes the local function names, and with no dSYM for
      these frameworks nothing can restore them. lldb then shows `___lldb_unnamed_symbol…` for React and Hermes
@@ -3261,11 +3261,11 @@ difference, as on Android.
 
 ```
 scripts/agent/locked pod -- bash -c 'cd apps/phone/ios && pod install'     after native dependencies change
-scripts/agent/locked xcodebuild -- xcodebuild -workspace apps/phone/ios/Ardia.xcworkspace -scheme Ardia \
+scripts/agent/locked xcodebuild -- xcodebuild -workspace apps/phone/ios/Ardia.xcworkspace -scheme Solstice \
   -configuration Release -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
   -derivedDataPath <your own dir> ARCHS=arm64 CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY=- \
   DEVELOPMENT_TEAM= PROVISIONING_PROFILE_SPECIFIER= build                                   JS bundled in
-agent-device install com.ardia.browser.ios <dir>/Build/Products/Release-iphonesimulator/Ardia.app
+agent-device install com.openbrowsercompany.solstice.ios <dir>/Build/Products/Release-iphonesimulator/Solstice.app
 ```
 
 The ad hoc identity signs locally for the simulator with each target's entitlements (the app group, so the app and
@@ -3277,13 +3277,13 @@ link ArdiaKit itself, or every symbol is linked twice; it finds ArdiaDesign's mo
 `SceneDelegate` starts React Native in the scene's window and hands links, quick actions and Handoff to the module.
 
 The project carries the SwiftUI app's extensions, compiled from `apps/phone/ios/Share`, `Action` and `Widgets`, with
-the Info.plists and entitlement files in `apps/phone/ios/Config`: the Share extension, Open in Ardia and the widgets, under the same
+the Info.plists and entitlement files in `apps/phone/ios/Config`: the Share extension, Open in Solstice and the widgets, under the same
 bundle ids. The SwiftUI app's intents need its `AppModel`, so the app target has its own copies with the same names,
 titles and phrases that post links instead.
 
 - `system.initialLink()` and `system.addLinkListener()`: `{ kind, source }` with kind `open` (url), `search` (query),
   `voiceSearch`, `incognito`, `tab` (id), `macTabs` or `inbox`, and source `web` (an http link from another app),
-  `system` (an `ardia://` link from a widget, the share sheet or the action), `shortcut`, `share` (the share
+  `system` (an `solstice://` link from a widget, the share sheet or the action), `shortcut`, `share` (the share
   sheet's inbox, when it couldn't open the app), `handoff` or `intent`.
 - `defaultBrowser`: `status()` from ArdiaBrowser's `DefaultBrowserStatus`, shared with the SwiftUI app;
   `requestRole()` is always false on iPhone, which has no role prompt; `openDefaultAppsSettings()`.
@@ -3312,8 +3312,8 @@ Watch your own frames before you hand a change on. The loop, for any agent:
    lease is wiped when it ends: close it with `device_close` (`shutdown: true`). Its udid, for `simctl`'s logs and
    recordings: `xcrun simctl --set ~/.simlock/devices/ios list devices booted`.
 3. **Install and launch,** from the repo root (the lease accepts installs only from this checkout):
-   `<agent-device> install com.ardia.browser.ios /tmp/ardia-phone/<name>.app`, then
-   `<agent-device> open com.ardia.browser.ios --relaunch --launch-args -ArdiaDemo --launch-args YES`. Add
+   `<agent-device> install com.openbrowsercompany.solstice.ios /tmp/ardia-phone/<name>.app`, then
+   `<agent-device> open com.openbrowsercompany.solstice.ios --relaunch --launch-args -ArdiaDemo --launch-args YES`. Add
    `--launch-args -BrowseDeck --launch-args YES` to open on the deck. Confirm the build:
    `xcrun simctl --set ~/.simlock/devices/ios spawn <udid> log show --last 2m --style compact --predicate 'eventMessage CONTAINS "ARDIA build"'`.
 4. **Record.** Start `xcrun simctl --set ~/.simlock/devices/ios io <udid> recordVideo --codec h264 --force run.mp4` in
@@ -3326,16 +3326,16 @@ Watch your own frames before you hand a change on. The loop, for any agent:
    - Measure positions, sizes and opacity from the pixels, not by eye.
 6. **Main's SwiftUI app,** the reference for the iPhone redesign.
    - It has the same bundle id, so uninstall one app before installing the other
-     (`xcrun simctl --set ~/.simlock/devices/ios uninstall <udid> com.ardia.browser.ios`).
+     (`xcrun simctl --set ~/.simlock/devices/ios uninstall <udid> com.openbrowsercompany.solstice.ios`).
    - The pinned Release build is `~/Developer/ardia-phone-references/swiftui-main.app` (linked from
      `/tmp/ardia-phone/swiftui-main.app`), with `swiftui-main.txt` saying from which commit. To make a fresh one from
      any commit of main (about 50 s), run `apps/phone/scripts/rebuild-swiftui-reference <commit>`: it builds that
      commit's `apps/ios` from a `git archive` export and signs it ad hoc, never with `CODE_SIGNING_ALLOWED=NO`.
      The ad hoc build carries simulated entitlements
-     (`application-identifier` `FAKETEAMID.com.ardia.browser.ios` and the app group), the same as `build-sim-app`'s
+     (`application-identifier` `FAKETEAMID.com.openbrowsercompany.solstice.ios` and the app group), the same as `build-sim-app`'s
      Expo builds. Without them the app has no Keychain: Sync With Mac stops at "Couldn't save the sync key in your
      Keychain", and an upgrade can't carry the key over. Check with
-     `otool -l <app>/Ardia | grep -c 'sectname __entitlements'` (1).
+     `otool -l <app>/Solstice | grep -c 'sectname __entitlements'` (1).
    - Its launch arguments: `-ArdiaDemo YES`, `-ArdiaDeck deck`, `-ArdiaInterfaceStyle classic`,
      `-ArdiaColorScheme dark`, `-ArdiaOpenSheet history`, `-ArdiaSpace <syncId>` (all in `SettingsLaunchHooks.swift`).
    - Record both apps doing the same thing in the same state, light and dark, and compare the same crop.
@@ -3720,11 +3720,11 @@ What it needs, for a yes or no:
 
 1. **The build.** A development-signed Release build of the Expo app, made with Xcode from `apps/phone/ios/Ardia.xcworkspace` (Release, a device destination).
    - Development signing keeps it debuggable, so Instruments can profile it. A TestFlight build can't be profiled that way.
-   - It can't sit beside the TestFlight SwiftUI app as things are: both are `com.ardia.browser.ios`, with extensions `com.ardia.browser.ios.share`, `.open` and `.widgets`, and the app group `group.com.ardia.browser.ios`. Installing it replaces the SwiftUI app and its data on that phone.
-   - The cleaner way is a second bundle id for measurement only: `com.ardia.browser.ios.measure`, built without the three extensions and the app group. Then both apps sit side by side and nothing of the owner's is touched. That's a build-setting change on our side, plus the signing below.
+   - It can't sit beside the TestFlight SwiftUI app as things are: both are `com.openbrowsercompany.solstice.ios`, with extensions `com.openbrowsercompany.solstice.ios.share`, `.open` and `.widgets`, and the app group `group.com.openbrowsercompany.solstice.ios`. Installing it replaces the SwiftUI app and its data on that phone.
+   - The cleaner way is a second bundle id for measurement only: `com.openbrowsercompany.solstice.ios.measure`, built without the three extensions and the app group. Then both apps sit side by side and nothing of the owner's is touched. That's a build-setting change on our side, plus the signing below.
 2. **The signing,** all the owner's to do (agents never touch the Apple developer account, certificates, profiles or the device list).
    - Register the phone's UDID in team U5L5T3NGVV's devices, or let Xcode do it while signed in as a team member with automatic signing, which is what the projects use (`CODE_SIGN_STYLE = Automatic`).
-   - Let Xcode create a development certificate and profile for the bundle id. For the measurement id, that means an App ID `com.ardia.browser.ios.measure`, with no capabilities beyond the defaults if it's built without the app group.
+   - Let Xcode create a development certificate and profile for the bundle id. For the measurement id, that means an App ID `com.openbrowsercompany.solstice.ios.measure`, with no capabilities beyond the defaults if it's built without the app group.
    - On the phone, turn on Developer Mode (Settings › Privacy & Security › Developer Mode) and trust the Mac.
 3. **The devices.**
    - The oldest iPhone that runs iOS 27 (the deployment target is iOS 27.0 in both apps). It shows the worst case for JavaScript, glass and memory.
@@ -3732,7 +3732,7 @@ What it needs, for a yes or no:
    - Which phones he has is his to say.
 4. **The Mac.** This Mac, with Xcode 27.1, over a cable for the first pairing, then over the same network.
 5. **The tools.**
-   - Instruments' **App Launch** template (or `xcrun xctrace record --template 'App Launch' --device <udid> --launch -- com.ardia.browser.ios.measure`) for cold and warm launch.
+   - Instruments' **App Launch** template (or `xcrun xctrace record --template 'App Launch' --device <udid> --launch -- com.openbrowsercompany.solstice.ios.measure`) for cold and warm launch.
    - **Animation Hitches** for the deck, the card opening, the tab swipe and scrolling: hitch time ratio and long frames, at 120 Hz.
    - **Time Profiler** for where JavaScript and native time goes.
    - **Allocations** and the VM Tracker for memory, with the WebKit processes counted.
@@ -3750,23 +3750,23 @@ What it needs, for a yes or no:
 
 #### Default browser on iPhone
 
-Apple granted the web-browser entitlement (`com.apple.developer.web-browser`) for `com.ardia.browser.ios`, so the
+Apple granted the web-browser entitlement (`com.apple.developer.web-browser`) for `com.openbrowsercompany.solstice.ios`, so the
 app ships with the default browser on, and one build setting turns all of it on or off together:
 
-- **The switch.** `ARDIA_DEFAULT_BROWSER = YES` in the Debug and Release settings of the Ardia target in
+- **The switch.** `ARDIA_DEFAULT_BROWSER = YES` in the Debug and Release settings of the Solstice target in
   `apps/phone/ios/Ardia.xcodeproj/project.pbxproj`. `release-ios` signs with it unless `--no-default-browser`, and
   the iOS Release workflow's `default_browser` input is on by default.
 - **The entitlement.** `CODE_SIGN_ENTITLEMENTS = $(ARDIA_ENTITLEMENTS_$(ARDIA_DEFAULT_BROWSER))`, so `NO` signs with
-  `apps/phone/ios/Config/Ardia.entitlements` and `YES` with `apps/phone/ios/Config/Ardia-DefaultBrowser.entitlements`,
+  `apps/phone/ios/Config/Ardia.entitlements` and `YES` with `apps/phone/ios/Config/Solstice-DefaultBrowser.entitlements`,
   the same file plus `com.apple.developer.web-browser`. Main's SwiftUI app signs with the same two files.
 - **Info.plist.** `ArdiaDefaultBrowser` is `$(ARDIA_DEFAULT_BROWSER)`, which ArdiaKit's
   `DefaultBrowserStatus.isOffered` reads. The http and https `CFBundleURLTypes` iOS requires of a default browser are
-  already declared and do nothing until the system lists Ardia.
+  already declared and do nothing until the system lists Solstice.
 - **What appears.** With `isOffered` true, `ArdiaPhoneDefaultBrowser.status()` returns `canAsk: true`: the
   onboarding step shows (unless asked within 100 days, as in SwiftUI), and Settings › Default Browser opens the
-  system's Default Apps page. Page menu › Open in Default Browser hides once Ardia is the default. With `NO`,
+  system's Default Apps page. Page menu › Open in Default Browser hides once Solstice is the default. With `NO`,
   `isDefault` and `canAsk` are both false and none of this shows.
-- **The signing side.** The App ID `com.ardia.browser.ios` has the Default Web Browser capability, switched on under
+- **The signing side.** The App ID `com.openbrowsercompany.solstice.ios` has the Default Web Browser capability, switched on under
   Additional Capabilities in the developer portal after Apple's approval; automatic signing puts it in the profile.
   Without it a build with `YES` fails to sign ("requires approval from Apple"), so it cannot ship half on.
 
@@ -3832,7 +3832,7 @@ main's order for now.
    sharing summary under it is gone; What's Sent and the opt-in say it). What the app keeps and what it sends,
    together; Clear Browsing Data used to sit in the mixed group. Android's Settings keeps the summary.
 7. "Experimental": "Browse for Me" when offered. Rarely changed, so near the bottom.
-8. "About": "Show Onboarding" button ("hand.wave.fill", #FF901A, tinted primary) and "About Ardia" link ("info",
+8. "About": "Show Onboarding" button ("hand.wave.fill", #FF901A, tinted primary) and "About Solstice" link ("info",
    neutral). Footer: the version line, centred, 16 pt above. Last, as iOS Settings ends with About.
 
 Appearance (`AppearancePage.swift`, `ColorChoiceRows.swift`):
@@ -3926,8 +3926,8 @@ an `EditButton`.
 Clear Browsing Data: a "Time Range" `Picker`; "Clear" section of `Toggle`s History, Cache, Cookies and Site Data,
 Archived Tabs; destructive "Clear Data…" with a `ProgressView`, confirmed by a `confirmationDialog`.
 
-Default Browser: an explanation page with "How to change your default browser" and an "Open Ardia in Settings"
-button. About: `AppIconPreview` (72 pt, 22.5% continuous corners, a 0.5 pt hairline) and "Ardia", three `Link` rows
+Default Browser: an explanation page with "How to change your default browser" and an "Open Solstice in Settings"
+button. About: `AppIconPreview` (72 pt, 22.5% continuous corners, a 0.5 pt hairline) and "Solstice", three `Link` rows
 (ardia.dev, Release Notes, Source Code), a footer, "Open Source Licenses" (each credit a `LabeledContent` and a
 `Link`).
 
@@ -3970,9 +3970,9 @@ out of the id order CocoaPods writes in (fixed in 8304ed5c6, and on `expo-ios-in
 d5fbaabc1). After a hand edit to the project, run `pod install` and commit what it writes.
 
 **What the build is.**
-- **App record:** the same as the SwiftUI app: "Ardia", bundle id `com.ardia.browser.ios`, team `U5L5T3NGVV`, and the
+- **App record:** the same as the SwiftUI app: "Solstice", bundle id `com.openbrowsercompany.solstice.ios`, team `U5L5T3NGVV`, and the
   extensions `.share`, `.widgets` and `.open`. The Expo project (`apps/phone/ios/Ardia.xcodeproj`) already uses these
-  ids and the same entitlement files, now in `apps/phone/ios/Config`: the app group `group.com.ardia.browser.ios`, and the default
+  ids and the same entitlement files, now in `apps/phone/ios/Config`: the app group `group.com.openbrowsercompany.solstice.ios`, and the default
   browser off (`ARDIA_DEFAULT_BROWSER = NO`).
 - **Version and build number:**
   - The Apple version is TestFlight's pin, `1.0.1` for now ("TestFlight: the workflow, its certificate and its
@@ -3992,7 +3992,7 @@ d5fbaabc1). After a hand edit to the project, run `pod install` and commit what 
   - It checks the versions and build on all four targets, the three extensions, the stamp, Hermes bytecode, the test
     hooks off, the stripped frameworks, the app's dSYM matching its binary, default browser off and, when signed, the
     app group and web-browser entitlements.
-  - The Settings footer follows main's `AppVersionLabel`: "Ardia 0.2.47 Nightly 2 (10)" from TestFlight.
+  - The Settings footer follows main's `AppVersionLabel`: "Solstice 0.2.47 Nightly 2 (10)" from TestFlight.
   - `.github/workflows/ios-release.yml` builds it, the only iPhone app since the clean-up. It installs the app's
     packages and Pods on the `xcode-27` runner and runs that script. An upload with `public_testers` on is refused,
     so it can only reach the Internal group.
@@ -4024,7 +4024,7 @@ d5fbaabc1). After a hand edit to the project, run `pod install` and commit what 
      mode=upload -f public_testers=false`.
      - The build number is taken above App Store Connect's highest, from 10 on, unless `-f build=` sets it.
      - The version is TestFlight's pin, `1.0.1`; the run refuses any other.
-  4. **On the owner's phone:** install it from TestFlight over the SwiftUI app. Settings' footer should read "Ardia
+  4. **On the owner's phone:** install it from TestFlight over the SwiftUI app. Settings' footer should read "Solstice
      <version> Nightly (<build>)".
 - **Who uploads, and how 0.2.47 (9) went up:**
   - The SwiftUI build was sent from `main` by the iOS Release workflow on 15 Nov (`gh workflow run ios-release.yml -f
@@ -4056,7 +4056,7 @@ build.
 
 **Proving the upgrade on a copy of real data.** On a leased simulator, never the owner's phone or live profile.
 1. **Where real data comes from.**
-   - A TestFlight app's container can't be read from a Mac. So the source is the owner's Mac Ardia profile, copied
+   - A TestFlight app's container can't be read from a Mac. So the source is the owner's Mac Solstice profile, copied
      into a scratch folder (the repo's rule: copies only, never the live profile, nothing written back).
    - Delete `sync.json` from the copy before anything starts, so the copy never syncs to the owner's real iCloud
      folder.
@@ -4067,7 +4067,7 @@ build.
 2. **Set up main's SwiftUI app as the owner uses it** (`/tmp/ardia-phone/swiftui-main.app`, onboarding done):
    - Connect: Settings › Sync With Mac › Connect to Your Mac, Enter Words, with the phrase read from
      `<work>/phrase.txt` straight into the field (never printed, no screenshot while it shows). Then the folder:
-     `<work>/folder` mirrored into the app's `Documents/Ardia Sync` and chosen there.
+     `<work>/folder` mirrored into the app's `Documents/Solstice Sync` and chosen there.
    - Then use it: at least nine tabs, two archived, about 30 pages visited, a private tab, every Settings row moved
      off its default, Site Settings, blocking (a trusted site, a My Filters line, one list off), the Reader's
      settings, and Appearance.
@@ -4096,14 +4096,14 @@ build.
 - **One folder for both sides, no relay.** The leased simulator's "On My iPhone" is the `File Provider Storage` of
   its `group.com.apple.FileProvider.LocalStorage` app group container under
   `~/.simlock/devices/ios/<udid>/data/Containers/Shared/AppGroup/` (read each container's
-  `.com.apple.mobile_container_manager.metadata.plist` for `MCMMetadataIdentifier`). Make `Ardia Sync` there, and
+  `.com.apple.mobile_container_manager.metadata.plist` for `MCMMetadataIdentifier`). Make `Solstice Sync` there, and
   before `mac start` make `<work>/folder` a symlink to it. The Mac writes into it, and the phone's picker shows it as
-  On My iPhone › Ardia Sync.
+  On My iPhone › Solstice Sync.
 - **The phrase without a screen read:** on Enter Words, take one snapshot while the field is empty, to get the
   field's ref and the Use Phrase button. Then `<agent-device> fill <field ref> --text-stdin < <work>/phrase.txt`,
   which keeps the words out of argv and output, and press Use Phrase by its coordinates. Read the screen again only
   once it shows "Step 1, done".
-- **The folder:** Choose Folder… › Browse › On My iPhone › Ardia Sync, then Open from inside the folder.
+- **The folder:** Choose Folder… › Browse › On My iPhone › Solstice Sync, then Open from inside the folder.
 - **Main's app must be the ad hoc build** (the simulator section above). A `CODE_SIGNING_ALLOWED=NO` build connects
   but can't save the key.
 - **Expect Appearance to change once connected:** Match My Mac follows the Mac profile, so a profile set to dark turns
@@ -4126,7 +4126,7 @@ so no real profile holds more history than that. How far it got:
 
 **A fresh connect on 0.88** (2026-11-16, the Expo build at cb2876bc7, clean install on lease cfc7a246, a scratch Mac
 seeded from the stand-in). Onboarding's Connect to Your Mac took the phrase (Enter Words, `fill --text-stdin`) and On My
-iPhone › Ardia Sync, and showed "Connected." The Mac listed one new phone (ci7pa7gk…). A tab sent from the Mac arrived
+iPhone › Solstice Sync, and showed "Connected." The Mac listed one new phone (ci7pa7gk…). A tab sent from the Mac arrived
 once, marked from "shiv". A page opened on the phone appeared under its tabs on the Mac within one sync.
 
 **The stand-in run's before and after** (the real run reads the same things the same way):
@@ -4140,7 +4140,7 @@ once, marked from "shiv". A page opened on the phone appeared under its tabs on 
 | Settings | Search Suggestions off, Auto-Open Keyboard off, archive after 7 days, app links in App, Appearance Green and Classic with Match My Mac off | the same, in `preferences`; Settings reads the same rows |
 | Synced from the Mac | Search Engine DuckDuckGo, the Personal space's pins | the same pins on the start page, four spaces |
 | Import | none | `legacy.receipt` `{"tabs":21,"archive":2,"visits":23,"preferences":7}`, all records accounted for |
-| Sync With Mac | connected: Mac "shiv", "This iPhone", folder Ardia Sync | opens on the connected page with the same devices and folder; no Connect step |
+| Sync With Mac | connected: Mac "shiv", "This iPhone", folder Solstice Sync | opens on the connected page with the same devices and folder; no Connect step |
 | The Mac's view (`mac sync`) | one phone, ckl2z6gj…, 21 tabs | the same one phone, the same id, 21 tabs |
 | Mac to phone | | a tab sent from the Mac arrived once, marked from "shiv" |
 | Phone to Mac | | a page opened on the phone appeared under its tabs on the Mac |
@@ -4183,9 +4183,9 @@ run is the proof. The same run's source pass found four other things the upgrade
 | Page thumbnails | 9 in Caches/TabSnapshots | 9 `-legacy` pictures | pass |
 | Website data | a page's cookie and localStorage `main1` | the page reads `cookie-main1` and `local-main1` | pass |
 | Downloads | proof-note.txt in Documents/Downloads | the same file | pass: the file, and the Library's Downloads lists it (run3) |
-| Bookmarks (from the Mac) | Ardia; Proof Folder with 2; Hacker News in Other Bookmarks | the same in the Library's Bookmarks (run3) | pass |
+| Bookmarks (from the Mac) | Solstice; Proof Folder with 2; Hacker News in Other Bookmarks | the same in the Library's Bookmarks (run3) | pass |
 | Spaces, pins, the Mac's tabs | 4 spaces; Personal's 4 pins; the Mac's tabs | the same in the Spaces sheet and on the start page | pass |
-| Sync With Mac | connected: Mac "shiv", "iPhone", folder Ardia Sync | the connected page, the same; no Connect step | pass |
+| Sync With Mac | connected: Mac "shiv", "iPhone", folder Solstice Sync | the connected page, the same; no Connect step | pass |
 | The Mac's view | one phone, kty6evegx…, 48 tab lines | the same one phone and id, 48 tab lines | pass |
 | Site permissions | localhost: camera, microphone, location | the same grant (`browsing.sitePermissions`, identical) and Site Settings row | pass; Revoke Camera after the upgrade left Microphone and Location in the row and the stored grant, and the page asked for the camera again (run3) |
 | Per-site settings | Wikipedia 125% and Night Shade on | identical `browsing.sites`; the page menu shows Night Shade on, 125% | pass |
@@ -4230,8 +4230,8 @@ This was `docs/ios.md`'s, for main's SwiftUI app; since the clean-up the workflo
   the iPhone in Xcode's Devices and Simulators window for wireless debugging on the local network. Turn on Developer
   Mode and confirm the iPhone is available in `xcrun devicectl list devices`.
   - **Local Xcode.** When the Mac has development signing set up, build for the connected iPhone using
-    `apps/phone/ios/Ardia.xcworkspace` and the `Ardia` scheme. Install the resulting development-signed `.app` with
-    `xcrun devicectl device install app --device <udid> <path-to-Ardia.app>`. For a debugging session, select the
+    `apps/phone/ios/Ardia.xcworkspace` and the `Solstice` scheme. Install the resulting development-signed `.app` with
+    `xcrun devicectl device install app --device <udid> <path-to-Solstice.app>`. For a debugging session, select the
     iPhone as the run destination in Xcode.
   - **CI-signed IPA.** `gh workflow run ios-release.yml --ref <branch> -f mode=device -f udid=<udid>` registers the
     iPhone and builds the `ios-device-build` IPA from that ref. Its version defaults to the Mac app's
@@ -4240,12 +4240,12 @@ This was `docs/ios.md`'s, for main's SwiftUI app; since the clean-up the workflo
     ```sh
     gh run download <run-id> -n ios-device-build -D <scratch-dir>
     ditto -x -k <scratch-dir>/Ardia.ipa <scratch-dir>/unpacked
-    xcrun devicectl device install app --device <udid> <scratch-dir>/unpacked/Payload/Ardia.app
+    xcrun devicectl device install app --device <udid> <scratch-dir>/unpacked/Payload/Solstice.app
     ```
 
-  Confirm installation of `com.ardia.browser.ios` on the iPhone.
-- **The app record.** "Ardia", bundle id `com.ardia.browser.ios`, team `U5L5T3NGVV`; the extensions are `.widgets`,
-  `.share` and `.open`, sharing the app group `group.com.ardia.browser.ios`.
+  Confirm installation of `com.openbrowsercompany.solstice.ios` on the iPhone.
+- **The app record.** "Solstice", bundle id `com.openbrowsercompany.solstice.ios`, team `U5L5T3NGVV`; the extensions are `.widgets`,
+  `.share` and `.open`, sharing the app group `group.com.openbrowsercompany.solstice.ios`.
 - **Talk to Me's voice** is not part of a build or an upload. Only a new voice needs a step, on a Mac:
 
   ```sh
@@ -4276,7 +4276,7 @@ This was `docs/ios.md`'s, for main's SwiftUI app; since the clean-up the workflo
 - **CI's certificate.** The archive signs with one development certificate kept in `IOS_DEVELOPMENT_P12` and
   `IOS_DEVELOPMENT_P12_PASSWORD` ("Apple Development: Created via API", expires 12 Nov 2027), so a run makes and
   revokes nothing on the team; a revoked certificate mails the account holder. To renew it: make a key and a request
-  (`openssl req -new -newkey rsa:2048 -nodes -keyout key.pem -out request.csr -subj "/CN=Ardia CI"`), run
+  (`openssl req -new -newkey rsa:2048 -nodes -keyout key.pem -out request.csr -subj "/CN=Solstice CI"`), run
   `mode=certificate` with `signing_request` set to the request's base64, download the `ios-development-certificate`
   artifact, pack it with the key into a .p12 with macOS's `/usr/bin/openssl`, and set both secrets. Distribution
   signing is Apple's cloud-managed certificate.
@@ -4316,13 +4316,13 @@ replays the swipe into the deck n times in a lab build ("The swipe into the deck
 
 `ArdiaPhoneSync` on iPhone wraps the SwiftUI app's `SyncService` (ArdiaKit's ArdiaSync) whole, behind the same
 interface and events as Android. `PhoneSyncHost` owns the one service: `AppDelegate` creates it in
-`didFinishLaunching`, registers the background refresh task (`com.ardia.browser.ios.sync`) and starts it, so a
+`didFinishLaunching`, registers the background refresh task (`com.openbrowsercompany.solstice.ios.sync`) and starts it, so a
 background launch with no scene runs a cycle without React Native. `SceneDelegate` tells it when the app becomes
 active and resigns. Keys, the phrase's entropy and sealed bytes stay in Swift; only the typed phrase crosses, to
 `connect`.
 
 - **Continuing the SwiftUI app's sync.** Same bundle id, same container: the service reads `Application
-  Support/Sync` (`sync.json`, `sync-state.nns`, `sync-journal.nns`, `sync-snapshot.nns`) and the `Ardia Sync Key`
+  Support/Sync` (`sync.json`, `sync-state.nns`, `sync-journal.nns`, `sync-snapshot.nns`) and the `Solstice Sync Key`
   Keychain item, so a tester's phone keeps its device id and folder with no new connect.
 - **The phone's data.** `packages/phone/ios/PhoneSync` (a Swift package the Podfile links into the pod) reads
   `Documents/SQLite/browser.db` read-only, one connection and one read transaction per cycle, with a busy timeout;
@@ -4342,25 +4342,25 @@ active and resigns. Keys, the phrase's entropy and sealed bytes stay in Swift; o
   demo and no logging hooks. In a test build, `-ArdiaSyncDemo YES` swaps in `SyncService.demo` unless sync is set up,
   and `-ArdiaPageLab YES` opens the page lab. With Metro, start it with `EXPO_PUBLIC_ARDIA_LAB=true`.
 - **Background refresh.** The app registers the task at launch and submits a request each time it resigns
-  (the simulator's log shows `submitTaskRequest: <BGAppRefreshTaskRequest: com.ardia.browser.ios.sync …>`). On the
+  (the simulator's log shows `submitTaskRequest: <BGAppRefreshTaskRequest: com.openbrowsercompany.solstice.ios.sync …>`). On the
   iOS 27 simulator, `_simulateLaunchForTaskWithIdentifier:` from lldb on a backgrounded, suspended app did not run
   the handler. To check it on a device: run from Xcode, send the app to the background, pause, run
-  `e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateLaunchForTaskWithIdentifier:@"com.ardia.browser.ios.sync"]`,
+  `e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateLaunchForTaskWithIdentifier:@"com.openbrowsercompany.solstice.ios.sync"]`,
   continue, and look for the Mac's latest send in `Application Support/PhoneSync/inbox.json`.
 
 **What ArdiaSync does** (it was `docs/ios.md`'s, and holds for the Expo app, which runs the same service). The iPhone
 is a device in the Mac's chain: its own device id, its own logs, the same file format. A Mac that has never heard of
 the iPhone reads its files.
-- **Folder.** iCloud Drive › Ardia Sync, the Mac's default. iOS gives an app no path into iCloud Drive without a
+- **Folder.** iCloud Drive › Solstice Sync, the Mac's default. iOS gives an app no path into iCloud Drive without a
   container entitlement, and the Mac writes there without one, so the iPhone asks for the folder once with the system
-  folder picker and keeps a security-scoped bookmark. Picking iCloud Drive itself works too: the app looks for Ardia
+  folder picker and keeps a security-scoped bookmark. Picking iCloud Drive itself works too: the app looks for Solstice
   Sync (or Netnyahoo Sync) inside it. Reads and writes go through `NSFileCoordinator`, which makes iCloud bring files
   down; dataless files are reported as pending, as on the Mac.
 - **Joining.** The Mac's Settings › General › Sync › Connect Another Device shows a QR code of the phrase. The iPhone scans it
   (or takes the 24 words typed or pasted), checks the checksum, and checks that the folder holds that phrase's chain
   before saving anything. Its errors are the Mac's. A different phrase entered after a failure clears the old error
   and, with a folder already chosen, tries again at once (`SyncConnectFlow`); the same words retyped don't.
-- **Keys.** The phrase's entropy is kept in the Keychain (`Ardia Sync Key`, this device only,
+- **Keys.** The phrase's entropy is kept in the Keychain (`Solstice Sync Key`, this device only,
   `AfterFirstUnlockThisDeviceOnly`, so background refresh can read it). The sync state (replica, base, version
   vectors, journal) is sealed with the file key in the app's container, like the Mac's `sync-state.nns`.
 - **What the iPhone writes.** `dev:<id>` (its name), `tabs:<id>` (its 30 most recent open tabs), history visits as
