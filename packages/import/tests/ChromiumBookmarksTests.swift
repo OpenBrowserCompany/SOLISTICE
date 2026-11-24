@@ -20,7 +20,7 @@ final class ChromiumBookmarksTests: XCTestCase {
   }
 
   func testTheRustParserReadsBothFilesAndReportsItsBackend() throws {
-    try write("Bookmarks", #"{"roots":{"bookmark_bar":{"type":"folder","name":"","children":[{"type":"url","name":"Ardia","url":"https://ardia.dev/","date_added":"13350000000000000"}]},"other":{"type":"folder","children":[]}}}"#)
+    try write("Bookmarks", #"{"roots":{"bookmark_bar":{"type":"folder","name":"","children":[{"type":"url","name":"Solstice","url":"https://ardia.dev/","date_added":"13350000000000000"}]},"other":{"type":"folder","children":[]}}}"#)
     try write("AccountBookmarks", #"{"roots":{"bookmark_bar":{"type":"folder","children":[{"type":"url","name":"Account","url":"https://account.example/"}]},"synced":{"type":"folder","children":[{"type":"url","url":"https://phone.example/"}]}}}"#)
     let read = ChromiumBookmarks.read(profile: profile)
     XCTAssertEqual(read.core, ImportCoreRead(format: .chromiumBookmarks, backend: .rust, outcome: .ok))

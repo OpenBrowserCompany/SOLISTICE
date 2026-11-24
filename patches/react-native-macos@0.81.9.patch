@@ -6,12 +6,12 @@ index 72266bd2fa7e3a8a64dc6abc88b1a1a00cf0b614..e25055dfc5bbdc02028ee537fe7e9a8a
    );
  
    const eventHandlers = usePressability(config);
-+  // [Ardia: with no hover callback the view asks for no mouse enter and leave, so it gets no tracking area and sends no hover events
++  // [Solstice: with no hover callback the view asks for no mouse enter and leave, so it gets no tracking area and sends no hover events
 +  const withoutHover =
 +    onHoverIn == null && onHoverOut == null
 +      ? {onMouseEnter: undefined, onMouseLeave: undefined}
 +      : null;
-+  // Ardia]
++  // Solstice]
  
    return (
      <View
@@ -50,7 +50,7 @@ index 1ae22ed66776941c33b2c0a78038b2b997506aa7..6d2be668a23e199bc587a493eee55b44
          inputRef.current,
          mostRecentEventCount,
 -        text,
-+        nativeUpdate.text ?? null, // [Ardia: only a value JS changed is text to set; a selection-only update sent the value too, and native takes command text as meant, so it replaced an input method's marked text Ardia]
++        nativeUpdate.text ?? null, // [Solstice: only a value JS changed is text to set; a selection-only update sent the value too, and native takes command text as meant, so it replaced an input method's marked text Solstice]
          selection?.start ?? -1,
          selection?.end ?? -1,
        );
@@ -59,10 +59,10 @@ index 1ae22ed66776941c33b2c0a78038b2b997506aa7..6d2be668a23e199bc587a493eee55b44
    ]);
  
 -  return {setLastNativeText, setLastNativeSelection};
-+  // [Ardia: whether a selection is kept to compare a selection prop against
++  // [Solstice: whether a selection is kept to compare a selection prop against
 +  const knowsNativeSelection =
 +    lastNativeSelection.start !== -1 || lastNativeSelection.end !== -1;
-+  // Ardia]
++  // Solstice]
 +  return {setLastNativeText, setLastNativeSelection, knowsNativeSelection};
  }
  
@@ -80,7 +80,7 @@ index 1ae22ed66776941c33b2c0a78038b2b997506aa7..6d2be668a23e199bc587a493eee55b44
        return;
      }
  
-+    // [Ardia: with no selection prop nothing reads the native selection, so a caret move sets no state and commits nothing; the first one after a controlled selection forgets it, so a later one is always sent
++    // [Solstice: with no selection prop nothing reads the native selection, so a caret move sets no state and commits nothing; the first one after a controlled selection forgets it, so a later one is always sent
 +    if (selection == null) {
 +      if (knowsNativeSelection) {
 +        setLastNativeSelection({
@@ -90,7 +90,7 @@ index 1ae22ed66776941c33b2c0a78038b2b997506aa7..6d2be668a23e199bc587a493eee55b44
 +      }
 +      return;
 +    }
-+    // Ardia]
++    // Solstice]
 +
      setLastNativeSelection({
        selection: event.nativeEvent.selection,
@@ -107,7 +107,7 @@ index 879e36bc2483226756011b21948f2dd1760d7cf8..383f676c62b23f008964002aeb3940f1
 +    [[NSNotificationCenter defaultCenter] addObserver:self
 +                                             selector:@selector(ardia_interfaceScaleDidChange:)
 +                                                 name:@"ArdiaInterfaceScaleDidChange"
-+                                               object:nil]; // [Ardia]
++                                               object:nil]; // [Solstice]
 +#endif // macOS]
  #if !TARGET_OS_OSX // [macOS]
      NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
@@ -117,7 +117,7 @@ index 879e36bc2483226756011b21948f2dd1760d7cf8..383f676c62b23f008964002aeb3940f1
    } else if (_resizeMode == RCTResizeModeCover) {
      if (!NSEqualSizes(self.bounds.size, NSZeroSize)) {
 -      image = RCTFillImagePreservingAspectRatio(image, self.bounds.size, self.window.backingScaleFactor ?: 1.0);
-+      image = RCTFillImagePreservingAspectRatio(image, self.bounds.size, self.window != nil ? ArdiaBackingDensity(self) : 1.0); // [Ardia]
++      image = RCTFillImagePreservingAspectRatio(image, self.bounds.size, self.window != nil ? ArdiaBackingDensity(self) : 1.0); // [Solstice]
      }
  #endif // macOS]
    } else if (!UIEdgeInsetsEqualToEdgeInsets(UIEdgeInsetsZero, _capInsets)) {
@@ -126,7 +126,7 @@ index 879e36bc2483226756011b21948f2dd1760d7cf8..383f676c62b23f008964002aeb3940f1
    const CGFloat scale = RCTScreenScale();
  #else // [macOS
 -  const CGFloat scale = self.window != nil ? self.window.backingScaleFactor : [NSScreen mainScreen].backingScaleFactor;
-+  const CGFloat scale = ArdiaBackingDensity(self); // [Ardia]
++  const CGFloat scale = ArdiaBackingDensity(self); // [Solstice]
  #endif // macOS]
    const CGFloat targetImagePixels = size.width * size.height * scale * scale;
  
@@ -135,7 +135,7 @@ index 879e36bc2483226756011b21948f2dd1760d7cf8..383f676c62b23f008964002aeb3940f1
      CGFloat imageScale = RCTScreenScale();
  #else // [macOS
 -    CGFloat imageScale = self.window != nil ? self.window.backingScaleFactor : [NSScreen mainScreen].backingScaleFactor;
-+    CGFloat imageScale = ArdiaBackingDensity(self); // [Ardia]
++    CGFloat imageScale = ArdiaBackingDensity(self); // [Solstice]
  #endif // macOS]
      if (!UIEdgeInsetsEqualToEdgeInsets(_capInsets, UIEdgeInsetsZero)) {
        // Don't resize images that use capInsets
@@ -144,7 +144,7 @@ index 879e36bc2483226756011b21948f2dd1760d7cf8..383f676c62b23f008964002aeb3940f1
  #else // [macOS
      CGSize idealSize = RCTTargetSize(
 -        imageSize, imageScale, frame.size, RCTScreenScale(), RCTResizeModeFromUIViewContentMode(_imageView.contentMode), YES);
-+        imageSize, imageScale, frame.size, ArdiaBackingDensity(self), RCTResizeModeFromUIViewContentMode(_imageView.contentMode), YES); // [Ardia]
++        imageSize, imageScale, frame.size, ArdiaBackingDensity(self), RCTResizeModeFromUIViewContentMode(_imageView.contentMode), YES); // [Solstice]
  #endif // macOS]
  
      // Don't reload if the current image or target image size is close enough
@@ -152,18 +152,18 @@ index 879e36bc2483226756011b21948f2dd1760d7cf8..383f676c62b23f008964002aeb3940f1
  #if TARGET_OS_OSX // [macOS
  - (void)viewDidChangeBackingProperties
  {
-+  [super viewDidChangeBackingProperties]; // [Ardia]
++  [super viewDidChangeBackingProperties]; // [Solstice]
    [self reloadImage];
  }
 +
-+// [Ardia
++// [Solstice
 +- (void)ardia_interfaceScaleDidChange:(__unused NSNotification *)notification
 +{
 +  if (self.window != nil) {
 +    [self reloadImage];
 +  }
 +}
-+// Ardia]
++// Solstice]
    
  - (RCTPlatformView *)reactAccessibilityElement
  {
@@ -180,7 +180,7 @@ index a413a2888789daa1a4230e301ec21af5ec203488..857bd369ad19670a96f80aa08423c3b4
 -@property (nonatomic, copy) RCTURLRequestIncrementalDataBlock incrementalDataBlock;
 -@property (nonatomic, copy) RCTURLRequestResponseBlock responseBlock;
 -@property (nonatomic, copy) RCTURLRequestProgressBlock uploadProgressBlock;
-+// [Ardia: atomic, as a cancel on the caller's queue clears them while the handler's queue reads them Ardia]
++// [Solstice: atomic, as a cancel on the caller's queue clears them while the handler's queue reads them Solstice]
 +@property (atomic, copy) RCTURLRequestCompletionBlock completionBlock;
 +@property (atomic, copy) RCTURLRequestProgressBlock downloadProgressBlock;
 +@property (atomic, copy) RCTURLRequestIncrementalDataBlock incrementalDataBlock;
@@ -197,8 +197,8 @@ index a82671b7c87fae1e390cc6a292bd91611ca40584..13effa264ea260263dcf9ae7cd5e80bc
    std::mutex _mutex;
    std::atomic<RCTNetworkTaskStatus> _atomicStatus;
    RCTNetworkTask *_selfReference;
-+  std::mutex _selfReferenceMutex; // [Ardia]
-+  std::atomic<bool> _cancelled; // [Ardia]
++  std::mutex _selfReferenceMutex; // [Solstice]
++  std::atomic<bool> _cancelled; // [Solstice]
  }
  
  static auto currentRequestId = std::atomic<NSUInteger>(0);
@@ -212,29 +212,29 @@ index a82671b7c87fae1e390cc6a292bd91611ca40584..13effa264ea260263dcf9ae7cd5e80bc
 -  _incrementalDataBlock = nil;
 -  _responseBlock = nil;
 -  _uploadProgressBlock = nil;
-+  self.completionBlock = nil; // [Ardia: through the atomic setters, see the header Ardia]
++  self.completionBlock = nil; // [Solstice: through the atomic setters, see the header Solstice]
 +  self.downloadProgressBlock = nil;
 +  self.incrementalDataBlock = nil;
 +  self.responseBlock = nil;
 +  self.uploadProgressBlock = nil;
    _requestToken = nil;
-+  // [Ardia: last, as it can be the task's last reference, and under the lock start takes it with
++  // [Solstice: last, as it can be the task's last reference, and under the lock start takes it with
 +  NS_VALID_UNTIL_END_OF_SCOPE RCTNetworkTask *selfReference;
 +  {
 +    std::lock_guard<std::mutex> lock(_selfReferenceMutex);
 +    selfReference = _selfReference;
 +    _selfReference = nil;
 +  }
-+  // Ardia]
++  // Solstice]
 +}
 +
-+// [Ardia: only the first of cancel, an error and completion finishes the task, so a cancel racing a completion never
++// [Solstice: only the first of cancel, an error and completion finishes the task, so a cancel racing a completion never
 +// invalidates it twice (releasing _selfReference twice) and a cancelled task never calls its completion block
 +- (BOOL)finishOnce
 +{
 +  return _atomicStatus.exchange(RCTNetworkTaskFinished) != RCTNetworkTaskFinished;
  }
-+// Ardia]
++// Solstice]
  
  - (void)dispatchCallback:(dispatch_block_t)callback
  {
@@ -243,7 +243,7 @@ index a82671b7c87fae1e390cc6a292bd91611ca40584..13effa264ea260263dcf9ae7cd5e80bc
  - (void)start
  {
 -  if (_atomicStatus != RCTNetworkTaskPending) {
-+  // [Ardia: running and retained before the handler can call back, as a fast one (data: URIs) finishes the task
++  // [Solstice: running and retained before the handler can call back, as a fast one (data: URIs) finishes the task
 +  // before sendRequest: returns, and only from pending, so a finished task never runs again; a cancel that came
 +  // before the token was published couldn't cancel the request, so start does
 +  BOOL started;
@@ -270,16 +270,16 @@ index a82671b7c87fae1e390cc6a292bd91611ca40584..13effa264ea260263dcf9ae7cd5e80bc
 +  if ([self validateRequestToken:token] && _cancelled && [_handler respondsToSelector:@selector(cancelRequest:)]) {
 +    [_handler cancelRequest:token];
    }
-+  // Ardia]
++  // Solstice]
  }
  
  - (void)cancel
  {
 -  if (_atomicStatus.exchange(RCTNetworkTaskFinished) == RCTNetworkTaskFinished) {
-+  if (![self finishOnce]) { // [Ardia]
++  if (![self finishOnce]) { // [Solstice]
      return;
    }
-+  _cancelled = true; // [Ardia]
++  _cancelled = true; // [Solstice]
  
    id token = _requestToken;
    if (token && [_handler respondsToSelector:@selector(cancelRequest:)]) {
@@ -291,8 +291,8 @@ index a82671b7c87fae1e390cc6a292bd91611ca40584..13effa264ea260263dcf9ae7cd5e80bc
 -    _atomicStatus = RCTNetworkTaskFinished;
 -    if (_completionBlock) {
 -      RCTURLRequestCompletionBlock completionBlock = _completionBlock;
-+  if (!valid && [self finishOnce]) { // [Ardia]
-+    RCTURLRequestCompletionBlock completionBlock = self.completionBlock; // [Ardia]
++  if (!valid && [self finishOnce]) { // [Solstice]
++    RCTURLRequestCompletionBlock completionBlock = self.completionBlock; // [Solstice]
 +    if (completionBlock) {
        [self dispatchCallback:^{
          completionBlock(self->_response, nil, RCTErrorWithMessage(@"Invalid request token."));
@@ -303,7 +303,7 @@ index a82671b7c87fae1e390cc6a292bd91611ca40584..13effa264ea260263dcf9ae7cd5e80bc
  
 -  if (_uploadProgressBlock) {
 -    RCTURLRequestProgressBlock uploadProgressBlock = _uploadProgressBlock;
-+  RCTURLRequestProgressBlock uploadProgressBlock = self.uploadProgressBlock; // [Ardia]
++  RCTURLRequestProgressBlock uploadProgressBlock = self.uploadProgressBlock; // [Solstice]
 +  if (uploadProgressBlock) {
      int64_t length = _request.HTTPBody.length;
      [self dispatchCallback:^{
@@ -314,7 +314,7 @@ index a82671b7c87fae1e390cc6a292bd91611ca40584..13effa264ea260263dcf9ae7cd5e80bc
    _response = response;
 -  if (_responseBlock) {
 -    RCTURLRequestResponseBlock responseBlock = _responseBlock;
-+  RCTURLRequestResponseBlock responseBlock = self.responseBlock; // [Ardia]
++  RCTURLRequestResponseBlock responseBlock = self.responseBlock; // [Solstice]
 +  if (responseBlock) {
      [self dispatchCallback:^{
        responseBlock(response);
@@ -326,10 +326,10 @@ index a82671b7c87fae1e390cc6a292bd91611ca40584..13effa264ea260263dcf9ae7cd5e80bc
 -      _atomicStatus = RCTNetworkTaskFinished;
 -      if (_completionBlock) {
 -        RCTURLRequestCompletionBlock completionBlock = _completionBlock;
-+      if (![self finishOnce]) { // [Ardia]
++      if (![self finishOnce]) { // [Solstice]
 +        return;
 +      }
-+      RCTURLRequestCompletionBlock completionBlock = self.completionBlock; // [Ardia]
++      RCTURLRequestCompletionBlock completionBlock = self.completionBlock; // [Solstice]
 +      if (completionBlock) {
          [self dispatchCallback:^{
            completionBlock(
@@ -340,7 +340,7 @@ index a82671b7c87fae1e390cc6a292bd91611ca40584..13effa264ea260263dcf9ae7cd5e80bc
  
 -  if (_incrementalDataBlock) {
 -    RCTURLRequestIncrementalDataBlock incrementalDataBlock = _incrementalDataBlock;
-+  RCTURLRequestIncrementalDataBlock incrementalDataBlock = self.incrementalDataBlock; // [Ardia]
++  RCTURLRequestIncrementalDataBlock incrementalDataBlock = self.incrementalDataBlock; // [Solstice]
 +  if (incrementalDataBlock) {
      [self dispatchCallback:^{
        incrementalDataBlock(data, length, total);
@@ -348,7 +348,7 @@ index a82671b7c87fae1e390cc6a292bd91611ca40584..13effa264ea260263dcf9ae7cd5e80bc
    }
 -  if (_downloadProgressBlock) {
 -    RCTURLRequestProgressBlock downloadProgressBlock = _downloadProgressBlock;
-+  RCTURLRequestProgressBlock downloadProgressBlock = self.downloadProgressBlock; // [Ardia]
++  RCTURLRequestProgressBlock downloadProgressBlock = self.downloadProgressBlock; // [Solstice]
 +  if (downloadProgressBlock) {
      [self dispatchCallback:^{
        downloadProgressBlock(length, total);
@@ -360,10 +360,10 @@ index a82671b7c87fae1e390cc6a292bd91611ca40584..13effa264ea260263dcf9ae7cd5e80bc
 -  _atomicStatus = RCTNetworkTaskFinished;
 -  if (_completionBlock) {
 -    RCTURLRequestCompletionBlock completionBlock = _completionBlock;
-+  if (![self finishOnce]) { // [Ardia]
++  if (![self finishOnce]) { // [Solstice]
 +    return;
 +  }
-+  RCTURLRequestCompletionBlock completionBlock = self.completionBlock; // [Ardia]
++  RCTURLRequestCompletionBlock completionBlock = self.completionBlock; // [Solstice]
 +  if (completionBlock) {
      NSData *dataCopy = nil;
      {
@@ -376,7 +376,7 @@ index bbee6d1e1865359b350da78b745c6c0061a2dc5d..c645bfead1814173bef35608504aa5ec
  }
  
  const getTouchFromPressEvent = (event: GestureResponderEvent) => {
-+  // [Ardia: the touch this event is about comes first. `touches` also lists every other button still held, or one whose mouse up a menu took, and its button decided whether this press counted
++  // [Solstice: the touch this event is about comes first. `touches` also lists every other button still held, or one whose mouse up a menu took, and its button decided whether this press counted
    const {changedTouches, touches} = event.nativeEvent;
  
 -  if (touches != null && touches.length > 0) {
@@ -389,7 +389,7 @@ index bbee6d1e1865359b350da78b745c6c0061a2dc5d..c645bfead1814173bef35608504aa5ec
 +    return touches[0];
 +  }
    return event.nativeEvent;
-+  // Ardia]
++  // Solstice]
  };
  
  function convertPointerEventToMouseEvent(input: PointerEvent): MouseEvent {
@@ -401,9 +401,9 @@ index 3de368b73b6bbad86f1b27dd0ba56abb516f89e8..84d3218318dc1771ca52ed445f9cd0f8
  
  NS_ASSUME_NONNULL_BEGIN
  
-+#if TARGET_OS_OSX // [Ardia
++#if TARGET_OS_OSX // [Solstice
 +RCT_EXTERN CGFloat RCTTextOpticalLift(NSFont *_Nullable font, CGFloat scale);
-+#endif // Ardia]
++#endif // Solstice]
 +
  @interface RCTTextView : RCTUIView // [macOS]
  
@@ -424,8 +424,8 @@ index abff88e692bd8ec88f4e5b292234b23133962d46..3638b57b4d2567b1476ccd6828f118bf
  
  @end
  
-+// [Ardia: a line box is centred on its cap height, so lowercase text reads low next to an icon. The text is drawn a
-+// whole number of device pixels higher, (cap height - x-height) * 0.375, without touching layout. Ardia]
++// [Solstice: a line box is centred on its cap height, so lowercase text reads low next to an icon. The text is drawn a
++// whole number of device pixels higher, (cap height - x-height) * 0.375, without touching layout. Solstice]
 +CGFloat RCTTextOpticalLift(NSFont *_Nullable font, CGFloat scale)
 +{
 +  if (font == nil || scale <= 0) {
@@ -524,7 +524,7 @@ index abff88e692bd8ec88f4e5b292234b23133962d46..3638b57b4d2567b1476ccd6828f118bf
 +  }
 +  return NO;
 +}
-+// Ardia]
++// Solstice]
 +
  #endif // macOS]
  
@@ -533,9 +533,9 @@ index abff88e692bd8ec88f4e5b292234b23133962d46..3638b57b4d2567b1476ccd6828f118bf
    NSArray<RCTUIView *> *_Nullable _descendantViews; // [macOS]
    NSTextStorage *_Nullable _textStorage;
    CGRect _contentFrame;
-+#if TARGET_OS_OSX // [Ardia
++#if TARGET_OS_OSX // [Solstice
 +  NSFont *_Nullable _opticalFont;
-+#endif // Ardia]
++#endif // Solstice]
  }
  
  // [macOS
@@ -543,10 +543,10 @@ index abff88e692bd8ec88f4e5b292234b23133962d46..3638b57b4d2567b1476ccd6828f118bf
  #if TARGET_OS_OSX // [macOS
    NSLayoutManager *layoutManager = textStorage.layoutManagers.firstObject;
    NSTextContainer *textContainer = layoutManager.textContainers.firstObject;
-+  NSArray<NSValue *> *shown = descendantViews.count > 0 || RCTTextHasAttachments(textStorage) // [Ardia: inline views and attachments are placed apart from the glyphs, and text with no lowercase has no x-height to centre, so neither is lifted
++  NSArray<NSValue *> *shown = descendantViews.count > 0 || RCTTextHasAttachments(textStorage) // [Solstice: inline views and attachments are placed apart from the glyphs, and text with no lowercase has no x-height to centre, so neither is lifted
 +      ? nil
 +      : RCTTextShownCharacters(textStorage, layoutManager, textContainer);
-+  _opticalFont = shown != nil && RCTTextShowsLowercase(textStorage.string, shown) ? RCTTextDominantFont(textStorage, shown) : nil; // Ardia]
++  _opticalFont = shown != nil && RCTTextShowsLowercase(textStorage.string, shown) ? RCTTextDominantFont(textStorage, shown) : nil; // Solstice]
  
    [_textView replaceTextContainer:textContainer];
  
@@ -555,7 +555,7 @@ index abff88e692bd8ec88f4e5b292234b23133962d46..3638b57b4d2567b1476ccd6828f118bf
    _textView.minSize = contentFrame.size;
    _textView.maxSize = contentFrame.size;
 -  _textView.frame = contentFrame;
-+  _textView.frame = [self ardia_liftedContentFrame]; // [Ardia Ardia]
++  _textView.frame = [self ardia_liftedContentFrame]; // [Solstice Solstice]
    _textView.textStorage.attributedString = textStorage;
  #endif // macOS]
  
@@ -563,7 +563,7 @@ index abff88e692bd8ec88f4e5b292234b23133962d46..3638b57b4d2567b1476ccd6828f118bf
    [self setNeedsDisplay];
  }
  
-+#if TARGET_OS_OSX // [Ardia
++#if TARGET_OS_OSX // [Solstice
 +- (CGRect)ardia_liftedContentFrame
 +{
 +  CGFloat lift = _ardiaCentersCapitals ? 0 : RCTTextOpticalLift(_opticalFont, ArdiaBackingDensity(self));
@@ -594,7 +594,7 @@ index abff88e692bd8ec88f4e5b292234b23133962d46..3638b57b4d2567b1476ccd6828f118bf
 +  [super viewDidChangeBackingProperties];
 +  [self ardia_applyOpticalLift];
 +}
-+#endif // Ardia]
++#endif // Solstice]
 +
  - (void)drawRect:(CGRect)rect
  {
@@ -603,11 +603,11 @@ index abff88e692bd8ec88f4e5b292234b23133962d46..3638b57b4d2567b1476ccd6828f118bf
    CGFloat fraction;
    NSLayoutManager *layoutManager = _textStorage.layoutManagers.firstObject;
    NSTextContainer *textContainer = layoutManager.textContainers.firstObject;
-+#if TARGET_OS_OSX // [Ardia: the layout manager answers in its text container's points, inside the (lifted) text view
++#if TARGET_OS_OSX // [Solstice: the layout manager answers in its text container's points, inside the (lifted) text view
 +  NSPoint inTextView = [self convertPoint:point toView:_textView];
 +  NSPoint containerOrigin = _textView.textContainerOrigin;
 +  point = CGPointMake(inTextView.x - containerOrigin.x, inTextView.y - containerOrigin.y);
-+#endif // Ardia]
++#endif // Solstice]
    NSUInteger characterIndex = [layoutManager characterIndexForPoint:point
                                                      inTextContainer:textContainer
                             fractionOfDistanceBetweenInsertionPoints:&fraction];
@@ -615,12 +615,12 @@ index abff88e692bd8ec88f4e5b292234b23133962d46..3638b57b4d2567b1476ccd6828f118bf
  - (void)didMoveToWindow
  {
    [super didMoveToWindow];
-+#if TARGET_OS_OSX // [Ardia: follows the interface size only while drawn in a window
++#if TARGET_OS_OSX // [Solstice: follows the interface size only while drawn in a window
 +  [NSNotificationCenter.defaultCenter removeObserver:self name:@"ArdiaInterfaceScaleDidChange" object:nil];
 +  if (self.window) {
 +    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(ardia_interfaceScaleDidChange:) name:@"ArdiaInterfaceScaleDidChange" object:nil];
 +  }
-+#endif // Ardia]
++#endif // Solstice]
  
    if (!self.window) {
      self.layer.contents = nil;
@@ -628,9 +628,9 @@ index abff88e692bd8ec88f4e5b292234b23133962d46..3638b57b4d2567b1476ccd6828f118bf
        _highlightLayer = nil;
      }
    } else if (_textStorage) {
-+#if TARGET_OS_OSX // [Ardia
++#if TARGET_OS_OSX // [Solstice
 +    [self ardia_applyOpticalLift];
-+#endif // Ardia]
++#endif // Solstice]
      [self setNeedsDisplay];
    }
  }
@@ -656,7 +656,7 @@ index 18bbe64f657a36596563b3eb6d135284e28c674a..a4046a33e13d35cac155e306f368e04e
  
  static void *TextFieldSelectionObservingContext = &TextFieldSelectionObservingContext;
  
-+#if TARGET_OS_OSX // [Ardia: Return, Escape, Tab and Backspace reach a field as commands, never as key equivalents, so keyDownEvents asking for them went unheard; Backspace only from an empty field, so a delete the editor can do is never swallowed
++#if TARGET_OS_OSX // [Solstice: Return, Escape, Tab and Backspace reach a field as commands, never as key equivalents, so keyDownEvents asking for them went unheard; Backspace only from an empty field, so a delete the editor can do is never swallowed
 +static BOOL ArdiaCommandKeyHandledByJS(id<RCTBackedTextInputDelegate> textInputDelegate, NSTextView *editor, SEL commandSelector)
 +{
 +  NSString *key = commandSelector == @selector(cancelOperation:) ? @"Escape"
@@ -673,7 +673,7 @@ index 18bbe64f657a36596563b3eb6d135284e28c674a..a4046a33e13d35cac155e306f368e04e
 +  }
 +  return ![textInputDelegate textInputShouldHandleKeyEvent:event];
 +}
-+#endif // Ardia]
++#endif // Solstice]
 +
  #if !TARGET_OS_OSX // [macOS]
  @interface RCTBackedTextFieldDelegateAdapter () <UITextFieldDelegate, UITextDropDelegate>
@@ -682,7 +682,7 @@ index 18bbe64f657a36596563b3eb6d135284e28c674a..a4046a33e13d35cac155e306f368e04e
  - (BOOL)control:(NSControl *)control textView:(NSTextView *)fieldEditor doCommandBySelector:(SEL)commandSelector
  {
    id<RCTBackedTextInputDelegate> textInputDelegate = [_backedTextInputView textInputDelegate];
-+  if (ArdiaCommandKeyHandledByJS(textInputDelegate, fieldEditor, commandSelector)) { // [Ardia]
++  if (ArdiaCommandKeyHandledByJS(textInputDelegate, fieldEditor, commandSelector)) { // [Solstice]
 +    return YES;
 +  }
    BOOL commandHandled = NO;
@@ -692,7 +692,7 @@ index 18bbe64f657a36596563b3eb6d135284e28c674a..a4046a33e13d35cac155e306f368e04e
  {
    BOOL commandHandled = NO;
    id<RCTBackedTextInputDelegate> textInputDelegate = [_backedTextInputView textInputDelegate];
-+  if (ArdiaCommandKeyHandledByJS(textInputDelegate, textView, commandSelector)) { // [Ardia]
++  if (ArdiaCommandKeyHandledByJS(textInputDelegate, textView, commandSelector)) { // [Solstice]
 +    return YES;
 +  }
    // enter/return
@@ -706,9 +706,9 @@ index bcaa6add683bab6a3b4e86cc091c9cadb9f22970..c295eff3cbde856de41c67064d684894
  @property (nonatomic, strong, nullable) NSNumber *maxLength;
  @property (nonatomic, copy, nullable) NSAttributedString *attributedText;
  @property (nonatomic, copy) NSString *predictedText; // [macOS]
-+#if TARGET_OS_OSX // [Ardia
++#if TARGET_OS_OSX // [Solstice
 +- (void)replaceMarkedTextWithText:(NSString *)text;
-+#endif // Ardia]
++#endif // Solstice]
  @property (nonatomic, copy) NSString *inputAccessoryViewID;
  #if !TARGET_OS_OSX // [macOS]
  @property (nonatomic, strong) NSString *inputAccessoryViewButtonLabel;
@@ -720,16 +720,16 @@ index cac171e70c9fa225cdec45b205086342a0d50f06..a0d75d7f127c1da4758dcfcdd119513d
  #if TARGET_OS_OSX // [macOS avoids duplicating effects of textInputDid(Begin|End)Editing calls
    BOOL _isCurrentlyEditing;
  #endif // macOS]
-+#if TARGET_OS_OSX // [Ardia: the edit in progress (counted), and whether a click began it with its focus props to come
++#if TARGET_OS_OSX // [Solstice: the edit in progress (counted), and whether a click began it with its focus props to come
 +  NSUInteger _editSession;
 +  BOOL _clickFocused;
-+#endif // Ardia]
-+  __weak NSUndoManager *_undoManagerWithActions; // [Ardia: where its text undos are, so they go when it does Ardia]
-+#if TARGET_OS_OSX // [Ardia: the text JS last heard in onChange or set, so its echo can't end an input method's composition, whether text is coming from an undo or a JS command rather than a re-render, and whether text from JS is replacing marked text
++#endif // Solstice]
++  __weak NSUndoManager *_undoManagerWithActions; // [Solstice: where its text undos are, so they go when it does Solstice]
++#if TARGET_OS_OSX // [Solstice: the text JS last heard in onChange or set, so its echo can't end an input method's composition, whether text is coming from an undo or a JS command rather than a re-render, and whether text from JS is replacing marked text
 +  NSString *_textKnownToJS;
 +  BOOL _bypassingEchoCheck;
 +  BOOL _replacingMarkedText;
-+#endif // Ardia]
++#endif // Solstice]
  }
  
  #if !TARGET_OS_OSX // [macOS]
@@ -737,7 +737,7 @@ index cac171e70c9fa225cdec45b205086342a0d50f06..a0d75d7f127c1da4758dcfcdd119513d
  }
  #endif // [macOS]
  
-+- (void)dealloc // [Ardia]
++- (void)dealloc // [Solstice]
 +{
 +  [_undoManagerWithActions removeAllActionsWithTarget:self];
 +} // Ardia]
@@ -749,12 +749,12 @@ index cac171e70c9fa225cdec45b205086342a0d50f06..a0d75d7f127c1da4758dcfcdd119513d
  
    textNeedsUpdate = ([self textOf:attributedTextCopy equals:backedTextInputViewTextCopy] == NO);
  
-+#if TARGET_OS_OSX // [Ardia: while an input method holds marked text, a re-render restating the text JS already knows is an echo and is dropped: Korean commits a syllable and marks the next consonant in one keystroke, JS only heard the committed syllable, and setting that unmarked the consonant and reset the composition (3-set typing came out as loose letters, #863). Other text from a re-render, and any text from a JS command (clear(), a controlled value JS changed) or an undo, replaces the field, and AppKit ends the composition as it does
++#if TARGET_OS_OSX // [Solstice: while an input method holds marked text, a re-render restating the text JS already knows is an echo and is dropped: Korean commits a syllable and marks the next consonant in one keystroke, JS only heard the committed syllable, and setting that unmarked the consonant and reset the composition (3-set typing came out as loose letters, #863). Other text from a re-render, and any text from a JS command (clear(), a controlled value JS changed) or an undo, replaces the field, and AppKit ends the composition as it does
 +  if (textNeedsUpdate && !_bypassingEchoCheck && [self.backedTextInputView hasMarkedText] &&
 +      [attributedTextCopy.string isEqualToString:_textKnownToJS ?: @""]) {
 +    return;
 +  }
-+#endif // Ardia]
++#endif // Solstice]
 +
    if ((eventLag == 0 || self.backedTextInputView.ghostTextChanging) && textNeedsUpdate) { // [macOS]
  #if !TARGET_OS_OSX // [macOS]
@@ -764,34 +764,34 @@ index cac171e70c9fa225cdec45b205086342a0d50f06..a0d75d7f127c1da4758dcfcdd119513d
        // If something goes wrong when trying to remove it, just stick with oldAttributedText.
        NSAttributedString *oldAttributedTextWithoutGhostText = [self removingGhostTextFromString:oldAttributedText strict:YES] ?: oldAttributedText;
 -      [self.backedTextInputView.undoManager registerUndoWithTarget:self handler:^(RCTBaseTextInputView *strongSelf) {
-+      // [Ardia: an undo manager doesn't retain its targets, and the window's outlives this view: ⌘Z after the view
++      // [Solstice: an undo manager doesn't retain its targets, and the window's outlives this view: ⌘Z after the view
 +      // was gone ran a dead object's undo (a crash after the command bar closed)
 +      NSUndoManager *undoManager = self.backedTextInputView.undoManager;
 +      if (_undoManagerWithActions && _undoManagerWithActions != undoManager) {
 +        [_undoManagerWithActions removeAllActionsWithTarget:self];
 +      }
 +      _undoManagerWithActions = undoManager;
-+      // Ardia]
++      // Solstice]
 +      [undoManager registerUndoWithTarget:self handler:^(RCTBaseTextInputView *strongSelf) {
-+#if TARGET_OS_OSX // [Ardia
++#if TARGET_OS_OSX // [Solstice
 +        strongSelf->_bypassingEchoCheck = YES;
-+#endif // Ardia]
++#endif // Solstice]
          strongSelf.attributedText = oldAttributedTextWithoutGhostText;
-+#if TARGET_OS_OSX // [Ardia
++#if TARGET_OS_OSX // [Solstice
 +        strongSelf->_bypassingEchoCheck = NO;
-+#endif // Ardia]
++#endif // Solstice]
          [strongSelf textInputDidChange];
        }];
      }
  
-+#if TARGET_OS_OSX // [Ardia: AppKit commits the marked text before it takes the new text, and that commit's onChange reached JS after the replacement and put the composed text back over a clear
++#if TARGET_OS_OSX // [Solstice: AppKit commits the marked text before it takes the new text, and that commit's onChange reached JS after the replacement and put the composed text back over a clear
 +    _replacingMarkedText = [self.backedTextInputView hasMarkedText];
-+#endif // Ardia]
++#endif // Solstice]
      self.backedTextInputView.attributedText = attributedText;
-+#if TARGET_OS_OSX // [Ardia
++#if TARGET_OS_OSX // [Solstice
 +    _replacingMarkedText = NO;
 +    _textKnownToJS = [attributedText.string copy];
-+#endif // Ardia]
++#endif // Solstice]
  
  #if !TARGET_OS_OSX // [macOS]
      if (selection.empty) {
@@ -799,14 +799,14 @@ index cac171e70c9fa225cdec45b205086342a0d50f06..a0d75d7f127c1da4758dcfcdd119513d
    }
  }
  
-+#if TARGET_OS_OSX // [Ardia: a JS command's text is meant, so it replaces marked text even when it restates what JS knew (clear() while composing in an empty field)
++#if TARGET_OS_OSX // [Solstice: a JS command's text is meant, so it replaces marked text even when it restates what JS knew (clear() while composing in an empty field)
 +- (void)replaceMarkedTextWithText:(NSString *)text
 +{
 +  _bypassingEchoCheck = YES;
 +  self.attributedText = [[NSAttributedString alloc] initWithString:text attributes:self.textAttributes.effectiveTextAttributes ?: @{}];
 +  _bypassingEchoCheck = NO;
 +}
-+#endif // Ardia]
++#endif // Solstice]
 +
  - (void)setSelectionStart:(NSInteger)start selectionEnd:(NSInteger)end
  {
@@ -815,7 +815,7 @@ index cac171e70c9fa225cdec45b205086342a0d50f06..a0d75d7f127c1da4758dcfcdd119513d
      [self.backedTextInputView setSelectedTextRange:range notifyDelegate:NO];
    }
  #else // [macOS
-+  if (start < 0 || end < 0) { // [Ardia: setTextAndSelection sends -1 when JS sets text without a selection; as a range it moved the caret, which also ended an input method's composition
++  if (start < 0 || end < 0) { // [Solstice: setTextAndSelection sends -1 when JS sets text without a selection; as a range it moved the caret, which also ended an input method's composition
 +    return;
 +  } // Ardia]
    NSInteger startPosition = MIN(start, end);
@@ -825,11 +825,11 @@ index cac171e70c9fa225cdec45b205086342a0d50f06..a0d75d7f127c1da4758dcfcdd119513d
      return;
    }
    _isCurrentlyEditing = YES;
-+  // [Ardia
++  // [Solstice
 +  _editSession++;
 +  NSEventType began = NSApp.currentEvent.type;
 +  _clickFocused = began == NSEventTypeLeftMouseDown || began == NSEventTypeRightMouseDown || began == NSEventTypeOtherMouseDown;
-+  // Ardia]
++  // Solstice]
  #endif // macOS]
    
    [_eventDispatcher sendTextEventWithType:RCTTextEventTypeFocus
@@ -837,11 +837,11 @@ index cac171e70c9fa225cdec45b205086342a0d50f06..a0d75d7f127c1da4758dcfcdd119513d
  
  - (void)textInputDidChange
  {
-+#if TARGET_OS_OSX // [Ardia
++#if TARGET_OS_OSX // [Solstice
 +  if (_replacingMarkedText) {
 +    return;
 +  }
-+#endif // Ardia]
++#endif // Solstice]
    [self updateLocalData];
  
    id<RCTBackedTextInputViewProtocol> backedTextInputView = self.backedTextInputView;
@@ -849,9 +849,9 @@ index cac171e70c9fa225cdec45b205086342a0d50f06..a0d75d7f127c1da4758dcfcdd119513d
    if (!self.backedTextInputView.ghostTextChanging) { // [macOS]
      _nativeEventCount++;
  
-+#if TARGET_OS_OSX // [Ardia
++#if TARGET_OS_OSX // [Solstice
 +    _textKnownToJS = _onChange ? [self.attributedText.string copy] : nil;
-+#endif // Ardia]
++#endif // Solstice]
      if (_onChange) {
        _onChange(@{
          @"text" : [self.attributedText.string copy],
@@ -859,7 +859,7 @@ index cac171e70c9fa225cdec45b205086342a0d50f06..a0d75d7f127c1da4758dcfcdd119513d
  
  #pragma mark - Focus Control
  
-+#if TARGET_OS_OSX // [Ardia
++#if TARGET_OS_OSX // [Solstice
 +// Being edited: its window's first responder is the field editor (single line) or the view itself (multiline).
 +- (BOOL)ac_isEditing
 +{
@@ -881,11 +881,11 @@ index cac171e70c9fa225cdec45b205086342a0d50f06..a0d75d7f127c1da4758dcfcdd119513d
 +    [self.backedTextInputView selectAll:nil];
 +  }
 +}
-+#endif // Ardia]
++#endif // Solstice]
 +
  - (void)reactFocus
  {
-+#if TARGET_OS_OSX // [Ardia: focus() on a field already being edited leaves the edit as it is. A press in a TextInput
++#if TARGET_OS_OSX // [Solstice: focus() on a field already being edited leaves the edit as it is. A press in a TextInput
 +  // calls focus() (TextInput.js skips its "already focused" check on macOS), and making an editing NSTextField first
 +  // responder again ends its edit (a blur), starts a new one and selects all: a click in the command bar closed it.
 +  // A field a click just focused (AppKit, on mouse-down) gets its focus props once, after that click: run inside the
@@ -901,7 +901,7 @@ index cac171e70c9fa225cdec45b205086342a0d50f06..a0d75d7f127c1da4758dcfcdd119513d
 +    }
 +    return;
 +  }
-+#endif // Ardia]
++#endif // Solstice]
    [self.backedTextInputView reactFocus];
  
    if (_clearTextOnFocus) {
@@ -909,9 +909,9 @@ index cac171e70c9fa225cdec45b205086342a0d50f06..a0d75d7f127c1da4758dcfcdd119513d
      [self.backedTextInputView setSelectedTextRange:NSMakeRange(NSNotFound, 0) notifyDelegate:NO];
  #endif // macOS]
    }
-+#if TARGET_OS_OSX // [Ardia: applied here
++#if TARGET_OS_OSX // [Solstice: applied here
 +  _clickFocused = NO;
-+#endif // Ardia]
++#endif // Solstice]
  }
  
  - (void)reactBlur
@@ -923,11 +923,11 @@ index fac5699dedeaaa35bb22b8f8d5d96a3817ca92b1..692ea640ba83db5b0bfe3fc1a24fda68
      if (eventLag != 0) {
        return;
      }
-+#if TARGET_OS_OSX // [Ardia: before the selection below, which would commit an input method's marked text, and before the shadow view's echo rule sees this text
++#if TARGET_OS_OSX // [Solstice: before the selection below, which would commit an input method's marked text, and before the shadow view's echo rule sees this text
 +    if (value && [view.backedTextInputView hasMarkedText]) {
 +      [view replaceMarkedTextWithText:value];
 +    }
-+#endif // Ardia]
++#endif // Solstice]
      RCTExecuteOnUIManagerQueue(^{
        RCTBaseTextInputShadowView *shadowView =
            (RCTBaseTextInputShadowView *)[self.bridge.uiManager shadowViewForReactTag:viewTag];
@@ -939,9 +939,9 @@ index 9973da7611fc92df7e66010350504bf077a9f2d9..66f7f05ae27762b12e41f92c02bd3997
      self.submitBehavior = @"blurAndSubmit";
  
      _backedTextInputView = [[RCTUITextField alloc] initWithFrame:self.bounds];
-+#if !TARGET_OS_OSX // [Ardia: on the Mac the field's frame comes only from -ardia_layoutBackedField, never from autoresizing, so its optical lift can't feed back into its layout rect
++#if !TARGET_OS_OSX // [Solstice: on the Mac the field's frame comes only from -ardia_layoutBackedField, never from autoresizing, so its optical lift can't feed back into its layout rect
      _backedTextInputView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-+#endif // Ardia]
++#endif // Solstice]
  #if TARGET_OS_OSX // [macOS
      _backedTextInputView.cell.scrollable = YES;
      _backedTextInputView.cell.usesSingleLineMode = YES;
@@ -950,11 +950,11 @@ index 9973da7611fc92df7e66010350504bf077a9f2d9..66f7f05ae27762b12e41f92c02bd3997
    [super setReactBorderInsets:reactBorderInsets];
    // We apply `borderInsets` as `backedTextInputView`'s layout offset on mac.
 -  ((RCTUITextField*)self.backedTextInputView).frame = UIEdgeInsetsInsetRect(self.bounds, reactBorderInsets);
-+  [self ardia_layoutBackedField]; // [Ardia Ardia]
++  [self ardia_layoutBackedField]; // [Solstice Solstice]
    [self setNeedsLayout];
  }
  
-+- (void)ardia_layoutBackedField // [Ardia
++- (void)ardia_layoutBackedField // [Solstice
 +{
 +  _backedTextInputView.frame = UIEdgeInsetsInsetRect(self.bounds, self.reactBorderInsets);
 +}
@@ -977,7 +977,7 @@ index 9973da7611fc92df7e66010350504bf077a9f2d9..66f7f05ae27762b12e41f92c02bd3997
      _backedTextInputView.textInputDelegate = self;
      _backedTextInputView.text = previousTextField.text;
      [self replaceSubview:previousTextField with:_backedTextInputView];
-+    [self ardia_layoutBackedField]; // [Ardia Ardia]
++    [self ardia_layoutBackedField]; // [Solstice Solstice]
    }
  }
  
@@ -990,13 +990,13 @@ index 386405335b411e70a82909033febc7dd5b4adabe..ace454e53458fb82d2fd6b456c4e9562
  RCT_REMAP_OSX_VIEW_PROPERTY(secureTextEntry, useSecureTextField, BOOL) // [macOS]
 +RCT_REMAP_OSX_VIEW_PROPERTY(ardiaCentersCapitals, backedTextInputView.ardiaCentersCapitals, BOOL)
  
-+#if TARGET_OS_OSX // [Ardia: pastedTypes reached only multiline fields
++#if TARGET_OS_OSX // [Solstice: pastedTypes reached only multiline fields
 +RCT_CUSTOM_VIEW_PROPERTY(pastedTypes, NSArray<NSPasteboardType>*, RCTSinglelineTextInputView)
 +{
 +  NSArray<NSPasteboardType> *types = json ? [RCTConvert NSPasteboardTypeArray:json] : nil;
 +  [view.backedTextInputView setReadablePasteBoardTypes:types];
 +}
-+#endif // Ardia]
++#endif // Solstice]
 +
  @end
 diff --git a/Libraries/Text/TextInput/Singleline/RCTUITextField.h b/Libraries/Text/TextInput/Singleline/RCTUITextField.h
@@ -1021,7 +1021,7 @@ index 137d0ee9f51616ea27c397a8bf595fe2c0ff5e91..aee0e19607a58db55ddf0afc4f6d682b
  #import <React/RCTBackedTextInputDelegateAdapter.h>
  #import <React/RCTBackedTextInputDelegate.h> // [macOS]
  #import <React/RCTTextAttributes.h>
-+#import <React/RCTTextView.h> // [Ardia Ardia]
++#import <React/RCTTextView.h> // [Solstice Solstice]
  #import <React/RCTUtils.h>
  #import <React/UIView+React.h>
  
@@ -1029,7 +1029,7 @@ index 137d0ee9f51616ea27c397a8bf595fe2c0ff5e91..aee0e19607a58db55ddf0afc4f6d682b
  
  #if TARGET_OS_OSX // [macOS
  
-+// [Ardia: a single-line field given pastedTypes pastes only those as plain text, with line breaks folded the way
++// [Solstice: a single-line field given pastedTypes pastes only those as plain text, with line breaks folded the way
 +// Chrome's omnibox folds them (OmniboxView::SanitizeTextForPaste): leading and trailing whitespace goes, and a
 +// whitespace run holding a line break becomes one space when the text has other spaces (prose), or nothing when it
 +// doesn't (a URL wrapped over lines). A rich paste instead took the source's look, and a link copied with its title
@@ -1158,11 +1158,11 @@ index 137d0ee9f51616ea27c397a8bf595fe2c0ff5e91..aee0e19607a58db55ddf0afc4f6d682b
 +}
 +
 +@end
-+// Ardia]
++// Solstice]
 +
  @interface RCTUITextFieldCell : NSTextFieldCell
  
-+@property (nonatomic, copy, nullable) NSArray<NSPasteboardType> *pasteTypes; // [Ardia Ardia]
++@property (nonatomic, copy, nullable) NSArray<NSPasteboardType> *pasteTypes; // [Solstice Solstice]
  @property (nonatomic, assign) UIEdgeInsets textContainerInset;
  @property (nonatomic, getter=isAutomaticTextReplacementEnabled) BOOL automaticTextReplacementEnabled;
  @property (nonatomic, getter=isAutomaticSpellingCorrectionEnabled) BOOL automaticSpellingCorrectionEnabled;
@@ -1172,10 +1172,10 @@ index 137d0ee9f51616ea27c397a8bf595fe2c0ff5e91..aee0e19607a58db55ddf0afc4f6d682b
  
 -@implementation RCTUITextFieldCell
 +@implementation RCTUITextFieldCell {
-+  RCTUIPlainPasteFieldEditor *_plainPasteEditor; // [Ardia Ardia]
++  RCTUIPlainPasteFieldEditor *_plainPasteEditor; // [Solstice Solstice]
 +}
 +
-+- (void)setPasteTypes:(NSArray<NSPasteboardType> *)pasteTypes // [Ardia
++- (void)setPasteTypes:(NSArray<NSPasteboardType> *)pasteTypes // [Solstice
 +{
 +  _pasteTypes = [pasteTypes copy];
 +  _plainPasteEditor.pasteTypes = _pasteTypes;
@@ -1189,7 +1189,7 @@ index 137d0ee9f51616ea27c397a8bf595fe2c0ff5e91..aee0e19607a58db55ddf0afc4f6d682b
 +  if (!_plainPasteEditor) {
 +    _plainPasteEditor = [[RCTUIPlainPasteFieldEditor alloc] initWithFrame:NSZeroRect];
 +    _plainPasteEditor.fieldEditor = YES;
-+    _plainPasteEditor.allowsUndo = YES; // [Ardia: AppKit's shared field editor has allowsUndo on and a bare NSTextView doesn't, which left Edit's Undo and Redo disabled while the bar had focus Ardia]
++    _plainPasteEditor.allowsUndo = YES; // [Solstice: AppKit's shared field editor has allowsUndo on and a bare NSTextView doesn't, which left Edit's Undo and Redo disabled while the bar had focus Solstice]
 +    _plainPasteEditor.pasteTypes = _pasteTypes;
 +  }
 +  return _plainPasteEditor;
@@ -1201,8 +1201,8 @@ index 137d0ee9f51616ea27c397a8bf595fe2c0ff5e91..aee0e19607a58db55ddf0afc4f6d682b
  #if TARGET_OS_OSX // [macOS
    BOOL _isUpdatingPlaceholderText;
    NSArray<NSPasteboardType> *_readablePasteboardTypes;
-+  NSRect _ardiaLayoutFrame; // [Ardia Ardia]
-+  BOOL _ardiaHasLayoutFrame; // [Ardia Ardia]
++  NSRect _ardiaLayoutFrame; // [Solstice Solstice]
++  BOOL _ardiaHasLayoutFrame; // [Solstice Solstice]
  #endif // macOS]
  }
  
@@ -1210,7 +1210,7 @@ index 137d0ee9f51616ea27c397a8bf595fe2c0ff5e91..aee0e19607a58db55ddf0afc4f6d682b
  	return ((NSTextView *)self.currentEditor).validAttributesForMarkedText ?: @[];
  }
  
-+- (NSTextInputContext *)inputContext // [Ardia
++- (NSTextInputContext *)inputContext // [Solstice
 +{
 +  return self.currentEditor.inputContext;
 +} // Ardia]
@@ -1222,13 +1222,13 @@ index 137d0ee9f51616ea27c397a8bf595fe2c0ff5e91..aee0e19607a58db55ddf0afc4f6d682b
  - (void)setFont:(UIFont *)font
  {
    ((RCTUITextFieldCell*)self.cell).font = font;
-+#if TARGET_OS_OSX // [Ardia
++#if TARGET_OS_OSX // [Solstice
 +  [self ardia_applyOpticalLift];
-+#endif // Ardia]
++#endif // Solstice]
 +}
 +
 +#if TARGET_OS_OSX
-+// [Ardia: typed and placeholder text get RCTTextView's optical lift. The field grows upward by the lift inside its
++// [Solstice: typed and placeholder text get RCTTextView's optical lift. The field grows upward by the lift inside its
 +// unchanged layout box, so its text sits that much higher and the caret, which AppKit clips to the field's bounds,
 +// keeps its full height.
 +- (NSRect)ardia_liftedFrame:(NSRect)frame
@@ -1323,7 +1323,7 @@ index 137d0ee9f51616ea27c397a8bf595fe2c0ff5e91..aee0e19607a58db55ddf0afc4f6d682b
 +  [super viewDidMoveToSuperview];
 +  [self ardia_applyOpticalLift];
 +}
-+// Ardia]
++// Solstice]
 +#endif
 +
  - (UIFont *)font
@@ -1333,9 +1333,9 @@ index 137d0ee9f51616ea27c397a8bf595fe2c0ff5e91..aee0e19607a58db55ddf0afc4f6d682b
  #if !TARGET_OS_OSX // [macOS]
    [super setPlaceholder:placeholder];
  #else // [macOS
-+  _isUpdatingPlaceholderText = YES; // [Ardia: AppKit ends and restarts the edit of an empty field whose placeholder changes, so this needs the same guard as _updatePlaceholder: unguarded, React Native reported a blur, and the real blur after it went unheard (Backspace out of site search closed the command bar) Ardia]
++  _isUpdatingPlaceholderText = YES; // [Solstice: AppKit ends and restarts the edit of an empty field whose placeholder changes, so this needs the same guard as _updatePlaceholder: unguarded, React Native reported a blur, and the real blur after it went unheard (Backspace out of site search closed the command bar) Solstice]
    [super setPlaceholderString:placeholder];
-+  _isUpdatingPlaceholderText = NO; // [Ardia]
++  _isUpdatingPlaceholderText = NO; // [Solstice]
  #endif // macOS]
    [self _updatePlaceholder];
  }
@@ -1344,7 +1344,7 @@ index 137d0ee9f51616ea27c397a8bf595fe2c0ff5e91..aee0e19607a58db55ddf0afc4f6d682b
    self.placeholderAttributedString = [[NSAttributedString alloc] initWithString:self.placeholder ?: @""
  																	 attributes:[self _placeholderTextAttributes]];
 +  NSTextView *editor = (NSTextView *)self.currentEditor;
-+  if (editor) { // [Ardia: the field editor keeps the placeholder it was set up with while it holds text, so a colour change (dark to light) left the old one, invisible, once the field was emptied. Setting it up again also paints its text and typing attributes in the cell's textColor (the system one, not this field's), so they are put back as they were Ardia]
++  if (editor) { // [Solstice: the field editor keeps the placeholder it was set up with while it holds text, so a colour change (dark to light) left the old one, invisible, once the field was emptied. Setting it up again also paints its text and typing attributes in the cell's textColor (the system one, not this field's), so they are put back as they were Solstice]
 +    NSAttributedString *shown = [editor.textStorage copy];
 +    NSDictionary<NSAttributedStringKey, id> *typing = editor.typingAttributes;
 +    [self.cell setUpFieldEditorAttributes:editor];
@@ -1356,7 +1356,7 @@ index 137d0ee9f51616ea27c397a8bf595fe2c0ff5e91..aee0e19607a58db55ddf0afc4f6d682b
 +                           }];
 +    [editor.textStorage endEditing];
 +    editor.typingAttributes = typing;
-+  } // [Ardia]
++  } // [Solstice]
    _isUpdatingPlaceholderText = NO;
  #endif // macOS]
  }
@@ -1364,7 +1364,7 @@ index 137d0ee9f51616ea27c397a8bf595fe2c0ff5e91..aee0e19607a58db55ddf0afc4f6d682b
  - (void)setReadablePasteBoardTypes:(NSArray<NSPasteboardType> *)readablePasteboardTypes
  {
    _readablePasteboardTypes = readablePasteboardTypes;
-+  if ([self.cell isKindOfClass:RCTUITextFieldCell.class]) { // [Ardia
++  if ([self.cell isKindOfClass:RCTUITextFieldCell.class]) { // [Solstice
 +    ((RCTUITextFieldCell *)self.cell).pasteTypes = readablePasteboardTypes;
 +  } // Ardia]
  }
@@ -1461,7 +1461,7 @@ index b85ee3dd203f88bf2daaa47e912031ea200ff910..fdd49042170be0c7850fea3ea8550c32
  
  #import "RCTTouchHandler.h"
  
-+#import <stdatomic.h> // [Ardia]
++#import <stdatomic.h> // [Solstice]
 +
  #if !TARGET_OS_OSX // [macOS]
  #import <UIKit/UIGestureRecognizerSubclass.h>
@@ -1470,9 +1470,9 @@ index b85ee3dd203f88bf2daaa47e912031ea200ff910..fdd49042170be0c7850fea3ea8550c32
      _reactTouches = [NSMutableArray new];
      _touchViews = [NSMutableArray new];
  
-+#if TARGET_OS_OSX // [Ardia: a menu's tracking loop takes every mouse up from here on
++#if TARGET_OS_OSX // [Solstice: a menu's tracking loop takes every mouse up from here on
 +    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ardia_menuDidBeginTracking:) name:NSMenuDidBeginTrackingNotification object:nil];
-+#endif // Ardia]
++#endif // Solstice]
 +
  #if !TARGET_OS_OSX // [macOS]
      // `cancelsTouchesInView` and `delaysTouches*` are needed in order to be used as a top level
@@ -1481,7 +1481,7 @@ index b85ee3dd203f88bf2daaa47e912031ea200ff910..fdd49042170be0c7850fea3ea8550c32
  
  #pragma mark - Bookkeeping for touch indices
  
-+#if TARGET_OS_OSX // [Ardia: a mouse down and its drags and up share an event number, but each button counts on its own and synthesized events all carry 0, so a match also needs the same button and an index not matched yet; two touches mapped to one index sent JS a null touch (getTouchIdentifier, a fatal error)
++#if TARGET_OS_OSX // [Solstice: a mouse down and its drags and up share an event number, but each button counts on its own and synthesized events all carry 0, so a match also needs the same button and an index not matched yet; two touches mapped to one index sent JS a null touch (getTouchIdentifier, a fatal error)
 +static NSInteger ArdiaMouseButton(NSEvent *event)
 +{
 +  switch (event.type) {
@@ -1509,9 +1509,9 @@ index b85ee3dd203f88bf2daaa47e912031ea200ff910..fdd49042170be0c7850fea3ea8550c32
 +    return ![taken containsIndex:idx] && touch.eventNumber == event.eventNumber && ArdiaMouseButton(event) == button;
 +  }];
 +}
-+#endif // Ardia]
++#endif // Solstice]
 +
-+#if TARGET_OS_OSX // [Ardia: a mouse has one of each button, so a recorded touch whose button goes down again lost its mouse up to a menu or a drag session that tracked it. Its React responder would keep every later press, so the next click did nothing; it is cancelled before the new touch is recorded. Another button's touch is never judged here: only the event stream says whether it ended, and a view that opens a menu on a press, whose tracking takes the mouse up, releases that one press itself
++#if TARGET_OS_OSX // [Solstice: a mouse has one of each button, so a recorded touch whose button goes down again lost its mouse up to a menu or a drag session that tracked it. Its React responder would keep every later press, so the next click did nothing; it is cancelled before the new touch is recorded. Another button's touch is never judged here: only the event stream says whether it ended, and a view that opens a menu on a press, whose tracking takes the mouse up, releases that one press itself
 +static _Atomic(NSUInteger) ArdiaTouchesCancelledWithoutRelease = 0;
 +
 ++ (NSUInteger)ardia_touchesCancelledWithoutRelease
@@ -1587,7 +1587,7 @@ index b85ee3dd203f88bf2daaa47e912031ea200ff910..fdd49042170be0c7850fea3ea8550c32
 +    self.state = primary ? UIGestureRecognizerStateCancelled : UIGestureRecognizerStateEnded;
 +  }
 +}
-+#endif // Ardia]
++#endif // Solstice]
 +
  - (void)_recordNewTouches:(NSSet *)touches
  {
@@ -1596,13 +1596,13 @@ index b85ee3dd203f88bf2daaa47e912031ea200ff910..fdd49042170be0c7850fea3ea8550c32
    for (NSEvent *touch in touches) {
  #endif // macOS]
  
-+#if !TARGET_OS_OSX // [Ardia: AppKit can hand the same mouse down over twice; recording it again put a second React touch behind one native touch
++#if !TARGET_OS_OSX // [Solstice: AppKit can hand the same mouse down over twice; recording it again put a second React touch behind one native touch
      RCTAssert(![_nativeTouches containsObject:touch], @"Touch is already recorded. This is a critical bug.");
 +#else
 +    if ([_nativeTouches containsObject:touch]) {
 +      continue;
 +    }
-+#endif // Ardia]
++#endif // Solstice]
  
      // Find closest React-managed touchable view
      
@@ -1614,27 +1614,27 @@ index b85ee3dd203f88bf2daaa47e912031ea200ff910..fdd49042170be0c7850fea3ea8550c32
 -      NSInteger index = [_nativeTouches indexOfObjectPassingTest:^BOOL(NSEvent *event, __unused NSUInteger idx, __unused BOOL *stop) {
 -        return touch.eventNumber == event.eventNumber;
 -      }];
-+  NSMutableIndexSet *removed = [NSMutableIndexSet new]; // [Ardia]
++  NSMutableIndexSet *removed = [NSMutableIndexSet new]; // [Solstice]
 +  for (NSEvent *touch in touches) {
-+    NSInteger index = [self ardia_indexOfNativeTouch:touch excluding:removed]; // [Ardia]
++    NSInteger index = [self ardia_indexOfNativeTouch:touch excluding:removed]; // [Solstice]
  #endif // macOS]
      if (index == NSNotFound) {
        continue;
      }
  
-+#if !TARGET_OS_OSX // [Ardia]
++#if !TARGET_OS_OSX // [Solstice]
      [_touchViews removeObjectAtIndex:index];
      [_nativeTouches removeObjectAtIndex:index];
      [_reactTouches removeObjectAtIndex:index];
 +#else
 +    [removed addIndex:index];
-+#endif // Ardia]
++#endif // Solstice]
    }
-+#if TARGET_OS_OSX // [Ardia]
++#if TARGET_OS_OSX // [Solstice]
 +  [_touchViews removeObjectsAtIndexes:removed];
 +  [_nativeTouches removeObjectsAtIndexes:removed];
 +  [_reactTouches removeObjectsAtIndexes:removed];
-+#endif // Ardia]
++#endif // Solstice]
  }
  
  - (void)_updateReactTouchAtIndex:(NSInteger)touchIndex
@@ -1642,20 +1642,20 @@ index b85ee3dd203f88bf2daaa47e912031ea200ff910..fdd49042170be0c7850fea3ea8550c32
    for (UITouch *touch in touches) {
      NSInteger index = [_nativeTouches indexOfObject:touch];
  #else // [macOS
-+  NSMutableIndexSet *taken = [NSMutableIndexSet new]; // [Ardia]
++  NSMutableIndexSet *taken = [NSMutableIndexSet new]; // [Solstice]
    for (NSEvent *touch in touches) {
 -    NSInteger index = [_nativeTouches indexOfObjectPassingTest:^BOOL(NSEvent *event, __unused NSUInteger idx, __unused BOOL *stop) {
 -      return touch.eventNumber == event.eventNumber;
 -    }];
-+    NSInteger index = [self ardia_indexOfNativeTouch:touch excluding:taken]; // [Ardia]
++    NSInteger index = [self ardia_indexOfNativeTouch:touch excluding:taken]; // [Solstice]
  #endif // macOS]
      
      if (index == NSNotFound) {
        continue;
      }
-+#if TARGET_OS_OSX // [Ardia]
++#if TARGET_OS_OSX // [Solstice]
 +    [taken addIndex:index];
-+#endif // Ardia]
++#endif // Solstice]
      
  #if TARGET_OS_OSX // [macOS
      _nativeTouches[index] = touch;
@@ -1663,9 +1663,9 @@ index b85ee3dd203f88bf2daaa47e912031ea200ff910..fdd49042170be0c7850fea3ea8550c32
  
  - (void)interactionsEnded:(NSSet *)touches withEvent:(UIEvent*)event // [macOS]
  {
-+#if TARGET_OS_OSX // [Ardia: a mouse up ends the gesture only when no other button's touch is still recorded, and one that matches no touch leaves a gesture in progress alone; ending it reset the recognizer, which cancelled the press still held
++#if TARGET_OS_OSX // [Solstice: a mouse up ends the gesture only when no other button's touch is still recorded, and one that matches no touch leaves a gesture in progress alone; ending it reset the recognizer, which cancelled the press still held
 +  [self ardia_finishTouches:touches eventName:@"touchEnd" state:UIGestureRecognizerStateEnded];
-+#else // Ardia]
++#else // Solstice]
    [self _updateAndDispatchTouches:touches eventName:@"touchEnd"];
 -#if !TARGET_OS_OSX // [macOS]
    if (RCTAllTouchesAreCancelledOrEnded(event.allTouches)) {
@@ -1683,9 +1683,9 @@ index b85ee3dd203f88bf2daaa47e912031ea200ff910..fdd49042170be0c7850fea3ea8550c32
  
  - (void)interactionsCancelled:(NSSet *)touches withEvent:(UIEvent*)event // [macOS]
  {
-+#if TARGET_OS_OSX // [Ardia]
++#if TARGET_OS_OSX // [Solstice]
 +  [self ardia_finishTouches:touches eventName:@"touchCancel" state:UIGestureRecognizerStateCancelled];
-+#else // Ardia]
++#else // Solstice]
    [self _updateAndDispatchTouches:touches eventName:@"touchCancel"];
 -#if !TARGET_OS_OSX // [macOS]
    if (RCTAllTouchesAreCancelledOrEnded(event.allTouches)) {
@@ -1707,7 +1707,7 @@ index b85ee3dd203f88bf2daaa47e912031ea200ff910..fdd49042170be0c7850fea3ea8550c32
  - (void)mouseDown:(NSEvent *)event
  {
    [super mouseDown:event];
-+  [self ardia_cancelTouchesWithoutReleaseBeforeMouseDown:event]; // [Ardia]
++  [self ardia_cancelTouchesWithoutReleaseBeforeMouseDown:event]; // [Solstice]
    [self interactionsBegan:[NSSet setWithObject:event]];
    // [macOS
    if (_shouldSendMouseUpOnSystemBehalf) {
@@ -1715,7 +1715,7 @@ index b85ee3dd203f88bf2daaa47e912031ea200ff910..fdd49042170be0c7850fea3ea8550c32
  - (void)rightMouseDown:(NSEvent *)event
  {
    [super rightMouseDown:event];
-+  [self ardia_cancelTouchesWithoutReleaseBeforeMouseDown:event]; // [Ardia]
++  [self ardia_cancelTouchesWithoutReleaseBeforeMouseDown:event]; // [Solstice]
    [self interactionsBegan:[NSSet setWithObject:event]];
  }
    
@@ -1727,7 +1727,7 @@ index 8f1094a71ed431fcecb6f760ffe8d6da643f04cb..67404c8656b69d9cf28d9eb5862e9914
    return [view hitTest:pointInSuperview];
  }
  
-+NS_INLINE CGFloat ArdiaBackingDensity(NSView *view) // [Ardia: device pixels per point where the view is drawn, interface size included
++NS_INLINE CGFloat ArdiaBackingDensity(NSView *view) // [Solstice: device pixels per point where the view is drawn, interface size included
 +{
 +  return view.window != nil ? [view convertSizeToBacking:NSMakeSize(1, 1)].width : [NSScreen mainScreen].backingScaleFactor;
 +} // Ardia]
@@ -1743,7 +1743,7 @@ index a37a1c106a04752c1baeb6dd2170402ce5f34f71..4b0fa1207d50724979fdb0122a4a88ee
  #import <React/RCTAssert.h>
  
  #import <objc/runtime.h>
-+#import <React/UIView+React.h> // [Ardia]
++#import <React/UIView+React.h> // [Solstice]
  
  #import <CoreImage/CIFilter.h>
  #import <CoreImage/CIVector.h>
@@ -1751,7 +1751,7 @@ index a37a1c106a04752c1baeb6dd2170402ce5f34f71..4b0fa1207d50724979fdb0122a4a88ee
    return RCTUIViewCommonInit([super initWithCoder:coder]);
  }
  
-+// [Ardia
++// [Solstice
 +static BOOL RCTUIViewLeavesAutoLayout(RCTUIView *view, NSView *superview)
 +{
 +  if (view.reactTag == nil || view.autoresizingMask != NSViewNotSizable) {
@@ -1787,7 +1787,7 @@ index a37a1c106a04752c1baeb6dd2170402ce5f34f71..4b0fa1207d50724979fdb0122a4a88ee
 +    self.translatesAutoresizingMaskIntoConstraints = YES;
 +  }
 +}
-+// Ardia]
++// Solstice]
 +
  - (BOOL)acceptsFirstMouse:(NSEvent *)event
  {
@@ -1797,7 +1797,7 @@ index a37a1c106a04752c1baeb6dd2170402ce5f34f71..4b0fa1207d50724979fdb0122a4a88ee
  }
  
 -- (void)setTransform3D:(CATransform3D)transform3D
-+// [Ardia: the layer transform for transform3D at the view's current size. On macOS, layer.anchorPoint is
++// [Solstice: the layer transform for transform3D at the view's current size. On macOS, layer.anchorPoint is
 +// {0, 0} instead of {0.5, 0.5} as on iOS, so the transform is moved to apply from the view's center; that depends
 +// on the size, so it's worked out again each time it's applied.
 +static CATransform3D RCTUIViewLayerTransform(RCTUIView *view)
@@ -1850,7 +1850,7 @@ index a37a1c106a04752c1baeb6dd2170402ce5f34f71..4b0fa1207d50724979fdb0122a4a88ee
 +    RCTUIViewApplyTransform3D(self);
 +  }
  }
-+// Ardia]
++// Solstice]
  
  - (NSView *)hitTest:(NSPoint)point
  {
@@ -1859,11 +1859,11 @@ index a37a1c106a04752c1baeb6dd2170402ce5f34f71..4b0fa1207d50724979fdb0122a4a88ee
      localPoint = [self.layer convertPoint:point fromLayer:self.layer.superlayer];
    } else {
 -    localPoint = point;
-+    // [Ardia: a view React Native just mounted has no layer in the tree until AppKit's next display pass; hit-testing
++    // [Solstice: a view React Native just mounted has no layer in the tree until AppKit's next display pass; hit-testing
 +    // the superview's point as a local one put it at its superview's origin for those frames (a new sidebar hover card
 +    // took clicks meant for the pinned tiles). Its frame says where it is.
 +    localPoint = self.superview != nil ? [self convertPoint:point fromView:self.superview] : point;
-+    // Ardia]
++    // Solstice]
    }
    return [self hitTest:localPoint withEvent:nil];
  }
@@ -1874,7 +1874,7 @@ index a37a1c106a04752c1baeb6dd2170402ce5f34f71..4b0fa1207d50724979fdb0122a4a88ee
 -  if (_hasCustomTransform3D && !CATransform3DEqualToTransform(layer.transform, _transform3D)) {
 -    layer.transform = _transform3D;
 +  if (_hasCustomTransform3D) {
-+    RCTUIViewApplyTransform3D(self); // [Ardia]
++    RCTUIViewApplyTransform3D(self); // [Solstice]
    }
  
    if (_respondsToDisplayLayer) {
@@ -1882,12 +1882,12 @@ index a37a1c106a04752c1baeb6dd2170402ce5f34f71..4b0fa1207d50724979fdb0122a4a88ee
    return self;
  }
  
-+// [Ardia: hit testing passes to the React view that holds the image.
++// [Solstice: hit testing passes to the React view that holds the image.
 +- (NSView *)hitTest:(NSPoint)point
 +{
 +  return nil;
 +}
-+// Ardia]
++// Solstice]
 +
  - (void)setContentMode:(UIViewContentMode)contentMode
  {
@@ -1900,9 +1900,9 @@ index 829eeea724bbb5da5e6307972d3c316b26686773..c357ee3cd905cc4f86fdc538277226c9
  
  - (void)sendEvent:(id<RCTEvent>)event
  {
-+  if (event == nil) { // [Ardia: a nil event queued an empty slot that crashed the JS thread Ardia]
++  if (event == nil) { // [Solstice: a nil event queued an empty slot that crashed the JS thread Solstice]
 +    return;
-+  } // [Ardia]
++  } // [Solstice]
    [self notifyObserversOfEvent:event];
  
    [_eventQueueLock lock];
@@ -1928,12 +1928,12 @@ index 3edcc9670a8ccb5eef44524e78445117d2416ed8..1f7951f616996941706f11b380c12051
 +#if !TARGET_OS_OSX // [macOS]
 +static const NSTimeInterval kMinimumSleepInterval = 1;
 +#else // [macOS
-+// [Ardia: sleep on an NSTimer whenever the next timer is more than two frames out, not a second. The display
++// [Solstice: sleep on an NSTimer whenever the next timer is more than two frames out, not a second. The display
 +// link wakes the JS thread every frame (120 times a second on ProMotion), so an app with a few timers a second kept it
 +// running much of the time at idle. The NSTimer fires at the target; the display link stays for what is due within a
 +// couple of frames (requestAnimationFrame, short timeouts).
 +static const NSTimeInterval kMinimumSleepInterval = 2 * kFrameDuration;
-+// Ardia]
++// Solstice]
 +#endif // macOS]
 +
  @interface _RCTTimer : NSObject
@@ -1944,10 +1944,10 @@ index 3edcc9670a8ccb5eef44524e78445117d2416ed8..1f7951f616996941706f11b380c12051
    BOOL _inBackground;
    id<RCTTimingDelegate> _timingDelegate;
 +#if TARGET_OS_OSX // [macOS]
-+  // [Ardia: whether NSApp is hidden (written on the main thread), and the run loop timers are created on (JS).
++  // [Solstice: whether NSApp is hidden (written on the main thread), and the run loop timers are created on (JS).
 +  std::atomic<bool> _appHidden;
 +  NSRunLoop *_timingRunLoop;
-+  // Ardia]
++  // Solstice]
 +#endif // macOS]
  }
  
@@ -1962,7 +1962,7 @@ index 3edcc9670a8ccb5eef44524e78445117d2416ed8..1f7951f616996941706f11b380c12051
        [self appDidMoveToBackground];
      }
 +#else // [macOS
-+    // [Ardia: background only while the app is hidden. This read `![NSApp isHidden]`, so a visible app went to
++    // [Solstice: background only while the app is hidden. This read `![NSApp isHidden]`, so a visible app went to
 +    // background at launch and never came back: the display link stopped and every timer, requestAnimationFrame
 +    // included, ran off a one-shot NSTimer, as fast as JS asked (about 1000 frames a second). Observed here, on the
 +    // main thread with the first read, so no hide or unhide falls between them.
@@ -1973,7 +1973,7 @@ index 3edcc9670a8ccb5eef44524e78445117d2416ed8..1f7951f616996941706f11b380c12051
 +                                                 object:nil];
 +    }
 +    [self appHiddenDidChange];
-+    // Ardia]
++    // Solstice]
 +#endif
    });
  
@@ -1983,7 +1983,7 @@ index 3edcc9670a8ccb5eef44524e78445117d2416ed8..1f7951f616996941706f11b380c12051
  }
  
 +#if TARGET_OS_OSX // [macOS]
-+// [Ardia: AppKit tells the main thread; the timing thread (JS) switches, where the display link calls in and the
++// [Solstice: AppKit tells the main thread; the timing thread (JS) switches, where the display link calls in and the
 +// sleep timer must live (on the main run loop, default mode only, a menu or a live resize would hold every timer). It
 +// reads the latest state whenever it switches, so a late or repeated nudge can't leave it stale; before the first
 +// timer there's nothing to nudge, and the first createTimer catches up.
@@ -2022,7 +2022,7 @@ index 3edcc9670a8ccb5eef44524e78445117d2416ed8..1f7951f616996941706f11b380c12051
 +    [self appDidMoveToForeground];
 +  }
 +}
-+// Ardia]
++// Solstice]
 +#endif // [macOS]
 +
  - (void)dealloc
@@ -2033,12 +2033,12 @@ index 3edcc9670a8ccb5eef44524e78445117d2416ed8..1f7951f616996941706f11b380c12051
  - (void)scheduleSleepTimer:(NSDate *)sleepTarget
  {
 +#if TARGET_OS_OSX // [macOS]
-+  // [Ardia: a hidden app keeps running, with no display link to pace it: a frame apart at least, or a
++  // [Solstice: a hidden app keeps running, with no display link to pace it: a frame apart at least, or a
 +  // requestAnimationFrame loop comes back as fast as the run loop turns.
 +  if (_inBackground) {
 +    sleepTarget = [sleepTarget laterDate:[NSDate dateWithTimeIntervalSinceNow:kFrameDuration]];
 +  }
-+  // Ardia]
++  // Solstice]
 +#endif // [macOS]
    @synchronized(self) {
      if (!_sleepTimer || !_sleepTimer.valid) {
@@ -2053,20 +2053,20 @@ index 3edcc9670a8ccb5eef44524e78445117d2416ed8..1f7951f616996941706f11b380c12051
      // Immediately dispatch frame, so we don't have to wait on the displaylink.
      [self didUpdateFrame:nil];
 +#else // [macOS
-+    // [Ardia: fire what's due without waking the display link for it, then sleep until the next timer, or start
++    // [Solstice: fire what's due without waking the display link for it, then sleep until the next timer, or start
 +    // the display link if that one is due within a couple of frames (a timer's callback that asks for a frame starts
 +    // it from createTimer).
 +    [self didUpdateFrame:nil];
 +    if (_paused && !_inBackground) {
 +      [self sleepOrStartTimers];
 +    }
-+    // Ardia]
++    // Solstice]
 +#endif // macOS]
 +  }
 +}
 +
 +#if TARGET_OS_OSX // [macOS]
-+// [Ardia
++// [Solstice
 +- (void)sleepOrStartTimers
 +{
 +  NSDate *next = nil;
@@ -2081,7 +2081,7 @@ index 3edcc9670a8ccb5eef44524e78445117d2416ed8..1f7951f616996941706f11b380c12051
 +    [self scheduleSleepTimer:next];
    }
  }
-+// Ardia]
++// Solstice]
 +#endif // macOS]
  
  /**
@@ -2091,7 +2091,7 @@ index 3edcc9670a8ccb5eef44524e78445117d2416ed8..1f7951f616996941706f11b380c12051
                          repeats:(BOOL)repeats
  {
 +#if TARGET_OS_OSX // [macOS]
-+  [self syncWithAppHidden]; // [Ardia]
++  [self syncWithAppHidden]; // [Solstice]
 +#endif // macOS]
    NSTimeInterval jsSchedulingOverhead = MAX(-jsSchedulingTime.timeIntervalSinceNow, 0);
  
@@ -2101,7 +2101,7 @@ index 3edcc9670a8ccb5eef44524e78445117d2416ed8..1f7951f616996941706f11b380c12051
  RCT_EXPORT_METHOD(setSendIdleEvents : (BOOL)sendIdleEvents)
  {
 +#if TARGET_OS_OSX // [macOS]
-+  [self syncWithAppHidden]; // [Ardia]
++  [self syncWithAppHidden]; // [Solstice]
 +#endif // macOS]
    _sendIdleEvents = sendIdleEvents;
    if (sendIdleEvents) {
@@ -2115,10 +2115,10 @@ index f95d6a8..a91c9fb 100644
  - (void)performAnimations:(void (^)(void))animations withCompletionBlock:(void (^)(BOOL completed))completionBlock;
  
 +#if TARGET_OS_OSX // [macOS
-+// [Ardia: a view's frame update runs on Core Animation: the frame is set once and its layer glides there. Ardia]
++// [Solstice: a view's frame update runs on Core Animation: the frame is set once and its layer glides there. Solstice]
 +- (void)ardia_glideView:(RCTPlatformView *)view toFrame:(CGRect)frame withCompletionBlock:(void (^)(BOOL completed))completionBlock;
-+// [Ardia: a view hit-tests at its final frame while it glides there, so until it lands a press on it would reach a row
-+// drawn somewhere else: a moving view, and the part of a clipping view its glide hasn't uncovered yet, take no hits. Ardia]
++// [Solstice: a view hit-tests at its final frame while it glides there, so until it lands a press on it would reach a row
++// drawn somewhere else: a moving view, and the part of a clipping view its glide hasn't uncovered yet, take no hits. Solstice]
 +RCT_EXTERN BOOL RCTArdiaGlideHidesHit(CALayer *layer, CGPoint point);
 +#endif // macOS]
 +
@@ -2136,8 +2136,8 @@ index 64e697c..4ac22f5 100644
 +#endif // macOS]
 +
 +#if TARGET_OS_OSX // [macOS
-+// [Ardia: glides in flight, counted from the animations themselves, so hits stay off until the render server has
-+// actually finished them, however late a slow commit started them. Ardia]
++// [Solstice: glides in flight, counted from the animations themselves, so hits stay off until the render server has
++// actually finished them, however late a slow commit started them. Solstice]
 +static NSInteger ArdiaGlidesInFlight;
 +
 +@interface ArdiaGlideEnd : NSObject <CAAnimationDelegate>
@@ -2170,8 +2170,8 @@ index 64e697c..4ac22f5 100644
  
      _animationType = [RCTConvert RCTAnimationType:config[@"type"]];
 +#if TARGET_OS_OSX // [macOS
-+    // [Ardia: a curve as a cubic Bézier's two control points, `controlPoints: [x1, y1, x2, y2]`, as Easing.bezier takes
-+    // them, so a layout glide can follow the same curve as the JS animations beside it. Ardia]
++    // [Solstice: a curve as a cubic Bézier's two control points, `controlPoints: [x1, y1, x2, y2]`, as Easing.bezier takes
++    // them, so a layout glide can follow the same curve as the JS animations beside it. Solstice]
 +    NSArray *points = [RCTConvert NSArray:config[@"controlPoints"]];
 +    if (points.count == 4) {
 +      _ardiaControlPoints = points;
@@ -2185,11 +2185,11 @@ index 64e697c..4ac22f5 100644
  }
  
 +#if TARGET_OS_OSX // [macOS
-+// [Ardia: a layout animation on macOS ran each frame on the main thread: NSAnimationContext's implicit frame animation
++// [Solstice: a layout animation on macOS ran each frame on the main thread: NSAnimationContext's implicit frame animation
 +// is AppKit's NSAnimationManager setting every moving view's frame, and redrawing it, on each display refresh, so a
 +// sidebar folder that moved 500 rows below it dropped frames. A glide sets the final frame at once, which is where the
 +// view lays out, hit-tests and hovers from then on, and adds additive animations from where its layer was to its layer,
-+// which the render server plays with no further work from the app. Ardia]
++// which the render server plays with no further work from the app. Solstice]
 +BOOL RCTArdiaGlideHidesHit(CALayer *layer, CGPoint point)
 +{
 +  if (layer == nil || ArdiaGlidesInFlight == 0) {
@@ -2256,8 +2256,8 @@ index 64e697c..4ac22f5 100644
 +    completionBlock(YES);
 +    return;
 +  }
-+  // [Ardia: no CATransaction of its own: committing one per view flushed the window's display cycle, its whole layout
-+  // included, once for every view that moved. Ardia]
++  // [Solstice: no CATransaction of its own: committing one per view flushed the window's display cycle, its whole layout
++  // included, once for every view that moved. Solstice]
 +  CAMediaTimingFunction *timing = [self ardia_timingFunction];
 +  static ArdiaGlideEnd *ends;
 +  if (ends == nil) {
@@ -2305,8 +2305,8 @@ index 7f1aeff..e0ccd89 100644
  
  #import "RCTUIManager.h"
  
-+#import <deque> // [Ardia]
-+#import <mutex> // [Ardia]
++#import <deque> // [Solstice]
++#import <mutex> // [Solstice]
 +
  #import <AVFoundation/AVFoundation.h>
  #import <React/RCTSurfacePresenterStub.h>
@@ -2316,13 +2316,13 @@ index 7f1aeff..e0ccd89 100644
    // Keyed by viewName
    NSMutableDictionary *_componentDataByName;
 +
-+  // [Ardia
++  // [Solstice
 +  std::mutex _mainQueueMountsLock;
 +  std::deque<std::pair<uint64_t, dispatch_block_t>> _mainQueueMounts;
 +  uint64_t _lastMainQueueMount;
 +  uint64_t _mainQueueMountsTarget;
 +  BOOL _drainingMainQueueMounts;
-+  // Ardia]
++  // Solstice]
  }
  
  @synthesize bridge = _bridge;
@@ -2331,7 +2331,7 @@ index 7f1aeff..e0ccd89 100644
  
        } else if (updatingLayoutAnimation) {
 +#if TARGET_OS_OSX // [macOS
-+        [updatingLayoutAnimation ardia_glideView:view toFrame:frame withCompletionBlock:completion]; // [Ardia: a frame update glides on Core Animation. Ardia]
++        [updatingLayoutAnimation ardia_glideView:view toFrame:frame withCompletionBlock:completion]; // [Solstice: a frame update glides on Core Animation. Solstice]
 +#else // macOS]
          // Animate view update
          [updatingLayoutAnimation
@@ -2348,7 +2348,7 @@ index 7f1aeff..e0ccd89 100644
    // Execute the previously queued UI blocks
    RCTProfileBeginFlowEvent();
 -  RCTExecuteOnMainQueue(^{
-+  // [Ardia: mounts land in layout order: a live-resize layout on the main thread mounts every older queued mount first.
++  // [Solstice: mounts land in layout order: a live-resize layout on the main thread mounts every older queued mount first.
 +  const uint64_t mount = [self enqueueMainQueueMount:^{
      RCTProfileEndFlowEvent();
      RCT_PROFILE_BEGIN_EVENT(RCTProfileTagAlways, @"-[UIManager flushUIBlocks]", (@{
@@ -2399,7 +2399,7 @@ index 7f1aeff..e0ccd89 100644
 +  } @finally {
 +    _drainingMainQueueMounts = NO;
 +  }
-+  // Ardia]
++  // Solstice]
  }
  
  - (void)setNeedsLayout
@@ -2412,9 +2412,9 @@ index 7f1aeff..e0ccd89 100644
 -    //The macOS default coordinate system has its origin at the lower left of the drawing area, so we need to flip the y-axis coordinate.
 -    windowFrame.origin.y = view.window.contentView.frame.size.height - windowFrame.origin.y - windowFrame.size.height;
 -#endif // macOS]
-+    // [Ardia: the answer is in the owning React root's points from its top left, like every other number JS has. A
++    // [Solstice: the answer is in the owning React root's points from its top left, like every other number JS has. A
 +    // window whose root is drawn at an interface size keeps root bounds = frame / scale, so window points would be
-+    // scaled while layout and touches are not. A view outside any root keeps the window answer. Ardia]
++    // scaled while layout and touches are not. A view outside any root keeps the window answer. Solstice]
 +    RCTPlatformView *rootView = view;
 +    while (rootView.superview && ![rootView isReactRootView]) {
 +      rootView = rootView.superview;
@@ -2445,7 +2445,7 @@ index 152e76da136756ebc962ece4cc84e84df7cfce0e..4e38bf09796d31dfc63cf79a081e40ea
  @property (nonatomic, assign) BOOL removeClippedSubviews;
  
 +#if TARGET_OS_OSX // [macOS
-+// [Ardia: what RCTScrollView tells on each scroll step, once for all the views it holds: the clip view that moved. Ardia]
++// [Solstice: what RCTScrollView tells on each scroll step, once for all the views it holds: the clip view that moved. Solstice]
 ++ (void)ardia_scrolled:(NSView *)moved;
 +#endif // macOS]
 +
@@ -2469,17 +2469,17 @@ index 0a4efc1..887cd1d 100644
  }
  
 +#if TARGET_OS_OSX // [macOS
-+// [Ardia: hover follows layout. AppKit sends mouseEntered/mouseExited only when the pointer moves, so a view that
++// [Solstice: hover follows layout. AppKit sends mouseEntered/mouseExited only when the pointer moves, so a view that
 +// lays out or scrolls under a still pointer (the next sidebar row after a close) kept its old hover state. Every view
 +// with hover handlers is kept here; layout and scrolling mark hover dirty, and one coalesced check on the main queue,
 +// after the layout that asked for it, compares the pointer with their frames.
-+// Dev-only overrides stand in for the pointer and the mouse buttons in hidden test instances. Ardia]
++// Dev-only overrides stand in for the pointer and the mouse buttons in hidden test instances. Solstice]
 +static NSHashTable *ArdiaHoverViews;
 +static BOOL ArdiaHoverDirty;
 +static BOOL ArdiaHoverHeld;
 +static BOOL ArdiaHoverInstalled;
-+// [Ardia: set while a window dispatches a scroll wheel event (its routing hit test and the walk up to the scroll view),
-+// and only then. Ardia]
++// [Solstice: set while a window dispatches a scroll wheel event (its routing hit test and the walk up to the scroll view),
++// and only then. Solstice]
 +static BOOL ArdiaRoutingWheel;
 +
 +__attribute__((constructor)) static void ArdiaWatchWheelRouting(void)
@@ -2499,22 +2499,22 @@ index 0a4efc1..887cd1d 100644
 +    }
 +  }));
 +}
-+// [Ardia: a scroll holds hover. Each row passing under a still pointer was entered and left, a React commit and a
++// [Solstice: a scroll holds hover. Each row passing under a still pointer was entered and left, a React commit and a
 +// layout pass per row, which cost the scroll its frames. So while a scroll moves nothing in it is entered, and a view
 +// in it is left on the step that takes it out from under the pointer: a highlight that rode along with its row
 +// looked wrong, and one that went out while its row was still under the pointer blinked. A scroll's first step is
 +// checked in full, as any layout change is: a lone wheel notch, a step with no other within ArdiaHoverScrollSettle,
 +// moves the highlight to the row now under the pointer at once, and leaves it alone when that is the same row. Once
-+// the scroll has paused, the check runs, as a page's hover does. Ardia]
++// the scroll has paused, the check runs, as a page's hover does. Solstice]
 +static __weak NSView *ArdiaHoverScrolled;
 +static BOOL ArdiaHoverRidesScroll;
 +static CFTimeInterval ArdiaHoverWakeAt;
 +static const CFTimeInterval ArdiaHoverScrollSettle = 0.06;
-+// [Ardia: only the list moving under a still pointer waits. The pointer is measured from where it was at the last full
++// [Solstice: only the list moving under a still pointer waits. The pointer is measured from where it was at the last full
 +// hover check, never from a scroll step or another view's enter, so a scroll step that lands between a pointer move and
 +// its enter can't swallow the move, every event of one move is measured alike, and slow motion adds up. A pointer that
 +// moved a point since then updates hover at once, so a trackpad that keeps nudging a list pinned at its end never
-+// freezes it. Ardia]
++// freezes it. Solstice]
 +typedef struct {
 +  double scrolledAt;
 +  double anchorX;
@@ -2555,13 +2555,13 @@ index 0a4efc1..887cd1d 100644
 +  });
 +  return lock;
 +}
-+// [Ardia: removeClippedSubviews hides, on macOS. AppKit's work on every scroll step grows with the views in the
++// [Solstice: removeClippedSubviews hides, on macOS. AppKit's work on every scroll step grows with the views in the
 +// scroll view, shown or not: tracking areas, the cursor's hit test, the layer tree. A view with removeClippedSubviews
 +// hides its children that lie further than ArdiaClipMargin outside its scroll view's visible part, and AppKit skips
 +// hidden views. Hidden, not removed as on iOS: a hidden view keeps its place, its frame and its window, so measuring
 +// it still works. A scroll hides and shows, once per ArdiaClipStep; a layout only shows, so a row an animation is
 +// still sliding out stays until the next scroll. With VoiceOver or Switch Control on nothing is hidden: a hidden view
-+// is not in the accessibility tree, and both have to reach every row. Ardia]
++// is not in the accessibility tree, and both have to reach every row. Solstice]
 +static NSHashTable *ArdiaClippingViews;
 +static BOOL ArdiaClipDirty;
 +static const CGFloat ArdiaClipMargin = 300;
@@ -2575,8 +2575,8 @@ index 0a4efc1..887cd1d 100644
 +#endif // macOS]
 +
 +#if TARGET_OS_OSX // [macOS
-+// [Ardia: a border image is drawn at the view's own backing density, which includes the interface size its root is
-+// drawn at, and is drawn again when that size changes; an ancestor's bounds change never reaches the view itself. Ardia]
++// [Solstice: a border image is drawn at the view's own backing density, which includes the interface size its root is
++// drawn at, and is drawn again when that size changes; an ancestor's bounds change never reaches the view itself. Solstice]
 +static NSHashTable<RCTView *> *ArdiaBorderImageViews(void)
 +{
 +  static NSHashTable<RCTView *> *views;
@@ -2595,8 +2595,8 @@ index 0a4efc1..887cd1d 100644
 +  return views;
 +}
 +
-+// [Ardia: VoiceOver or Switch Control that turns on while rows are hidden gets them back at once, not at the next
-+// scroll. Ardia]
++// [Solstice: VoiceOver or Switch Control that turns on while rows are hidden gets them back at once, not at the next
++// scroll. Solstice]
 +@interface ArdiaVoiceOverWatcher : NSObject
 +@end
 +#endif // macOS]
@@ -2607,12 +2607,12 @@ index 0a4efc1..887cd1d 100644
  #if TARGET_OS_OSX // [macOS
    NSTrackingArea *_trackingArea;
    BOOL _hasMouseOver;
-+  BOOL _ardiaEnterWaiting; // [Ardia: AppKit entered it while a scroll held hover or over a clipped part Ardia]
-+  BOOL _ardiaClipCounted; // [Ardia]
-+  __weak NSWindow *_ardiaHoverWindow; // [Ardia]
-+  NSString *_ardiaEnterEpoch; // [Ardia]
++  BOOL _ardiaEnterWaiting; // [Solstice: AppKit entered it while a scroll held hover or over a clipped part Solstice]
++  BOOL _ardiaClipCounted; // [Solstice]
++  __weak NSWindow *_ardiaHoverWindow; // [Solstice]
++  NSString *_ardiaEnterEpoch; // [Solstice]
    BOOL _mouseDownCanMoveWindow;
-+  // [Ardia: the clip view whose bounds changes this view observes, if any (viewDidMoveToWindow). Ardia]
++  // [Solstice: the clip view whose bounds changes this view observes, if any (viewDidMoveToWindow). Solstice]
 +  __weak NSClipView *_observedClipView;
 +  BOOL _observesBounds;
 +  BOOL _ardiaClipped;
@@ -2627,7 +2627,7 @@ index 0a4efc1..887cd1d 100644
      return nil;
    }
 +#if TARGET_OS_OSX // [macOS
-+  if (RCTArdiaGlideHidesHit(self.layer, point)) { // [Ardia: no hits on a view still gliding to its frame. Ardia]
++  if (RCTArdiaGlideHidesHit(self.layer, point)) { // [Solstice: no hits on a view still gliding to its frame. Solstice]
 +    return nil;
 +  }
 +#endif // macOS]
@@ -2637,9 +2637,9 @@ index 0a4efc1..887cd1d 100644
    RCTPlatformView *hitSubview = nil; // [macOS]
    BOOL isPointInside = [self pointInside:point withEvent:event];
 +#if TARGET_OS_OSX // [macOS
-+  // [Ardia: routing a scroll wheel event only needs the scroll view under the pointer, so its hit test skips views that
++  // [Solstice: routing a scroll wheel event only needs the scroll view under the pointer, so its hit test skips views that
 +  // don't contain the point, with all their subviews, as AppKit's own does. The full walk visited every view of every
-+  // row (a 300-tab sidebar: thousands) once to route each wheel event and again to pass it up to its scroll view. Ardia]
++  // row (a 300-tab sidebar: thousands) once to route each wheel event and again to pass it up to its scroll view. Solstice]
 +  if (!isPointInside && ArdiaRoutingWheel) {
 +    return nil;
 +  }
@@ -2652,7 +2652,7 @@ index 0a4efc1..887cd1d 100644
    // both of which would not cause the mouseExited to be invoked.
  
 -  if ([self window] == nil) {
-+  // [Ardia: one registration per view. AppKit calls this again whenever a view already in the window is
++  // [Solstice: one registration per view. AppKit calls this again whenever a view already in the window is
 +  // re-added (didUpdateReactSubviews re-adds every subview each time a container's children change), and each call
 +  // added another observer: a long-lived row in a scroll view piled up dozens, every removal scans them all, so
 +  // each view leaving the window cost a little more the longer the app ran (profile switches, which mount and unmount
@@ -2683,7 +2683,7 @@ index 0a4efc1..887cd1d 100644
 +    _observesBounds = YES;
 +    _observedClipView = clipView;
 +  }
-+  // Ardia]
++  // Solstice]
 +
 +  if (_removeClippedSubviews) {
 +    [RCTView ardia_layoutChanged];
@@ -2691,13 +2691,13 @@ index 0a4efc1..887cd1d 100644
  
    [self reactViewDidMoveToWindow]; // [macOS] Github#1412
  
-+  [self ardia_windowChanged]; // [Ardia]
++  [self ardia_windowChanged]; // [Solstice]
    [super viewDidMoveToWindow];
  }
  
 -- (void)viewBoundsChanged:(NSNotification*)__unused inNotif
-+// [Ardia: hover follows layout: a scroll goes through the same check as everything else, so a row under a window
-+// that covers the pointer isn't entered (the old rule looked at bounds alone). Ardia]
++// [Solstice: hover follows layout: a scroll goes through the same check as everything else, so a row under a window
++// that covers the pointer isn't entered (the old rule looked at bounds alone). Solstice]
 +- (void)viewBoundsChanged:(NSNotification*)inNotif
  {
 -  // When an enclosing scrollview is scrolled using the scrollWheel or trackpad,
@@ -2741,7 +2741,7 @@ index 0a4efc1..887cd1d 100644
 -    if (!NSPointInRect(locationInView, [self bounds]))
 -    {
 -      _hasMouseOver = NO;
-+// [Ardia: the parent it leaves is the one that hid it, so a view that moves to another parent is shown there. Ardia]
++// [Solstice: the parent it leaves is the one that hid it, so a view that moves to another parent is shown there. Solstice]
 +- (void)viewWillMoveToSuperview:(NSView *)newSuperview
 +{
 +  [super viewWillMoveToSuperview:newSuperview];
@@ -2769,8 +2769,8 @@ index 0a4efc1..887cd1d 100644
 +    _ardiaClippedTo = bounds;
 +  }
 +  CGRect kept = [self convertRect:CGRectInset(bounds, -ArdiaClipMargin, -ArdiaClipMargin) fromView:shown];
-+  // [Ardia: the child that holds the keyboard focus stays shown. Hiding it takes the focus away, which ended a tab
-+  // rename in the sidebar as soon as its row had scrolled out of the margin. Ardia]
++  // [Solstice: the child that holds the keyboard focus stays shown. Hiding it takes the focus away, which ended a tab
++  // rename in the sidebar as soon as its row had scrolled out of the margin. Solstice]
 +  NSView *focused = (NSView *)self.window.firstResponder;
 +  if (![focused isKindOfClass:[NSView class]] || ![focused isDescendantOf:self]) {
 +    focused = nil;
@@ -2795,7 +2795,7 @@ index 0a4efc1..887cd1d 100644
  - (void)setRemoveClippedSubviews:(BOOL)removeClippedSubviews
  {
 +#if TARGET_OS_OSX // [macOS
-+  // [Ardia: removeClippedSubviews hides, on macOS. Ardia]
++  // [Solstice: removeClippedSubviews hides, on macOS. Solstice]
 +  if (removeClippedSubviews == _removeClippedSubviews) {
 +    return;
 +  }
@@ -2829,7 +2829,7 @@ index 0a4efc1..887cd1d 100644
  - (void)didUpdateReactSubviews
  {
 +#if TARGET_OS_OSX // [macOS
-+  [RCTView ardia_layoutChanged]; // [Ardia: hover follows layout, and so does what removeClippedSubviews hides. Ardia]
++  [RCTView ardia_layoutChanged]; // [Solstice: hover follows layout, and so does what removeClippedSubviews hides. Solstice]
 +  [super didUpdateReactSubviews];
 +#else // macOS]
    if (_removeClippedSubviews) {
@@ -2843,7 +2843,7 @@ index 0a4efc1..887cd1d 100644
  - (void)updateClippedSubviews
  {
 +#if TARGET_OS_OSX // [macOS
-+  [self ardia_clipSubviewsHiding:NO]; // [Ardia: removeClippedSubviews hides, on macOS. Ardia]
++  [self ardia_clipSubviewsHiding:NO]; // [Solstice: removeClippedSubviews hides, on macOS. Solstice]
 +#else // macOS]
    // Find a suitable view to use for clipping
    RCTPlatformView *clipView = [self react_findClipView]; // [macOS]
@@ -2859,7 +2859,7 @@ index 0a4efc1..887cd1d 100644
    // TODO: detect up-front if re-rendering is necessary
    CGSize oldSize = self.bounds.size;
 +#if TARGET_OS_OSX // [macOS
-+  CGRect oldFrame = self.frame; // [Ardia: hover follows layout. Ardia]
++  CGRect oldFrame = self.frame; // [Solstice: hover follows layout. Solstice]
 +#endif // macOS]
    [super reactSetFrame:frame];
    if (!CGSizeEqualToSize(self.bounds.size, oldSize)) {
@@ -2867,7 +2867,7 @@ index 0a4efc1..887cd1d 100644
    }
 +#if TARGET_OS_OSX // [macOS
 +  if (!CGRectEqualToRect(self.frame, oldFrame)) {
-+    [RCTView ardia_layoutChanged]; // [Ardia: hover follows layout, and so does what removeClippedSubviews hides. Ardia]
++    [RCTView ardia_layoutChanged]; // [Solstice: hover follows layout, and so does what removeClippedSubviews hides. Solstice]
 +  }
 +#endif // macOS]
  }
@@ -2876,14 +2876,14 @@ index 0a4efc1..887cd1d 100644
 +- (void)viewDidChangeBackingProperties
 +{
 +  [super viewDidChangeBackingProperties];
-+  if ([ArdiaBorderImageViews() containsObject:self]) { // [Ardia: a border image follows the new backing density. Ardia]
++  if ([ArdiaBorderImageViews() containsObject:self]) { // [Solstice: a border image follows the new backing density. Solstice]
 +    [self.layer setNeedsDisplay];
 +  }
 +}
 +
-+// [Ardia: displayLayer is the only place that copies clipsToBounds to the layer, and nothing asked for one when
++// [Solstice: displayLayer is the only place that copies clipsToBounds to the layer, and nothing asked for one when
 +// overflow changed. A view that stopped clipping at the same size (a group's rows once its fold animation ends)
-+// kept masking its children, which cut the selected row's glow. Ardia]
++// kept masking its children, which cut the selected row's glow. Solstice]
 +- (void)setClipsToBounds:(BOOL)clipsToBounds
 +{
 +  if (clipsToBounds == self.clipsToBounds) {
@@ -2912,8 +2912,8 @@ index 0a4efc1..887cd1d 100644
 -  }
 -  [layer setTransform:transform];
 -#endif // macOS]
-+  // [Ardia: the anchor point compensation that was here moved to -[RCTUIView setTransform3D:], which
-+  // UIView+React's updateTransform now goes through; doing it here as well applied it twice. Ardia]
++  // [Solstice: the anchor point compensation that was here moved to -[RCTUIView setTransform3D:], which
++  // UIView+React's updateTransform now goes through; doing it here as well applied it twice. Solstice]
  
    if (useIOSBorderRendering) {
      layer.cornerRadius = cornerRadii.topLeftHorizontal;
@@ -2922,10 +2922,10 @@ index 0a4efc1..887cd1d 100644
    layer.contentsScale = image.scale;
  #else // [macOS
 -  CGFloat scaleFactor = self.window.backingScaleFactor;
-+  CGFloat scaleFactor = self.window != nil ? [self convertSizeToBacking:NSMakeSize(1, 1)].width : 0; // [Ardia]
++  CGFloat scaleFactor = self.window != nil ? [self convertSizeToBacking:NSMakeSize(1, 1)].width : 0; // [Solstice]
    layer.contents = [image layerContentsForContentsScale:scaleFactor];
    layer.contentsScale = scaleFactor;
-+  [ArdiaBorderImageViews() addObject:self]; // [Ardia]
++  [ArdiaBorderImageViews() addObject:self]; // [Solstice]
  #endif // macOS]
    layer.needsDisplayOnBoundsChange = YES;
    layer.magnificationFilter = kCAFilterNearest;
@@ -2933,8 +2933,8 @@ index 0a4efc1..887cd1d 100644
  	return [self focusable] || [super acceptsFirstResponder];
  }
  
-+// [Ardia: AppKit asks for tracking areas only when a view's geometry changes, so handlers set on a view already
-+// laid out (a peek panel getting onMouseLeave as it comes out) had none, and its pointer never left. Ardia]
++// [Solstice: AppKit asks for tracking areas only when a view's geometry changes, so handlers set on a view already
++// laid out (a peek panel getting onMouseLeave as it comes out) had none, and its pointer never left. Solstice]
 +- (void)setOnMouseEnter:(RCTDirectEventBlock)onMouseEnter
 +{
 +  _onMouseEnter = [onMouseEnter copy];
@@ -2954,36 +2954,36 @@ index 0a4efc1..887cd1d 100644
    if (!wouldRecreateIdenticalTrackingArea) {
      if (_trackingArea) {
        [self removeTrackingArea:_trackingArea];
-+      // [Ardia: forget it too. Kept, a view that lost its hover handlers and got them back with the same bounds
++      // [Solstice: forget it too. Kept, a view that lost its hover handlers and got them back with the same bounds
 +      // counted the removed area as "identical" and never added one again: no mouseEntered/mouseExited from then on
-+      // (the sidebar's peek panel stayed out after its first peek). Ardia]
++      // (the sidebar's peek panel stayed out after its first peek). Solstice]
 +      _trackingArea = nil;
-+      // [Ardia: and what it knew, once its handlers are gone: a view that is under the pointer when it loses its
++      // [Solstice: and what it knew, once its handlers are gone: a view that is under the pointer when it loses its
 +      // handlers never hears it leave, and its next scroll (viewBoundsChanged:) would send a leave for it. A view that
 +      // keeps its handlers keeps it: its area is only being resized, and forgetting it there meant a hovered view whose
 +      // size changed under the pointer (the sidebar's New Tab row as a new tab slides in) never got its leave and
-+      // stayed highlighted. Ardia]
++      // stayed highlighted. Solstice]
 +      if (!hasMouseHoverEvent) {
 +        _hasMouseOver = NO;
-+        _ardiaHoverWindow = nil; // [Ardia]
-+        [self ardia_stopWaiting]; // [Ardia]
++        _ardiaHoverWindow = nil; // [Solstice]
++        [self ardia_stopWaiting]; // [Solstice]
 +      }
      }
  
      if (hasMouseHoverEvent) {
        _trackingArea = [[NSTrackingArea alloc] initWithRect:self.bounds
 -                                                   options:NSTrackingActiveAlways|NSTrackingMouseEnteredAndExited
-+                                                   options:[self ardia_trackingOptions] // [Ardia]
++                                                   options:[self ardia_trackingOptions] // [Solstice]
                                                       owner:self
                                                    userInfo:nil];
        [self addTrackingArea:_trackingArea];
 +      if (_hasMouseOver) {
-+        [RCTView ardia_markHoverDirty]; // [Ardia: hover follows layout: the resized view may have left the pointer. Ardia]
++        [RCTView ardia_markHoverDirty]; // [Solstice: hover follows layout: the resized view may have left the pointer. Solstice]
 +      }
 +    }
 +  }
 +
-+  // [Ardia: hover follows layout: the views the check looks at. Ardia]
++  // [Solstice: hover follows layout: the views the check looks at. Solstice]
 +  if (hasMouseHoverEvent) {
 +    if (ArdiaHoverViews == nil) {
 +      ArdiaHoverViews = [NSHashTable weakObjectsHashTable];
@@ -2997,15 +2997,15 @@ index 0a4efc1..887cd1d 100644
  }
  
 -- (void)mouseEntered:(NSEvent *)event
-+// [Ardia: hover follows layout. The check: the pointer (or the dev override) against the visible frame of each view
++// [Solstice: hover follows layout. The check: the pointer (or the dev override) against the visible frame of each view
 +// with hover handlers, in the window frontmost under the pointer, as AppKit's tracking areas would see it once the
 +// pointer moved. Frames, not layer transforms: hover follows where a view is laid out, where its clicks land, while an
 +// animation still slides it there. All leaves go out before any enter, innermost first, then the enters, outermost
 +// first, so a row taking another's place under the pointer isn't left by a late leave. Enters wait while a mouse
-+// button is down, as AppKit's do. Ardia]
++// button is down, as AppKit's do. Solstice]
 ++ (void)ardia_scrolled:(NSView *)moved
 +{
-+  if (moved != nil) { // [Ardia: a step that leaves the list where it was is no scroll and holds nothing.
++  if (moved != nil) { // [Solstice: a step that leaves the list where it was is no scroll and holds nothing.
 +    if (ArdiaHoverScrollOrigins == nil) {
 +      ArdiaHoverScrollOrigins = [NSMapTable weakToStrongObjectsMapTable];
 +    }
@@ -3021,11 +3021,11 @@ index 0a4efc1..887cd1d 100644
 +  }
 +  CFTimeInterval now = CACurrentMediaTime();
 +  BOOL starts = now - ArdiaHoverHoldState.scrolledAt >= ArdiaHoverScrollSettle;
-+  if (starts) { // [Ardia: a still pointer waits from the first step, measured from where hover last saw the pointer, so a
++  if (starts) { // [Solstice: a still pointer waits from the first step, measured from where hover last saw the pointer, so a
 +    // move already on its way still counts as one.
 +    [self ardia_hoverDecidedAt:ArdiaHoverPointerSample];
 +  } // Ardia]
-+  if (moved != nil) { // [Ardia: each list's own last step, so one list's scroll never ends another's hold.
++  if (moved != nil) { // [Solstice: each list's own last step, so one list's scroll never ends another's hold.
 +    if (ArdiaHoverMovedAt == nil) {
 +      ArdiaHoverMovedAt = [NSMapTable weakToStrongObjectsMapTable];
 +    }
@@ -3036,7 +3036,7 @@ index 0a4efc1..887cd1d 100644
 +  }
 +  ArdiaHoverHoldState.scrolledAt = now;
 +  ArdiaHoverScrolled = moved;
-+  if (ArdiaHoverRidesScroll && moved != nil) { // [Ardia: from the first step, a hovered row carried away from the pointer is left at once. Ardia]
++  if (ArdiaHoverRidesScroll && moved != nil) { // [Solstice: from the first step, a hovered row carried away from the pointer is left at once. Solstice]
 +    NSPoint screen = [NSEvent mouseLocation];
 +#if DEBUG
 +    if (ArdiaPointerOverride != nil) {
@@ -3063,7 +3063,7 @@ index 0a4efc1..887cd1d 100644
 +  [self ardia_markHoverDirty];
 +}
 +
-+// [Ardia: the pointer, or the dev override. Ardia]
++// [Solstice: the pointer, or the dev override. Solstice]
 ++ (NSPoint)ardia_pointerOnScreen
 +{
 +#if DEBUG
@@ -3116,9 +3116,9 @@ index 0a4efc1..887cd1d 100644
 +  return [NSEvent pressedMouseButtons] != 0;
 +}
 +
-+// [Ardia: for telemetry, how many times hover waited more than 300 ms for a scroll to pause and how many enters came
++// [Solstice: for telemetry, how many times hover waited more than 300 ms for a scroll to pause and how many enters came
 +// over a clipped part, by the consent period each began in, so one that began while sharing was off is never counted
-+// after it turns on. Ardia]
++// after it turns on. Solstice]
 ++ (void)ardia_setConsentEpoch:(NSString *)epoch
 +{
 +  @synchronized(ArdiaHoverHoldLock()) {
@@ -3297,7 +3297,7 @@ index 0a4efc1..887cd1d 100644
 +#if DEBUG
 +  ArdiaHoverPasses++;
 +#endif
-+  BOOL still = [self ardia_holdsHoverInScrolled:YES]; // [Ardia: only views in a list that just moved wait. Ardia]
++  BOOL still = [self ardia_holdsHoverInScrolled:YES]; // [Solstice: only views in a list that just moved wait. Solstice]
 +  NSPoint screen = [NSEvent mouseLocation];
 +  BOOL pressed = [NSEvent pressedMouseButtons] != 0;
 +#if DEBUG
@@ -3308,22 +3308,22 @@ index 0a4efc1..887cd1d 100644
 +    pressed = ArdiaButtonsOverride.boolValue;
 +  }
 +#endif
-+  ArdiaHoverPointerSample = screen; // [Ardia]
-+  if (!still) { // [Ardia]
++  ArdiaHoverPointerSample = screen; // [Solstice]
++  if (!still) { // [Solstice]
 +    [self ardia_hoverDecidedAt:screen];
-+  } // [Ardia]
++  } // [Solstice]
 +  NSWindow *front = [self ardia_windowUnderPointer:screen];
 +  NSMutableArray<RCTView *> *leaving = [NSMutableArray new];
 +  NSMutableArray<RCTView *> *entering = [NSMutableArray new];
 +  BOOL held = NO;
-+  BOOL deferred = NO; // [Ardia]
-+  CFTimeInterval wakeAt = 0; // [Ardia]
++  BOOL deferred = NO; // [Solstice]
++  CFTimeInterval wakeAt = 0; // [Solstice]
 +  for (RCTView *view in ArdiaHoverViews.allObjects) {
 +    NSWindow *window = view.window;
 +    if (window == nil) {
 +      continue;
 +    }
-+    CFTimeInterval until = still ? [self ardia_movingUntil:view] : 0; // [Ardia: wake when the first deferred list goes quiet.
++    CFTimeInterval until = still ? [self ardia_movingUntil:view] : 0; // [Solstice: wake when the first deferred list goes quiet.
 +    if (until > 0) {
 +      deferred = YES;
 +      wakeAt = wakeAt == 0 ? until : MIN(wakeAt, until);
@@ -3348,7 +3348,7 @@ index 0a4efc1..887cd1d 100644
 +  for (RCTView *view in [self ardia_byDepth:entering deepestFirst:NO]) {
 +    [view ardia_setMouseOver:YES atScreenPoint:screen];
 +  }
-+  if (!deferred) { // [Ardia: a hold is timed only while a hover change waits, and checked again once the lists go quiet.
++  if (!deferred) { // [Solstice: a hold is timed only while a hover change waits, and checked again once the lists go quiet.
 +    [self ardia_endHoverHold];
 +  } else if (ArdiaHoverWakeAt == 0 || wakeAt < ArdiaHoverWakeAt - 0.001) {
 +    ArdiaHoverWakeAt = wakeAt;
@@ -3384,7 +3384,7 @@ index 0a4efc1..887cd1d 100644
 +                 additionalData:nil];
 +}
 +
-+// [Ardia: a scroll holds hover, AppKit's too. With the pointer in the window AppKit itself enters and leaves each
++// [Solstice: a scroll holds hover, AppKit's too. With the pointer in the window AppKit itself enters and leaves each
 +// view that scrolls under it, on every scroll step, so those wait as well: the check that runs once the scroll has
 +// paused sends what changed. Only the views the scroll moves wait: a pointer that goes to the toolbar while the
 +// list still coasts enters there at once.
@@ -3398,9 +3398,9 @@ index 0a4efc1..887cd1d 100644
 +  [RCTView ardia_markHoverDirty];
 +  return YES;
 +}
-+// Ardia]
++// Solstice]
 +
-+// [Ardia: AppKit enters a view anywhere in its bounds, the part its scroll view clips included, while the hover check
++// [Solstice: AppKit enters a view anywhere in its bounds, the part its scroll view clips included, while the hover check
 +// counts only the part it shows. An enter that a scroll holds, or that comes over the clipped part, waits: one watch on
 +// the app's mouse moves, kept only while some view waits, tries it again on each move, and the first one over the
 +// shown part once nothing holds hover is the enter. A leave goes only to a view that was entered, and a view that
@@ -3536,36 +3536,36 @@ index 0a4efc1..887cd1d 100644
 +    }
 +  });
 +}
-+// Ardia]
++// Solstice]
 +
 +- (void)mouseEntered:(NSEvent *)event
 +{
-+  _ardiaEnterEpoch = [RCTView ardia_consentEpoch]; // [Ardia]
-+  if (_hasMouseOver && _ardiaHoverWindow == self.window) { // [Ardia: already entered here; nothing waits. Ardia]
++  _ardiaEnterEpoch = [RCTView ardia_consentEpoch]; // [Solstice]
++  if (_hasMouseOver && _ardiaHoverWindow == self.window) { // [Solstice: already entered here; nothing waits. Solstice]
 +    [self ardia_stopWaiting];
 +    return;
 +  }
-+  if ([self ardia_holdHoverForScroll]) { // [Ardia]
++  if ([self ardia_holdHoverForScroll]) { // [Solstice]
 +    [self ardia_waitForEnter];
 +    return;
 +  }
-+  [self ardia_enterAt:self.window != nil ? [self.window convertPointToScreen:event.locationInWindow] : [RCTView ardia_pointerOnScreen]]; // [Ardia]
++  [self ardia_enterAt:self.window != nil ? [self.window convertPointToScreen:event.locationInWindow] : [RCTView ardia_pointerOnScreen]]; // [Solstice]
 +}
 +
  - (void)mouseExited:(NSEvent *)event
  {
-+  if (_ardiaEnterWaiting) { // [Ardia]
++  if (_ardiaEnterWaiting) { // [Solstice]
 +    [self ardia_stopWaiting];
-+  } // [Ardia]
-+  if (!_hasMouseOver) { // [Ardia: no leave owed, so nothing to hold. Ardia]
++  } // [Solstice]
++  if (!_hasMouseOver) { // [Solstice: no leave owed, so nothing to hold. Solstice]
 +    return;
 +  }
-+  if ([self ardia_holdHoverForScroll]) { // [Ardia]
++  if ([self ardia_holdHoverForScroll]) { // [Solstice]
 +    return;
 +  }
-+  ArdiaHoverPointerSample = [RCTView ardia_pointerOnScreen]; // [Ardia]
++  ArdiaHoverPointerSample = [RCTView ardia_pointerOnScreen]; // [Solstice]
    _hasMouseOver = NO;
-+  _ardiaHoverWindow = nil; // [Ardia]
++  _ardiaHoverWindow = nil; // [Solstice]
    [self sendMouseEventWithBlock:self.onMouseLeave
                     locationInfo:[self locationInfoFromEvent:event]
                    modifierFlags:event.modifierFlags
@@ -3574,7 +3574,7 @@ index 0a4efc1..887cd1d 100644
    NSNumber *emitted = objc_getAssociatedObject(event, &kRCTViewKeyboardEventEmittedKey);
    BOOL alreadyEmitted = [emitted boolValue];
 -  if (!alreadyEmitted) {
-+  if (!alreadyEmitted && keyboardEvent != nil) { // [Ardia: a dead key has no characters, so no event Ardia]
++  if (!alreadyEmitted && keyboardEvent != nil) { // [Solstice: a dead key has no characters, so no event Solstice]
      [_eventDispatcher sendEvent:keyboardEvent];
      objc_setAssociatedObject(event, &kRCTViewKeyboardEventEmittedKey, @(YES), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
    }
@@ -3584,7 +3584,7 @@ index 0a4efc1..887cd1d 100644
  @end
 +
 +#if TARGET_OS_OSX // [macOS
-+@implementation ArdiaVoiceOverWatcher // [Ardia]
++@implementation ArdiaVoiceOverWatcher // [Solstice]
 +
 +- (void)observeValueForKeyPath:(__unused NSString *)keyPath
 +                      ofObject:(__unused id)object
@@ -3607,8 +3607,8 @@ index eb79ff32614392cb16e6eb3dbec6cc5b037fe27a..d06ebb9e6949046c5fd546edc77556b7
  - (void)updateClippedSubviews
  {
 +#if TARGET_OS_OSX // [macOS
-+  // [Ardia: a view with removeClippedSubviews hides its own children when told of the scroll (ardia_scrolled). The
-+  // walk from here through every view in the scroll view, on each scroll step, was a tenth of a long list's step. Ardia]
++  // [Solstice: a view with removeClippedSubviews hides its own children when told of the scroll (ardia_scrolled). The
++  // walk from here through every view in the scroll view, on each scroll step, was a tenth of a long list's step. Solstice]
 +#else // macOS]
    // Find a suitable view to use for clipping
    RCTPlatformView *clipView = [self react_findClipView]; // [macOS]
@@ -3625,24 +3625,24 @@ index eb79ff32614392cb16e6eb3dbec6cc5b037fe27a..d06ebb9e6949046c5fd546edc77556b7
    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
    if ([self window] == nil) {
      // Unregister for bounds change notifications
-+    // [Ardia: every clip view's, as RCTView's removal here used to do for it (it now removes only its own).
++    // [Solstice: every clip view's, as RCTView's removal here used to do for it (it now removes only its own).
      [defaultCenter removeObserver:self
                               name:NSViewBoundsDidChangeNotification
 -                           object:_scrollView.contentView];
 +                           object:nil];
-+    // Ardia]
++    // Solstice]
      [defaultCenter removeObserver:self
                               name:NSPreferredScrollerStyleDidChangeNotification
                             object:nil];
    } else {
-+    // [Ardia: AppKit calls this again each time the view is re-added in the same window: register once.
++    // [Solstice: AppKit calls this again each time the view is re-added in the same window: register once.
 +    [defaultCenter removeObserver:self
 +                             name:NSViewBoundsDidChangeNotification
 +                           object:_scrollView.contentView];
 +    [defaultCenter removeObserver:self
 +                             name:NSPreferredScrollerStyleDidChangeNotification
 +                           object:nil];
-+    // Ardia]
++    // Solstice]
      // Register for bounds change notifications so we can track scrolling
      [defaultCenter addObserver:self
                        selector:@selector(scrollViewDocumentViewBoundsDidChange:)
@@ -3653,8 +3653,8 @@ index eb79ff32614392cb16e6eb3dbec6cc5b037fe27a..d06ebb9e6949046c5fd546edc77556b7
 -- (void)scrollViewDocumentViewBoundsDidChange:(__unused NSNotification *)notification
 +- (void)scrollViewDocumentViewBoundsDidChange:(NSNotification *)notification
  {
-+  // [Ardia: hover follows layout, and a scroll holds hover: told here once, not by every view in the list. The
-+  // call setFrame: schedules passes no notification and is no scroll. Ardia]
++  // [Solstice: hover follows layout, and a scroll holds hover: told here once, not by every view in the list. The
++  // call setFrame: schedules passes no notification and is no scroll. Solstice]
 +  if (notification != nil) {
 +    [RCTView ardia_scrolled:notification.object];
 +  }
@@ -3670,10 +3670,10 @@ index 30c4f1e53e7b94016c8ed1b425587753fc80c2ce..1fe8dd641c9c0135f43960e4cc57a0fa
  - (void)didUpdateReactSubviews
  {
 +#if TARGET_OS_OSX // [macOS
-+  // [Ardia: -addSubview: on a view that is already a subview takes it out and puts it back (it leaves and re-enters
++  // [Solstice: -addSubview: on a view that is already a subview takes it out and puts it back (it leaves and re-enters
 +  // the window, its layer is rebuilt), so re-adding every child whenever one was inserted or removed cost a closed
 +  // tab ~58 of them, 7-9 ms. The children end up in the same order, after any non-React subviews, as before; the
-+  // ones already in place are left alone and the rest are put in order by -setSubviews:. Ardia]
++  // ones already in place are left alone and the rest are put in order by -setSubviews:. Solstice]
 +  NSArray<RCTPlatformView *> *wanted = self.reactSubviews;
 +  NSArray<NSView *> *current = self.subviews;
 +  if (current.count >= wanted.count &&
@@ -3708,7 +3708,7 @@ index 30c4f1e53e7b94016c8ed1b425587753fc80c2ce..1fe8dd641c9c0135f43960e4cc57a0fa
      transform = view.reactTransform;
    }
  
-+#if TARGET_OS_OSX // [Ardia: RCTUIView keeps the transform and puts it back after AppKit resets the layer's.
++#if TARGET_OS_OSX // [Solstice: RCTUIView keeps the transform and puts it back after AppKit resets the layer's.
 +  if ([view isKindOfClass:[RCTUIView class]]) {
 +    ((RCTUIView *)view).transform3D = transform;
 +  } else {
@@ -3716,7 +3716,7 @@ index 30c4f1e53e7b94016c8ed1b425587753fc80c2ce..1fe8dd641c9c0135f43960e4cc57a0fa
 +  }
 +#else
    view.layer.transform = transform;
-+#endif // Ardia]
++#endif // Solstice]
    // Enable edge antialiasing in rotation, skew, or perspective transforms
    view.layer.allowsEdgeAntialiasing = transform.m12 != 0.0f || transform.m21 != 0.0f || transform.m34 != 0.0f;
  }
@@ -3728,7 +3728,7 @@ index 61de2be2e8f6b7114a6fb92f6e7b07b130f8fc25..924d3490150e68d9878137875af03bf4
      const bool hasFractionalHeight =
          !yoga::inexactEquals(round(scaledNodeHeight), scaledNodeHeight);
  
-+    // [Ardia: on a fractional pixel grid (an interface size other than 100%) a thin node, a hairline or a 1 to 2 point
++    // [Solstice: on a fractional pixel grid (an interface size other than 100%) a thin node, a hairline or a 1 to 2 point
 +    // rule, keeps one whole-pixel size wherever it sits and never rounds to nothing
 +    const bool fractionalGrid =
 +        !yoga::inexactEquals(round(pointScaleFactor), pointScaleFactor);
@@ -3737,11 +3737,11 @@ index 61de2be2e8f6b7114a6fb92f6e7b07b130f8fc25..924d3490150e68d9878137875af03bf4
 +        scaledNodeWith > 0.01 && scaledNodeWith < thinPixels;
 +    const bool thinHeight = fractionalGrid && !textRounding &&
 +        scaledNodeHeight > 0.01 && scaledNodeHeight < thinPixels;
-+    // Ardia]
++    // Solstice]
 +
      node->getLayout().setDimension(
          Dimension::Width,
-+        thinWidth // [Ardia]
++        thinWidth // [Solstice]
 +            ? (float)(std::max(1.0, round(scaledNodeWith)) / pointScaleFactor)
 +            :
          roundValueToPixelGrid(
@@ -3751,7 +3751,7 @@ index 61de2be2e8f6b7114a6fb92f6e7b07b130f8fc25..924d3490150e68d9878137875af03bf4
  
      node->getLayout().setDimension(
          Dimension::Height,
-+        thinHeight // [Ardia]
++        thinHeight // [Solstice]
 +            ? (float)(std::max(1.0, round(scaledNodeHeight)) / pointScaleFactor)
 +            :
          roundValueToPixelGrid(
