@@ -257,8 +257,8 @@ jobs:
       - name: The build has the app, the engine and the helpers
         run: |
           set -euo pipefail
-          app="$SCRATCH/dd/Build/Products/Debug/Ardia.app"
-          for part in "Contents/MacOS/Ardia" "Contents/Frameworks/Chromium Framework.framework" "Contents/Helpers/ArdiaPluginHost" "Contents/PlugIns/ArdiaDockTile.plugin"; do
+          app="$SCRATCH/dd/Build/Products/Debug/Solstice.app"
+          for part in "Contents/MacOS/Solstice" "Contents/Frameworks/Chromium Framework.framework" "Contents/Helpers/ArdiaPluginHost" "Contents/PlugIns/ArdiaDockTile.plugin"; do
             [ -e "$app/$part" ] || { echo "::error::the build has no $part"; exit 1; }
           done
       - name: The engine's public headers match a published engine
