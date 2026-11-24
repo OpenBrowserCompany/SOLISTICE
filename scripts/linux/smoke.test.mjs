@@ -190,7 +190,7 @@ test("sync-core wants the Rust core's answers through ArdiaSync.enterPhrase, and
   for (const phrase of Object.values(SYNC_CORE_PHRASES)) assert.equal(phrase.split(" ").length, 24);
   const good = { core: "rust", claim: { granted: true }, valid: { error: "noData" }, checksum: { error: "checksum" }, unknown: { error: "unknownWord", word: "zzzz" } };
   assert.deepEqual(syncCoreProblems(good), []);
-  const problems = syncCoreProblems({ core: "native", valid: { thrown: "Another Ardia window is running sync" }, checksum: { error: "checksum" }, unknown: { error: "unknownWord", word: "x" } });
+  const problems = syncCoreProblems({ core: "native", valid: { thrown: "Another Solstice window is running sync" }, checksum: { error: "checksum" }, unknown: { error: "unknownWord", word: "x" } });
   assert.equal(problems.length, 3, problems.join("\n"));
   assert.match(problems.join("\n"), /not "rust"/);
   assert.match(problems.join("\n"), /valid phrase answered .*thrown/);

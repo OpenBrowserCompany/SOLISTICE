@@ -130,7 +130,7 @@ def static_x86_64_executable_problem(data):
         if start + size > len(data):
             return 'has a segment past the end of the file'
         if kind == PT_INTERP:
-            return f'is dynamically linked: build it for {UPDATE_VERIFY_TARGET}, so it runs wherever Ardia does'
+            return f'is dynamically linked: build it for {UPDATE_VERIFY_TARGET}, so it runs wherever Solstice does'
         loads += kind == PT_LOAD
     if loads == 0:
         return 'has no loadable segment'
