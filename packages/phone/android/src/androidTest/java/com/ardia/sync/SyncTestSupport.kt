@@ -18,7 +18,7 @@ val testAssets: AssetManager get() = InstrumentationRegistry.getInstrumentation(
 
 class Sandbox {
     val root = File(InstrumentationRegistry.getInstrumentation().targetContext.cacheDir, "ardia-sync-${UUID.randomUUID()}")
-    val folder = File(root, "Ardia Sync")
+    val folder = File(root, "Solstice Sync")
     val state = File(root, "State")
     val keys = File(root, "Keys")
 
@@ -146,8 +146,8 @@ class FakeMac(folder: File, entropy: ByteArray, var clock: TestClock? = null) : 
 }
 
 class FakeCarrier(root: File, seed: Long) {
-    val macFolder = File(root, "Mac/Ardia Sync").apply { mkdirs() }
-    val phoneFolder = File(root, "Phone/Ardia Sync").apply { mkdirs() }
+    val macFolder = File(root, "Mac/Solstice Sync").apply { mkdirs() }
+    val phoneFolder = File(root, "Phone/Solstice Sync").apply { mkdirs() }
     private val random = Random(seed)
     private var synced = HashSet<String>()
     private val partial = HashSet<String>()

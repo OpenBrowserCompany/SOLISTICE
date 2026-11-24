@@ -96,7 +96,7 @@ class SyncEndToEndTest {
             service.syncNow()
             assertEquals(SyncPhase.Updated, service.phase)
             assertEquals("Updated just now", service.statusText)
-            assertEquals("Ardia Sync", service.folderName)
+            assertEquals("Solstice Sync", service.folderName)
             val profile = service.snapshot.defaultProfile!!
             assertEquals("Personal", profile.name)
             assertEquals(listOf("MacBook Pro"), profile.deviceTabs.map { it.deviceName })
@@ -302,7 +302,7 @@ class SyncEndToEndTest {
     fun aKeystoreKeyOpensOnlyForItsAccount() {
         val sandbox = Sandbox()
         try {
-            val store = KeystoreKeyStore(sandbox.keys, "Ardia Sync Key Test")
+            val store = KeystoreKeyStore(sandbox.keys, "Solstice Sync Key Test")
             val entropy = RecoveryPhrase.generateEntropy()
             assertTrue(store.save(entropy, "device"))
             assertEquals(entropy.toList(), store.load("device")?.toList())
@@ -478,7 +478,7 @@ class SyncEndToEndTest {
             assertEquals(1, moved.size)
             val empty = java.io.File(j.sandbox.root, "Empty").apply { mkdirs() }
             assertEquals(ConnectResult.NoSyncData, j.service.changeFolder(SyncFolderPick.Folder(empty)))
-            assertEquals("Ardia Sync", j.service.folderName)
+            assertEquals("Solstice Sync", j.service.folderName)
             j.service.stopSyncing()
         } finally {
             j.done()
@@ -492,7 +492,7 @@ class SyncEndToEndTest {
         val j = joined()
         try {
             val second = java.io.File(j.sandbox.root, "Second")
-            j.sandbox.folder.copyRecursively(java.io.File(second, "Ardia Sync"))
+            j.sandbox.folder.copyRecursively(java.io.File(second, "Solstice Sync"))
             val metaFile = java.io.File(j.sandbox.state, "sync.json")
             val before = metaFile.readText()
             val block = refuseMetaSaves(j.sandbox)

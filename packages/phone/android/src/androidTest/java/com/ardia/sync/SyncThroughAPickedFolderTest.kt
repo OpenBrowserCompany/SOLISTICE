@@ -34,7 +34,7 @@ class SyncThroughAPickedFolderTest {
 
     private class Drive(val sandbox: Sandbox) {
         val root = File(sandbox.root, "Drive").apply { mkdirs() }
-        val folder = File(root, "Ardia Sync").apply { mkdirs() }
+        val folder = File(root, "Solstice Sync").apply { mkdirs() }
 
         init {
             TestDocumentsProvider.reset(root)
@@ -64,8 +64,8 @@ class SyncThroughAPickedFolderTest {
         try {
             val keys = SyncKeys(RecoveryPhrase.generateEntropy())
             val tree = ResolverDocumentTree(resolver, TestDocumentsProvider.treeUri)
-            assertEquals("Ardia Sync", DocumentTreeStorage.locate(tree))
-            val vault = SyncVault(DocumentTreeStorage(tree, "Ardia Sync", "Ardia Sync"), keys)
+            assertEquals("Solstice Sync", DocumentTreeStorage.locate(tree))
+            val vault = SyncVault(DocumentTreeStorage(tree, "Solstice Sync", "Solstice Sync"), keys)
             vault.createChain()
             val ids = (0 until 5).map { vault.write("app", "{\"n\":$it}".toByteArray()) }
             val fromDisk = SyncVault(com.ardia.sync.core.FolderStorage(drive.folder), keys).read("app", emptySet())
@@ -91,7 +91,7 @@ class SyncThroughAPickedFolderTest {
             val service = service(drive.sandbox, source, TrustingTreeAccess(resolver))
             val phrase = RecoveryPhrase.words(entropy).joinToString(" ")
             assertEquals(ConnectResult.Connected, service.connect(phrase, SyncFolderPick.Tree(TestDocumentsProvider.treeUri.toString())))
-            assertEquals("Ardia Sync", service.folderName)
+            assertEquals("Solstice Sync", service.folderName)
             service.syncNow()
             assertEquals(SyncPhase.Updated, service.phase)
             assertTrue(bookmarks(service).contains("Docs"))
@@ -229,7 +229,7 @@ class SyncThroughAPickedFolderTest {
             first.close()
 
             val strict = service(drive.sandbox, source, AndroidSyncFolderAccess(resolver))
-            assertFalse(AndroidSyncFolderAccess(resolver).keep(SyncFolderLocation.Tree(pick.treeUri, "Ardia Sync", "Ardia Sync")))
+            assertFalse(AndroidSyncFolderAccess(resolver).keep(SyncFolderLocation.Tree(pick.treeUri, "Solstice Sync", "Solstice Sync")))
             strict.start()
             assertEquals(SyncPhase.NeedsFolderAccess, strict.phase)
             assertEquals("Choose your sync folder again to keep syncing.", strict.statusText)
@@ -259,7 +259,7 @@ class SyncThroughAPickedFolderTest {
         val drive = Drive(Sandbox())
         try {
             val tree = ResolverDocumentTree(resolver, TestDocumentsProvider.treeUri)
-            val storage = DocumentTreeStorage(tree, "Ardia Sync", "Ardia Sync")
+            val storage = DocumentTreeStorage(tree, "Solstice Sync", "Solstice Sync")
             assertEquals(emptyList<String>(), storage.names(emptyList()))
             drive.folder.renameTo(File(drive.root, "Away"))
             assertNull(storage.names(emptyList()))
