@@ -29,7 +29,7 @@ import { SyncSection } from "./SyncSection";
 import { UpdatesSection } from "./UpdatesSection";
 import { homeRelative } from "../../../lib/homePath";
 
-const APP = "Ardia";
+const APP = "Solstice";
 
 export function GeneralPane({ detail }: SettingsPlace) {
   if (detail === SETTINGS_DETAIL.filterLists) return <FilterListsPage />;
@@ -197,7 +197,7 @@ function ContentBlockingSection() {
     if (!on && c === "ads") {
       const { confirmed } = await confirm({
         title: "Turn Off Ad Blocker?",
-        message: "Ardia's Ad Blocker hides ads so pages load faster and feel cleaner.",
+        message: "Solstice's Ad Blocker hides ads so pages load faster and feel cleaner.",
         confirmTitle: "Turn Off",
       });
       if (!confirmed) return refresh();
