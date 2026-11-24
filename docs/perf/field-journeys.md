@@ -97,7 +97,7 @@ can be told from a slow launch on a quiet one; null when the call failed, never 
 launch was hidden, started as a login item, false when it wasn't; null when AppKit hadn't finished launching when the
 value was read). Both, and `main_ms`, `startup_ms` and `chromium_ms`, come from the first nightly after
 0.2.46-nightly.7; an earlier build leaves them out, and a mark the app didn't reach is null, never 0.
-`launch_source` (`login_item`, `documents` when another app opened a link or file with Ardia, `user`; null before AppKit
+`launch_source` (`login_item`, `documents` when another app opened a link or file with Solstice, `user`; null before AppKit
 finished launching, nothing else ever sent), `appkit_will_finish_ms` and `appkit_did_finish_ms` (`NSApplicationWillFinishLaunching`
 and `NSApplicationDidFinishLaunching`, from process start) come from the first nightly after 0.2.47-nightly.4.
 `cold_nth` (`1`, `2`, `3+`: which cold launch of this version on this copy this is; null on a warm launch, and on every launch of a

@@ -1,6 +1,6 @@
 # Performance benchmarks
 
-How to measure Ardia and gate a release on it. Every script prints its flags with `--help`, and its header
+How to measure Solstice and gate a release on it. Every script prints its flags with `--help`, and its header
 documents the same flags, so you don't need to read the rest of a script to run it. Results from past
 comparisons: [0.2.19 → 0.2.20](0.2.19-to-0.2.20.md), [0.2.22 → 0.2.23](0.2.22-to-0.2.23.md), [0.2.23 → 0.2.24](0.2.23-to-0.2.24.md), [0.2.24 → 0.2.25](0.2.24-to-0.2.25.md), [0.2.25 → 0.2.26](0.2.25-to-0.2.26.md), [0.2.26 → 0.2.27](0.2.26-to-0.2.27.md).
 
@@ -12,7 +12,7 @@ All of them are in `apps/browser/scripts/perf/`.
 |---|---|---|
 | `native-bench.mjs` | native | Launch, idle CPU and wakeups, memory, tab and window latency, throttling, on a Release app in hidden instances. Its header maps every section and output row to the function that measures it. |
 | `native-summary.mjs`, `gate-verdict.mjs`, `gate.sh` | native | The rows native-bench prints, the release gate's pooled verdict over its rounds, and the script that runs the whole gate under one perflab lock (below). |
-| `bench-sweep.mjs` | native, JS | Stops the app instances a gate's jobs launched with `open` (outside every process group, so no signal to a bench reaches them), found only by `ARDIA_DATA_DIR` or `HOME` in their environment naming a path inside the gate's own folders, never by executable or pid. The owner's Ardia never matches. |
+| `bench-sweep.mjs` | native, JS | Stops the app instances a gate's jobs launched with `open` (outside every process group, so no signal to a bench reaches them), found only by `ARDIA_DATA_DIR` or `HOME` in their environment naming a path inside the gate's own folders, never by executable or pid. The owner's Solstice never matches. |
 | `template-cache.mjs`, `template-state.mjs`, `ubo-cache.mjs` | native, cross-browser | The data folder every run copies: what a finished one must hold (uBO's saved engine, the startup components), and the cache that keeps it between rounds and gates, keyed by the app's build and code, uBO's version, the bench bundle and the page port. |
 | `acperf.swift` | native | Process probes (rusage, phys_footprint, window on screen, quit) and `postkeys` (real key events posted to one pid with `CGEventPostToPid`), built on demand with swiftc. |
 | `acmark.m` | native | Injected into the bench's copy of the app: marks when a window's React content commits, and (`AC_BENCH_KEYLOG=1`) every key down the app's event loop sees. |
@@ -62,9 +62,9 @@ Each bench drives the app through files in the instance's `ARDIA_DATA_DIR`:
 
 The previous stable release is the control and the new release candidate is the candidate. The gate passes when every
 row is the same or better. Only stable releases are gated, and only against stable: a nightly is never a control, so
-the control stays `dist/<previous stable>/export/Ardia.app` however many nightlies shipped in between.
+the control stays `dist/<previous stable>/export/Solstice.app` however many nightlies shipped in between.
 
-1. **Build the candidate with `scripts/release.sh <v> --rc`.** That gives you `dist/<v>-rc/export/Ardia.app`.
+1. **Build the candidate with `scripts/release.sh <v> --rc`.** That gives you `dist/<v>-rc/export/Solstice.app`.
    A local Release build is a different app: it's unstripped (about 18 MB against 8.9 MB) and has no secure
    timestamp or notarization ticket, so its launch numbers don't stand for what ships.
 2. **Give each app a bench bundle that matches its `NATIVE_API_VERSION`.** native-bench swaps its own bundle
@@ -177,7 +177,7 @@ renders, store updates and timers on the candidate's own bundle, as counts that 
 ratchet failed or a gate row needs explaining, alternating the apps one run at a time:
 
 ```sh
-for i in 1 2 3; do for app in $PREV:dist/$PREV/export/Ardia.app rc:dist/$V-rc/export/Ardia.app; do
+for i in 1 2 3; do for app in $PREV:dist/$PREV/export/Solstice.app rc:dist/$V-rc/export/Solstice.app; do
   node apps/browser/scripts/perf/js-bench.mjs run --app ${app#*:} --bundle ${app#*:}/Contents/Resources/main.jsbundle \
     --label ${app%%:*} --runs 1 --append 1 --out $OUT/js
 done; done
@@ -217,7 +217,7 @@ raised only by hand, with the reason in the commit. Nothing runs in CI, so the c
 ```sh
 node apps/browser/scripts/perf/ratchet.mjs run            # about 2 minutes: bundle the tree; the journeys, the one-tab launch and the Node counts side by side; check
 node apps/browser/scripts/perf/ratchet.mjs run --instr    # the same, plus the instruction counter
-node apps/browser/scripts/perf/ratchet.mjs run --own --app dist/<v>-rc/export/Ardia.app   # a release candidate's own bundle
+node apps/browser/scripts/perf/ratchet.mjs run --own --app dist/<v>-rc/export/Solstice.app   # a release candidate's own bundle
 node apps/browser/scripts/perf/ratchet.mjs check <report.json>          # a js-bench report you already have (several runs: the median run)
 node apps/browser/scripts/perf/ratchet.mjs check <reports> --retry <retry report>   # a run's verdict again, its retry merged per scenario as run does
 node apps/browser/scripts/perf/ratchet.mjs lower <report.json>          # lock in the counts a change cut; prints the diff (takes --retry too)
@@ -353,7 +353,7 @@ again shows up here at once: `switchTabs.subNotified` grows by the row count per
 
 ### In the release gate
 
-Step 4b of the release skill: `ratchet.mjs run --own --app dist/<v>-rc/export/Ardia.app` must print `ratchet: ok` before
+Step 4b of the release skill: `ratchet.mjs run --own --app dist/<v>-rc/export/Solstice.app` must print `ratchet: ok` before
 publishing. Counts need no perflab lock (they aren't timings), but run it on a Mac that isn't busy with someone's timing
 run. After a release that cut counts, `ratchet.mjs lower` and commit.
 
@@ -655,7 +655,7 @@ cancellation, so a loop that wakes while the other is being disarmed always ends
 2-second write run on their own queue, apart from the queue that allocates (recovery, the JS event, annotations), so a
 thread frozen holding the malloc lock can't stop the write; registration takes a small lock, never a queue.
 
-Frames are resolved without `dladdr`: a table of our own images' `__TEXT` ranges and UUIDs (Ardia, Chromium Framework,
+Frames are resolved without `dladdr`: a table of our own images' `__TEXT` ranges and UUIDs (Solstice, Chromium Framework,
 hermes) is built at start, the dyld shared cache's range is "system", anything else "other" with no offset. Two seconds
 into a freeze the watchdog writes the record into one of 20 fixed 4 KB slots (frames stop short of the slot's last 640 bytes, so the images and end marker always fit) of `freezes.txt` in the data folder,
 preformatted into a static buffer with `pwrite` to a file opened at start, so a force quit still leaves it; the frozen
