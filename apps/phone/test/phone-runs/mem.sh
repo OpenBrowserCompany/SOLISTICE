@@ -1,5 +1,5 @@
 #!/bin/bash
-S=g6vcdmxgydjbrga6; P=com.ardia.browser.android; O=/tmp/ardia-sync12-m3/out; L=$O/memory.txt
+S=g6vcdmxgydjbrga6; P=com.openbrowsercompany.solstice.android; O=/tmp/ardia-sync12-m3/out; L=$O/memory.txt
 n0=$(grep -ac 'PAGELAB memory' $O/session.log)
 adb -s $S shell am broadcast -a com.ardia.phone.MEMORY -p $P >/dev/null; sleep 3
 echo "== $1 ($(date -u +%T) UTC, animator $(adb -s $S shell settings get global animator_duration_scale|tr -d '\r'))" >> $L
