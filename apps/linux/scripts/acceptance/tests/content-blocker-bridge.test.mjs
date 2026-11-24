@@ -28,7 +28,7 @@ async function nativeScripts() {
 }
 
 const STAND_IN = {
-  "manifest.json": JSON.stringify({ manifest_version: 3, name: "Ardia bridge stand-in", version: "1.0", permissions: ["storage"] }),
+  "manifest.json": JSON.stringify({ manifest_version: 3, name: "Solstice bridge stand-in", version: "1.0", permissions: ["storage"] }),
   "js/vapi.js": `chrome.extension.getBackgroundPage = () => ({ "\\u00b5Block": { isReadyPromise: Promise.resolve() } });
 self.standIn = { whitelist: ["chrome-extension-scheme"], available: { easylist: { content: "filters", group: "ads", title: "EasyList", entryCount: 5 }, "fanboy-cookiemonster": { content: "filters", group: "annoyances", title: "Cookies", off: true, entryCount: 2 } }, messages: [] };`,
   "js/vapi-common.js": "",

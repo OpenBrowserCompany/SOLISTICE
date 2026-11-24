@@ -9,7 +9,7 @@ const panel = (...rows) => ["Site Controls", ...rows, "Zoom: 100%"].join("\n");
 
 describe("site panel security", () => {
   it("classifies each connection row", () => {
-    assert.equal(classifySitePanel(panel("Connection is secure", "Certificate issued by Ardia Acceptance Test CA")).level, "secure");
+    assert.equal(classifySitePanel(panel("Connection is secure", "Certificate issued by Solstice Acceptance Test CA")).level, "secure");
     assert.equal(classifySitePanel(panel("Connection is not secure", "Don't enter sensitive information on this site.")).level, "insecure");
     assert.equal(classifySitePanel(panel("Connection is not secure", "Parts of this page aren't secure (such as images).")).level, "mixed");
     assert.equal(classifySitePanel(panel("Connection is not secure", "The site's certificate isn't valid. Don't enter passwords or payment details.")).level, "certificateError");

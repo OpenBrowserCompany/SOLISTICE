@@ -71,7 +71,7 @@ describe("harness against a stock Chromium", { skip: available ? false : `${CHRO
     assert.notEqual((await lastState(plain.states)).securityState, "secure");
     const mixed = await open(fixtures.url.mixed());
     const state = await until(() => mixed.states.find((s) => s.securityStateIssueIds?.includes("contained-mixed-form")), { timeout: 8000, label: "mixed form state" });
-    assert.ok(state, "Chromium did not report the insecure form that Ardia classifies as mixed");
+    assert.ok(state, "Chromium did not report the insecure form that Solstice classifies as mixed");
   });
 
   it("answers the mapped suggestion host and blocks every other host", async () => {
