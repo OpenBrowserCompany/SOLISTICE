@@ -219,8 +219,8 @@ Shot "$Proof\$Label-09-relaunched.png"
 $second = Start-Process "$App\chrome.exe" -ArgumentList '--ardia-shell=webui' -PassThru; [Pilot]::Roots.Add($second.Id) | Out-Null
 $second.WaitForExit(20000) | Out-Null
 Wait-Until { Shell-Foreground } 10 'the first window to come forward' -NoThrow | Out-Null
-$windows = [Pilot]::CountShells('Ardia')
-Check 'second-launch-reuses' ($windows -eq 1) "Ardia windows after a second launch: $windows; foreground is the shell: $([Pilot]::GetForegroundWindow() -eq $h)"
+$windows = [Pilot]::CountShells('Solstice')
+Check 'second-launch-reuses' ($windows -eq 1) "Solstice windows after a second launch: $windows; foreground is the shell: $([Pilot]::GetForegroundWindow() -eq $h)"
 $F = [Pilot]::Frame($h)
 [Pilot]::Click([int]($F.Left + ($F.Right - $F.Left) * 0.55), [int]($F.Top + 30 * (Scale $h)))
 Wait-Until { Shell-Foreground } 5 'the shell to be the foreground window' -NoThrow | Out-Null

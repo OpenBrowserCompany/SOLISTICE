@@ -53,7 +53,7 @@ $orphan = @($targets | Where-Object { $_.url -like '*form.html?orphan*' })
 Check 'retired-document-makes-no-page' (($orphanDropped.Count -ge 1) -and ($orphan.Count -eq 0)) "$($orphanDropped -join ' / '); targets: $(($targets | ForEach-Object { $_.url }) -join ' | ')"
 
 $before = (Shell-Lines).Count
-$orphanProfile = "$Data\Chromium\Ardia orphanprofile"
+$orphanProfile = "$Data\Chromium\Solstice orphanprofile"
 Send-Then-Barrier 'window.__ardiaHost.invoke("tab.create", { key: "orphan-profile-probe", claim: "orphan-profile-claim", profile: "orphanprofile", url: "file:///C:/pilot/form.html?orphanprofile", testDelayMs: 4000 })' | Out-Null
 Crash-And-Reload $before @('page creation dropped before its profile loaded')
 $after = @(Shell-Lines | Select-Object -Skip $before)
