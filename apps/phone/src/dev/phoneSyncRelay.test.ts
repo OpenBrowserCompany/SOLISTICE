@@ -100,7 +100,7 @@ function relayWorld() {
   made.push(root);
   const adb = writeFakeAdb(root);
   const mac = path.join(root, "mac", "folder");
-  const phone = path.join(root, "phone", "Ardia Sync");
+  const phone = path.join(root, "phone", "Solstice Sync");
   const work = path.join(root, "work");
   fs.mkdirSync(mac, { recursive: true });
   fs.mkdirSync(phone, { recursive: true });

@@ -16,12 +16,12 @@ test("the iPhone app ships with the default browser on, now that Apple granted t
 });
 
 test("one build setting turns on the entitlement and the Info.plist key together, so the app is never half on", () => {
-  assert.match(project, /ARDIA_ENTITLEMENTS_NO = Config\/Ardia\.entitlements;/);
-  assert.match(project, /ARDIA_ENTITLEMENTS_YES = "Config\/Ardia-DefaultBrowser\.entitlements";/);
+  assert.match(project, /ARDIA_ENTITLEMENTS_NO = Config\/Solstice\.entitlements;/);
+  assert.match(project, /ARDIA_ENTITLEMENTS_YES = "Config\/Solstice-DefaultBrowser\.entitlements";/);
   const signing = [...project.matchAll(/CODE_SIGN_ENTITLEMENTS = (.+);/g)].map((match) => match[1]!.replaceAll('"', ""));
   assert.ok(signing.includes("$(ARDIA_ENTITLEMENTS_$(ARDIA_DEFAULT_BROWSER))"), "the app target picks its entitlements from ARDIA_DEFAULT_BROWSER");
   assert.match(info, /<key>ArdiaDefaultBrowser<\/key>\s*<string>\$\(ARDIA_DEFAULT_BROWSER\)<\/string>/, "DefaultBrowserStatus.isOffered reads the same setting");
-  const granted = entitlements("Ardia-DefaultBrowser.entitlements");
+  const granted = entitlements("Solstice-DefaultBrowser.entitlements");
   assert.match(granted, new RegExp(`<key>${WEB_BROWSER}</key>\\s*<true/>`));
   assert.equal(granted.replace(new RegExp(`\\s*<key>${WEB_BROWSER}</key>\\s*<true/>`), ""), entitlements("Ardia.entitlements"), "the two files differ only by the web-browser entitlement");
 });
