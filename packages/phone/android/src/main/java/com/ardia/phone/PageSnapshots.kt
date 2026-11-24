@@ -2,7 +2,7 @@ package com.ardia.phone
 
 import android.content.Context
 import android.graphics.Bitmap
-import com.ardia.browser.PageCapture
+import com.openbrowsercompany.solstice.PageCapture
 import java.io.File
 import java.security.MessageDigest
 import kotlinx.coroutines.CoroutineScope

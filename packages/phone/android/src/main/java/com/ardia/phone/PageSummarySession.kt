@@ -3,7 +3,7 @@ package com.ardia.phone
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.ardia.browser.ReadableContent
+import com.openbrowsercompany.solstice.ReadableContent
 import com.ardia.research.PageSummaryDigest
 import java.util.UUID
 import kotlin.coroutines.cancellation.CancellationException
