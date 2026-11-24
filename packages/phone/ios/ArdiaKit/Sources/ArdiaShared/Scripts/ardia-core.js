@@ -1314,7 +1314,7 @@ function hostOf(url        )         {
 
 const KNOWN_SCHEMES = new Set([
   "http", "https", "file", "about", "data", "blob", "mailto", "tel", "sms", "facetime", "ftp", "view-source",
-  "ardia", "chrome", "chrome-extension", "devtools", "x-apple.systempreferences", "itms-apps", "slack", "zoommtg", "vscode",
+  "ardia", "solstice", "chrome", "chrome-extension", "devtools", "x-apple.systempreferences", "itms-apps", "slack", "zoommtg", "vscode",
   "cursor", "notion", "figma", "spotify", "linear", "obsidian", "raycast",
 ]);
 

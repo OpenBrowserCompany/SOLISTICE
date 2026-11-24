@@ -113,6 +113,8 @@ jobs:
           fetch-depth: 0
       - name: Create the build root
         run: |
+          brew install coreutils
+          echo "$(brew --prefix coreutils)/libexec/gnubin" >> "$GITHUB_PATH"
           mkdir -p "$HOME/chromium-build"
           touch "$HOME/chromium-build/.metadata_never_index"
       - name: Sync a fresh Chromium tree
