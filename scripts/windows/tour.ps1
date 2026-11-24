@@ -152,7 +152,7 @@ Add-Type -AssemblyName System.Windows.Forms, System.Drawing
 
 function Write-Tour {
   $header = @(
-    "# Ardia on Windows: screenshot tour",
+    "# Solstice on Windows: screenshot tour",
     "",
     "Every line is one stop: what the tour did, what it expected, and whether a fact the script can check says it happened (yes, no, or unverified when there is nothing to check). A screen that looks wrong is reported here and never fails the job; only a crash or an exit does.",
     "",
@@ -561,7 +561,7 @@ function Set-Seen($Stop, [bool]$Seen) {
   if ($Seen) { $Stop.Seen = "yes" } else { $Stop.Seen = "no" }
 }
 
-function Start-Ardia([string]$Name, [switch]$Onboarded, [hashtable]$Settings, [switch]$KeepData, [string[]]$Arguments = @()) {
+function Start-Solstice([string]$Name, [switch]$Onboarded, [hashtable]$Settings, [switch]$KeepData, [string[]]$Arguments = @()) {
   $data = Join-Path (Join-Path $Out "data") $Name
   if (-not $KeepData) { Remove-Item -Recurse -Force -ErrorAction SilentlyContinue $data }
   New-Item -ItemType Directory -Force -Path $data | Out-Null
@@ -611,7 +611,7 @@ function Start-Ardia([string]$Name, [switch]$Onboarded, [hashtable]$Settings, [s
   return $session
 }
 
-function Stop-Ardia($Session) {
+function Stop-Solstice($Session) {
   if (-not $Session) { return }
   $exitedOnItsOwn = $Session.Process.HasExited
   $Session.Stopping = $true
@@ -737,7 +737,7 @@ function Invoke-OnboardingAdvance($Session, $State, $Stop) {
 }
 
 function Invoke-OnboardingTour {
-  $session = Start-Ardia "onboarding"
+  $session = Start-Solstice "onboarding"
   if (-not (Test-Usable $session)) {
     Invoke-Stop $session "onboarding-launch" "Onboarding: first launch" {
       param($stop)
@@ -746,7 +746,7 @@ function Invoke-OnboardingTour {
       $stop.Seen = "no"
       $stop.Facts.Add("windows: $(Format-Windows (Get-TopWindows $session))")
     } | Out-Null
-    Stop-Ardia $session
+    Stop-Solstice $session
     return
   }
   Invoke-Stop $session "onboarding-intro" "Onboarding: intro animation" {
@@ -816,7 +816,7 @@ function Invoke-OnboardingTour {
     $now = Read-Onboarding $session
     if ($now) { $stop.Facts.Add("onboarding.json is at $($now.Step) $($now.Sub), completedAt $($now.Completed)") }
   } | Out-Null
-  Stop-Ardia $session
+  Stop-Solstice $session
 }
 
 function Read-FocusedText {
@@ -1025,41 +1025,41 @@ function Close-Bar {
 }
 
 function Invoke-TypingTour {
-  $session = Start-Ardia "typing-sidebar" -Onboarded
+  $session = Start-Solstice "typing-sidebar" -Onboarded
   if (-not (Test-Usable $session)) { $script:FailedStops.Add("Typing (typing-sidebar): no usable window") }
   if (Test-Usable $session) {
     $opened = Invoke-Stop $session "typing-page" "Not a first run: open Example Domain to type over" {
       param($stop)
       $stop.Did = "Launched onboarded, opened example.com in a tab."
-      $stop.Expected = "the window's title names example.com, the host Ardia shows for the open page."
+      $stop.Expected = "the window's title names example.com, the host Solstice shows for the open page."
       Set-Seen $stop (Open-Page $session $stop "example.com" "example\.com")
     }
     if ($opened.Seen -ne "yes") { $script:FailedStops.Add("$($opened.Number) Not a first run: open Example Domain to type over") }
     Invoke-BarTypingStop $session "typing-ctrl-l" "Not a first run: Ctrl+L on a page, typing at 80 ms a key, ten tries" "On Example Domain, pressed Ctrl+L, typed example.com from 300 ms after it at 80 ms a key, reading the field after every key, then closed the bar with Escape; ten times." { Send-QuickChord @(0x11) 0x4C } { Close-Bar } 300 80 10
     Invoke-BarTypingStop $session "typing-ctrl-t" "Not a first run: Ctrl+T, typing at 80 ms a key from 100 ms after it, ten tries" "Pressed Ctrl+T, typed example.com from 100 ms after it at 80 ms a key, reading the field after every key, then closed the tab with Ctrl+W; ten times." { Send-QuickChord @(0x11) 0x54 } { Send-Chord @(0x11) 0x57 } 100 80 10
   }
-  Stop-Ardia $session
+  Stop-Solstice $session
 
-  $session = Start-Ardia "typing-top" -Onboarded -Settings @{ tabLayout = "top" }
+  $session = Start-Solstice "typing-top" -Onboarded -Settings @{ tabLayout = "top" }
   if (-not (Test-Usable $session)) { $script:FailedStops.Add("Typing (typing-top): no usable window") }
   if (Test-Usable $session) {
     $opened = Invoke-Stop $session "typing-top-page" "Not a first run, tabs on top: open Example Domain to type over" {
       param($stop)
       $stop.Did = "Launched onboarded with tabLayout = top, opened example.com in a tab."
-      $stop.Expected = "the window's title names example.com, the host Ardia shows for the open page."
+      $stop.Expected = "the window's title names example.com, the host Solstice shows for the open page."
       Set-Seen $stop (Open-Page $session $stop "example.com" "example\.com")
     }
     if ($opened.Seen -ne "yes") { $script:FailedStops.Add("$($opened.Number) Not a first run, tabs on top: open Example Domain to type over") }
     Invoke-BarTypingStop $session "typing-toolbar" "Not a first run, tabs on top: Ctrl+L into the toolbar's address field, typing at 80 ms a key, ten tries" "With tabs on top, on Example Domain, pressed Ctrl+L, typed example.com from 300 ms after it at 80 ms a key, reading the field after every key, then closed the bar with Escape; ten times." { Send-QuickChord @(0x11) 0x4C } { Close-Bar } 300 80 10
   }
-  Stop-Ardia $session
+  Stop-Solstice $session
 
-  $session = Start-Ardia "typing-floating" -Onboarded -Settings @{ newTabOpens = "commandBar" }
+  $session = Start-Solstice "typing-floating" -Onboarded -Settings @{ newTabOpens = "commandBar" }
   if (-not (Test-Usable $session)) { $script:FailedStops.Add("Typing (typing-floating): no usable window") }
   if (Test-Usable $session) {
     Invoke-BarTypingStop $session "typing-floating" "Not a first run, new tabs open the command bar: Ctrl+T into the floating bar, typing at 80 ms a key, ten tries" "With newTabOpens = commandBar, pressed Ctrl+T, typed example.com from 100 ms after it at 80 ms a key, reading the field after every key, then closed the floating bar with Escape; ten times." { Send-QuickChord @(0x11) 0x54 } { Close-Bar } 100 80 10
   }
-  Stop-Ardia $session
+  Stop-Solstice $session
 
   Invoke-HoldTour
 }
@@ -1170,9 +1170,9 @@ function Invoke-WholeTextTries($Session, [string]$Slug, [string]$Title, [string]
 
 function Invoke-HoldTour {
   $env:ARDIA_TEST = "keyHoldReadyMs=$($script:HoldReadyMs)"
-  $session = Start-Ardia "hold" -Onboarded
+  $session = Start-Solstice "hold" -Onboarded
   $env:ARDIA_TEST = ""
-  if (-not (Test-Usable $session)) { $script:FailedStops.Add("Hold (hold): no usable window"); Stop-Ardia $session; return }
+  if (-not (Test-Usable $session)) { $script:FailedStops.Add("Hold (hold): no usable window"); Stop-Solstice $session; return }
   $opened = Invoke-Stop $session "hold-page" "Key hold: open Example Domain in the first tab" {
     param($stop)
     $stop.Did = "Launched onboarded, opened example.com in a tab."
@@ -1271,7 +1271,7 @@ function Invoke-HoldTour {
   if ($pad -ne [IntPtr]::Zero) {
     [ArdiaTour]::SetWindowPos($pad, [IntPtr](-1), 640, 420, 360, 260, 0x0040) | Out-Null
     Focus-Window $session $session.Main $null | Out-Null
-    Invoke-HoldStop $session "hold-click-other" "Key hold: typing, then a click into another program before the bar is ready" "With Notepad open beside Ardia, pressed Ctrl+T, and from 15 ms after it typed ab, then clicked into Notepad." "the hold ends when Notepad takes the keyboard, logged as a drop with keys held, and Notepad gets none of it (#2099)." {
+    Invoke-HoldStop $session "hold-click-other" "Key hold: typing, then a click into another program before the bar is ready" "With Notepad open beside Solstice, pressed Ctrl+T, and from 15 ms after it typed ab, then clicked into Notepad." "the hold ends when Notepad takes the keyboard, logged as a drop with keys held, and Notepad gets none of it (#2099)." {
       param($stop)
       $client = Get-Client $pad
       Send-Typed "ab" 10
@@ -1297,10 +1297,10 @@ function Invoke-HoldTour {
     Send-QuickChord @(0x11) 0x56 | Out-Null
   } { param($stop, $field, $mark) @(Get-LinesSince $session $mark "^keys \d+ hold \d+ dropped: a key with Ctrl, Alt or Win").Count -ge 1 }
 
-  Stop-Ardia $session
+  Stop-Solstice $session
 
-  $live = Start-Ardia "hold-live" -Onboarded
-  if (-not (Test-Usable $live)) { $script:FailedStops.Add("Hold (hold-live): no usable window"); Stop-Ardia $live; return }
+  $live = Start-Solstice "hold-live" -Onboarded
+  if (-not (Test-Usable $live)) { $script:FailedStops.Add("Hold (hold-live): no usable window"); Stop-Solstice $live; return }
   $page = Invoke-Stop $live "hold-live-page" "Key hold, runner's own timing: open Example Domain in the first tab" {
     param($stop)
     $stop.Did = "Launched onboarded without a readiness floor, opened example.com in a tab."
@@ -1309,7 +1309,7 @@ function Invoke-HoldTour {
   }
   if ($page.Seen -ne "yes") { $script:FailedStops.Add("$($page.Number) Key hold, runner's own timing: open Example Domain") }
   Invoke-WholeTextTries $live "hold-whole-live" "Key hold, runner's own timing: example.com typed from 15 ms after Ctrl+T, ten tries" "at the runner's own timing, so the first letters are held and the rest arrive live"
-  Stop-Ardia $live
+  Stop-Solstice $live
 }
 
 function Invoke-TypeStop($Session, [string]$Slug, [string]$Title, [string]$Did, [scriptblock]$Before, [string]$Into, [string]$Submit, [string]$Issues, [switch]$Required, [int]$FirstKeyMs = 100, [int]$KeyMs = 30, [switch]$ReadEachKey, [switch]$JudgeWholeText, [switch]$RequireGoHold, [switch]$JudgeLaterLetters) {
@@ -1546,10 +1546,10 @@ function Get-SuggestArguments {
 }
 
 function Initialize-SuggestProfile([string]$Name) {
-  $prep = Start-Ardia $Name
+  $prep = Start-Solstice $Name
   $path = Join-Path $prep.Data "session.json"
   if (Test-Usable $prep) { Wait-Until $prep { Test-Path -LiteralPath $path } 8000 | Out-Null }
-  Stop-Ardia $prep
+  Stop-Solstice $prep
   $saved = $null
   if (Test-Path -LiteralPath $path) {
     try { $saved = Get-Content -Raw -LiteralPath $path | ConvertFrom-Json -AsHashtable } catch { $saved = $null }
@@ -1570,7 +1570,7 @@ function Invoke-FirstRunLaunch([string]$Name, [string]$Exe, [scriptblock]$Body, 
   try {
     $script:SuggestProfile = $null
     if ($OwnSuggestions) { $script:SuggestProfile = Initialize-SuggestProfile $Name }
-    $session = if ($OwnSuggestions) { Start-Ardia $Name -KeepData -Arguments (Get-SuggestArguments) } else { Start-Ardia $Name }
+    $session = if ($OwnSuggestions) { Start-Solstice $Name -KeepData -Arguments (Get-SuggestArguments) } else { Start-Solstice $Name }
   } finally {
     $script:App = $saved
   }
@@ -1586,7 +1586,7 @@ function Invoke-FirstRunLaunch([string]$Name, [string]$Exe, [scriptblock]$Body, 
     } | Out-Null
     $script:FailedStops.Add("First run ($Name): no usable window")
   }
-  Stop-Ardia $session
+  Stop-Solstice $session
 }
 
 function Invoke-FirstRunTour {
@@ -1975,7 +1975,7 @@ function Invoke-SettingsStops($Session, [string]$Suffix, [string]$Label, [switch
 }
 
 function Invoke-MainTour {
-  $session = Start-Ardia "browser" -Onboarded
+  $session = Start-Solstice "browser" -Onboarded
   Invoke-Stop $session "main-window" "Main window, onboarding done" {
     param($stop)
     $stop.Did = "Launched with onboarding.json marked done and waited for the first window."
@@ -1992,7 +1992,7 @@ function Invoke-MainTour {
     $stop.Facts.Add("foreground is ours: $(Test-ForegroundIsOurs $session)")
     $stop.Facts.Add("DWM dark title bar: $([ArdiaTour]::DarkModeOf($session.Main))")
   } | Out-Null
-  if (-not (Test-Usable $session)) { Stop-Ardia $session; return }
+  if (-not (Test-Usable $session)) { Stop-Solstice $session; return }
 
   Invoke-Stop $session "new-tabs" "Three new tabs" {
     param($stop)
@@ -2115,7 +2115,7 @@ function Invoke-MainTour {
 
   Invoke-SettingsStops $session "" "" -Panes
 
-  Invoke-Stop $session "little-ardia" "Little Ardia window" {
+  Invoke-Stop $session "little-ardia" "Little Solstice window" {
     param($stop)
     $stop.Did = "Pressed Ctrl+Alt+N."
     $stop.Expected = "a newLittleArdia command, a new top-level window of ours, and its command panel drawn whole below the bar's field rather than cut off 24 points down, with the window buttons on the bare bar."
@@ -2187,7 +2187,7 @@ function Invoke-MainTour {
     Start-Sleep -Milliseconds 500
   } | Out-Null
 
-  Stop-Ardia $session
+  Stop-Solstice $session
 }
 
 function Wait-Title($Session, [string]$Pattern, [int]$Milliseconds = 25000) {
@@ -2212,7 +2212,7 @@ function Open-Page($Session, $Stop, [string]$Address, [string]$TitlePattern) {
 }
 
 function Invoke-PagesTour {
-  $session = Start-Ardia "pages" -Onboarded
+  $session = Start-Solstice "pages" -Onboarded
   Invoke-Stop $session "page-loads" "A page loads in a tab" {
     param($stop)
     $stop.Did = "Pressed Ctrl+T, typed example.com and pressed Enter."
@@ -2223,7 +2223,7 @@ function Invoke-PagesTour {
     Set-Seen $stop $loaded
     $stop.Facts.Add("windows: $(Format-Windows (Get-TopWindows $session))")
   } | Out-Null
-  if (-not (Test-Usable $session)) { Stop-Ardia $session; return }
+  if (-not (Test-Usable $session)) { Stop-Solstice $session; return }
 
   Invoke-Stop $session "page-find" "Find in the page" {
     param($stop)
@@ -2294,7 +2294,7 @@ function Invoke-PagesTour {
 
   Invoke-Stop $session "page-link-from-outside" "A link from another launch" {
     param($stop)
-    $stop.Did = "Started Ardia again with https://example.org/ while it was running."
+    $stop.Did = "Started Solstice again with https://example.org/ while it was running."
     $stop.Expected = "the running app opens the link in a window of ours whose title names the site, and no second app stays."
     $before = @(Get-TopWindows $session)
     $second = Start-Process -FilePath $App -ArgumentList "https://example.org/" -PassThru
@@ -2342,7 +2342,7 @@ function Invoke-PagesTour {
     Set-Seen $stop $loaded
     $stop.Facts.Add("the new window is titled '$([ArdiaTour]::TitleOf($private))'")
   } | Out-Null
-  Stop-Ardia $session
+  Stop-Solstice $session
 }
 
 $script:TourPagesPort = 9363
@@ -2529,7 +2529,7 @@ function Invoke-PeekTabsTour {
   }
   $blue = @(0x33, 0x66, 0xcc)
   $red = @(0xc0, 0x39, 0x2b)
-  $session = Start-Ardia "peek-tabs" -Onboarded -Settings @{ appearance = "light" }
+  $session = Start-Solstice "peek-tabs" -Onboarded -Settings @{ appearance = "light" }
   $state = [pscustomobject]@{ Card = $null; PageB = $null; PageA = $null }
 
   $stop = Invoke-Stop $session "peek-tabs-open" "A Peek on tab A takes the keyboard" {
@@ -2623,7 +2623,7 @@ function Invoke-PeekTabsTour {
     Set-Seen $stop ($closed -and $null -ne $notBlue -and $notBlue -lt 2 -and $typed)
   }
   Note-Required $stop "peek-tabs"
-  Stop-Ardia $session
+  Stop-Solstice $session
 }
 
 function Invoke-PeekTour([string]$Name, [hashtable]$Settings, [string]$Look, [int]$Height = 0, [int]$ScaleSteps = 0) {
@@ -2637,7 +2637,7 @@ function Invoke-PeekTour([string]$Name, [hashtable]$Settings, [string]$Look, [in
     $set = Set-ScaleStep ($savedStep + $ScaleSteps)
     $script:Lines.Add("- The $Name part moved the display scale override from step $savedStep to $(Get-ScaleStep) (set: $set).")
   }
-  $session = Start-Ardia $Name -Onboarded -Settings $Settings
+  $session = Start-Solstice $Name -Onboarded -Settings $Settings
   Invoke-Stop $session $Name "A Peek over a page, $Look" {
     param($stop)
     $stop.Did = "Opened a loopback page with one link, then Shift-clicked the link."
@@ -2684,12 +2684,12 @@ function Invoke-PeekTour([string]$Name, [hashtable]$Settings, [string]$Look, [in
     Send-Escape
     Start-Sleep -Milliseconds 800
   } | Out-Null
-  Stop-Ardia $session
+  Stop-Solstice $session
   if ($null -ne $savedStep) { Set-ScaleStep $savedStep | Out-Null }
 }
 
 function Invoke-LayoutTour([string]$Name, [hashtable]$Settings, [string]$Title, [string]$Expected) {
-  $session = Start-Ardia $Name -Onboarded -Settings $Settings
+  $session = Start-Solstice $Name -Onboarded -Settings $Settings
   Invoke-Stop $session $Name $Title {
     param($stop)
     $stop.Did = "Launched with $(($Settings.GetEnumerator() | ForEach-Object { "$($_.Key) = $($_.Value)" }) -join ', ') in config.json, then pressed Ctrl+T twice."
@@ -2708,11 +2708,11 @@ function Invoke-LayoutTour([string]$Name, [hashtable]$Settings, [string]$Title, 
     $problems = @(Read-LogLines $session.Log | Where-Object { $_ -match "\[config\]" })
     if ($problems.Count) { $stop.Facts.Add("config log lines: $(($problems | Select-Object -First 3) -join ' | ')") }
   } | Out-Null
-  Stop-Ardia $session
+  Stop-Solstice $session
 }
 
 function Invoke-DarkTour {
-  $session = Start-Ardia "dark" -Onboarded -Settings @{ appearance = "dark" }
+  $session = Start-Solstice "dark" -Onboarded -Settings @{ appearance = "dark" }
   Invoke-Stop $session "dark-main" "Dark mode, main window" {
     param($stop)
     $stop.Did = "Launched with appearance = dark in config.json."
@@ -2732,7 +2732,7 @@ function Invoke-DarkTour {
     elseif ($dark -eq 0 -or $darker -eq $false) { $stop.Seen = "no" }
   } | Out-Null
   if (Test-Usable $session) { Invoke-SettingsStops $session "-dark" ", dark mode" }
-  Stop-Ardia $session
+  Stop-Solstice $session
 }
 
 function Get-Motion($Session, [int]$Mark) {
@@ -2777,13 +2777,13 @@ function Invoke-MotionStop($Session, [string]$Slug, [string]$Title, [string]$Key
 }
 
 function Invoke-MotionTour {
-  $session = Start-Ardia "motion" -Onboarded
+  $session = Start-Solstice "motion" -Onboarded
   if (Test-Usable $session) {
     Invoke-MotionStop $session "motion-sidebar-hides" "The sidebar slides away" "Ctrl+S" @(0x11) 0x53 "toggleSidebar" 150 -JumpsWithAnimationsOff
     Invoke-MotionStop $session "motion-sidebar-shows" "The sidebar slides back" "Ctrl+S" @(0x11) 0x53 "toggleSidebar" 150 -JumpsWithAnimationsOff
     Invoke-MotionStop $session "motion-new-tab" "A new tab's row slides in" "Ctrl+T" @(0x11) 0x54 "newTab" 80
   }
-  Stop-Ardia $session
+  Stop-Solstice $session
 }
 
 $script:SettingsWindow = [IntPtr]::Zero
@@ -2837,7 +2837,7 @@ foreach ($tour in $tours) {
     Write-Host "[tour] the $($tour.Name) part stopped early: $($_.Exception.Message)"
     if ($tour.Required) { $script:FailedStops.Add("the $($tour.Name) part stopped early: $($_.Exception.Message)") }
   } finally {
-    foreach ($session in @($script:Sessions | Where-Object { -not $_.Stopping })) { Stop-Ardia $session }
+    foreach ($session in @($script:Sessions | Where-Object { -not $_.Stopping })) { Stop-Solstice $session }
   }
 }
 

@@ -126,7 +126,7 @@
     {
       "name": "new-tab",
       "title": "Open a tab",
-      "description": "Runs Ardia's newTab command.",
+      "description": "Runs Solstice's newTab command.",
       "timeout": 5
     },
     {
