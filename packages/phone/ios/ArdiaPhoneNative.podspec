@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.summary        = package['description']
   s.description    = package['description']
   s.license        = 'Apache-2.0'
-  s.author         = 'Ardia'
+  s.author         = 'Solstice'
   s.homepage       = 'https://ardia.dev'
   s.platforms      = { :ios => '27.0' }
   s.swift_version  = '5.9'

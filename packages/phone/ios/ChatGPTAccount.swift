@@ -82,7 +82,7 @@ final class ChatGPTAccount {
     self.connection = nil
     KeychainSecret.delete(Self.connectionKey)
     if await !revoke(connection) {
-      problem = String(localized: "Disconnected on this iPhone, but OpenAI didn’t confirm it. You can also remove Ardia in ChatGPT’s settings.")
+      problem = String(localized: "Disconnected on this iPhone, but OpenAI didn’t confirm it. You can also remove Solstice in ChatGPT’s settings.")
     }
   }
 

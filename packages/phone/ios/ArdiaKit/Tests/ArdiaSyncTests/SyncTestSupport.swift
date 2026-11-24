@@ -5,7 +5,7 @@ import Foundation
 
 final class Sandbox {
   let root: URL
-  var folder: URL { root.appendingPathComponent("Ardia Sync", isDirectory: true) }
+  var folder: URL { root.appendingPathComponent("Solstice Sync", isDirectory: true) }
   var state: URL { root.appendingPathComponent("State", isDirectory: true) }
   var keys: URL { root.appendingPathComponent("Keys", isDirectory: true) }
 
