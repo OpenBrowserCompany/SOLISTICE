@@ -4,7 +4,7 @@ const SYNC_ONLY_PHRASES = ["pages you pinned to your Mac, ", "tabs you sent to a
 
 const APPEARANCE_WITHOUT_SYNC = "With each launch, the Appearance you chose: Glass or Classic, and Light, Dark or System";
 
-const COLOR_WITHOUT_SYNC = "With each launch, whether your color is one of Ardia’s colors or a custom theme. Never which colors";
+const COLOR_WITHOUT_SYNC = "With each launch, whether your color is one of Solstice’s colors or a custom theme. Never which colors";
 
 const IPHONE_ONLY_FIELDS = ["perf_backdrop", "browse_for_me_opened", "page_summaries_pinched", "talk_to_me_answers_read", "page_covers_capped"];
 

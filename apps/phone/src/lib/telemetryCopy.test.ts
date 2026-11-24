@@ -24,7 +24,7 @@ test("the envelope around each batch carries only the fields What’s Sent lists
   }
 });
 
-test("What’s Sent says the day’s counts are for the last day Ardia was used, which is what is sent after days away", () => {
+test("What’s Sent says the day’s counts are for the last day Solstice was used, which is what is sent after days away", () => {
   const usage = PHONE_WHATS_SENT.flatMap((section) => section.items).find((item) => item.fields.includes("usage_counts"))!;
   assert.match(usage.text, /last day you used Ardia/);
   assert.doesNotMatch(usage.text, /day before/);

@@ -1,6 +1,6 @@
 export const PHONE_SHARING_COPY = {
   toggle: "Share anonymous usage stats",
-  summary: "How fast Ardia opens, rough counts of what you use, and how often a page stops. Never the sites you visit, anything you type or search, or what’s in your tabs.",
+  summary: "How fast Solstice opens, rough counts of what you use, and how often a page stops. Never the sites you visit, anything you type or search, or what’s in your tabs.",
   whatsSent: "What’s Sent",
   footnote:
     "Off unless you turn it on. Sent to ardia.dev with a random ID made on this phone, and kept on our own servers. No third parties. Turning it off stops it at once and deletes anything waiting to be sent. This setting doesn’t sync.",
@@ -17,10 +17,10 @@ export const PHONE_WHATS_SENT: { title: string; items: SentItem[] }[] = [
         text: "A random install ID, made on this phone the first time you turn sharing on and kept through updates. Nothing is sent with it while sharing is off",
         fields: ["distinct_id"],
       },
-      { text: "A random ID for each time Ardia opens, so one session’s events can be read together, and a random ID for each event", fields: ["$session_id", "uuid"] },
-      { text: "That it came from Ardia’s phone app, under the name ardia-phone, and which version of its reporting it uses", fields: ["app", "$app_name", "$lib", "$lib_version", "service.name"] },
+      { text: "A random ID for each time Solstice opens, so one session’s events can be read together, and a random ID for each event", fields: ["$session_id", "uuid"] },
+      { text: "That it came from Solstice’s phone app, under the name ardia-phone, and which version of its reporting it uses", fields: ["app", "$app_name", "$lib", "$lib_version", "service.name"] },
       { text: "Android or iOS, and its version number", fields: ["platform", "$os", "$os_version", "os.type", "os.version"] },
-      { text: "Ardia’s version number, and whether it’s a test build", fields: ["$app_version", "$environment", "service.version", "deployment.environment"] },
+      { text: "Solstice’s version number, and whether it’s a test build", fields: ["$app_version", "$environment", "service.version", "deployment.environment"] },
       { text: "Two flags asking our servers not to build a profile and not to work out a location from your connection", fields: ["$process_person_profile", "$geoip_disable"] },
       { text: "When it happened", fields: ["timestamp"] },
     ],
@@ -30,7 +30,7 @@ export const PHONE_WHATS_SENT: { title: string; items: SentItem[] }[] = [
     items: [
       { text: "When you turn sharing on: whether you did it in Settings or during setup", fields: ["sharing_turned_on", "source"] },
       {
-        text: "Each launch, and whether Ardia has brought over the previous version’s tabs and history, started without them after it couldn’t, or had nothing to bring over, and how many tries failed before it opened. Never what it brought or why",
+        text: "Each launch, and whether Solstice has brought over the previous version’s tabs and history, started without them after it couldn’t, or had nothing to bring over, and how many tries failed before it opened. Never what it brought or why",
         fields: ["app_launched", "legacy_import", "legacy_import_failures", "look_mode"],
       },
       {
@@ -38,7 +38,7 @@ export const PHONE_WHATS_SENT: { title: string; items: SentItem[] }[] = [
         fields: ["interface_style", "color_scheme"],
       },
       {
-        text: "With each launch, whether your color matches your Mac, is one of Ardia’s colors, or is a custom theme. Never which colors",
+        text: "With each launch, whether your color matches your Mac, is one of Solstice’s colors, or is a custom theme. Never which colors",
         fields: ["color_choice"],
       },
       {
@@ -46,23 +46,23 @@ export const PHONE_WHATS_SENT: { title: string; items: SentItem[] }[] = [
         fields: ["glass_render"],
       },
       {
-        text: "On Android, with each launch, whether the Material You design was off, and with it on, whether Dynamic Colors used your wallpaper, Ardia used your custom color, or the phone gave no wallpaper palette and Ardia used its own",
+        text: "On Android, with each launch, whether the Material You design was off, and with it on, whether Dynamic Colors used your wallpaper, Solstice used your custom color, or the phone gave no wallpaper palette and Solstice used its own",
         fields: ["material_colors"],
       },
       {
-        text: "How long Ardia took to open, from when the system started it to its first screen, and how much of that passed before its code began to run",
+        text: "How long Solstice took to open, from when the system started it to its first screen, and how much of that passed before its code began to run",
         fields: ["perf_launch", "launch_ms", "js_ms"],
       },
       {
-        text: "On iPhone, how long Ardia took to show its first backdrop, from when the system started it",
+        text: "On iPhone, how long Solstice took to show its first backdrop, from when the system started it",
         fields: ["perf_backdrop", "backdrop_ms"],
       },
       {
-        text: "With Auto-Open Keyboard on, how long Ardia took to put its search tray up when it opened, from when the system started it",
+        text: "With Auto-Open Keyboard on, how long Solstice took to put its search tray up when it opened, from when the system started it",
         fields: ["perf_launch_tray", "tray_ms"],
       },
       {
-        text: "At most once a day, for the last day you used Ardia before today: how many tabs you opened, searches you made, pages you pinned to your Mac, tabs you sent to another device, pages that stopped working because their page process ended, links from other apps Ardia gave up on because they took too long, and pages that reloaded by themselves when the phone came back online, how often the tab switcher opened before a page’s picture was ready, how often a tap on the tabs button had to copy the page right then because its picture wasn’t up to date, how often you opened a card while the tab switcher was still settling, how often you searched your tabs, how often you picked a space from its menu, how many tabs you moved to another space, how many pages you printed, how many you translated, how often a pinned site took you back to its tab after the page had moved on, how often you showed the tab switcher as a grid, how often you opened the tab switcher by swiping up on the bottom bar instead of tapping its tabs button, how often a back swipe closed a tab or a forward swipe reopened one, how often Archive or History took more than 0.4 seconds to show its list, how often you scrolled far enough in them to show older days, how often you swiped a long address in the search field to read the rest of it, how often you swiped up on the bottom bar and let go early so the page came back, how often you switched tabs by swiping the bottom bar sideways, whether the one-time hint about that swipe was shown on Android, how often the page stalled for more than a twentieth of a second while it shrank into the tab switcher, how often the bottom bar collapsed on Android, and how often you opened a menu or a confirmation, counted apart for the phone’s own menus and the ones Ardia draws, never while browsing privately. Counts only, never which",
+        text: "At most once a day, for the last day you used Solstice before today: how many tabs you opened, searches you made, pages you pinned to your Mac, tabs you sent to another device, pages that stopped working because their page process ended, links from other apps Solstice gave up on because they took too long, and pages that reloaded by themselves when the phone came back online, how often the tab switcher opened before a page’s picture was ready, how often a tap on the tabs button had to copy the page right then because its picture wasn’t up to date, how often you opened a card while the tab switcher was still settling, how often you searched your tabs, how often you picked a space from its menu, how many tabs you moved to another space, how many pages you printed, how many you translated, how often a pinned site took you back to its tab after the page had moved on, how often you showed the tab switcher as a grid, how often you opened the tab switcher by swiping up on the bottom bar instead of tapping its tabs button, how often a back swipe closed a tab or a forward swipe reopened one, how often Archive or History took more than 0.4 seconds to show its list, how often you scrolled far enough in them to show older days, how often you swiped a long address in the search field to read the rest of it, how often you swiped up on the bottom bar and let go early so the page came back, how often you switched tabs by swiping the bottom bar sideways, whether the one-time hint about that swipe was shown on Android, how often the page stalled for more than a twentieth of a second while it shrank into the tab switcher, how often the bottom bar collapsed on Android, and how often you opened a menu or a confirmation, counted apart for the phone’s own menus and the ones Solstice draws, never while browsing privately. Counts only, never which",
         fields: ["usage_counts", "tabs_opened", "searches", "pins_to_mac", "tabs_sent", "page_processes_gone", "links_given_up", "pages_reloaded_online", "find_opened_system", "find_opened_bar", "find_closed_bar", "spaces_swiped", "tray_hidden_rows_opened", "deck_pictures_late", "deck_pictures_at_press", "deck_opens_while_landing", "tray_back_swiped", "search_tabs_opened", "spaces_picked", "tabs_moved_to_space", "pages_printed", "pages_translated", "pinned_tabs_refound", "site_permissions_revoked", "card_opens_waited", "native_menus_opened", "drawn_menus_opened", "library_opened", "deck_grid_shown", "landscape_shown", "duo_layout_shown", "list_sheets_late", "list_pages_added", "search_reveals_late", "address_field_scrolled", "deck_bar_swipes", "tabs_swiped_closed", "tabs_swiped_reopened", "page_menu_tapped_away", "new_tab_search_opened", "deck_incognito_switches", "deck_bar_swipes_returned", "tabs_bar_swiped", "tab_swipe_hints_shown", "deck_pulls_hitched", "bottom_bar_collapses"],
       },
       {
@@ -74,7 +74,7 @@ export const PHONE_WHATS_SENT: { title: string; items: SentItem[] }[] = [
         fields: ["talk_to_me_answers_read", "talk_to_me_ear_listens", "talk_to_me_voice_downloads", "talk_to_me_download_failed", "talk_to_me_failed"],
       },
       {
-        text: "In the same daily counts: how often you turned Incognito on with the eyes in the search panel, and on Android how often Ardia couldn’t turn Incognito on because the phone’s Android System WebView is too old to keep Incognito pages separate. Counts only, never what you browsed",
+        text: "In the same daily counts: how often you turned Incognito on with the eyes in the search panel, and on Android how often Solstice couldn’t turn Incognito on because the phone’s Android System WebView is too old to keep Incognito pages separate. Counts only, never what you browsed",
         fields: ["tray_incognito_switches", "incognito_unavailable"],
       },
       {
@@ -90,7 +90,7 @@ export const PHONE_WHATS_SENT: { title: string; items: SentItem[] }[] = [
         fields: ["paste_and_go_links", "paste_and_go_texts", "paste_and_go_unread"],
       },
       {
-        text: "In the same daily counts, on Android: how often you opened Ardia from its Search, Voice Search and New Incognito Tab tiles in Quick Settings. Counts only",
+        text: "In the same daily counts, on Android: how often you opened Solstice from its Search, Voice Search and New Incognito Tab tiles in Quick Settings. Counts only",
         fields: ["search_tile_taps", "voice_tile_taps", "incognito_tile_taps"],
       },
       {
@@ -106,7 +106,7 @@ export const PHONE_WHATS_SENT: { title: string; items: SentItem[] }[] = [
         fields: ["page_pictures_blank", "page_pictures_hidden", "page_pictures_webkit", "page_pictures_scrolled"],
       },
       {
-        text: "In the same daily counts: how often Ardia couldn’t save your latest tab changes and told you it would keep trying, and how often the search panel opened before its suggestions were ready. Counts only, and never while browsing privately",
+        text: "In the same daily counts: how often Solstice couldn’t save your latest tab changes and told you it would keep trying, and how often the search panel opened before its suggestions were ready. Counts only, and never while browsing privately",
         fields: ["tab_writes_stalled", "search_opens_cold"],
       },
       {
@@ -126,11 +126,11 @@ export const PHONE_WHATS_SENT: { title: string; items: SentItem[] }[] = [
         fields: ["glass_shaders_failed"],
       },
       {
-        text: "In the same daily counts, on Android: how many actions you chose in menus Ardia draws, never which action or while browsing privately",
+        text: "In the same daily counts, on Android: how many actions you chose in menus Solstice draws, never which action or while browsing privately",
         fields: ["drawn_menu_actions_chosen"],
       },
       {
-        text: "In the same daily counts, on Android: how often you tapped the Ardia logo on the start page to search. Counts only, and never while browsing privately",
+        text: "In the same daily counts, on Android: how often you tapped the Solstice logo on the start page to search. Counts only, and never while browsing privately",
         fields: ["start_logo_taps"],
       },
       {
