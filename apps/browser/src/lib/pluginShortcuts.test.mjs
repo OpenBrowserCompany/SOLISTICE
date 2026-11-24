@@ -21,7 +21,7 @@ const text = (raw) => {
 };
 const action = (title, shortcut) => ({ type: "Action", props: { title, shortcut }, children: [] });
 
-test("Ardia's word and glyph notation read the same, in any case and modifier order", () => {
+test("Solstice's word and glyph notation read the same, in any case and modifier order", () => {
   assert.equal(text("cmd+shift+c"), "cmd+shift+c");
   assert.equal(text("Shift+Cmd+C"), "cmd+shift+c");
   assert.equal(text(" command + option + k "), "cmd+opt+k");
@@ -34,7 +34,7 @@ test("Ardia's word and glyph notation read the same, in any case and modifier or
   assert.equal(text("cmd+1"), "cmd+1");
 });
 
-test("a shortcut Ardia can't read is dropped", () => {
+test("a shortcut Solstice can't read is dropped", () => {
   for (const raw of [undefined, null, 3, {}, "", "   ", "cmd+", "cmd++", "+c", "cmd+shift", "hyper+c", "cmd+cmd+c", "cmd+ab", "cmd+f13", "cmd+f0", "cmd+é", "cmd+escape", "cmd+enter", "cmd+return", "cmd+tab", "cmd+up", "cmd+left", "cmd+delete", "cmd+backspace", "cmd+home", "cmd+pageup", `cmd+${"x".repeat(50)}`]) {
     assert.equal(pluginShortcutOf(raw), null, JSON.stringify(raw));
   }
@@ -84,7 +84,7 @@ test("a shortcut that would type into a field or shadow an essential key is refu
   for (const raw of ["cmd+shift+c", "cmd+k", "cmd+opt+c", "cmd+ctrl+c", "cmd+shift+space", "cmd+f1", "cmd+1", "cmd+e"]) assert.ok(pluginShortcutOf(raw), `${raw} is allowed`);
 });
 
-test("the node check keeps a valid shortcut in Ardia's spelling and drops a refused one without failing the tree", () => {
+test("the node check keeps a valid shortcut in Solstice's spelling and drops a refused one without failing the tree", () => {
   const checked = checkPluginNode({
     type: "ActionPanel",
     props: {},
@@ -104,7 +104,7 @@ test("the node check keeps a valid shortcut in Ardia's spelling and drops a refu
   assert.equal(copy.props.title, "Copy");
 });
 
-test("a shortcut becomes Ardia's key and modifiers, in Ardia's modifier order", () => {
+test("a shortcut becomes Solstice's key and modifiers, in Solstice's modifier order", () => {
   const s = pluginShortcutOf("shift+opt+ctrl+cmd+k");
   assert.deepEqual(pluginShortcutModifiers(s), ["control", "option", "shift", "command"]);
   assert.equal(pluginShortcutKeyChar(s), "k");
@@ -180,7 +180,7 @@ test("at the same depth the one that registered first wins", () => {
   assert.equal(mergeShortcutBindings([{ depth: 1, seq: 5, bindings: bindingsOf([b]) }, { depth: 1, seq: 2, bindings: bindingsOf([a]) }])[0].action, a);
 });
 
-test("a key one of Ardia's commands holds never binds, and doesn't pass to a later action either", () => {
+test("a key one of Solstice's commands holds never binds, and doesn't pass to a later action either", () => {
   const first = action("First", "cmd+l");
   const second = action("Second", "cmd+l");
   const other = action("Other", "cmd+k");

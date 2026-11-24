@@ -44,7 +44,7 @@ test("a theme file that doesn't parse gives no roles, so the caller keeps the la
   assert.deepEqual(parse({ dark: "#000" }).problems, ["themes/nord.json: dark must be an object of colour roles"]);
 });
 
-test("the theme's roles replace Ardia's in the base palettes, and a role left out keeps Ardia's", () => {
+test("the theme's roles replace Solstice's in the base palettes, and a role left out keeps Solstice's", () => {
   const merged = mergedPalettes(colorRoles, { dark: { accent: "#88C0D0" }, light: {} }, 3);
   assert.equal(merged.revision, 3);
   assert.equal(merged.dark.accent, "#88C0D0");
@@ -54,7 +54,7 @@ test("the theme's roles replace Ardia's in the base palettes, and a role left ou
   assert.equal(mergedPalettes(colorRoles, null, 0).dark, colorRoles.dark);
 });
 
-test("a theme file carries its look blocks next to its roles, and a colours-only theme keeps Ardia's own look", () => {
+test("a theme file carries its look blocks next to its roles, and a colours-only theme keeps Solstice's own look", () => {
   const parsed = parse({ dark: { accent: "#88C0D0" }, metrics: { rowHeight: 40, rowGap: "x" }, layout: { hide: ["pinned"] } });
   assert.deepEqual(parsed.problems, ["themes/nord.json: metrics.rowGap must be a number from 0 to 12"]);
   assert.deepEqual(parsed.look, { metrics: { rowHeight: 40 }, layout: { hide: ["pinned"] } });
