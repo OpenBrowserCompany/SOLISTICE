@@ -1,4 +1,4 @@
-package com.ardia.browser
+package com.openbrowsercompany.solstice
 
 object DesktopSites {
     fun key(host: String): String {
