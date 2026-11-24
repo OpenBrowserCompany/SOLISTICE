@@ -15,7 +15,7 @@ export const INTERNAL_PAGES: Record<AppPageHost, { title: string }> = {
   downloads: { title: "Downloads" },
 };
 
-const internalUrl = (page: AppPageHost, query?: string) => `ardia://${page}${query ? `?q=${encodeURIComponent(query)}` : ""}`;
+const internalUrl = (page: AppPageHost, query?: string) => `solstice://${page}${query ? `?q=${encodeURIComponent(query)}` : ""}`;
 
 export function internalPageOf(url: string | null | undefined): AppPageHost | null {
   const route = url ? appUrlRoute(url) : null;

@@ -225,7 +225,7 @@ test("a pinned tab keeps its peek across a tab switch and closing the pinned tab
   assert.equal(S().tabs[id], undefined);
 });
 
-test("Little Ardia doesn't peek", () => {
+test("Little Solstice doesn't peek", () => {
   S().hydrate({ profiles: { default: PERSONAL }, profileOrder: ["default"] });
   const small = S().createWindow({ kind: "small", url: "https://small.example/" });
   const tab = S().windows[small].tabIds[0];
