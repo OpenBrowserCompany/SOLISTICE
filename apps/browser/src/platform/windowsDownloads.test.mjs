@@ -24,10 +24,10 @@ test("the launch replay announces only this launch's downloads, with their profi
     ] }),
     emit: (name, data) => emitted.push({ name, id: data.id, profile: data.profile }),
   };
-  await watchDownloads(engine, "Ardia p-1");
+  await watchDownloads(engine, "Solstice p-1");
   assert.deepEqual(emitted, [
-    { name: "downloads.changed", id: "running", profile: "Ardia p-1" },
-    { name: "downloads.changed", id: "fresh", profile: "Ardia p-1" },
+    { name: "downloads.changed", id: "running", profile: "Solstice p-1" },
+    { name: "downloads.changed", id: "fresh", profile: "Solstice p-1" },
   ]);
 });
 
@@ -52,7 +52,7 @@ test("a download saved twice by the old launch replay is restored once; other pr
   const rows = [
     { id: "guid", ...file },
     { id: "saved-0", ...file },
-    { id: "other-profile", ...file, profile: "Ardia p-2" },
+    { id: "other-profile", ...file, profile: "Solstice p-2" },
     { id: "replaced-later", ...file, startTime: file.startTime + 60_000 },
     { id: "no-start-a", url: file.url, path: file.path, profile: "" },
     { id: "no-start-b", url: file.url, path: file.path, profile: "" },

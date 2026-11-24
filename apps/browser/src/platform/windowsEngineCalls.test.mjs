@@ -372,13 +372,13 @@ test("the engine domain shapes what the Mac shapes", async () => {
 
 const ONE_PIXEL_PNG = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==";
 
-function hostedEngine(removal, reply, { nativeFolder = "c:/ardia/user data/" } = {}) {
+function hostedEngine(removal, reply, { nativeFolder = "c:/solstice/user data/" } = {}) {
   const engine = fakeEngine(reply);
   engine.hosted = [];
   engine.removed = [];
   engine.host = async (verb) => {
     engine.hosted.push(verb);
-    return { chromium: "157.0.1.2", userDataDir: "C:\\Ardia\\User Data" };
+    return { chromium: "157.0.1.2", userDataDir: "C:\\Solstice\\User Data" };
   };
   engine.profileDataFolder = () => nativeFolder;
   engine.removeProfileFolder = async (...given) => {
@@ -391,7 +391,7 @@ function hostedEngine(removal, reply, { nativeFolder = "c:/ardia/user data/" } =
 test("deleting a profile's data removes its folder, or clears its data and waits while the engine holds it", async () => {
   const gone = hostedEngine("removed");
   assert.deepEqual(await calling(gone, "profiles")("deleteData", {}, "p-1-a"), { remaining: [] });
-  assert.deepEqual(gone.removed, [["Ardia p-1-a"]]);
+  assert.deepEqual(gone.removed, [["Solstice p-1-a"]]);
   assert.deepEqual(gone.calls, []);
 
   const absent = hostedEngine("absent");
@@ -436,7 +436,7 @@ test("engine.info answers from the engine host in the Mac's shape", async () => 
   const engine = hostedEngine("removed");
   assert.deepEqual(await calling(engine, "engine")("info"), {
     pid: 0,
-    dataDirectory: "C:\\Ardia\\User Data",
+    dataDirectory: "C:\\Solstice\\User Data",
     engine: "ardiacore",
     chromiumVersion: "157.0.1.2",
     liveBrowsers: 0,
@@ -460,7 +460,7 @@ test("favicons.fetch answers the icon Chromium stored for that address, with its
 });
 
 const GENERATED = "p-mhw3k2x1-1f";
-const NOT_ARDIAS = "data (the profile's id isn't one Ardia makes)";
+const NOT_ARDIAS = "data (the profile's id isn't one Solstice makes)";
 
 async function deletedBy(profile, removal = "removed") {
   const engine = hostedEngine(removal, () => '{"ok":true}');
@@ -468,9 +468,9 @@ async function deletedBy(profile, removal = "removed") {
   return { reply, removed: engine.removed.map(([folder]) => folder), calls: engine.calls.map((c) => c.name) };
 }
 
-test("only an id Ardia makes is deleted by its folder", async () => {
-  assert.deepEqual(await deletedBy(GENERATED), { reply: { remaining: [] }, removed: [`Ardia ${GENERATED}`], calls: [] });
-  assert.deepEqual(await deletedBy("a".repeat(238)), { reply: { remaining: [] }, removed: [`Ardia ${"a".repeat(238)}`], calls: [] });
+test("only an id Solstice makes is deleted by its folder", async () => {
+  assert.deepEqual(await deletedBy(GENERATED), { reply: { remaining: [] }, removed: [`Solstice ${GENERATED}`], calls: [] });
+  assert.deepEqual(await deletedBy("a".repeat(238)), { reply: { remaining: [] }, removed: [`Solstice ${"a".repeat(238)}`], calls: [] });
   for (const profile of ["work.1", "work_1", "Work", "work\u0000x", "incognitoWork", "a".repeat(239), "x".repeat(300), "é", "😀", "work 1", "_", "a\ud800b"]) {
     for (const removal of ["removed", "inUse"]) {
       assert.deepEqual(await deletedBy(profile, removal), { reply: { remaining: [NOT_ARDIAS] }, removed: [], calls: [] }, JSON.stringify(profile));
@@ -481,7 +481,7 @@ test("only an id Ardia makes is deleted by its folder", async () => {
 test("an id with @ is a private session to the engine, and anything else gets a folder", async () => {
   assert.deepEqual(await deletedBy("incognito:w1@work"), { reply: { remaining: [] }, removed: [], calls: [] });
   assert.deepEqual(await deletedBy("tab@work"), { reply: { remaining: [] }, removed: [], calls: [] });
-  assert.deepEqual((await deletedBy("incognitowork")).removed, ["Ardia incognitowork"]);
+  assert.deepEqual((await deletedBy("incognitowork")).removed, ["Solstice incognitowork"]);
   assert.deepEqual(await deletedBy("work\u0000@x"), { reply: { remaining: [NOT_ARDIAS] }, removed: [], calls: [] });
 });
 
