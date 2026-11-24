@@ -46,7 +46,7 @@ paper taking each profile's colour. Then:
 - "ANY CHROME EXTENSION." with "NO THANKS." stamped on Chrome's own prompt;
 - "SEVEN APP ICONS. ONE DOCK." (the seven painted icon variants, from Settings › Appearance);
 - four "NO" cards;
-- ardia.dev typed into the address bar, the camera diving into the site's "Touch grass.";
+- ardia.dev typed into the address bar, the camera diving into the site's "A Web with freedom.";
 - "TOUCH GRASS." on the end hit, then the end card: the icon, the name, DOWNLOAD FOR MAC / ARDIA.DEV and the GitHub address, beside the painted mark:
   the sun rises over the hills on the hit, hops on the three march taps and leaps on the last brass button, glowing.
 
@@ -227,7 +227,7 @@ is captured in-process, frame by frame:
 - **The ardia.dev frames** were captured (2026-10-03) while the site still showed the old mascot and copy. The
   film brings them up to date in place (`SiteLogo` in `shots.tsx`), laid out as `apps/site` lays the page out at
   that width: the hero figure becomes the painted logo with its "NO ACCOUNT" stamp and caption, the headline and
-  lede become "Touch grass." and today's lede, and the header's wordmark, icon and section links and the tab's title
+  lede become "A Web with freedom." and today's lede, and the header's wordmark, icon and section links and the tab's title
   and favicon follow. Recapturing `typing` once the new site is live makes this unnecessary.
 - **Stale footage until the next capture** (2026-10-11): `swipe` was captured with the orange profile named
   "Campaign" on political Wikipedia pages, and `block` with the dictionary page on "immunity". `session.mjs` and
