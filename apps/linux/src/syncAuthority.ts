@@ -8,7 +8,7 @@ const CALL_TIMEOUT_MS = 30_000;
 export const INTERACTIVE_CALL_TIMEOUT_MS = 900_000;
 const AUTHORITY_WAIT_MS = 10_000;
 const BECOME_RETRY_MAX_MS = 60_000;
-export const NO_AUTHORITY_MESSAGE = "Sync runs in an Ardia browser window, and none answered. Open a browser window and try again.";
+export const NO_AUTHORITY_MESSAGE = "Sync runs in an Solstice browser window, and none answered. Open a browser window and try again.";
 
 export const REMOTE_METHODS = [
   "syncNow",

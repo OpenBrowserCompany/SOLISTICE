@@ -35,12 +35,12 @@ const commandTitle = (id: string) => {
   const spec = commandSpec(command!);
   return (arg && spec?.variants?.[arg]?.title) || spec?.title || `${command!.replace(/([A-Z])/g, " $1").replace(/^./, (c) => c.toUpperCase())}${arg ? ` ${arg}` : ""}`;
 };
-const legacyPathOf = (command: string) => LINUX_STANDARD_ITEMS[command]?.path ?? (/Settings|Profile/.test(command) ? "Ardia" : /Tab|Window|Group/.test(command) ? "Tabs" : /find|Find|Selection|copy/.test(command) ? "Edit" : /bookmark|Bookmark/.test(command) ? "Bookmarks" : /History|Browsing|downloads|back|forward/.test(command) ? "History" : "View");
+const legacyPathOf = (command: string) => LINUX_STANDARD_ITEMS[command]?.path ?? (/Settings|Profile/.test(command) ? "Solstice" : /Tab|Window|Group/.test(command) ? "Tabs" : /find|Find|Selection|copy/.test(command) ? "Edit" : /bookmark|Bookmark/.test(command) ? "Bookmarks" : /History|Browsing|downloads|back|forward/.test(command) ? "History" : "View");
 const PROFILES_MENU = ["Window", "Profiles"];
 const PROFILES_MENU_COMMANDS: ReadonlySet<string> = new Set(["switchProfile", "nextProfile", "previousProfile", "newProfile"]);
 const PER_PROFILE_PATHS: Readonly<Record<string, readonly string[]>> = {
   switchProfile: PROFILES_MENU,
-  newLittleArdia: ["File", "New Little Ardia Window in Profile"],
+  newLittleArdia: ["File", "New Little Solstice Window in Profile"],
 };
 type ProfileNames = Readonly<Record<string, { name: string } | undefined>>;
 const profileRow = (id: string, profileNames: ProfileNames) => {

@@ -164,7 +164,7 @@ async function becomeAuthority(host: ArdiaHost) {
   try {
     await refreshSyncDocuments({ refresh: refreshDocument, remove: deleteDocument });
   } catch (error) {
-    useSync.setState({ status: "stalled", error: "Ardia couldn’t read this device’s sync files, so sync is paused to keep them." });
+    useSync.setState({ status: "stalled", error: "Solstice couldn’t read this device’s sync files, so sync is paused to keep them." });
     throw error;
   }
   await loadSyncDeviceName(host);
