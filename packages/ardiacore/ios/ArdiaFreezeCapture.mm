@@ -28,7 +28,7 @@ constexpr int kSlotBytes = 4096;
 constexpr int kSlotTail = 640;
 constexpr int kMaxImages = 6;
 constexpr int kKept = 4;
-const char *const kOwnImages[] = {"Ardia", "Ardia.debug.dylib", "Chromium Framework", "hermes"};
+const char *const kOwnImages[] = {"Solstice", "Ardia.debug.dylib", "Chromium Framework", "hermes"};
 const char *const kThreadNames[kThreadCount] = {"main", "js"};
 
 struct Image {
@@ -255,7 +255,7 @@ void OpenRecords() {
   NSString *dir = ArdiaLaunchConfig.shared.dataDirectory;
   if (!dir) {
     NSURL *support = [NSFileManager.defaultManager URLForDirectory:NSApplicationSupportDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:nil];
-    dir = [support URLByAppendingPathComponent:NSBundle.mainBundle.bundleIdentifier ?: @"Ardia"].path;
+    dir = [support URLByAppendingPathComponent:NSBundle.mainBundle.bundleIdentifier ?: @"Solstice"].path;
   }
   if (!dir) return;
   [NSFileManager.defaultManager createDirectoryAtPath:dir withIntermediateDirectories:YES attributes:nil error:nil];
