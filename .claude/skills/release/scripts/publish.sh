@@ -24,8 +24,8 @@ run() {
 }
 
 channel="$(channel_of "$version")"
-dmg="$dist/Ardia-$version.dmg"
-zip="$dist/Ardia-$version.zip"
+dmg="$dist/Solstice-$version.dmg"
+zip="$dist/Solstice-$version.zip"
 feed="$dist/appcast.xml"
 
 assets=()
@@ -58,10 +58,10 @@ echo "PASS  $deltas Sparkle delta(s) join the release"
 "$root/scripts/release/check-packages.sh" "$dist" "$version" || die "the update zip or the DMG isn't laid out as installs expect (scripts/release/check-packages.sh)"
 linux="$dist/linux"
 if [ -d "$linux" ]; then
-  linux_package="$linux/Ardia-$version-linux-x64.tar.xz"
+  linux_package="$linux/Solstice-$version-linux-x64.tar.xz"
   linux_cli="$linux/ardia-cli-$version-linux-x64.tar.gz"
-  linux_deb="$linux/Ardia-$version-linux-x64.deb"
-  linux_appimage="$linux/Ardia-$version-linux-x64.AppImage"
+  linux_deb="$linux/Solstice-$version-linux-x64.deb"
+  linux_appimage="$linux/Solstice-$version-linux-x64.AppImage"
   linux_arch="$linux/ardia-bin-$version.src.tar.gz"
   provenance="$linux/provenance.txt"
   [ -f "$provenance" ] || die "$linux has no provenance.txt"
@@ -84,7 +84,7 @@ if [ -d "$linux" ]; then
   (cd "$linux" && shasum -a 256 -c --quiet "${linux_sums[@]}") \
     || die "the Linux assets in $linux don't match their .sha256 files"
   echo "PASS  the Linux assets join the release: ${linux_files[*]##*/}"
-  linux_update="$linux/Ardia-$version-linux-update.txt"
+  linux_update="$linux/Solstice-$version-linux-update.txt"
   if [ -f "$linux_update" ] && [ -f "$linux_update.sig" ]; then
     assets+=("$linux_update" "$linux_update.sig")
     echo "PASS  the signed Linux self-update manifest joins the release"
@@ -98,20 +98,20 @@ windows="$dist/windows"
 if [ -d "$windows" ]; then
   windows_assets=()
   for cpu in x64 arm64; do
-    windows_setup="Ardia-$version-windows-$cpu-setup.exe"
+    windows_setup="Solstice-$version-windows-$cpu-setup.exe"
     for file in "$windows/$windows_setup" "$windows/$windows_setup.sha256"; do
       [ -f "$file" ] || die "$windows has no $(basename "$file") (the Release workflow's windows job makes them, or remove $windows to publish without Windows)"
     done
     windows_assets+=("$windows_setup")
   done
-  windows_source="Ardia-$version-windows-source.tar.xz"
+  windows_source="Solstice-$version-windows-source.tar.xz"
   for file in "$windows/$windows_source" "$windows/$windows_source.sha256"; do
     [ -f "$file" ] || die "$windows has no $(basename "$file"): the installers ship only beside their engine's source"
   done
   windows_assets+=("$windows_source")
   stamped_version="$(python3 -I -c 'import json, sys; print(json.load(open(sys.argv[1]))["version"])' "$windows/Ardia.build.json" 2>/dev/null)" \
     || die "$windows has no readable Ardia.build.json"
-  [ "$stamped_version" = "$version" ] || die "the Windows installers in $windows are Ardia $stamped_version, not $version"
+  [ "$stamped_version" = "$version" ] || die "the Windows installers in $windows are Solstice $stamped_version, not $version"
   (cd "$windows" && for file in "${windows_assets[@]}"; do shasum -a 256 -c --quiet "$file.sha256" || exit 1; done) \
     || die "the Windows files in $windows don't match their .sha256 files"
   for file in "${windows_assets[@]}"; do assets+=("$windows/$file" "$windows/$file.sha256"); done
@@ -157,15 +157,15 @@ if [ "$channel" = nightly ]; then
 else
   release_flags=(--latest)
 fi
-run gh release create "v$version" -R "$REPO" "${release_flags[@]}" --verify-tag --title "Ardia $version" \
+run gh release create "v$version" -R "$REPO" "${release_flags[@]}" --verify-tag --title "Solstice $version" \
   --notes-file "$dist/release-notes.md" "${assets[@]}"
 if [ "$channel" = nightly ]; then
-  nightly_notes="The newest nightly, always as Ardia-Nightly.dmg (https://ardia.dev/nightly). Now $version: its notes and source are at $REPO_URL/releases/tag/v$version. Every nightly's notes: $RELEASE_NOTES_URL"
+  nightly_notes="The newest nightly, always as Solstice-Nightly.dmg (https://ardia.dev/nightly). Now $version: its notes and source are at $REPO_URL/releases/tag/v$version. Every nightly's notes: $RELEASE_NOTES_URL"
   if ! gh release view nightly -R "$REPO" >/dev/null 2>&1; then
-    run gh release create nightly -R "$REPO" --prerelease --latest=false --title "Ardia Nightly" --notes "$nightly_notes"
+    run gh release create nightly -R "$REPO" --prerelease --latest=false --title "Solstice Nightly" --notes "$nightly_notes"
   fi
-  cp -c "$dmg" "$work/Ardia-Nightly.dmg"
-  run gh release upload nightly -R "$REPO" --clobber "$work/Ardia-Nightly.dmg"
+  cp -c "$dmg" "$work/Solstice-Nightly.dmg"
+  run gh release upload nightly -R "$REPO" --clobber "$work/Solstice-Nightly.dmg"
   run gh release edit nightly -R "$REPO" --notes "$nightly_notes"
   run gh release upload "$stable_tag" -R "$REPO" --clobber "$merged"
 fi
@@ -188,7 +188,7 @@ if [ "$channel" = nightly ]; then
   [ "$size" = "$(stat -f %z "$dmg")" ] && echo "PASS  $url is $version's DMG" \
     || { echo "FAIL  $url is $version's DMG (size $size, expected $(stat -f %z "$dmg"))"; status=1; }
   to="$(curl -s -o /dev/null --max-time 15 -w '%{redirect_url}' https://ardia.dev/nightly || true)"
-  legacy_nightly_dmg_url="https://github.com/mantrakp04/ardia/releases/download/nightly/Ardia-Nightly.dmg"
+  legacy_nightly_dmg_url="https://github.com/mantrakp04/ardia/releases/download/nightly/Solstice-Nightly.dmg"
   [ "$to" = "$legacy_nightly_dmg_url" ] && to="$(curl -s -o /dev/null --max-time 15 -w '%{redirect_url}' "$legacy_nightly_dmg_url" || true)"
   [ "$to" = "$NIGHTLY_DMG_URL" ] && echo "PASS  https://ardia.dev/nightly leads there" \
     || { echo "FAIL  https://ardia.dev/nightly leads there (goes to ${to:-nothing}: deploy the site, infra/site/nginx.conf)"; status=1; }

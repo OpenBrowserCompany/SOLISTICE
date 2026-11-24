@@ -17,7 +17,7 @@ const assets = JSON.parse(execFileSync("gh", ["release", "view", `v${version}`, 
 const releasePath = `${root}/apps/site/src/data/release.json`;
 const release = JSON.parse(readFileSync(releasePath, "utf8"));
 
-const linuxName = `Ardia-${version}-linux-x64.tar.xz`;
+const linuxName = `Solstice-${version}-linux-x64.tar.xz`;
 if (assets.some((asset) => asset.name === linuxName)) release.linux = version;
 else console.log(`note: v${version} has no ${linuxName}, so the Linux download stays on ${release.linux}`);
 
@@ -27,7 +27,7 @@ if (nightly) {
   process.exit(0);
 }
 
-const dmgName = `Ardia-${version}.dmg`;
+const dmgName = `Solstice-${version}.dmg`;
 const dmg = assets.find((asset) => asset.name === dmgName);
 if (!dmg) {
   console.error(`v${version} has no ${dmgName}: publish it first`);
@@ -40,9 +40,9 @@ const megabytes = Math.round(dmg.size / 1e6);
 const readmePath = `${root}/README.md`;
 const readme = readFileSync(readmePath, "utf8");
 const updated = readme
-  .replace(/releases\/(?:latest\/download|download\/v[\d.]+)\/Ardia-[\d.]+\.dmg/g, `releases/download/v${version}/${dmgName}`)
-  .replace(/Download Ardia [\d.]+/g, `Download Ardia ${version}`)
+  .replace(/releases\/(?:latest\/download|download\/v[\d.]+)\/Solstice-[\d.]+\.dmg/g, `releases/download/v${version}/${dmgName}`)
+  .replace(/Download Solstice [\d.]+/g, `Download Solstice ${version}`)
   .replace(/\d+ MB DMG/g, `${megabytes} MB DMG`)
   .replace(/It’s \d+ MB/g, `It’s ${megabytes} MB`);
 writeFileSync(readmePath, updated);
-console.log(`site and README: Ardia ${version}, ${megabytes} MB (${dmg.size} bytes); Linux ${release.linux}`);
+console.log(`site and README: Solstice ${version}, ${megabytes} MB (${dmg.size} bytes); Linux ${release.linux}`);
