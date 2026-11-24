@@ -230,4 +230,4 @@ export function createArdia(rpc: Rpc, registry: Registry, state: ApiState) {
   };
 }
 
-export type Ardia = ReturnType<typeof createArdia>;
+export type Solstice = ReturnType<typeof createArdia>;

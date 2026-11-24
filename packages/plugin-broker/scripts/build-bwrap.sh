@@ -17,7 +17,7 @@ Usage: build-bwrap.sh [--out DIR] [--mode static|native] [--cache DIR]
 Builds the pinned bubblewrap ${BWRAP_VERSION} (sha256 ${BWRAP_SHA256})
 with ${BWRAP_PATCH} applied (sha256 ${BWRAP_PATCH_SHA256}), so a sandbox
 whose bwrap monitor dies during setup exits instead of waiting forever,
-as DIR/ardia-bwrap, the bwrap Ardia's plugin broker binds plugin folders with.
+as DIR/ardia-bwrap, the bwrap Solstice's plugin broker binds plugin folders with.
 
   --out DIR     where ardia-bwrap goes (default: ./out)
   --mode static a static musl build inside ${ALPINE_IMAGE%%@*} (pinned by digest) through docker (default)
