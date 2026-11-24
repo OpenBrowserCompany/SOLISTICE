@@ -17,7 +17,7 @@ function fakeAppStoreConnect() {
     const path = new URL(url).pathname;
     const body = init.body ? JSON.parse(init.body) : undefined;
     appendFileSync(process.env.ASC_FAKE_LOG, `${JSON.stringify({ method, path, body })}\n`);
-    if (path === "/v1/apps") return reply([{ id: "app", attributes: { bundleId: "com.ardia.browser.ios", name: "Ardia" } }]);
+    if (path === "/v1/apps") return reply([{ id: "app", attributes: { bundleId: "com.openbrowsercompany.solstice.ios", name: "Solstice" } }]);
     if (path === "/v1/builds") return reply([{ id: "build", attributes: { version: "7", processingState: "VALID" } }]);
     if (path === "/v1/apps/app/betaGroups") return reply(groups);
     if (method === "POST" && path === "/v1/betaGroups") {
@@ -110,7 +110,7 @@ function nextBuild(failures, status = 500, failing = "/v1/apps") {
       const path = new URL(url).pathname;
       appendFileSync(process.env.ASC_FAKE_LOG, `${path}\n`);
       if (path === failing && left-- > 0) return new Response(JSON.stringify({ errors: [{ detail: "An unexpected error occurred on the server side." }] }), { status });
-      if (path === "/v1/apps") return new Response(JSON.stringify({ data: [{ id: "app", attributes: { bundleId: "com.ardia.browser.ios", name: "Ardia" } }] }), { status: 200 });
+      if (path === "/v1/apps") return new Response(JSON.stringify({ data: [{ id: "app", attributes: { bundleId: "com.openbrowsercompany.solstice.ios", name: "Solstice" } }] }), { status: 200 });
       if (path === "/v1/builds") return new Response(JSON.stringify({ data: [{ id: "build", attributes: { version: "9" } }] }), { status: 200 });
       if (path === "/v1/apps/app/buildUploads") return new Response(JSON.stringify({ data: [{ id: "upload", attributes: { cfBundleVersion: "11" } }] }), { status: 200 });
       return new Response(null, { status: 404 });

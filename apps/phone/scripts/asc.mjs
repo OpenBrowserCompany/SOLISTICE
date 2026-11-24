@@ -34,7 +34,7 @@ good: nobody can install it again and Apple can't undo it. It refuses the newest
 register-device adds an iPhone to the team's devices, so a development-signed build
 (apps/phone/scripts/release-ios --development) installs on it; an iPhone already there is left as it is.`;
 
-const BUNDLE_PREFIX = "com.ardia.browser.ios";
+const BUNDLE_PREFIX = "com.openbrowsercompany.solstice.ios";
 const DEVELOPMENT_CERTIFICATES = new Set(["DEVELOPMENT", "IOS_DEVELOPMENT"]);
 const PUBLIC_GROUP = "Public Testers";
 const API = "https://api.appstoreconnect.apple.com";
@@ -213,7 +213,7 @@ async function status() {
     });
     const capabilities = new Map(included.map((row) => [row.id, row.attributes.capabilityType]));
     const rows = all.filter((row) => ours(row.attributes.identifier));
-    console.log(`${all.length} App IDs on the team, ${rows.length} of them Ardia's`);
+    console.log(`${all.length} App IDs on the team, ${rows.length} of them Solstice's`);
     for (const row of rows) {
       const types = (row.relationships?.bundleIdCapabilities?.data ?? []).map((link) => capabilities.get(link.id) ?? "?");
       console.log(`${row.attributes.identifier} ${row.attributes.platform} [${types.sort().join(", ")}]`);
