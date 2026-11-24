@@ -1,4 +1,4 @@
-# Ardia on Windows
+# Solstice on Windows
 
 Windows comes before Linux, and both share one codebase with the Mac: no fork. The Windows work lives on its
 branch (PR #1116) until the owner merges it. This file is
@@ -19,7 +19,7 @@ Logic is written once. Only code that calls the OS is written per platform.
 
 ## What works on Windows today
 
-Walked by hand on 2026-11-14 in the Windows 11 ARM VM (1920 by 1080), with the `Ardia-Setup-arm64` installer of run
+Walked by hand on 2026-11-14 in the Windows 11 ARM VM (1920 by 1080), with the `Solstice-Setup-arm64` installer of run
 43544610044 (commit 45a0962e6, engine `windows-engine-20261113-12`, `ArdiaApp.dll` checked against the artifact), from
 a fresh data folder, as a user would: 41 driven runs, every row below seen on that build. Later that day the rows
 changed by #1658, #1686 and #1691 were seen again, and Tour and Open at login walked, on run 43565273476 (commit
@@ -34,15 +34,15 @@ what differs; the Mac's list is `docs/dia-feature-parity.md`. Rows marked "hidde
 
 | Feature | State | Tracked in |
 | --- | --- | --- |
-| Installer (wizard, Start menu, Open Ardia) | Works (`setup exit 0` over an empty and over an existing install) | |
+| Installer (wizard, Start menu, Open Solstice) | Works (`setup exit 0` over an empty and over an existing install) | |
 | First launch after the installer | Works: onboarding, no release notes | #1517 |
-| First launch with a link | Works: the link opens in a Little Ardia window in front, onboarding waits in the main window behind it | |
-| Onboarding (main's walk-through, #1762) | Works (72901e27a): eight steps (source, layout, tabs, look, search and privacy, pins, default browser, outro), Edge found on this PC, Windows wording, Ctrl+T, Ctrl+L and Ctrl+S key caps, no Dock card or trial, no app icon row; Skip on every step; Get Started and Take the Tour. Gaps: Tab leaves the intro for the page behind it, and the links step names the Mac's Notes (#1812); the default-browser hand-off to Windows Settings wasn't seen (the VM's default is already Ardia) | #1812 |
+| First launch with a link | Works: the link opens in a Little Solstice window in front, onboarding waits in the main window behind it | |
+| Onboarding (main's walk-through, #1762) | Works (72901e27a): eight steps (source, layout, tabs, look, search and privacy, pins, default browser, outro), Edge found on this PC, Windows wording, Ctrl+T, Ctrl+L and Ctrl+S key caps, no Dock card or trial, no app icon row; Skip on every step; Get Started and Take the Tour. Gaps: Tab leaves the intro for the page behind it, and the links step names the Mac's Notes (#1812); the default-browser hand-off to Windows Settings wasn't seen (the VM's default is already Solstice) | #1812 |
 | Intro animation and music | Differs: no Windows machine with a real GPU has run the animated meadow yet. Where Chromium gives no WebGL2 (the VM and the CI runners: no GPU, and the engine has no SwiftShader) the dawn poster stands in, or the plain dark background at night, within about 0.4 s (14 of 14 launches on 72901e27a). On software rendering (WARP, turned on with test switches) the scene draws: in the VM on 65dd9760b, in light with the page's own icon and wordmark and at night with the moon and fireflies; Tab, Space and Enter work Mute and Skip, and a click on Skip ends it. The WARP self-check runs it on every PR on x64 and ARM64. Music not checked (the VM has no audio out) | #1547, #1546, #1737, #1249 |
 | Tour | Works (d83398e1f): Take the Tour shows five stops (search, tabs in the sidebar, room to focus, two pages side by side, all set) with Back, Next and Skip Tour; Done ends it | |
 | Import from Edge | Works (onboarding finds Edge; import itself checked in #1357) | #1516 |
 | Check for updates | Differs: Check Now says "No Windows update published yet" and names the build (0.2.47-nightly.1, Windows alpha 290) | #1517 |
-| Default browser | Works: Settings › General says "Ardia is your default browser" in this VM | #1439 |
+| Default browser | Works: Settings › General says "Solstice is your default browser" in this VM | #1439 |
 | Open at login | Works (d83398e1f, the VM user's own data folder): on, it writes the `Run` entry for the installed `Ardia.exe`; off, it removes it. When Windows has it turned off in Task Manager's Startup apps, the row asks you to allow it there (#1694; it named the Mac's System Settings before). A sign-in wasn't done: it needs the VM account's password | #1694 |
 
 **Windows and tabs**
@@ -59,7 +59,7 @@ what differs; the Mac's list is `docs/dia-feature-parity.md`. Rows marked "hidde
 | Memory Saver's loaded-tab budget (the tabs hidden longest sleep past it) | Works (engine `windows-engine-20261116-4`, which also has #2052's page-place guard; seen by the `engine sleep:` self-checks in CI, not walked in the VM): the Mac's budget and sweep, sized from this PC's memory and Windows' memory load (85 % a warning, 95 % critical); the page view's `sleepIfHidden` asks Chromium's discard policy with the proactive reason, so a shown page or split pane, a page hidden within the mode's wait, typed form input, audio, capture and the other protections keep a tab awake. A page the app hid is no longer its page window's active tab, which Chromium would otherwise keep from every discard, and Chromium's DevTools-open state means a DevTools window inspects the page, not the engine's own always-attached page client (before -10 no Windows page could be discarded at all, by this budget, Chrome's Memory Saver timer or memory pressure). A discard is in place (`WebContentsDiscard`, as on the Mac), so the tab keeps its page and back/forward list. A slept tab wakes on show at its address and scroll. A pop-up window's page is not a tab, so the budget never asks it. The engine keeps a page for its own reasons too, in every discard but one the user or one of their extensions asks for (Chrome's Memory Saver timer, its memory-pressure and frozen-with-growing-memory discards as well as the budget, `kept_pages.cc` through `chromium-win-discard-asks-the-host.patch`; a kept page is never taken by an urgent discard either, since Windows' urgent discards skip protected pages; a discard the user or one of their extensions asks for, such as `chrome.tabs.discard()` from a tab-suspender extension, does not ask the host): the opener of a live pop-up or of a pending offer (100), so the pop-up's `window.opener` keeps working; a `beforeunload` handler (content's own handler state; the page graph's flag is never set in Chromium 157) on a page the user has used (101); a held Web Lock (102) or blocking IndexedDB lock (103); a WebSocket, WebTransport, WebRTC or direct-socket connection (104: the same signals that keep a page from freezing; in Chromium 157 an open WebSocket registers only the sticky feature, so a page that has used one stays kept until it navigates or reloads); a DevTools window, or a DevTools client other than the engine's own on the page or tab target: an extension's `chrome.debugger` or a remote CDP tool (105). Chromium's own protections hold as on the Mac (audible, capture, form input, notifications). Not seen yet, so such a page can still sleep (#2050): a Web Lock held by a dedicated worker, a WebSocket held by a SharedWorker, a blocking IndexedDB lock in a shared or service worker, an EventSource or long fetch stream, an upload. A hidden Peek card that stays mounted is not a shown page: after the mode's wait it can sleep, and it reloads at its address and scroll when it shows again. A tab that slept once still opens a new tab its link script saw clicked (the script Peek runs in) and an app-link ask. Pinned tabs sleep like any tab, as on the Mac (#1069). A page window keeps #2052's guard through a sleep and holds its place again once it wakes. Self-checks: `engine sleep:` in `selfCheck/engineSleep.ts`, `engineSleepKept.ts` and `engineSleepPlace.ts` | #1969 |
 | Unload inactive profiles (Settings › Advanced, with Memory Saver) | Not offered; hidden: the engine has no `profiles.unloadIdle` | #1425 |
 | The `ardia` command (the install 8 s after launch, Settings › Advanced › Command line) | Not offered: Windows has no native `ArdiaCli`. `PLATFORM_FEATURES.ardiaCommand` is false, so Command line is hidden in Settings and nothing is installed at launch. Its stand-in (`defaults.ts`) answers `canInstallUnattended` false and `install` with a failed result, and `installCliInBackground` treats a missing result as a failure. (Before, both answered null: the launch install threw `Cannot read property 'ok' of null`, an unhandled rejection 8 s after launch for nearly every Windows user, and Command line stayed on "Installing…".) Tests: `cliControlWindows.test.mjs`, `hiddenOnWindows.test.mjs` | #2135 |
-| Little Ardia (Ctrl+Alt+N) | Works, app-drawn chrome; its command bar lists recent pages | |
+| Little Solstice (Ctrl+Alt+N) | Works, app-drawn chrome; its command bar lists recent pages | |
 | Search Tabs (Ctrl+Shift+A), Ctrl+Tab | Works (d83398e1f): the new page has the keyboard after Ctrl+Tab and after Next Tab into a tab a restore left unloaded (#1658, #1691). Gap: a new tab opened with an address (Ctrl+T, the address, Enter) doesn't get the keyboard, tracked in #1689 (still so on 72901e27a) | #1658, #1689 |
 | Pin, Top Apps, New Group with Tab, tab menus | Works (the tab menu offers Move to Top Apps, Remove from Split View, Close Split View) | |
 | Page picture (a pinned page in another window) | Works: the other window shows the page picture | #1540 |
@@ -69,10 +69,10 @@ what differs; the Mac's list is `docs/dia-feature-parity.md`. Rows marked "hidde
 | Open in WebKit, Engines pane, Opens in | Does nothing (no WebKit on Windows); hidden | #1522 |
 | Split View (Ctrl+\, two pages, Next Pane) | Works: the empty pane takes the next address, Alt+Shift+] moves focus to the other pane's page. Seen on #1686's build: Focus Next Split Pane into an empty pane puts the typing in its search field, and a page left full screen by a tab switch comes back in a window and gets Escape | #1490, #1658 |
 | Peek | Works: Shift-click opens it over a split pane and in a private window; Escape closes it. Keys reach the Peek's page without a click, and after Escape they reach the source page with the link still focused, as on the Mac (the engine thread saw both in the VM on build 339 of #1708; not re-walked here). Its buttons at the top, left and right (53d5a2bee, walked 2026-11-14) are app UI over the page with a clean cut, answer clicks, include Split View's, and the tooltip reads "Open as Tab (Ctrl+O)" | #1531, #1576, #1708 |
-| A download while split | Differs: an insecure (http) download is blocked by Chromium's own download bubble; a download from localhost reaches Ardia's panel | #1519 |
+| A download while split | Differs: an insecure (http) download is blocked by Chromium's own download bubble; a download from localhost reaches Solstice's panel | #1519 |
 | Pop-up windows from pages | Works: the pop-up stays a tab of its opener's window, so `window.opener` and `postMessage` keep working, and shows in a pop-up window the app draws, sized and placed as the page asked | #1518 |
-| Open pop-up windows as tabs (Settings › Tabs › Links) | Works, not seen on Windows yet: with it on, a page's pop-up opens as a foreground tab beside the page instead of a pop-up window, as on the Mac (`engine/popupsAsTabs.ts`); a pop-up from Little Ardia, one with no page to open beside, an extension's, and a pop-up window already open stay windows | #1986 |
-| Main, Settings and Little Ardia window chrome | Works, no system title bar | |
+| Open pop-up windows as tabs (Settings › Tabs › Links) | Works, not seen on Windows yet: with it on, a page's pop-up opens as a foreground tab beside the page instead of a pop-up window, as on the Mac (`engine/popupsAsTabs.ts`); a pop-up from Little Solstice, one with no page to open beside, an extension's, and a pop-up window already open stay windows | #1986 |
+| Main, Settings and Little Solstice window chrome | Works, no system title bar | |
 
 **Pages**
 
@@ -81,12 +81,12 @@ what differs; the Mac's list is `docs/dia-feature-parity.md`. Rows marked "hidde
 | Command bar (history, open tabs, suggestions) | Works | |
 | Inline completion in the command bar | Works (top match completes inline) | #1520 |
 | Find in page | Works: the app's find bar, from a page or the app's UI (Ctrl+F); count, Enter, Shift+Enter, F3 and Shift+F3 step; Escape gives the page the keyboard back; private windows too | #1758 |
-| Page loading in the address field | Works (#1865's build 0bcabc63e, run 43642845254, 125%): while a slow page loads the glow fills the toolbar field, a Split View pane's field, a Peek's bar and Little Ardia's field, sweeps across when the load ends and fades; a load under 150 ms shows nothing; the tab's spinner and the stop button as before | #1820 |
+| Page loading in the address field | Works (#1865's build 0bcabc63e, run 43642845254, 125%): while a slow page loads the glow fills the toolbar field, a Split View pane's field, a Peek's bar and Little Solstice's field, sweeps across when the load ends and fades; a load under 150 ms shows nothing; the tab's spinner and the stop button as before | #1820 |
 | Reading mode (Ctrl+Alt+R, F9) | Works (53d5a2bee, walked 2026-11-14): it draws on a local article and on Wikipedia; Larger Text and the font switch work, Escape leaves it, F9 and Ctrl+Alt+R toggle it and it stays across a tab switch. A reload leaves it, as on the Mac. Find in page finds nothing inside it, as the shared reader keeps the article in a closed shadow root | #1831, #1883 |
 | Zoom (Ctrl+=, Ctrl+0) | Works, with the zoom icon in the address bar | |
 | Print | Works (Chromium's print preview, Microsoft Print to PDF) | |
 | JavaScript alert, confirm and prompt | Works (Chromium's dialogs over the page) | |
-| Page, link and image menus | Differs: Chromium's menu, trimmed as on the Mac (no Open link in split view, Cast, reading mode, QR code, send to your devices, Lens or other-profile items; Save as shows no Ctrl+S), but without the Mac's own items for a selection (search with Ardia's engine, Share) | #1811 |
+| Page, link and image menus | Differs: Chromium's menu, trimmed as on the Mac (no Open link in split view, Cast, reading mode, QR code, send to your devices, Lens or other-profile items; Save as shows no Ctrl+S), but without the Mac's own items for a selection (search with Solstice's engine, Share) | #1811 |
 | Full-screen (a page element) | Works; Escape leaves it | |
 | Picture in picture | Differs: Chromium's window, no stash, corners or mini player | #1425 |
 | Downloads (download, panel, Ctrl+J) | Works: the panel opens for a new download and lists it, including one held for Keep; Ctrl+J opens it and Escape closes it (53d5a2bee, walked 2026-11-14) | #1519, #1610 |
@@ -105,11 +105,11 @@ what differs; the Mac's list is `docs/dia-feature-parity.md`. Rows marked "hidde
 | Fill a saved password | Works | |
 | Notification and location prompts | Differs: Chromium's prompts (Allow, Block; while visiting, this time, never) | #1425 |
 | Camera and microphone | Not walked: the VM has no camera | |
-| Chrome Web Store install | Differs: the store says Add to Ardia, Chromium's Add extension dialog, then the icon in the toolbar and the extension's own page | stand-ins `extensions.resolveInstallPrompt` |
-| ardia://extensions | Works | |
+| Chrome Web Store install | Differs: the store says Add to Solstice, Chromium's Add extension dialog, then the icon in the toolbar and the extension's own page | stand-ins `extensions.resolveInstallPrompt` |
+| solstice://extensions | Works | |
 | Ad, tracker and cookie-banner blocking | Not offered; hidden | #1425 |
 | Hide anything (Hide Element) | Not offered; hidden: its rules are kept by the content blocker, which Windows lacks | #1425 |
-| Block autoplay on every site, and Autoplay per site in Site Controls | Works (engine `windows-engine-20261116-9`; seen by the `engine autoplay:` self-checks in CI, not walked in the VM): the Mac's settings and rule, enforced in Blink. A tab whose top-level site is set to Block, or has no Autoplay setting of its own while Block autoplay everywhere is on, plays media only in a document whose user asked: a click, tap or key press that reached that document (not Escape, not a Ctrl or Windows-key chord; Ctrl with Alt is AltGr and counts), Ardia's own play controls for the media they play, or a user action through Chrome's media session; a subframe also plays while it has transient activation, as the Mac's page script allows. The site is the top-level document's origin, or for a `blob:` or `about:blank` page the origin that made it. `chromium-win-autoplay-policy.patch` carries the decision to each new document with its commit (out-of-process iframes included), updates open documents when the setting changes, after a back/forward cache restore and when a prerendered page is shown, and refuses in `AutoplayPolicy` before Chrome's exemptions (media engagement, a Sound allowance, capture) and before muted autoplay: `play()` rejects with NotAllowedError, the autoplay attribute and internal resumptions do nothing, detached elements and shadow roots included. Blocking an open page pauses what its user did not ask to play. Plays refused are counted in the engine (`usage_counts.autoplay_plays_blocked`, at most 20 per page). Not covered, as on the Mac: Web Audio. Ardia's play controls reach media in the page and its same-origin iframes only, as before. Self-checks: `engine autoplay:` in `selfCheck/engineAutoplay.ts` | #1425, #1774, #2125 |
+| Block autoplay on every site, and Autoplay per site in Site Controls | Works (engine `windows-engine-20261116-9`; seen by the `engine autoplay:` self-checks in CI, not walked in the VM): the Mac's settings and rule, enforced in Blink. A tab whose top-level site is set to Block, or has no Autoplay setting of its own while Block autoplay everywhere is on, plays media only in a document whose user asked: a click, tap or key press that reached that document (not Escape, not a Ctrl or Windows-key chord; Ctrl with Alt is AltGr and counts), Solstice's own play controls for the media they play, or a user action through Chrome's media session; a subframe also plays while it has transient activation, as the Mac's page script allows. The site is the top-level document's origin, or for a `blob:` or `about:blank` page the origin that made it. `chromium-win-autoplay-policy.patch` carries the decision to each new document with its commit (out-of-process iframes included), updates open documents when the setting changes, after a back/forward cache restore and when a prerendered page is shown, and refuses in `AutoplayPolicy` before Chrome's exemptions (media engagement, a Sound allowance, capture) and before muted autoplay: `play()` rejects with NotAllowedError, the autoplay attribute and internal resumptions do nothing, detached elements and shadow roots included. Blocking an open page pauses what its user did not ask to play. Plays refused are counted in the engine (`usage_counts.autoplay_plays_blocked`, at most 20 per page). Not covered, as on the Mac: Web Audio. Solstice's play controls reach media in the page and its same-origin iframes only, as before. Self-checks: `engine autoplay:` in `selfCheck/engineAutoplay.ts` | #1425, #1774, #2125 |
 | Block requests to send notifications (Settings › Privacy & Security) | Not offered; hidden: it turns a notification request down when the app hears one, and on Windows the app hears none and can't answer one (`permissions.resolve`), so Chromium's own prompt still asks | #1425 |
 | Bookmark export | Works: Windows' Save As, then the HTML file is written | #1551 |
 | Password export | Works up to Windows' own sign-in prompt over the app window; the walk cancelled it there (the VM account's password is not typed in a test), so the file was not written | #1551 |
@@ -127,8 +127,8 @@ what differs; the Mac's list is `docs/dia-feature-parity.md`. Rows marked "hidde
 | Sync | Works: Turn On Sync at the default folder shows the Recovery Kit, the pane says updated just now, every What Syncs row but Passwords; a Mac and a PC exchanged pinned tabs and bookmarks both ways (#1594) | #1575, #1425 |
 | Calendar | Does nothing; hidden | #1521 |
 | Trackpad gestures, video upscaling, reorder haptics, thin scroll bars | Does nothing; hidden | #1522, #1520 |
-| Keep new-tab links inside a Little Ardia window, zoom with Ctrl and the mouse wheel, offer to save and fill passwords | Does nothing (the engine has no call for them yet); hidden | #1783, #1425 |
-| Warn before quitting | Works (#1796's build 1f4d97db1, run 43631924720): with it on, closing the last window (close button, Alt+F4, Ctrl+Shift+W, a lone Little Ardia's Ctrl+W; Ctrl+W on a window's last tab follows the same rule) asks first with the Mac's words; Cancel keeps the app running, Quit exits, Don't ask again turns it off; a hidden instance never asks | #1782, #1803 |
+| Keep new-tab links inside a Little Solstice window, zoom with Ctrl and the mouse wheel, offer to save and fill passwords | Does nothing (the engine has no call for them yet); hidden | #1783, #1425 |
+| Warn before quitting | Works (#1796's build 1f4d97db1, run 43631924720): with it on, closing the last window (close button, Alt+F4, Ctrl+Shift+W, a lone Little Solstice's Ctrl+W; Ctrl+W on a window's last tab follows the same rule) asks first with the Mac's words; Cancel keeps the app running, Quit exits, Don't ask again turns it off; a hidden instance never asks | #1782, #1803 |
 | Widevine | Not offered (says so) | |
 | Copy naming the Mac | Works: the walk found three more (a ⌘T, "History › Recently Closed", "File › Close All Tabs"), fixed in #1668's PR | #1522, #1668 |
 
@@ -150,7 +150,7 @@ what differs; the Mac's list is `docs/dia-feature-parity.md`. Rows marked "hidde
 
   The log, and `ardiaWindowsMissing()` in the JS console, list what the app has reached so far that has no Windows
   version, not everything left to port.
-- The app is a library, `ArdiaApp.dll` (the `Ardia` project), because Chromium's sandbox needs Chromium's own launcher
+- The app is a library, `ArdiaApp.dll` (the `Solstice` project), because Chromium's sandbox needs Chromium's own launcher
   to be the process. It runs in two modes, chosen by who calls it (`EngineApi.h` has the types):
   - Standalone: `Ardia.exe` is a stub (`ArdiaLauncher`) that loads `ArdiaApp.dll` from its own folder and calls
     `ArdiaAppRun`, which sets the app up and runs its own event loop. This is what CI builds and tests.
@@ -168,15 +168,15 @@ what differs; the Mac's list is `docs/dia-feature-parity.md`. Rows marked "hidde
   - What belongs to the app comes from the library (`AppImage.h`: the bundle folder, dialogs, window classes, the
     version); what is about the process stays with the executable (launch at login).
   - Windows finds the Windows App SDK's classes through the manifest of the process's executable, not the library's.
-    The `Ardia` project writes that list to `ArdiaApp.winrt.manifest` in the output folder, and the stub links it in
+    The `Solstice` project writes that list to `ArdiaApp.winrt.manifest` in the output folder, and the stub links it in
     with its own entries (`ArdiaLauncher/Ardia.exe.manifest`: Windows 10 and 11, per-monitor DPI, common controls 6).
     `scripts/windows/host-manifest.ps1 -From ArdiaApp.dll -To <exe>` writes the same list into another executable,
     keeping what it already declares: the engine's launcher needs it. The library, its DLLs and `Ardia.pri` have to sit
     next to that executable.
 - Native code is C++ in `apps/browser/windows/Ardia`, header-only, one module per header, named as on the Mac
   (`ArdiaApp` in `AppModule.h`), all included from `Modules.h`. Events reach JS as the device event
-  `<Module>:<event>` (`Events.h`). Folders come from `Paths.h`: data in `%LOCALAPPDATA%\Ardia` or `ARDIA_DATA_DIR`,
-  config in `%APPDATA%\Ardia`.
+  `<Module>:<event>` (`Events.h`). Folders come from `Paths.h`: data in `%LOCALAPPDATA%\Solstice` or `ARDIA_DATA_DIR`,
+  config in `%APPDATA%\Solstice`.
 - Windows are the app's own (`WindowManager.h`, `ArdiaAppWindows`): one runtime, one window per window id, each
   mounted with its id, as on the Mac. No window has a system title bar or system caption buttons: every window draws
   into its whole frame, and the UI draws minimize, maximize and close itself (`components/window/WindowControls.tsx`),
@@ -197,7 +197,7 @@ what differs; the Mac's list is `docs/dia-feature-parity.md`. Rows marked "hidde
     `placed <id> like the window in front`, `placed <id> where the last browser window was` and
     `opened <id> maximized`; `launch-smoke.ps1` maximizes a window, quits, relaunches twice and checks both.
   - Where the buttons sit comes from `windowControlsPlace` in `state/windows/layout.ts`: in the card's toolbar row, in
-    a right sidebar's header, at the end of the top tab strip, in Little Ardia's bar. With the address bar in a left
+    a right sidebar's header, at the end of the top tab strip, in Little Solstice's bar. With the address bar in a left
     sidebar they sit at the sidebar's leading end, in their own row above the header (one button and a 3 point gap
     tall, `sidebarControlsRow`), in the same order as everywhere else (menu, minimize, maximize, close), and the card
     reaches the page frame (#1973); the row beside them is a caption region, counted from the left (a negative third
@@ -250,11 +250,11 @@ what differs; the Mac's list is `docs/dia-feature-parity.md`. Rows marked "hidde
     without a reply; a no cancels the quit.
   - Warn before quitting asks when closing a browser window would quit the app: the setting is on, the instance
     isn't hidden, and no other window stays open: `windowIds()` less the browser windows the UI has closed or is
-    closing (Settings, Import and pop-up windows count while listed). A pop-up keeps Ardia running like any window:
+    closing (Settings, Import and pop-up windows count while listed). A pop-up keeps Solstice running like any window:
     closing the last browser window with a pop-up open neither asks nor quits, and the user closing that pop-up (its
     button, Alt+F4, Ctrl+W, the system menu) is the close that quits and asks. A page that closes itself
     (`window.close()`) closes its pop-up window at once, so in the last window it quits without asking: the question
-    protects what is still open, and nothing is. Little Ardia's own closes (Ctrl+W, Escape) and Ctrl+W on a
+    protects what is still open, and nothing is. Little Solstice's own closes (Ctrl+W, Escape) and Ctrl+W on a
     window's last tab ask the same way; when the last-tab confirm asks, it stands in for the quit question.
     Windows has no Quit command, so these are the only places it asks; the Mac asks on ⌘Q and never on a window's
     close. It asks before the window closes, so a Cancel leaves the window and the app as they were and no quit
@@ -264,8 +264,8 @@ what differs; the Mac's list is `docs/dia-feature-parity.md`. Rows marked "hidde
     closes while a close-tabs confirm is open, confirming it asks the quit question too, since that close now quits:
     the only close that shows both dialogs (#1889; `quit_warnings_after_tabs_confirm` and its `_cancelled` count them).
   - Windows fade as on the Mac (`WindowFade.h`), fade only with no grow. A window opened with `animated`, and every
-    window that is not a browser window (Little Ardia, Settings, Import: the Mac's system animates those open),
-    stays transparent until its React root has content or for 0.6 s, then fades in over 0.25 s (Little Ardia
+    window that is not a browser window (Little Solstice, Settings, Import: the Mac's system animates those open),
+    stays transparent until its React root has content or for 0.6 s, then fades in over 0.25 s (Little Solstice
     0.20 s); `animateWindowClose` fades it out from where it is over 0.18 s (0.15 s), hides it and then
     resolves. With `after` naming a new window it waits for that window to appear plus 0.20 s and hides at once. The
     fade makes the app window and every visible window it owns (the page windows) layered for its length and puts
@@ -287,11 +287,11 @@ what differs; the Mac's list is `docs/dia-feature-parity.md`. Rows marked "hidde
   enter, move, exit and drop updates. Dragging a file out of the app is not built yet, so `devLastFileDrag` is empty.
 - The app's identity (`AppIcon.h`): at startup the process takes the AppUserModelID `Ardia.Browser`, the one the
   installer's Start menu and desktop shortcuts carry, so the taskbar groups every window under that shortcut, uses its
-  icon, and a pin made from a running window relaunches Ardia. Every window the app opens gets Ardia's icon from the
+  icon, and a pin made from a running window relaunches Solstice. Every window the app opens gets Solstice's icon from the
   library's resources (`WM_SETICON`, big and small at the window's DPI), and notifications register with the name
-  Ardia and a PNG of that icon written to the data folder. The launch log says `app icon: AppUserModelID is ...`
+  Solstice and a PNG of that icon written to the data folder. The launch log says `app icon: AppUserModelID is ...`
   (and what it was) and `app icon: set on <id>`. `scripts/windows/launcher-identity.ps1` gives the engine's launcher
-  Ardia's icon as its first icon group and Ardia's name in its version strings (Task Manager shows the
+  Solstice's icon as its first icon group and Solstice's name in its version strings (Task Manager shows the
   FileDescription); `assemble.ps1` runs it, and `-Check` only reads it back.
 - Notifications are Windows App SDK app notifications (`NotificationCenter.h`): the app registers at startup, before
   the first window, which also registers its toast activator for this unpackaged app, so a click on a toast reaches
@@ -309,7 +309,7 @@ what differs; the Mac's list is `docs/dia-feature-parity.md`. Rows marked "hidde
   Search Tabs close. A popover with nothing focused in it needs the key captured, as the Mac's key monitor does:
   while the UI holds Escape (`captureEscape` in `platform/focus.ts`, for a page popover, a sidebar or bookmarks bar
   drag, and on Windows the Downloads popover too), `ArdiaFocus.setDragEscapeCapture` (`FocusModule.h`) has the
-  keyboard hook in `MenuKeyboard.h` take a bare Escape in an Ardia window and send `dragEscape`. While the tab
+  keyboard hook in `MenuKeyboard.h` take a bare Escape in an Solstice window and send `dragEscape`. While the tab
   switcher is open the hook takes every key, as on the Mac: Escape and the left and right arrows go to the switcher,
   W with Ctrl held (with or without Shift, never with Alt or as a key repeat) closes its highlighted row, and its own
   shortcut still runs. The launch log says `keys escape capture on|off` and
@@ -429,7 +429,7 @@ what differs; the Mac's list is `docs/dia-feature-parity.md`. Rows marked "hidde
   - **Telemetry:** `command_bar_key_holds`, `command_bar_keys_replayed` and `command_bar_key_hold_drops_<reason>` in
     `usage_counts`.
 - "Ctrl+Z reopens closed tabs" works as the Mac's retargeted Undo: with the setting on, the keyboard hook in
-  `MenuKeyboard.h` sends `reopenClosedTab` for a plain Ctrl+Z in a browser window (Little Ardia included, Settings and
+  `MenuKeyboard.h` sends `reopenClosedTab` for a plain Ctrl+Z in a browser window (Little Solstice included, Settings and
   Import not) when Reopen isn't disabled, no command is bound to Ctrl+Z, the window itself is the active one (not a
   dialog it owns, such as a prompt, nor a page), and no text field of the app has focus. Everything else keeps Ctrl+Z:
   a text field or a dialog's edit box undoes typing, a page gets its own undo, a command bound to Ctrl+Z runs. The app's text fields are React Native `TextInput`s
@@ -475,7 +475,7 @@ what differs; the Mac's list is `docs/dia-feature-parity.md`. Rows marked "hidde
       until its transform changes again. An animation changes it every frame; a fixed rotation on a view that
       resizes would need its transform set again.
 - While the command panel sits beside the window buttons it keeps their 138 points free at the right
-  (`trailingClearance` in `lib/windowChrome.ts`). Little Ardia's bar numbers for both systems are in
+  (`trailingClearance` in `lib/windowChrome.ts`). Little Solstice's bar numbers for both systems are in
   `components/littleArdia/barLayout.ts`.
 - Icons are the web demo's set (`packages/demo/src/shims/web/symbols`), resolved in TypeScript and drawn natively as
   Direct2D geometry in Composition shapes.
@@ -498,9 +498,9 @@ what differs; the Mac's list is `docs/dia-feature-parity.md`. Rows marked "hidde
   `windowsApiVersion` in `AppModule.h`. Bump both when the Windows native surface changes. A Mac bump doesn't
   touch it.
 - The app writes its launch log, React Native's log and JavaScript errors to `Logs\launch.log` in the data folder
-  (`%LOCALAPPDATA%\Ardia\Logs`), or to `--log-file=<path>` when given. Each line is `<level> <ms since process start>
+  (`%LOCALAPPDATA%\Solstice\Logs`), or to `--log-file=<path>` when given. Each line is `<level> <ms since process start>
   <message>`; the engine's lines are `engine 0 <message>`, and a crash's stack lands there too. Each start moves the
-  last run's log to `launch.previous.log`, and a run stops writing at 16 MB. A problem report from someone whose Ardia
+  last run's log to `launch.previous.log`, and a run stops writing at 16 MB. A problem report from someone whose Solstice
   won't open starts with those two files.
 - A background instance (`ARDIA_BACKGROUND=1`) shows its windows without taking focus and answers dialogs and menus
   without showing them, as on the Mac.
@@ -516,7 +516,7 @@ is plain Chromium.
 - Features the engine turns off at launch (`AddLaunchSwitches` in `scripts/windows/engine/src/ardia/win/main.cc`,
   appended to any `--disable-features` the launcher passed, which a launcher's `--enable-features` can't undo):
   `CalculateNativeWinOcclusion`, and `SettingsGlowupJourneys` (engine `windows-engine-20261117-9`, #2326). The latter
-  feeds Chrome's own guided tours, which Ardia never shows, and its chrome://settings handlers CHECK for a tracked
+  feeds Chrome's own guided tours, which Solstice never shows, and its chrome://settings handlers CHECK for a tracked
   browser view in the tab's window, which a hidden page window doesn't have. The Mac turns it off too (#2289). The
   `engine settings:` self-checks change a search engine, a site permission, the theme and browsing data through
   chrome://settings in shown, private, pop-up and hidden pages and ask the engine for the page after each.
@@ -537,7 +537,7 @@ is plain Chromium.
 - `//ardia/win` (`scripts/windows/engine/src/ardia/win`, copied into the tree by `series_win.py`) is the engine's side.
   It starts Chromium with no window of its own, turns the launch variables into switches as the Mac's launcher does
   (`ARDIA_DATA_DIR` keeps Chromium's data in `<dir>\Chromium`; `ARDIA_REMOTE_DEBUGGING_PORT`, `ARDIA_TEST` and
-  `ARDIA_TRACE` only count in a test instance, see Test instances; a remote debugging switch or an Ardia test switch on
+  `ARDIA_TRACE` only count in a test instance, see Test instances; a remote debugging switch or an Solstice test switch on
   the command line is dropped), loads the app's library once the browser has started, and hands it the API in
   `EngineApi.h`: `hostCall(verb, json, window)`, `engineCall(name, profile, json)`, one event sink and
   `testGateRefusal()`, the engine's test-instance decision. Chromium's message loop offers each message to the app first, except messages for Chromium's own windows.
@@ -591,7 +591,7 @@ is plain Chromium.
   pages, which sit side by side and clip to one) reports only the part its clips show, so the next profile's rows,
   parked beside the sidebar, cut nothing in the page (#1673). A translucent surface shows the card behind it in the hole, not the page.
   A `Surface` that only draws a gradient (`GradientFill`, the address field's load glow) reports no rectangle: it always
-  sits inside a toolbar, sidebar or Little Ardia plate that does, and `windowsGradientFill.test.mjs` pins its callers.
+  sits inside a toolbar, sidebar or Little Solstice plate that does, and `windowsGradientFill.test.mjs` pins its callers.
   Gradients draw through `ArdiaMaterialGradient` (`GradientView.h`): `fillColors` at `fillStops` top to bottom, masked
   left to right by `fade` at `fadeStops` through a `CompositionMaskBrush`, as `Surface.swift` masks its plate. When
   composition gradients fail, `Surface` draws rows at the stops inside columns that carry the fade.
@@ -634,7 +634,7 @@ is plain Chromium.
   The launch log records each request and why a request was skipped ("menu: …"), and `page_focus_return_requests_after_menu` counts the requests, including ones a focused app field or a later foreground change refuses. The self-check holds a real confirm and a real menu on both
   threads and checks that a page loads only in the first case; `dialog_pages_asked` and `dialog_pages_stalled` count
   pages asked while a dialog or a menu was open and how many hadn't loaded 10 s later.
-- A launch while the previous Ardia on the same profile is still closing waits for it to end (up to 45 s) instead of
+- A launch while the previous Solstice on the same profile is still closing waits for it to end (up to 45 s) instead of
   handing its command line to a browser that is shutting down, or starting a second browser on the same profile once
   that one has let go of Chromium's process singleton (which happens before its shutdown is over: the old process
   then still writes its profile). The quitting browser signals it from `QuitApp` and from its main parts' end
@@ -648,11 +648,11 @@ is plain Chromium.
   The app hands back its reason through `ArdiaAppStartFailure`.
 - A start that crashes or fails before it has run for 15 s counts as unfinished (`launch-starts.txt` in the data
   folder; a quit before then counts as finished). After two unfinished starts in a row, the next one moves the
-  state Ardia restores at launch (`session.json`, `launch-look.json`, `switches-cache.json`, `bookmarks-cache.json`)
+  state Solstice restores at launch (`session.json`, `launch-look.json`, `switches-cache.json`, `bookmarks-cache.json`)
   to `Recovery\<date-time>` in the data folder, deletes Chromium's graphics caches (`GrShaderCache`,
   `GraphiteDawnCache`, `ShaderCache`, `GPUPersistentCache` and the profile's `GPUCache`, `DawnGraphiteCache`,
   `DawnWebGPUCache`: a relaunch differs from a first run in what the first session wrote there), and says so once it
-  has opened, so a profile that crashes Ardia at every start opens again on its own. Chromium's profile (bookmarks,
+  has opened, so a profile that crashes Solstice at every start opens again on its own. Chromium's profile (bookmarks,
   history, passwords, cookies) isn't touched. #2097's recording (the app gone about 4 s after its window appears, at
   every launch after onboarding) is that shape; the launch log now kept in `Logs` says what ended it.
 - **Crash reports.** `ArdiaApp.crashReports(since)` lists the minidumps Chromium's crash handler (Crashpad) wrote after
@@ -660,7 +660,7 @@ is plain Chromium.
   Mac and Linux) can name what ended a run on the next launch. It used to answer an empty list, so a Windows crash left
   no report (#3664). `CrashDumps.h` does the work and uses only the standard library, so a test compiles it on any
   machine; `AppModule.h` picks the folders and builds the JS objects.
-  - Where: the profile's `Crashpad\reports` folder (`%LOCALAPPDATA%\Ardia\User Data` for an everyday instance, the
+  - Where: the profile's `Crashpad\reports` folder (`%LOCALAPPDATA%\Solstice\User Data` for an everyday instance, the
     instance's data folder for a test instance, whose dumps then never reach the everyday profile). Files over 32 MB
     and empty or damaged ones are skipped. Every dump newer than the asking time is read (Crashpad prunes the folder
     itself), so a burst of helper dumps can't hide an older browser one; then the newest five from the browser process
@@ -694,12 +694,12 @@ is plain Chromium.
   it: twice right away, once after it has exited, once while the previous browser is held at its exit (it must
   wait, with no second browser), once with two unfinished starts recorded (the session must be set aside), and
   once with `Microsoft.ReactNative.dll` hidden (it must exit 0 with the reason logged). Every launch must show one
-  window from one browser, and Windows must log no Ardia crash, Crashpad no dump and the launch log no fatal line.
+  window from one browser, and Windows must log no Solstice crash, Crashpad no dump and the launch log no fatal line.
 - A second launch reaches the running app: Chromium's process singleton hands it the command line, and
   `chromium-win-relaunch-to-app.patch` gives that to `//ardia/win`, which sends the topic `relaunch` with the web and
-  file addresses on it. The app treats them as links from another app (`onOpenURLs`: a Little Ardia window or a tab,
+  file addresses on it. The app treats them as links from another app (`onOpenURLs`: a Little Solstice window or a tab,
   as Settings says) and a launch with none as `reopen` (the last window comes forward).
-- A first launch opens the addresses it was started with, which is how a link from another app arrives when Ardia is
+- A first launch opens the addresses it was started with, which is how a link from another app arrives when Solstice is
   the default browser and isn't running: the engine starts with `--no-startup-window`, so Chromium opens none itself.
   `ArdiaWindowsHost.launchArguments` reads the process's own command line (Chromium's `--single-argument` form, which
   the default browser registration uses, as one argument), and `packages/expo-windows/src/launchLinks` keeps what is an
@@ -709,23 +709,23 @@ is plain Chromium.
   go the same way), after the session has restored, so they open as links from another app do on the Mac. The launch
   log says `launch links: <n> held until the app listens` and `<n> sent to the app`; telemetry counts them as
   `launch_command_line_links` in the hourly `usage_counts`.
-- Ardia is a browser Windows knows about once installed: the installer writes the per-user registration Chromium's
+- Solstice is a browser Windows knows about once installed: the installer writes the per-user registration Chromium's
   own `ShellUtil` would, unsuffixed (`ArdiaHTM` is Chromium's ProgID for this install mode): the ProgID, whose open
   command is `"<app>\Ardia.exe" --single-argument %1` (the form the first-launch and relaunch paths read as one
-  address), `StartMenuInternet\Ardia` with Capabilities for http, https and `.htm .html .shtml .svg .webp .xht .xhtml`,
-  `RegisteredApplications\Ardia`, and `OpenWithProgids` entries, all in HKCU, all removed by the uninstaller. The
+  address), `StartMenuInternet\Solstice` with Capabilities for http, https and `.htm .html .shtml .svg .webp .xht .xhtml`,
+  `RegisteredApplications\Solstice`, and `OpenWithProgids` entries, all in HKCU, all removed by the uninstaller. The
   installer does it, not the engine: Chromium registers itself only from its own installer or its settings page, and
-  Ardia ships neither. `installer-check.ps1` checks every key after install and that none is left after uninstall.
+  Solstice ships neither. `installer-check.ps1` checks every key after install and that none is left after uninstall.
 - Windows 10 and 11 don't let an app make itself the default browser. `setAsDefaultBrowser` opens Default apps
-  (Ardia's own page, `ms-settings:defaultapps?registeredAppUser=Ardia`, on Windows 11 when this Ardia.exe is the one
+  (Solstice's own page, `ms-settings:defaultapps?registeredAppUser=Solstice`, on Windows 11 when this Ardia.exe is the one
   registered; the general page otherwise) and answers false. `isDefaultBrowser` is true when the user's choice for
   http and https is `ArdiaHTM` and that ProgID opens this Ardia.exe. The choice is what the shell resolves
   (`AssocQueryString`), then the registry: Windows 11 builds since 2025 write it to `UserChoiceLatest\ProgId` and
-  leave the old `UserChoice` on the previous browser, so reading `UserChoice` alone says Edge after the user chose Ardia;
-  `ArdiaSystem.defaultBrowserState` returns the parts. Settings › General reads it again whenever an Ardia window
+  leave the old `UserChoice` on the previous browser, so reading `UserChoice` alone says Edge after the user chose Solstice;
+  `ArdiaSystem.defaultBrowserState` returns the parts. Settings › General reads it again whenever an Solstice window
   becomes active (React Native for Windows' AppState never changes in this app). With `PLATFORM_FEATURES.setsDefaultBrowser`
   off, onboarding's row says "Yes, in Windows Settings", Settings' button says "Choose in Windows Settings…", the
-  7-day trial isn't offered (it starts when Ardia becomes the default, which only Windows Settings decides, so the app
+  7-day trial isn't offered (it starts when Solstice becomes the default, which only Windows Settings decides, so the app
   could neither start nor date it), and the one-time offer after onboarding isn't made (it would open Settings at a
   launch nobody asked for).
 - A page that goes full screen takes its window full screen (`setPageFullScreen`, which puts the window back as it
@@ -761,7 +761,7 @@ is plain Chromium.
   area doesn't count, and any field at all in another window, such as Settings. `keyboard_follows_kept`,
   `keyboard_follows_used` and `keyboard_follows_dropped` in the hourly `usage_counts` count them. The engine host carries
   it out only if the keyboard is already in that app window (its own UI or its pages), only while one of the app's
-  windows is the foreground window, and never in a background instance. A focus it can't carry out because Ardia
+  windows is the foreground window, and never in a background instance. A focus it can't carry out because Solstice
   isn't in front is kept for that window and given when the window is activated again; it is dropped when the window
   closes, a field of the window takes the keyboard (`keyboard.forget`), another page of the window is asked or
   pressed, or the page hides. When a page that holds the keyboard hides, the keyboard goes to its app window. When an
@@ -772,7 +772,7 @@ is plain Chromium.
   with the sidebar (#2148). The shell acts on the window that was in front when the Windows key went down (CI showed
   an arrow sent later, with the app window in front, still ignored), and a page's own window can't be snapped, so
   nothing moved. `MenuKeyboard`'s thread hook sees the Windows key go down over a page; when the foreground window is
-  then a page window owned by one of the app's browser or Little Ardia windows (and the instance isn't a background
+  then a page window owned by one of the app's browser or Little Solstice windows (and the instance isn't a background
   one; a pop-up window's page keeps today's behaviour), the app window takes the foreground at once (same thread, so
   nothing is taken from another app) and the hook remembers the page. The user's own keys then reach the shell with
   the app window as its target; nothing is ever sent with `SendInput`, so the shell acts on the arrow's key-down, a
@@ -845,7 +845,7 @@ is plain Chromium.
   dialogs and the status bubble for a hovered link. The right-click menu is Chromium's, as on the Mac, but the engine
   (`ardia/win/context_menu.cc`) leaves out what Windows can't do: Open link in split view, Cast, reading mode, listen
   to this page, the QR code, send to your devices, Lens, and opening a link as another Chromium profile; Save as
-  shows no Ctrl+S, which is Ardia's Hide Tabs on Windows. Its search item still names Chromium's default engine.
+  shows no Ctrl+S, which is Solstice's Hide Tabs on Windows. Its search item still names Chromium's default engine.
 - A tab or pop-up a page opens (`target=_blank`, `window.open`, with a size or not) never becomes a Chromium pop-up
   window and never shows in its opener's place: `Navigate()` (`chromium-win-hosted-popups-and-menus.patch`) asks the
   host, which inserts it as a background tab of the opener's hosted window (the opener stays the active, visible tab)
@@ -878,15 +878,15 @@ is plain Chromium.
   opener's page holds the keyboard (`keyboard.page`, asked by `WindowManager.h` at that moment, the same rule as page
   focus in #1658); a pop-up from a pop-up is placed and focused by that pop-up, while its tabs and prompts go to the
   main page. Otherwise it shows just above its opener's window and that window's pages, without activating, and never
-  above another application's window. The Mac shows such a pop-up in front of its Ardia windows and makes it key
-  within Ardia; Windows shows it in the same place but leaves the keyboard where it was.
+  above another application's window. The Mac shows such a pop-up in front of its Solstice windows and makes it key
+  within Solstice; Windows shows it in the same place but leaves the keyboard where it was.
   `host.info` counts Chromium pop-up windows in `popupBrowsers`, which the self-check expects to stay 0.
 - Open pop-up windows as tabs (`webView.setPopupsOpenAsTabs`) is kept in the app, in `engine/popupsAsTabs.ts`: the Mac's
   native layer does it there, while on Windows the app makes the pop-up window itself. With it on, a `tab.opened`
   with `popup` goes to `requestHost` as the Mac's request (`foreground`, `popup: true`, the offered tab, the engine
   profile), so `openFromPage` puts it beside its page, keeps a Peek's page as a tab and counts it. The opener is the
   one the pop-up window would have used: for a pop-up from a pop-up, the first page. It stays a pop-up window when
-  that opener is gone, when the opener or the page that would take it is in Little Ardia (the `small` window kind,
+  that opener is gone, when the opener or the page that would take it is in Little Solstice (the `small` window kind,
   noted as the app opens its windows in `modules.ts`, like the Mac's `ardia.window.small`), and when no page of its
   profile is listening. An extension's pop-up never comes this way: Chromium makes it as its own pop-up browser. The
   setting only decides for new pop-ups, so a pop-up window already open stays one.
@@ -972,7 +972,7 @@ is plain Chromium.
 | `permissions.resolve` | Engine | Permission prompts drawn by the app; Chromium's own prompt shows today. |
 | `permissions.devExternalLaunches` | Default | Mac test hook. |
 | `profiles.loaded` | Engine | The profiles the engine has loaded, plus the `profiles.loaded` event. Today the call fails and the app counts every profile as open, as with lazy loading off. |
-| Profile folder names (no verb) | App | The engine names a profile's folder `Ardia ` plus its id, with lowercase letters, digits and `-` kept and every other byte written `_` and two lowercase hex digits (`profiles.cc`), so each name has its own folder even on a case-insensitive disk and Ardia's own ids (`p-<base36>-<base36>`) keep the folder they always had. `profiles.deleteData` still maps only ids of that shape and refuses the rest; it could map the escape too. |
+| Profile folder names (no verb) | App | The engine names a profile's folder `Solstice ` plus its id, with lowercase letters, digits and `-` kept and every other byte written `_` and two lowercase hex digits (`profiles.cc`), so each name has its own folder even on a case-insensitive disk and Solstice's own ids (`p-<base36>-<base36>`) keep the folder they always had. `profiles.deleteData` still maps only ids of that shape and refuses the rest; it could map the escape too. |
 | `sites.readStorage`, `writeStorage`, `registrableDomains` | Default | They carry a site's data between Chromium and WebKit pages, and WebKit pages are Mac only. Their engine calls (`ac_local_storage_read`, `_write`, `ac_registrable_domains`) are in `ac_local_storage.cc`, which BUILD.gn's `if (!is_win)` list keeps out of the Windows engine with the WebKit replica calls (`ac_extension_*`, `ac_passwords_page_*`), and `series-win` skips `chromium-extension-state-mirror-hooks.patch`. `windowsEngineCalls.test.mjs` fails when a call the Mac passes straight through is missing here while Windows builds it, or forwarded while it doesn't. |
 | `search.setEngineName` | Default | Names the search engine in the app's own page context menu; Windows shows Chromium's menu, which names Chromium's default engine. Needed again once the app draws that menu. |
 | `tabs.routeLinkTabs`, `stripCommand`, `strips`, `reportCommits` | Default | The Mac's Chromium tab strip; Windows hosts pages only, so the empty answers are right. |
@@ -1034,7 +1034,7 @@ Answered on Windows since the engine took Windows paths (`windows-engine-2026111
     schemes whose `HKCR` key carries `URL Protocol`, so a file type's ProgID can't pose as a link scheme, and it
     refuses one-letter schemes (drive letters).
   - **Prompt:** the Mac's prompt shows in the Mac's words. Like every page prompt it ignores input for half a second
-    after it appears and after an Ardia window becomes active; the window becoming active again because the user
+    after it appears and after an Solstice window becomes active; the window becoming active again because the user
     clicked from one of its own page windows back into it doesn't count (`WindowManager.h` marks that `focus` event
     `fromPage`, and `state/site/promptGuard.ts` skips it), so the first click on the prompt works. "Always allow" is offered only for an https or loopback
     site, outside private windows, and kept per profile in `external-app-allowances.json`; deleting a profile
@@ -1069,7 +1069,7 @@ Answered on Windows since the engine took Windows paths (`windows-engine-2026111
   (`reauthFailed` otherwise). A background instance answers the panel from `file-chooser.txt` and logs that a file was
   chosen, never which.
   Windows confirms the password export with Windows Hello, or with the Windows Security password prompt when Hello
-  isn't set up. Chromium shows that over `GetLastActiveBrowser()`'s window, which in Ardia is a page window, so
+  isn't set up. Chromium shows that over `GetLastActiveBrowser()`'s window, which in Solstice is a page window, so
   `chromium-win-reauth-app-window.patch` gives it a hook and the engine host answers with the app window the user is
   in. In Chrome that password prompt is modal on the browser UI thread, so other engine calls
   and quitting wait on it (the old stall, when the prompt sat unseen on a page window); the patch runs it on a pool
@@ -1089,14 +1089,14 @@ Answered on Windows since the engine took Windows paths (`windows-engine-2026111
   changes, as macOS's notifications do. Settings › Advanced says "battery saver" where the Mac says Low Power Mode.
 
 Deleting a profile's data: native (`ArdiaEngineHost.removeProfileFolder`) works out Chromium's data folder itself, as
-the engine does (`<ARDIA_DATA_DIR>\Chromium` in an instance with its own data folder, `%LOCALAPPDATA%\Ardia\User Data`
+the engine does (`<ARDIA_DATA_DIR>\Chromium` in an instance with its own data folder, `%LOCALAPPDATA%\Solstice\User Data`
 otherwise), and acts only where that folder holds the `Default` profile folder or `Local State` and agrees with `host.info`'s
 `userDataDir`. The folder counts first: Chromium saves `Local State` with `ReplaceFile`, and while it does a reader can
 find the file missing, which made a removal answer "refused" and leave a deleted profile's data on disk (#2120). A profile
-is deleted by its folder only when its id is one Ardia makes: lowercase `a-z`, `0-9` and `-`, at most 238 characters,
-so that `Ardia <id> (removing)` fits one 255-character NTFS name. Its folder is then exactly `Ardia <id>`. Any other id
+is deleted by its folder only when its id is one Solstice makes: lowercase `a-z`, `0-9` and `-`, at most 238 characters,
+so that `Solstice <id> (removing)` fits one 255-character NTFS name. Its folder is then exactly `Solstice <id>`. Any other id
 (hand-edited state, a sync from something else, a bug) could share its folder with another profile, so on purpose
-nothing is renamed, removed or cleared for it: the answer says the id isn't one Ardia makes, its data stays, and the
+nothing is renamed, removed or cleared for it: the answer says the id isn't one Solstice makes, its data stays, and the
 app logs that it couldn't delete it. A name with `@` is a private session to the engine and has no folder; a name with
 a NUL is refused, since the engine reads it only up to the NUL. Native renames the folder to `<folder> (removing)` first,
 which fails while the engine holds a file in it, so a loaded profile's folder is never half removed: its browsing data
@@ -1193,7 +1193,7 @@ sealed exactly as `packages/sync/ios/Core/SyncCrypto.swift` seals it. The engine
   an owner check that began before it is dropped.
 - Passwords are off on Windows (`PLATFORM_FEATURES.syncsPasswords`: no What Syncs row, the type never syncs, and
   the Mac's synced passwords stay in the vault untouched). Chromium turns `kSkipUndecryptablePasswords` on by default
-  on Windows only, and Ardia keeps it on: Settings, export and autofill read through the affiliation path, which still
+  on Windows only, and Solstice keeps it on: Settings, export and autofill read through the affiliation path, which still
   leaves out a login it can't decrypt. The plain login read is strict on Windows (`chromium-win-strict-login-list.patch`):
   it fails when any login can't be decrypted, for every caller of that read, so no caller has to remember a flag.
   Chromium never deletes a login it can't decrypt on Windows (`chromium-win-keep-every-login.patch`):
@@ -1232,7 +1232,7 @@ Swift core wrote (`fixtures/windows-interop/mac`), and the self-check opens that
 
 ## Updates
 
-- The updates live on the GitHub prerelease `windows-alpha`: `Ardia-Setup-x64.exe`, `Ardia-Setup-arm64.exe`, the
+- The updates live on the GitHub prerelease `windows-alpha`: `Solstice-Setup-x64.exe`, `Solstice-Setup-arm64.exe`, the
   feed `windows-update.json` (version, build, and per CPU the installer's address, SHA-256 and size) and the
   engine's source. `scripts/windows/publish-alpha.sh` puts one build there, the feed last. It keeps the installers of
   the build before, so an update the app already offered still downloads, and removes older ones. It refuses a build
@@ -1243,7 +1243,7 @@ Swift core wrote (`fixtures/windows-interop/mac`), and the self-check opens that
   number is the number of commits in the built commit's history (`git rev-list --count`, the workflow's `identity`
   job), so it grows with `main` and a release outranks every build before it, CI's included; builds before this rule
   were numbered by the run (up to about 670). The Windows workflow puts the same file beside the installer in its
-  `Ardia-Setup-<cpu>` artifact, which is where `publish-alpha.sh` reads a build's version and number. `ArdiaApp.systemInfo` takes its version and build from that file, since the library has no version
+  `Solstice-Setup-<cpu>` artifact, which is where `publish-alpha.sh` reads a build's version and number. `ArdiaApp.systemInfo` takes its version and build from that file, since the library has no version
   resource, so telemetry, About and problem reports name the build; a folder build without it says 0.0.0, build 0. Only an installed build with that file updates: Settings › General › Updates shows "not set up" for a
   folder build.
 - `packages/expo-windows/src/updater` is the app's `ArdiaUpdater` on Windows. It reads the feed, offers a higher
@@ -1264,9 +1264,9 @@ Mac, for every nightly and stable:
 
 1. Its `windows` job calls `windows.yml` with the release's version, at the release's commit: the same build, pinned
    engine (`scripts/windows/engine/prebuilt.json`), launch, tour and installer checks as CI, for x64 and arm64.
-   `release-files.ps1` names each tested installer `Ardia-<version>-windows-<cpu>-setup.exe` with its `.sha256`, and
+   `release-files.ps1` names each tested installer `Solstice-<version>-windows-<cpu>-setup.exe` with its `.sha256`, and
    the job leaves them with `Ardia.build.json` in the artifacts `windows-release-x64` and `windows-release-arm64`. Its
-   `source` job packs the engine's source, `Ardia-<version>-windows-source.tar.xz` with a `.sha256`, in
+   `source` job packs the engine's source, `Solstice-<version>-windows-source.tar.xz` with a `.sha256`, in
    `windows-release-source`: `scripts/windows/engine-source.sh`, from the Helium tags `helium-pins.ini` pins at the
    commit `prebuilt.json` names as its engine's `source`, so the archive matches the engine the installers carry even
    when the pins have moved on ahead of a new prebuilt. Its README names Chromium's source, this repository's tree at
@@ -1325,7 +1325,7 @@ A test instance needs all of:
 
 - an absolute `ARDIA_DATA_DIR` (not `C:foo` or `\foo`);
 - that folder and its `Chromium` folder, compared by their final paths on a local volume (junctions, `subst` drives and
-  8.3 names resolved), are not, inside or around the real `%LOCALAPPDATA%\Ardia` or `%APPDATA%\Ardia`;
+  8.3 names resolved), are not, inside or around the real `%LOCALAPPDATA%\Solstice` or `%APPDATA%\Solstice`;
 - a test build: an `Ardia.test-build` file beside `Ardia.exe`.
 
 Windows builds are not signed yet, and the alpha publishes the exact installer CI built and tested, so no build flag
@@ -1339,7 +1339,7 @@ replace `ArdiaApp.dll`, and on the Mac a changed bundle is likewise no longer si
 What it guards: the unmodified build people install can't be switched into test behaviour by the environment alone,
 and a test instance never runs on the real profile folders by mistake. What it doesn't: code already running as the
 user, which can plant the marker, race the folder check with a junction, or hard-link a scratch file to a real one.
-That code can also decrypt the real profile's DPAPI secrets directly, without Ardia; the Mac's keychain ties its items
+That code can also decrypt the real profile's DPAPI secrets directly, without Solstice; the Mac's keychain ties its items
 to the signed app, and Windows has nothing like it until builds are signed or installed per machine. `ARDIA_CONFIG_DIR`
 gets the same folder check, and a folder that can't be resolved on a local volume doesn't count.
 
@@ -1426,7 +1426,7 @@ does run in a test instance. A scratch folder with the marker must get both powe
   compile once for itself. A full run always compiles, saves that app for pull requests to reuse, and adds the tours, the
   installers and the install check. The tours run beside the launch checks in their own jobs, `x64-tour` (the app
   alone, then the pages and the typing with the engine; artifacts `tour` and `tour-engine`) and `x64-tour-first-run`
-  (artifact `tour-engine-first-run`), so a full run takes about as long as its slowest job instead of their sum. Only a full run has the `Ardia-Setup-<cpu>` artifacts that
+  (artifact `tour-engine-first-run`), so a full run takes about as long as its slowest job instead of their sum. Only a full run has the `Solstice-Setup-<cpu>` artifacts that
   `scripts/windows/publish-alpha.sh` publishes.
 - With the browser window open, the x64 run also drives the app with real input and fails when the default layout
   marks no caption region; a drag by the gap beside the window buttons is not Windows' own move or does not move the
@@ -1446,7 +1446,7 @@ does run in a test instance. A scratch folder with the marker must get both powe
   and read it back, so the script the engine's launcher depends on is exercised on every build.
 - `scripts/windows/tour.ps1` drives a full screenshot tour and writes `tour.md`, one line per stop with the facts it
   read. Among them: Downloads and Search Tabs must close on Escape (the caption regions go away while one is open and
-  come back, and for Downloads the log shows the native Escape capture taking the key), and Little Ardia's command
+  come back, and for Downloads the log shows the native Escape capture taking the key), and Little Solstice's command
   panel must be drawn whole below its field, with the window buttons on the bare bar (screen brightness where the
   panel used to be cut off, and under the buttons). In Settings › Appearance it clicks the Light tile's picture, found by UI Automation,
   and then Automatic's, and each must change `appearance` in `session.json`.
@@ -1458,7 +1458,7 @@ does run in a test instance. A scratch folder with the marker must get both powe
 - The smoke launch fails when the browser window answers `WM_GETICON` with no big or small icon, or the launch log
   does not show the AppUserModelID and the window icon; the installer check fails when the Start menu shortcut lacks
   the AppUserModelID or an icon file, the uninstall entry's icon is not a file, or the installed `Ardia.exe` does not
-  carry Ardia's icon and name.
+  carry Solstice's icon and name.
 - `platform/windowsModules.test.mjs` fails when the app imports something from `expo-modules-core` that
   `packages/expo-windows` doesn't export.
 - Nobody can compile Windows code on the Mac: CI is the compiler. The Windows VM on shiv covers behaviour by hand,
@@ -1482,14 +1482,14 @@ Ranked by how much a user notices. Sizes are rough: S is under a day, M is one t
 App side, an agent can do these now:
 1. A new tab opened with an address (Ctrl+T, the address, Enter) gets no keyboard (#1689). S, with the engine
    thread.
-2. Changing a Windows contrast theme while Settings is open crashes Ardia, inside the Windows App SDK (#1900). S once
+2. Changing a Windows contrast theme while Settings is open crashes Solstice, inside the Windows App SDK (#1900). S once
    the cause is seen on Windows.
 3. A private pop-up left as the only window closes the tabs it opens at once, where a regular one gets a browser window
    back (#1910): the app can't open a window on the pop-up's private session yet. S.
 4. The top edge over a page that reaches it (#1888): a real drag in CI resizes the window from the top; the cursor, a
    double click and a maximized window are untried in the VM. S.
 5. The theme's grain draws nothing, and the sidebar and toolbar don't blur what is behind them (#1921). M.
-6. The Mac's own items in the page menu: search a selection with Ardia's engine and Share (Chromium's menu is otherwise
+6. The Mac's own items in the page menu: search a selection with Solstice's engine and Share (Chromium's menu is otherwise
    trimmed as on the Mac since #1811). S.
 7. The app's own prompts for passwords, notifications and location, drawn like the Mac's (#1425 for the events the app
    needs). M each once the engine reports them. A pop-up's prompts go to its opener's window, as on the Mac's
@@ -1533,5 +1533,5 @@ only where the engine, Windows itself or a decision stands in the way.
    gestures. Import from another browser is done for bookmarks, history, open tabs, favicons, Chromium passwords and
    cookies, and HTML and CSV files; what is left is listed under Import from another browser.
 6. An installer exists (`scripts/windows/make-installer.ps1`, Inno Setup, per user, no admin prompt; CI builds
-   `Ardia-Setup-<cpu>.exe` and installs and uninstalls it), every release ships them and refreshes the feed, and the
+   `Solstice-Setup-<cpu>.exe` and installs and uninstalls it), every release ships them and refreshes the feed, and the
    app updates itself from it (Updates, below). Left: signing both.
