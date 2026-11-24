@@ -25,7 +25,7 @@ export async function loadProgramClaims(): Promise<ProgramClaims> {
   return claims;
 }
 
-export const REGISTRY_UNREADABLE = "Ardia's list of program names kept for its built-in plugins is missing or damaged, so no program goes on PATH";
+export const REGISTRY_UNREADABLE = "Solstice's list of program names kept for its built-in plugins is missing or damaged, so no program goes on PATH";
 
 export const programsBlocked = () => useProgramRegistry.getState().failClosed;
 

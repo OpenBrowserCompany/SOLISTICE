@@ -245,7 +245,7 @@ test("surfaces: render needs an open instance and a sane tree; toolbar updates n
   assert.equal((await ask("reader", "toolbar.update", { itemId: "nope", update: {} }, run)).error.code, "refused");
   await ask("reader", "toolbar.update", { itemId: "go", update: { tone: "destructive" } }, run);
   assert.equal(pluginToolbarItems(P())[0].state.tone, "destructive");
-  assert.equal((await ask("reader", "toolbar.update", { itemId: "go", update: { tone: "danger" } }, run)).error.code, "bad_request", "only Ardia's tones");
+  assert.equal((await ask("reader", "toolbar.update", { itemId: "go", update: { tone: "danger" } }, run)).error.code, "bad_request", "only Solstice's tones");
   assert.deepEqual((await ask("reader", "ui.showToast", { title: "Saved", detail: "3 notes", windowId: w }, run)).result, { ok: true });
   assert.deepEqual([useToasts.getState().toasts[w]?.title, useToasts.getState().toasts[w]?.message], ["Saved", "3 notes"]);
   assert.equal(dispatchPluginSurfaceEvent("reader", "notes", w, "h1", [{ value: 1 }]), true);
@@ -349,7 +349,7 @@ test("omnibox providers register for active plugins and only return safe rows", 
 
 test("decide hooks start the plugin eagerly and answer within 250 ms, with URLs cut to the plugin's permissions", async () => {
   await enable(GUARD);
-  assert.equal(host.starts.at(-1).name, "guard", "a plugin with hooks starts with Ardia");
+  assert.equal(host.starts.at(-1).name, "guard", "a plugin with hooks starts with Solstice");
   const run = P().processes.guard.run;
   await ask("guard", "ready", {}, run);
   const deciding = runPluginDecideHook("tab.opening", { url: "https://a.example/?token=1" }, consentToken());
@@ -643,7 +643,7 @@ test("a retainContext side panel stays mounted hidden when closed; others close 
   assert.equal(s().retainedSidePanels[w], undefined, "turning the plugin off drops its retained panels");
 });
 
-test("main gets plugin.stopping about 120 ms before Ardia stops or restarts it", async () => {
+test("main gets plugin.stopping about 120 ms before Solstice stops or restarts it", async () => {
   await enable(READER);
   let run = await activated();
   restartProcess("reader");
@@ -1347,7 +1347,7 @@ test("a command's context shows tab and group titles only to a plugin with the t
   assert.deepEqual(shownCommandContext({ tabs: false }, { groupId: "g1", title: "Hiring" }), { groupId: "g1" });
 });
 
-test("a control-socket caller is the socket inside Ardia and still \"cli\" on the wire, for protocol 2 as for protocol 1", async () => {
+test("a control-socket caller is the socket inside Solstice and still \"cli\" on the wire, for protocol 2 as for protocol 1", async () => {
   await enable(LAZY);
   const lazyRun = await activated("lazy");
   const calling = callTool("lazy", "echo", {}, { kind: "socket" });
@@ -1406,7 +1406,7 @@ test("an omnibox query cancelled while its lazy plugin starts never goes out, an
 });
 
 const ARRANGER = { manifest: 2, name: "arranger", title: "Arranger", main: "index.js", permissions: { tabs: "write", fullUrls: true, workspace: true } };
-const NOT_WEB = ["file:///etc/hosts", "chrome://settings/", "ardia://history", "javascript:alert(1)", "data:text/html,hi", "https://user:pw@ok.example/"];
+const NOT_WEB = ["file:///etc/hosts", "chrome://settings/", "solstice://history", "javascript:alert(1)", "data:text/html,hi", "https://user:pw@ok.example/"];
 const tabCount = () => Object.keys(S().tabs).length;
 const groupCount = () => Object.keys(S().groups).length;
 

@@ -83,7 +83,7 @@ test("a profile that never installed the command line has it offered and nothing
   assert.deepEqual(launch.sweeps, [[]], "at launch every command of a plugin that isn't installed comes off PATH");
   assert.equal(S().settings.cliControl, false);
   assert.deepEqual(officialPlugins(P(), true, hidden), [
-    { name: "cli", title: "Command Line", blurb: "Drive Ardia from your terminal or an agent.", icon: "terminal.fill", version: "0.3.0", example: "ardia tabs", update: null, state: "available" },
+    { name: "cli", title: "Command Line", blurb: "Drive Solstice from your terminal or an agent.", icon: "terminal.fill", version: "0.3.0", example: "ardia tabs", update: null, state: "available" },
   ]);
   assert.deepEqual(pluginSocketMethod("plugins.official", {}), { result: officialPlugins(P()) });
 });
@@ -101,9 +101,9 @@ test("the seam: unsupported where plugins aren't, coming soon only behind its fl
   const fake = JSON.stringify({ manifest: 1, name: "fake", title: "Fake", official: true, autoInstall: true, alwaysOn: true });
   await scan([{ name: "cli", text: CLI, ...BUILT_IN }, { name: "fake", status: "ok", text: fake, folderId: "4:4" }, { name: "other", status: "ok", text: OTHER, folderId: "1:2" }]);
   assert.deepEqual(P().listings.fake.problems, [
-    "plugin.json: alwaysOn is only for Ardia's official plugins",
-    "plugin.json: official is only for Ardia's official plugins",
-    "plugin.json: autoInstall is only for Ardia's official plugins",
+    "plugin.json: alwaysOn is only for Solstice's official plugins",
+    "plugin.json: official is only for Solstice's official plugins",
+    "plugin.json: autoInstall is only for Solstice's official plugins",
   ]);
   assert.deepEqual(officialPlugins(P(), true, hidden).map((p) => p.name), ["cli"]);
   await scan([{ name: "cli", text: CLI, ...BUILT_IN }, { name: "other", status: "ok", text: OTHER, folderId: "1:2" }]);
@@ -281,10 +281,10 @@ test("a plugin you install can't be always on, can't run after-update actions an
     { name: "cli", text: CLI, ...BUILT_IN },
     { name: "impostor", status: "ok", text: impostor, folderId: "7:8" },
   ]);
-  assert.deepEqual(P().listings.always.problems, ["plugin.json: alwaysOn is only for Ardia's official plugins"]);
-  assert.deepEqual(P().listings.after.problems, ["plugin.json: programs[0].afterUpdate is only for Ardia's official plugins"]);
-  assert.deepEqual(P().listings.impostor.problems, ["plugin.json: programs[0].name: ardia belongs to Ardia's official cli plugin"]);
-  assert.deepEqual(P().listings.claimer.problems, ["plugin.json: contributes.programs[0].claim is only for Ardia's official plugins"]);
+  assert.deepEqual(P().listings.always.problems, ["plugin.json: alwaysOn is only for Solstice's official plugins"]);
+  assert.deepEqual(P().listings.after.problems, ["plugin.json: programs[0].afterUpdate is only for Solstice's official plugins"]);
+  assert.deepEqual(P().listings.impostor.problems, ["plugin.json: programs[0].name: ardia belongs to Solstice's official cli plugin"]);
+  assert.deepEqual(P().listings.claimer.problems, ["plugin.json: contributes.programs[0].claim is only for Solstice's official plugins"]);
   assert.equal(lifecycle.requestPluginConsent("always"), false);
 });
 
@@ -292,13 +292,13 @@ test("a claimed name stays reserved while its owner is missing: a folder you add
   host.registry = { claims: { ardia: "cli" }, failClosed: false, legacyOwners: ["cli"] };
   try {
     await scan([{ name: "cli", status: "ok", text: JSON.stringify({ manifest: 2, name: "cli", contributes: { programs: [{ name: "ardia", path: "bin/ardia" }] } }), folderId: "9:9" }]);
-    assert.deepEqual(P().listings.cli.problems, ["plugin.json: contributes.programs[0].name: ardia belongs to Ardia's official cli plugin"]);
+    assert.deepEqual(P().listings.cli.problems, ["plugin.json: contributes.programs[0].name: ardia belongs to Solstice's official cli plugin"]);
     host.registry = { claims: { ardia: "cli" }, failClosed: true, legacyOwners: [] };
     await scan([{ name: "cli", text: CLI, ...BUILT_IN }]);
-    assert.deepEqual(P().listings.cli.problems, ["plugin.json: contributes.programs[0].name: ardia is kept for Ardia's official plugins, and the list of which one owns it couldn't be read"], "a damaged registry fails closed, even for the owner");
+    assert.deepEqual(P().listings.cli.problems, ["plugin.json: contributes.programs[0].name: ardia is kept for Solstice's official plugins, and the list of which one owns it couldn't be read"], "a damaged registry fails closed, even for the owner");
     host.registry = { claims: {}, failClosed: false, legacyOwners: [] };
     await scan([{ name: "cli", text: CLI, ...BUILT_IN }]);
-    assert.deepEqual(P().listings.cli.problems, ["plugin.json: contributes.programs[0].claim: ardia isn't in the list of programs this Ardia reserves for its official plugins"]);
+    assert.deepEqual(P().listings.cli.problems, ["plugin.json: contributes.programs[0].claim: ardia isn't in the list of programs this Solstice reserves for its official plugins"]);
   } finally {
     host.registry = null;
   }
@@ -382,28 +382,28 @@ test("a plugin you added has its programs removed with it", async () => {
 test("what the command line gets, as Settings shows it", () => {
   const texts = consentLines(readManifest(CLI).manifest).map((l) => l.text);
   assert.deepEqual(texts, [
-    "Turns on control in Settings › Advanced. While it's on, any program you run, and the commands Ardia runs for it after updates, can fully control Ardia: every tab and page, your signed-in sites and their cookies, and uploads and downloads of any file on this Mac",
-    "Adds ardia to your PATH. It runs as you, outside Ardia's sandbox",
+    "Turns on control in Settings › Advanced. While it's on, any program you run, and the commands Solstice runs for it after updates, can fully control Solstice: every tab and page, your signed-in sites and their cookies, and uploads and downloads of any file on this Mac",
+    "Adds ardia to your PATH. It runs as you, outside Solstice's sandbox",
     "After updates, runs ardia skills install --auto, ardia skills refresh",
     "Adds ~/.local/bin to your PATH in your shell's login file",
   ], "four honest lines, full control first: control, the program, what runs after updates and the PATH line");
   assert.ok(!texts.some((t) => t.includes("in the background")), "a program-only plugin runs nothing in the background");
 });
 
-test("a plugin whose programs run as you says first that they can fully control Ardia, without asking for control", async () => {
+test("a plugin whose programs run as you says first that they can fully control Solstice, without asking for control", async () => {
   const { fullControlLine, FULL_CONTROL_SUMMARY } = await import("./consent.ts");
   const other = readManifest(OTHER).manifest;
   const lines = consentLines(other).map((l) => l.text);
-  assert.equal(lines[0], "The other-tool command runs as you, so while control is on in Settings › Advanced, it can fully control Ardia: every tab and page, your signed-in sites and their cookies, and uploads and downloads of any file on this Mac");
+  assert.equal(lines[0], "The other-tool command runs as you, so while control is on in Settings › Advanced, it can fully control Solstice: every tab and page, your signed-in sites and their cookies, and uploads and downloads of any file on this Mac");
   assert.equal(fullControlLine(other)?.text, lines[0]);
-  assert.equal(FULL_CONTROL_SUMMARY, "Can fully control Ardia");
+  assert.equal(FULL_CONTROL_SUMMARY, "Can fully control Solstice");
   const cli = readManifest(CLI).manifest;
   assert.ok(consentLines(cli, { controlOff: true })[0].text.startsWith("While control is on in Settings › Advanced, any program you run"), "an Off you chose stays off, so the line doesn't say it turns control on");
   assert.ok(consentLines(cli, { installed: true })[0].text.startsWith("While control is on in Settings › Advanced, any program you run"), "an installed plugin's page describes the access it has, not what turning it on does");
   const pair = readManifest(JSON.stringify({ manifest: 1, name: "pair", title: "Pair", programs: [{ name: "a", path: "bin/a", afterUpdate: [["sync"]] }, { name: "b", path: "bin/b" }] })).manifest;
-  assert.ok(fullControlLine(pair)?.text.startsWith("The a and b commands run as you, as do the commands Ardia runs for it after updates, so while control is on in Settings › Advanced, they can fully control Ardia"));
+  assert.ok(fullControlLine(pair)?.text.startsWith("The a and b commands run as you, as do the commands Solstice runs for it after updates, so while control is on in Settings › Advanced, they can fully control Solstice"));
   const sandboxed = readManifest(JSON.stringify({ manifest: 1, name: "boxed", title: "Boxed", main: "dist/index.js", permissions: { tabs: "read" } })).manifest;
-  assert.equal(fullControlLine(sandboxed), null, "a plugin that only runs in Ardia's sandbox can't read the control token");
+  assert.equal(fullControlLine(sandboxed), null, "a plugin that only runs in Solstice's sandbox can't read the control token");
   assert.ok(!consentLines(sandboxed).some((l) => l.text.includes("fully control")));
 });
 
