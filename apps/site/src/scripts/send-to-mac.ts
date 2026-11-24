@@ -3,7 +3,7 @@ import { sentLink } from "../data/release";
 import { pagePath } from "../data/site";
 
 const LINK = sentLink("share");
-const DATA: ShareData = { url: LINK, title: "Ardia", text: "Download Ardia on your Mac:" };
+const DATA: ShareData = { url: LINK, title: "Solstice", text: "Download Solstice on your Mac:" };
 
 const root = document.documentElement;
 const inapp = root.dataset.inapp ?? null;

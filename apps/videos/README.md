@@ -1,6 +1,6 @@
 # Videos
 
-Remotion videos for Ardia, a Remocn Studio project. Each folder in `src/videos` is a composition, named after the
+Remotion videos for Solstice, a Remocn Studio project. Each folder in `src/videos` is a composition, named after the
 folder. Render one with `pnpm -C apps/videos render <id>`, which writes `out/<id>.mp4` (gitignored).
 
 `render` runs `scripts/deliver.sh`. Remotion's own AAC carries 2048 samples of encoder priming with no edit list, so
@@ -25,9 +25,9 @@ Two caveats for delivery:
 | `teaser-9x16` | 1080 × 1920 | 14.9 s |
 
 Every other browser asks for something. Four brass stabs carry "SIGN IN. / TRY AI. / ACCEPT ALL. / UPGRADE.",
-each over a site interrupting you in a real Ardia window: a login wall sliding up, an AI copilot panel sliding
+each over a site interrupting you in a real Solstice window: a login wall sliding up, an AI copilot panel sliding
 in over an article, a cookie wall, an "upgrade to keep typing" modal, with a pointer heading for each button. Then
-the asks get stamped onto it on a snare roll. Ardia's painted hills (the logo) rise beside the pile, lean back
+the asks get stamped onto it on a snare roll. Solstice's painted hills (the logo) rise beside the pile, lean back
 and shove it off on the drop, and the sun rises over them as "ARDIA — THE SIDEBAR BROWSER FOR MAC" lands,
 glinting as "ASKS FOR NOTHING." is stamped. (The sun has already peeked over the window to cheer the first NO.)
 
@@ -118,11 +118,11 @@ It ends on a chat callback ("it's all in the folder 📁") and the end card. Cap
 
 ### Footage
 
-Every Ardia pixel is captured from hidden Debug instances whose `sharedFolders` location is a scratch folder they share. The sync is the app's own (`docs/shared-folders.md`, "Testing it"), and nothing touches iCloud Drive.
+Every Solstice pixel is captured from hidden Debug instances whose `sharedFolders` location is a scratch folder they share. The sync is the app's own (`docs/shared-folders.md`, "Testing it"), and nothing touches iCloud Drive.
 
 ```bash
-scripts/capture/sf-run.sh <Debug Ardia.app> <scratch dir>          # Priya and Tomás: share, add, drop, rename, reorder, subfolder
-node scripts/capture/sf-vignettes.mjs <Debug Ardia.app> <scratch dir> [turn launch lab trip class]
+scripts/capture/sf-run.sh <Debug Solstice.app> <scratch dir>          # Priya and Tomás: share, add, drop, rename, reorder, subfolder
+node scripts/capture/sf-vignettes.mjs <Debug Solstice.app> <scratch dir> [turn launch lab trip class]
 python3 scripts/capture/sf-composite.py <scene>…                    # every .capture/sf-* and <vignette>-* folder
 ```
 
@@ -149,7 +149,7 @@ python3 scripts/capture/sf-composite.py <scene>…                    # every .c
   - the resolve on 101.
 
   Speech-to-text finds no words in it, and the voice isolator finds no voice.
-- **Narration.** ElevenLabs `eleven_multilingual_v2` with "Ardia Warm Baritone", a Voice Design narrator rather than a clone of anyone. Two other candidates are in `public/music/shared-folders/voice-candidates/`.
+- **Narration.** ElevenLabs `eleven_multilingual_v2` with "Solstice Warm Baritone", a Voice Design narrator rather than a clone of anyone. Two other candidates are in `public/music/shared-folders/voice-candidates/`.
 - **Master.** Matched to the measured Apple films: −16 LUFS and a light dip under the voice.
 
 To recreate the mix, run `python3 scripts/music/shared-folders.py --check`. It writes `shared-folders-16x9.wav`, `shared-folders-9x16.wav` and `shared-folders-16x9-novo.wav` to `public/music/shared-folders/`.
@@ -173,12 +173,12 @@ scripts/music/fetch-samples.sh     # the CC0 samples (public/music/samples)
 python3 scripts/music/score.py     # public/music/launch.wav, teaser.wav (numpy + scipy)
 # footage: a DEV build, captured hidden (needs Metro on :8081, like any DEV instance)
 ../../scripts/agent/build-app --as videos
-scripts/capture/run-all.sh ../browser/build-videos/Build/Products/Debug/Ardia.app <scratch dir> [scene…]
+scripts/capture/run-all.sh ../browser/build-videos/Build/Products/Debug/Solstice.app <scratch dir> [scene…]
 ```
 
 ### How the footage is made
 
-Every UI pixel comes from Ardia itself, never a mock-up. `run-all.sh` launches a hidden DEV instance
+Every UI pixel comes from Solstice itself, never a mock-up. `run-all.sh` launches a hidden DEV instance
 (`ARDIA_BACKGROUND=1`, a scratch `ARDIA_DATA_DIR`, `--session` from `scripts/capture/session.mjs`). That
 session has five profiles, each with real sites, in light appearance with the address in the toolbar, so each
 profile's name sits next to the traffic lights in its colour:
