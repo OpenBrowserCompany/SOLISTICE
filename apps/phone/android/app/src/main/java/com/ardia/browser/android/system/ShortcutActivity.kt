@@ -1,11 +1,11 @@
-package com.ardia.browser.android.system
+package com.openbrowsercompany.solstice.android.system
 
 import android.app.Activity
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.ardia.browser.android.MainActivity
+import com.openbrowsercompany.solstice.android.MainActivity
 
 class ShortcutActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {

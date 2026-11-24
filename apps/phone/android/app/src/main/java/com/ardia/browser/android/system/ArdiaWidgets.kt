@@ -1,4 +1,4 @@
-package com.ardia.browser.android.system
+package com.openbrowsercompany.solstice.android.system
 
 import android.content.Context
 import android.content.res.Configuration
@@ -51,8 +51,8 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.ardia.appmodel.SystemLink
-import com.ardia.browser.android.R
-import com.ardia.browser.android.SystemIntents
+import com.openbrowsercompany.solstice.android.R
+import com.openbrowsercompany.solstice.android.SystemIntents
 import com.ardia.design.Monogram
 import com.ardia.design.ProfileLook
 

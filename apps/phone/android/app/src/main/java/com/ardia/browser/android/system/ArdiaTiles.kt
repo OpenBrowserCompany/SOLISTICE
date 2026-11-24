@@ -1,4 +1,4 @@
-package com.ardia.browser.android.system
+package com.openbrowsercompany.solstice.android.system
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
@@ -7,7 +7,7 @@ import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import com.ardia.appmodel.SystemLink
-import com.ardia.browser.android.SystemIntents
+import com.openbrowsercompany.solstice.android.SystemIntents
 import com.ardia.phone.PendingCounts
 import com.ardia.phone.UsageConsent
 
