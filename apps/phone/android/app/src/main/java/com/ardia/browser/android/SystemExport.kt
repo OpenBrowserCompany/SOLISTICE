@@ -1,10 +1,10 @@
-package com.ardia.browser.android
+package com.openbrowsercompany.solstice.android
 
 import android.content.Context
-import com.ardia.browser.android.system.ArdiaWidgets
-import com.ardia.browser.android.system.SystemSnapshotExporter
-import com.ardia.browser.android.system.SystemSnapshots
-import com.ardia.browser.android.system.SystemStore
+import com.openbrowsercompany.solstice.android.system.ArdiaWidgets
+import com.openbrowsercompany.solstice.android.system.SystemSnapshotExporter
+import com.openbrowsercompany.solstice.android.system.SystemSnapshots
+import com.openbrowsercompany.solstice.android.system.SystemStore
 import com.ardia.phone.NightChange
 import com.ardia.phone.PhoneSync
 import kotlinx.coroutines.CoroutineScope

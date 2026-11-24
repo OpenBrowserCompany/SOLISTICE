@@ -1,4 +1,4 @@
-package com.ardia.browser.android
+package com.openbrowsercompany.solstice.android
 
 import android.app.Application
 import android.content.res.Configuration
