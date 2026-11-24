@@ -71,7 +71,7 @@ fi
 
 for argument in "$@"; do
   if [[ "$argument" == --no-sandbox ]]; then
-    exec "$chrome" "--ardia-sandbox-decision=Ardia was started with --no-sandbox" "$@"
+    exec "$chrome" "--ardia-sandbox-decision=Solstice was started with --no-sandbox" "$@"
   fi
 done
 
@@ -81,14 +81,14 @@ fi
 
 installer=$(readlink -f -- "$here/../../install.sh" 2>/dev/null || true)
 {
-  printf 'Ardia can'"'"'t start Chromium'"'"'s sandbox here: %s.\n' "$why"
+  printf 'Solstice can'"'"'t start Chromium'"'"'s sandbox here: %s.\n' "$why"
   if [[ -n "${APPIMAGE:-}" ]]; then
-    printf 'An AppImage can'"'"'t carry Chromium'"'"'s setuid sandbox helper, and Ardia won'"'"'t run without the sandbox.\n'
-    printf 'Install Ardia'"'"'s .deb, which sets up the sandbox helper and its AppArmor profile, or allow user namespaces with %s.\n' "$allow"
+    printf 'An AppImage can'"'"'t carry Chromium'"'"'s setuid sandbox helper, and Solstice won'"'"'t run without the sandbox.\n'
+    printf 'Install Solstice'"'"'s .deb, which sets up the sandbox helper and its AppArmor profile, or allow user namespaces with %s.\n' "$allow"
   elif [[ -n "$installer" && -f "$installer" ]]; then
-    printf 'Install it with sudo %s, which sets up the sandbox, or install Ardia'"'"'s .deb.\n' "$installer"
+    printf 'Install it with sudo %s, which sets up the sandbox, or install Solstice'"'"'s .deb.\n' "$installer"
   else
-    printf 'Reinstall Ardia'"'"'s package as root so its sandbox helper is set up.\n'
+    printf 'Reinstall Solstice'"'"'s package as root so its sandbox helper is set up.\n'
   fi
 } >&2
 exit 1

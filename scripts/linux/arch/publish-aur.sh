@@ -2,7 +2,7 @@
 set -euo pipefail
 usage='usage: scripts/linux/arch/publish-aur.sh <version> (--sha256 HEX | --package TARBALL) [--dry-run]
 
-Updates the AUR package ardia-bin to Ardia <version>: clones
+Updates the AUR package ardia-bin to Solstice <version>: clones
 ssh://aur@aur.archlinux.org/ardia-bin.git, writes PKGBUILD and .SRCINFO with
 update-pkgbuild.sh, checks that the tarball the PKGBUILD downloads from the
 GitHub release has that sha256, commits and pushes. The first push creates the

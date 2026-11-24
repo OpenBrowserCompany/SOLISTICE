@@ -3,8 +3,8 @@ set -euo pipefail
 usage='usage: scripts/linux/arch/update-pkgbuild.sh <version> (--sha256 HEX | --package TARBALL) [--out DIR]
        scripts/linux/arch/update-pkgbuild.sh --check
 
-Points the ardia-bin PKGBUILD at the release tarball of Ardia <version>
-(Ardia-<version>-linux-x64.tar.xz on the v<version> GitHub release): it sets
+Points the ardia-bin PKGBUILD at the release tarball of Solstice <version>
+(Solstice-<version>-linux-x64.tar.xz on the v<version> GitHub release): it sets
 pkgver (a nightly'"'"'s -nightly.<n> becomes nightly.<n>, which pacman
 sorts before its stable), resets pkgrel to 1, pins sha256sums to HEX
 or to the digest of TARBALL, and writes the matching .SRCINFO, as
@@ -68,7 +68,7 @@ fi
 if [ -n "$tarball" ]; then
   [ -z "$sha256" ] || die "pass --sha256 or --package, not both"
   [ -f "$tarball" ] || die "no tarball at $tarball"
-  [ "${tarball##*/}" = "Ardia-$version-linux-x64.tar.xz" ] || die "${tarball##*/} isn't Ardia-$version-linux-x64.tar.xz"
+  [ "${tarball##*/}" = "Solstice-$version-linux-x64.tar.xz" ] || die "${tarball##*/} isn't Solstice-$version-linux-x64.tar.xz"
   sha256=$(sha256sum "$tarball" | cut -d' ' -f1)
 fi
 [[ "$sha256" =~ ^[0-9a-f]{64}$ ]] || die "pass the tarball's sha256 (64 lowercase hex digits) with --sha256, or --package"
