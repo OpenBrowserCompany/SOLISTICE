@@ -192,7 +192,7 @@ test("on Windows an empty sidebar header on the left collapses to the page frame
   assert.equal(footer({ tabLayout: "top" }), false);
 });
 
-test("on the Mac Little Ardia's bar keeps its numbers", () => {
+test("on the Mac Little Solstice's bar keeps its numbers", () => {
   const bar = { height: 38, navLeft: 79, navPitch: 30, fieldLeft: 143, fieldTop: 5, buttonTop: 5, trailingRoom: 0, controlsRight: 9 };
   assert.deepEqual(littleArdiaBarLayout(mac), bar);
   assert.deepEqual(littleArdiaBarLayout(), bar);
@@ -200,7 +200,7 @@ test("on the Mac Little Ardia's bar keeps its numbers", () => {
   assert.equal(SMALL_BAR_BUTTON, 28);
 });
 
-test("on Windows Little Ardia's bar starts at the window's left edge and its controls end before the caption buttons", () => {
+test("on Windows Little Solstice's bar starts at the window's left edge and its controls end before the caption buttons", () => {
   const bar = littleArdiaBarLayout(windows);
   assert.deepEqual(bar, { height: 38, navLeft: 9, navPitch: 30, fieldLeft: 73, fieldTop: 5, buttonTop: 5, trailingRoom: 171, controlsRight: 180 });
   assert.ok(bar.controlsRight >= windows.trailingWidth, "the copy, open and profile buttons stay left of minimize, maximize and close");
@@ -327,7 +327,7 @@ test("on Linux with the window buttons hidden no layout keeps room or a place fo
   const bar = littleArdiaBarLayout(linux.HIDDEN_BUTTONS_CHROME);
   assert.equal(bar.height, SMALL_BAR_HEIGHT);
   assert.equal(bar.trailingRoom, 0);
-  assert.ok(bar.navLeft < littleArdiaBarLayout(linux.TRAFFIC_LIGHTS_CHROME).navLeft, "Little Ardia's back button starts at the edge, not after lights");
+  assert.ok(bar.navLeft < littleArdiaBarLayout(linux.TRAFFIC_LIGHTS_CHROME).navLeft, "Little Solstice's back button starts at the edge, not after lights");
 });
 
 test("on Linux with native buttons every layout places them where the Windows build does", () => {
@@ -354,7 +354,7 @@ test("on Linux with the desktop's buttons at the left the … stays where the Wi
   }
   const macBar = littleArdiaBarLayout(mac);
   const leftBar = littleArdiaBarLayout(left);
-  assert.equal(leftBar.navLeft - macBar.navLeft, left.leadingWidth - mac.leadingWidth, "Little Ardia's back button sits as far past the buttons as it sits past the Mac's lights");
+  assert.equal(leftBar.navLeft - macBar.navLeft, left.leadingWidth - mac.leadingWidth, "Little Solstice's back button sits as far past the buttons as it sits past the Mac's lights");
   const closeOnly = littleArdiaBarLayout(linux.nativeButtonsChrome(parseButtonLayout("close:")));
   assert.ok(closeOnly.navLeft < macBar.navLeft && closeOnly.navLeft > littleArdiaBarLayout(linux.HIDDEN_BUTTONS_CHROME).navLeft, "one button at the left needs less room than three lights, and more than none");
 });
