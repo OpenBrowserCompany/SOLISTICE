@@ -6,7 +6,7 @@
 
 #include "NativeModules.h"
 
-namespace Ardia {
+namespace Solstice {
 
 template <class TPayload>
 void EmitEvent(winrt::Microsoft::ReactNative::ReactContext const &context, std::wstring_view module, std::wstring_view event, TPayload &&payload) noexcept {

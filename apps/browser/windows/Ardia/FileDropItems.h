@@ -18,7 +18,7 @@
 #pragma comment(lib, "ole32.lib")
 #pragma comment(lib, "shell32.lib")
 
-namespace Ardia::FileDropParts {
+namespace Solstice::FileDropParts {
 
 enum class AcceptMode { Links, LinksAndText, ExtensionPackages };
 

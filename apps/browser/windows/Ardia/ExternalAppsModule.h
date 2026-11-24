@@ -13,7 +13,7 @@
 #include "Paths.h"
 #include "SystemModule.h"
 
-namespace Ardia {
+namespace Solstice {
 
 namespace ExternalApps {
 
