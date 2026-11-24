@@ -1,4 +1,4 @@
-// Copyright 2026 Ardia. Apache-2.0.
+// Copyright 2026 Solstice. Apache-2.0.
 
 #include "chrome/browser/ardia/ac_cli_page_signals.h"
 
@@ -250,7 +250,7 @@ base::ScopedClosureRunner RunPageSignal(std::string_view method,
     return base::ScopedClosureRunner();
   }
   if (method != kHitTest) {
-    Answer(std::move(reply), base::unexpected("ardia: unknown Ardia method"));
+    Answer(std::move(reply), base::unexpected("ardia: unknown Solstice method"));
     return base::ScopedClosureRunner();
   }
   if (std::optional<std::string> unknown =
