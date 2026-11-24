@@ -26,11 +26,11 @@ export const checks: Check[] = [
     name: "desktop calls: the save panel answers cancelled, then the queued pick",
     async run() {
       const dialogs = native<TurboModule & DialogsModule>("ArdiaDialogs");
-      expectEqual(await dialogs.saveFile("Ardia Bookmarks.html", "html", "Web page", ""), null, "a save panel nobody answered");
+      expectEqual(await dialogs.saveFile("Solstice Bookmarks.html", "html", "Web page", ""), null, "a save panel nobody answered");
       const chosen = `${dataFolder()}\\self-check-export.html`;
       documents().writeDocument(PICKS, chosen);
       await documents().documentSaved(PICKS);
-      expectEqual(await dialogs.saveFile("Ardia Passwords.csv", "csv", "CSV file", "Anyone who can open this file can read your passwords."), chosen, "the queued pick");
+      expectEqual(await dialogs.saveFile("Solstice Passwords.csv", "csv", "CSV file", "Anyone who can open this file can read your passwords."), chosen, "the queued pick");
     },
   },
   {

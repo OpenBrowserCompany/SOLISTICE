@@ -167,7 +167,7 @@ export const checks: Check[] = [
     },
   },
   {
-    name: "ArdiaSystem.defaultBrowserState names Ardia's ProgID and agrees with isDefaultBrowser",
+    name: "ArdiaSystem.defaultBrowserState names Solstice's ProgID and agrees with isDefaultBrowser",
     async run() {
       const state = system().defaultBrowserState();
       expectTrue(state.progId === "ArdiaHTM", `progId is ${JSON.stringify(state.progId)}`);
@@ -228,9 +228,9 @@ export const checks: Check[] = [
       };
       await refused("a feed from another site", update.fetchText("https://example.com/windows-update.json"));
       await refused("a feed that climbs out of the releases", update.fetchText(`${published}../../../../other/repo/releases/download/x/windows-update.json`));
-      await refused("an installer from another site", update.download("https://example.com/Ardia-Setup.exe", "a".repeat(64), 10));
-      await refused("an installer with no SHA-256", update.download(`${published}windows-alpha/Ardia-Setup-x64.exe`, "", 10));
-      await refused("an installer with no size", update.download(`${published}windows-alpha/Ardia-Setup-x64.exe`, "a".repeat(64), 0));
+      await refused("an installer from another site", update.download("https://example.com/Solstice-Setup.exe", "a".repeat(64), 10));
+      await refused("an installer with no SHA-256", update.download(`${published}windows-alpha/Solstice-Setup-x64.exe`, "", 10));
+      await refused("an installer with no size", update.download(`${published}windows-alpha/Solstice-Setup-x64.exe`, "a".repeat(64), 0));
       const state = await requireNativeModule<Pick<UpdaterNative, "updaterState">>("ArdiaUpdater").updaterState();
       expectTrue(state.available === true, "the updater says it is not built in");
       expectTrue(state.configured === (update.installed === true && typeof update.buildFile === "string" && update.buildFile.length > 0), `configured is ${String(state.configured)}`);
