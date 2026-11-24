@@ -55,7 +55,7 @@ final class PluginHost {
             if attachment == attached {
               spawn(spec, certificates: certificates, done: done)
             } else {
-              done(["ok": false, "reason": "Ardia closed its plugins while this one was starting"])
+              done(["ok": false, "reason": "Solstice closed its plugins while this one was starting"])
             }
             complete()
           }
@@ -65,7 +65,7 @@ final class PluginHost {
   }
 
   private func spawn(_ spec: PluginProcess.Spec, certificates: PluginSandbox.PreparedCertificates, done: @escaping ([String: Any]) -> Void) {
-    guard let folders = PluginFolders.current() else { return done(["ok": false, "reason": "Ardia has no data folder"]) }
+    guard let folders = PluginFolders.current() else { return done(["ok": false, "reason": "Solstice has no data folder"]) }
     nextRun += 1
     let result = PluginProcess.spawn(
       spec, run: nextRun, folders: folders, queue: queue, certificates: certificates,
@@ -174,7 +174,7 @@ final class PluginHost {
     queue.async { [self] in
       lifecycle.enqueue(name, .remove) { [self] complete in
         runs.stopAll(name, graceMs: 1000) {
-          let problem = PluginFolders.current().map { $0.remove(name, official: official, folderId: folderId) } ?? "Ardia has no data folder."
+          let problem = PluginFolders.current().map { $0.remove(name, official: official, folderId: folderId) } ?? "Solstice has no data folder."
           DispatchQueue.main.async { done(problem) }
           complete()
         }

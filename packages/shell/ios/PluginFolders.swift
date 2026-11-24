@@ -40,7 +40,7 @@ struct PluginFolders {
       }
       return .success(ProgramPlaces(store: (appData as NSString).appendingPathComponent("Programs"), binDir: bin))
     }
-    let given = (home as NSString).appendingPathComponent("Library/Application Support/Ardia")
+    let given = (home as NSString).appendingPathComponent("Library/Application Support/Solstice")
     try? FileManager.default.createDirectory(atPath: given, withIntermediateDirectories: true)
     let support = PluginSandbox.resolved(given) ?? given
     return .success(ProgramPlaces(store: (support as NSString).appendingPathComponent("Programs"), binDir: (home as NSString).appendingPathComponent(".local/bin")))

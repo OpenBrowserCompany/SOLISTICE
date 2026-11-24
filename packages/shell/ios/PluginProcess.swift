@@ -56,7 +56,7 @@ final class PluginProcess: PluginRun {
       guard let given = spec.entry, let entry = PluginFiles.scriptEntry(given, in: folder) else {
         return .failure(.refused("its entry \(spec.entry ?? "(none)") wasn't found, or isn't a script file inside the plugin's folder"))
       }
-      guard let host = hostBinary() else { return .failure(.refused("Ardia's plugin host is missing from the app")) }
+      guard let host = hostBinary() else { return .failure(.refused("Solstice's plugin host is missing from the app")) }
       return .success((host, host, ["--entry", entry]))
     }
     guard let first = spec.run.first else { return .failure(.refused("it names no program")) }
