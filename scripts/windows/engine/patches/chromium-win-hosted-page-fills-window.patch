@@ -16,7 +16,7 @@
  
  bool MultiContentsView::ShouldUseRoundedFrame() const {
 +#if BUILDFLAG(IS_WIN)
-+  // Ardia: a window the app hosts (//ardia/win) is the page alone, edge to
++  // Solstice: a window the app hosts (//ardia/win) is the page alone, edge to
 +  // edge. The app draws the card around it.
 +  if (g_ardia_win_hosts_normal_windows && browser_view_->GetIsNormalType()) {
 +    return false;
