@@ -47,7 +47,7 @@ bool TakeLinuxLaunchUrls(const base::CommandLine& command_line, const std::vecto
   }
   if (!linux_open_urls::ShellTakesLaunch(launch)) return false;
   if (Pending().Add(launch.urls) != launch.urls.size()) {
-    LOG(WARNING) << "Ardia dropped links from another app: too many are waiting for a window";
+    LOG(WARNING) << "Solstice dropped links from another app: too many are waiting for a window";
   }
   if (Sink().arrived) Sink().arrived.Run();
   return true;
