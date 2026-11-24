@@ -66,7 +66,7 @@ struct WebKitMenuCommands {
     switch url.scheme?.lowercased() ?? "" {
     case "http", "https": true
     case "about": url.absoluteString.lowercased() == "about:blank"
-    case let scheme where ["file", "ardia"].contains(scheme): page?.scheme?.lowercased() == scheme
+    case let scheme where ["file", "ardia", "solstice"].contains(scheme): page?.scheme?.lowercased() == scheme
     default: false
     }
   }

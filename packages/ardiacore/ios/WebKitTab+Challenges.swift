@@ -193,7 +193,7 @@ extension WebKitTab {
     } else if blocked.strictTransport {
       details = "<p>\(interstitialExplanation(primary, host: host, certificate: certificate))</p><p>You cannot visit \(site) right now because the website uses HSTS. Network errors and attacks are usually temporary, so this page will probably work later.</p>"
     } else {
-      details = "<p>You cannot visit \(site) right now because the website sent scrambled credentials that Ardia cannot process. Network errors and attacks are usually temporary, so this page will probably work later.</p>"
+      details = "<p>You cannot visit \(site) right now because the website sent scrambled credentials that Solstice cannot process. Network errors and attacks are usually temporary, so this page will probably work later.</p>"
     }
     return """
       <!doctype html><html><head><meta charset="utf-8"><meta name="color-scheme" content="light dark"><title>Privacy error</title>

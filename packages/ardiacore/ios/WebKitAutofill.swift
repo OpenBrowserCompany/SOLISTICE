@@ -325,7 +325,7 @@ final class WebKitAutofill: NSObject, WKScriptMessageHandler {
     guard row.enabled, let current = target, let tab = current.tab else { return }
     if row.id == Self.manageRow {
       close(tab)
-      let url = current.kind == .address ? "ardia://settings/addresses" : "ardia://settings/payments"
+      let url = current.kind == .address ? "solstice://settings/addresses" : "solstice://settings/payments"
       return tab.emit("openWindow", ["url": url, "disposition": "foreground", "userGesture": true])
     }
     guard let entry = entries.first(where: { $0["id"] as? String == row.id }) else { return }
