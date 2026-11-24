@@ -1,8 +1,8 @@
 import type { Plugin } from "vite";
 import type { Wording } from "./credentialWording";
 
-const UNAVAILABLE = "Ardia reads your calendars through Evolution Data Server, which isn't running in this session. Install GNOME Calendar or Evolution, add your accounts in GNOME Online Accounts, then try again.";
-const REFUSED = "Evolution Data Server refused to share your calendars with Ardia. If Ardia runs in a sandbox, let it reach Evolution Data Server on the session bus, then try again.";
+const UNAVAILABLE = "Solstice reads your calendars through Evolution Data Server, which isn't running in this session. Install GNOME Calendar or Evolution, add your accounts in GNOME Online Accounts, then try again.";
+const REFUSED = "Evolution Data Server refused to share your calendars with Solstice. If Solstice runs in a sandbox, let it reach Evolution Data Server on the session bus, then try again.";
 
 export const CALENDAR_WORDING: readonly Wording[] = [
   {
@@ -10,7 +10,7 @@ export const CALENDAR_WORDING: readonly Wording[] = [
     replacements: [
       ["Uses the Calendar app's accounts.", "Uses Evolution Data Server: the accounts in GNOME Online Accounts and the calendars in GNOME Calendar or Evolution."],
       [
-        `"Ardia isn't allowed to read your calendars. Allow it in System Settings › Privacy & Security › Calendars."`,
+        `"Solstice isn't allowed to read your calendars. Allow it in System Settings › Privacy & Security › Calendars."`,
         `(access === "restricted" ? ${JSON.stringify(UNAVAILABLE)} : ${JSON.stringify(REFUSED)})`,
       ],
       [
@@ -31,8 +31,8 @@ export const CALENDAR_WORDING: readonly Wording[] = [
         `<Button variant="text" look="link" title="Try Again" onPress={() => void connectCalendar()} />`,
       ],
       [
-        "Allow Ardia in System Settings › Privacy & Security › Calendars to see your meetings here.",
-        "Ardia can't read your calendars from Evolution Data Server. Settings › Automations › Calendar shows how to fix it.",
+        "Allow Solstice in System Settings › Privacy & Security › Calendars to see your meetings here.",
+        "Solstice can't read your calendars from Evolution Data Server. Settings › Automations › Calendar shows how to fix it.",
       ],
     ],
   },
@@ -42,17 +42,17 @@ export const CALENDAR_WORDING: readonly Wording[] = [
       [`export const openCalendarPrivacy = () => void openExternalURL("x-apple.systempreferences:com.apple.preference.security?Privacy_Calendars");`, "export const openCalendarPrivacy = () => {};"],
       [`const CALENDARS_PRIVACY = "System Settings › Privacy & Security › Calendars";`, ""],
       [
-        `  if (access === "restricted") return \`Calendar access is restricted on this Mac, by Screen Time or your organization. If you can change it, allow Ardia in \${CALENDARS_PRIVACY}.\`;
-  if (access === "writeOnly") return \`Ardia can only add events to your calendars. Choose Full Access for Ardia in \${CALENDARS_PRIVACY}.\`;
-  if (access === "denied") return \`Ardia isn't allowed to read your calendars. Turn on Ardia in \${CALENDARS_PRIVACY}.\`;
-  const launcherHint = request?.responsible === "other" ? " macOS may have checked the app that opened Ardia instead of Ardia: quit Ardia, open it from the Dock or Finder, then connect again." : "";
-  if (request?.error) return \`macOS couldn't give Ardia calendar access (\${request.error}). Check \${CALENDARS_PRIVACY}.\${launcherHint}\`;
-  if (launcherHint) return \`macOS didn't ask Ardia for calendar access.\${launcherHint}\`;
-  return \`macOS didn't ask for calendar access. Allow Ardia in \${CALENDARS_PRIVACY}.\`;`,
+        `  if (access === "restricted") return \`Calendar access is restricted on this Mac, by Screen Time or your organization. If you can change it, allow Solstice in \${CALENDARS_PRIVACY}.\`;
+  if (access === "writeOnly") return \`Solstice can only add events to your calendars. Choose Full Access for Solstice in \${CALENDARS_PRIVACY}.\`;
+  if (access === "denied") return \`Solstice isn't allowed to read your calendars. Turn on Solstice in \${CALENDARS_PRIVACY}.\`;
+  const launcherHint = request?.responsible === "other" ? " macOS may have checked the app that opened Solstice instead of Solstice: quit Solstice, open it from the Dock or Finder, then connect again." : "";
+  if (request?.error) return \`macOS couldn't give Solstice calendar access (\${request.error}). Check \${CALENDARS_PRIVACY}.\${launcherHint}\`;
+  if (launcherHint) return \`macOS didn't ask Solstice for calendar access.\${launcherHint}\`;
+  return \`macOS didn't ask for calendar access. Allow Solstice in \${CALENDARS_PRIVACY}.\`;`,
         `  if (access === "restricted") return ${JSON.stringify(UNAVAILABLE)};
   if (access === "denied" || access === "writeOnly") return ${JSON.stringify(REFUSED)};
   if (request?.error) return \`Evolution Data Server couldn't share your calendars (\${request.error}).\`;
-  return "Ardia didn't get access to your calendars. Try again.";`,
+  return "Solstice didn't get access to your calendars. Try again.";`,
       ],
     ],
   },

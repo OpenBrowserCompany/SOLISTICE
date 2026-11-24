@@ -9,9 +9,9 @@ export const CREDENTIAL_WORDING: readonly Wording[] = [
       [
         `  const apps = \`1Password, Bitwarden, KeePassXC and Proton Pass extensions connect to their \${PLATFORM_TERMS.computer} apps.\`;
   return systemInfo().inApplicationsFolder === false
-    ? \`\${apps} For 1Password, move Ardia to your Applications folder and reopen it (1Password only connects to browsers there), then in the 1Password app open Settings › Browser › Add Browser and choose it.\`
-    : \`\${apps} For 1Password, add Ardia once: in the 1Password app, open Settings › Browser › Add Browser and choose Ardia.\`;`,
-        `  return "Password manager extensions such as 1Password, Bitwarden, KeePassXC and Proton Pass install from the Chrome Web Store. Ardia doesn't set up their connection to a desktop app on Linux yet.";`,
+    ? \`\${apps} For 1Password, move Solstice to your Applications folder and reopen it (1Password only connects to browsers there), then in the 1Password app open Settings › Browser › Add Browser and choose it.\`
+    : \`\${apps} For 1Password, add Solstice once: in the 1Password app, open Settings › Browser › Add Browser and choose Solstice.\`;`,
+        `  return "Password manager extensions such as 1Password, Bitwarden, KeePassXC and Proton Pass install from the Chrome Web Store. Solstice doesn't set up their connection to a desktop app on Linux yet.";`,
       ],
       [
         "description={`Saved on this ${PLATFORM_TERMS.computer}, separately for each profile, and encrypted with ${PLATFORM_TERMS.passwordKey}.`}",
