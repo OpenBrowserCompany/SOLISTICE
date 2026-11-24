@@ -110,7 +110,7 @@ internal fun DrawScope.drawLogo(outline: Boolean, outlineWeight: Float) {
 }
 
 @Composable
-fun FidgetLogo(modifier: Modifier = Modifier, contentDescription: String = "Ardia") {
+fun FidgetLogo(modifier: Modifier = Modifier, contentDescription: String = "Solstice") {
     val reduceMotion = LocalReduceMotion.current
     val haptics = LocalHapticFeedback.current
     val scope = rememberCoroutineScope()

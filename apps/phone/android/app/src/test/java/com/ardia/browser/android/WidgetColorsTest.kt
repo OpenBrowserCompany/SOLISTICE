@@ -1,7 +1,7 @@
-package com.ardia.browser.android
+package com.openbrowsercompany.solstice.android
 
 import androidx.compose.ui.graphics.Color
-import com.ardia.browser.android.system.WidgetColors
+import com.openbrowsercompany.solstice.android.system.WidgetColors
 import com.ardia.design.ProfileLook
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
