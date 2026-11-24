@@ -15,8 +15,8 @@ import android.view.View
 import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import com.ardia.browser.Page
-import com.ardia.browser.TouchScrollers
+import com.openbrowsercompany.solstice.Page
+import com.openbrowsercompany.solstice.TouchScrollers
 import com.ardia.browsing.PageSwipe
 import com.ardia.browsing.PullToRefreshRules
 import com.ardia.browsing.SwipeDirection
@@ -509,7 +509,7 @@ internal class PageGestures(private val owner: ViewGroup, private val host: View
 
         init {
             visibility = INVISIBLE
-            contentDescription = context.getString(com.ardia.browser.R.string.phone_reloading)
+            contentDescription = context.getString(com.openbrowsercompany.solstice.R.string.phone_reloading)
         }
 
         internal val isSpinning: Boolean get() = spin?.isRunning == true

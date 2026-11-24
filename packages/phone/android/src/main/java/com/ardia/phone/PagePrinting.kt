@@ -4,8 +4,8 @@ import android.app.Activity
 import android.content.Context
 import android.print.PrintAttributes
 import android.print.PrintManager
-import com.ardia.browser.BrowserUrl
-import com.ardia.browser.Page
+import com.openbrowsercompany.solstice.BrowserUrl
+import com.openbrowsercompany.solstice.Page
 
 internal object PagePrinting {
     fun jobName(title: String, address: String): String = title.trim().ifEmpty { BrowserUrl.rawHost(address) ?: address }
