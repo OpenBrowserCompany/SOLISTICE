@@ -1,7 +1,7 @@
 Two of our patches call functions that //chrome/browser/ardia defines, and that layer is only built into the Mac
 framework: ardia::RegisterManagementPolicyProviders (chromium-extension-management-policy-hook.patch) and
 NewArdiaVideoOverlayWindow (chromium-pip-overlay-window.patch). On Windows the calls are left out until the layer
-builds there: no Ardia policy providers, and Chrome's own Picture-in-Picture window.
+builds there: no Solstice policy providers, and Chrome's own Picture-in-Picture window.
 
 build_config in pip: True
 --- a/chrome/browser/extensions/chrome_extension_system.cc
@@ -32,7 +32,7 @@ build_config in pip: True
 --- a/chrome/browser/ui/views/overlay/video_overlay_window_views.cc
 +++ b/chrome/browser/ui/views/overlay/video_overlay_window_views.cc
 @@ -321,8 +321,10 @@
- // Ardia: Dia's window, defined in //chrome/browser/ardia (pip/). Not a
+ // Solstice: Dia's window, defined in //chrome/browser/ardia (pip/). Not a
  // GN dependency: it resolves at link time in the binary we build (ArdiaCore's
  // chrome_dll links that target).
 +#if BUILDFLAG(IS_MAC)

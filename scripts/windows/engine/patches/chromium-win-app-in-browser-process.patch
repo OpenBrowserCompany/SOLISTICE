@@ -12,7 +12,7 @@
      base::debug::DumpWithoutCrashing();
    }
    base::CommandLine::Init(0, nullptr);
-+  // Ardia: with the app's library beside the executable, the browser
++  // Solstice: with the app's library beside the executable, the browser
 +  // process runs the app (//ardia/win) instead of opening Chrome's window.
 +  ardia_win::BeforeChromeMain();
  #else
@@ -38,7 +38,7 @@
  // BrowserMainParts ------------------------------------------------------------
 +
 +#if BUILDFLAG(IS_WIN)
-+// Ardia: the app's own startup and shutdown steps (//ardia/win).
++// Solstice: the app's own startup and shutdown steps (//ardia/win).
 +void (*g_ardia_win_add_main_parts)(ChromeBrowserMainParts* main_parts) =
 +    nullptr;
 +#endif
@@ -50,7 +50,7 @@
        std::make_unique<ChromeBrowserMainExtraPartsPerformanceMonitor>());
  
 +#if BUILDFLAG(IS_WIN)
-+  // Ardia: the app starts after the browser, and stops before it.
++  // Solstice: the app starts after the browser, and stops before it.
 +  if (g_ardia_win_add_main_parts) {
 +    g_ardia_win_add_main_parts(main_parts.get());
 +  }
@@ -65,7 +65,7 @@
        "//sandbox/win:sandbox",
        "//third_party/cld_3/src/src:cld_3",
        "//third_party/wtl",
-+      "//ardia/win",  # Ardia: the app in the browser process (scripts/windows/engine/src)
++      "//ardia/win",  # Solstice: the app in the browser process (scripts/windows/engine/src)
        "//ui/views",
      ]
  
