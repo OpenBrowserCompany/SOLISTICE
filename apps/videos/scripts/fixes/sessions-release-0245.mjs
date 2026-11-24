@@ -39,7 +39,7 @@ build("session-r45-switch.json", {
   frame: SMALL,
 });
 
-build("session-r45-bookmarks.json", { tabs: [T("t1", "http://moodwall.example/"), T("b1", "ardia://bookmarks", { title: "Bookmarks" })], active: "b1", frame: SMALL });
+build("session-r45-bookmarks.json", { tabs: [T("t1", "http://moodwall.example/"), T("b1", "solstice://bookmarks", { title: "Bookmarks" })], active: "b1", frame: SMALL });
 
 build("session-r45-cli.json", {
   tabs: [...TILES, T("t1", "http://moodwall.example/"), T("t2", "http://docpad.example/")],

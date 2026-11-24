@@ -179,12 +179,12 @@ gitignored `public/music/shared-folders/`.
 | `music-take5.mp3` | Not used: prompt mode with `force_instrumental`, but 84 s long and static (no swell, montage or resolve) | Eleven Music, `music_v2_5` |
 | `music-take6.mp3` | Not used: swell lands on beat 24, but no montage lift, and the voice isolator found more residue at 26–30 s and 51–61 s | Eleven Music, `music_v2_5` |
 | `music-take1.mp3` … `music-take3.mp3` | Not used: first-cut takes (120 BPM grid) that had vocals | Eleven Music, `music_v2_5` |
-| `vo-<id>.wav` for the 18 ids in `cuts.json` (`vo1a` … `vo9b`, `vo8`) | One clip per sentence of the voiceover, silence trimmed; `vo-vo2.wav` slowed 12%. Files whose ids are no longer in `cuts.json` (`vo-vo1.wav`, `vo-vo4.wav`, `vo-vo5a.wav`, `vo-vo5b.wav`, `vo-vo6.wav`, `vo-vo7.wav`) are unused leftovers | Text to Speech, `eleven_multilingual_v2` (stability 0.5, speed 0.9–1.05), voice "Ardia Warm Baritone" (`j9kn16hLvKzxumeflEAU`) |
-| `voice-candidates/ardia-warm-baritone.wav` | Narrator candidate reading vo3 (picked) | Text to Speech, `eleven_multilingual_v2`, "Ardia Warm Baritone" (`j9kn16hLvKzxumeflEAU`) |
-| `voice-candidates/ardia-deep-baritone.wav` | Narrator candidate reading vo3 | Text to Speech, `eleven_multilingual_v2`, "Ardia Deep Baritone" (`xIoYWOdGw6lEPoeAjpMl`) |
-| `voice-candidates/ardia-warm-alto.wav` | Narrator candidate reading vo3 | Text to Speech, `eleven_multilingual_v2`, "Ardia Warm Alto" (`T1Zf1ZVxdHgsn5BqWUGD`) |
+| `vo-<id>.wav` for the 18 ids in `cuts.json` (`vo1a` … `vo9b`, `vo8`) | One clip per sentence of the voiceover, silence trimmed; `vo-vo2.wav` slowed 12%. Files whose ids are no longer in `cuts.json` (`vo-vo1.wav`, `vo-vo4.wav`, `vo-vo5a.wav`, `vo-vo5b.wav`, `vo-vo6.wav`, `vo-vo7.wav`) are unused leftovers | Text to Speech, `eleven_multilingual_v2` (stability 0.5, speed 0.9–1.05), voice "Solstice Warm Baritone" (`j9kn16hLvKzxumeflEAU`) |
+| `voice-candidates/ardia-warm-baritone.wav` | Narrator candidate reading vo3 (picked) | Text to Speech, `eleven_multilingual_v2`, "Solstice Warm Baritone" (`j9kn16hLvKzxumeflEAU`) |
+| `voice-candidates/ardia-deep-baritone.wav` | Narrator candidate reading vo3 | Text to Speech, `eleven_multilingual_v2`, "Solstice Deep Baritone" (`xIoYWOdGw6lEPoeAjpMl`) |
+| `voice-candidates/ardia-warm-alto.wav` | Narrator candidate reading vo3 | Text to Speech, `eleven_multilingual_v2`, "Solstice Warm Alto" (`T1Zf1ZVxdHgsn5BqWUGD`) |
 | `voice-candidates/README.txt` | Names and voice ids of the candidates | Written by hand |
 | `sfx-*.wav` | Foley (chat pops, clicks, ticks, lifts, thuds, the arrival chime), each cue levelled 20–26 LU under the music (the arrival chime about 16 LU under) | Sound Effects, `eleven_text_to_sound_v2` |
-| (no file) | The first-cut narrator, "Ardia Narrator (designed)" (`UaGUd7CqoCVmNU5Aiahi`, `eleven_v3`), was rejected as thin; its `vo-*.wav` files were overwritten by the lines above | Text to Speech, `eleven_v3` |
+| (no file) | The first-cut narrator, "Solstice Narrator (designed)" (`UaGUd7CqoCVmNU5Aiahi`, `eleven_v3`), was rejected as thin; its `vo-*.wav` files were overwritten by the lines above | Text to Speech, `eleven_v3` |
 | `shared-folders-16x9.wav`, `shared-folders-9x16.wav` | The mix: music, sound effects and voiceover (the two files are identical) | Rendered by `shared-folders.py` from the files above |
 | `shared-folders-16x9-novo.wav` | The mix without voiceover | Rendered by `shared-folders.py` from the files above |

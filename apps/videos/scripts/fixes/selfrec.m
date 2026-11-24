@@ -263,7 +263,7 @@ static void Poll(void) {
 __attribute__((constructor)) static void SelfRecInit(void) {
   const char *dir = getenv("FIXES_SELFREC_DIR");
   if (!dir) return;
-  if (![[NSBundle mainBundle].bundlePath.lastPathComponent isEqualToString:@"Ardia.app"]) return;
+  if (![[NSBundle mainBundle].bundlePath.lastPathComponent isEqualToString:@"Solstice.app"]) return;
   gLayers = getenv("FIXES_SELFREC_LAYERS") != NULL;
   gCapture = (CreateImageFromArray)dlsym(RTLD_DEFAULT, "CGWindowListCreateImageFromArray");
   if (!gCapture && !gLayers) return;
