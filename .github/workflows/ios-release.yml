@@ -69,7 +69,7 @@ permissions:
 jobs:
   status:
     if: inputs.mode == 'status'
-    runs-on: ubuntu-latest
+    runs-on: namespace-profile-solistice-browser
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -92,7 +92,7 @@ jobs:
 
   public-link:
     if: inputs.mode == 'public-link'
-    runs-on: ubuntu-latest
+    runs-on: namespace-profile-solistice-browser
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -118,7 +118,7 @@ jobs:
 
   add-tester:
     if: inputs.mode == 'add-tester'
-    runs-on: ubuntu-latest
+    runs-on: namespace-profile-solistice-browser
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -144,7 +144,7 @@ jobs:
 
   expire:
     if: inputs.mode == 'expire'
-    runs-on: ubuntu-latest
+    runs-on: namespace-profile-solistice-browser
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -169,7 +169,7 @@ jobs:
 
   certificate:
     if: inputs.mode == 'certificate'
-    runs-on: ubuntu-latest
+    runs-on: namespace-profile-solistice-browser
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
