@@ -70,9 +70,9 @@ test("maps both navigation URLs and preserves the public navigation schema", () 
   const h = setup();
   h.receiver.install(snapshot());
   h.send(message(2, "navigation", { ...navigation, url: "chrome://settings", committedUrl: "chrome://history" }));
-  assert.equal(h.calls.at(-1)[1].url, "ardia://settings");
-  assert.equal(h.calls.at(-1)[1].committedUrl, "ardia://history");
-  assert.equal(useBrowser.getState().tabs[h.tab].url, "ardia://settings");
+  assert.equal(h.calls.at(-1)[1].url, "solstice://settings");
+  assert.equal(h.calls.at(-1)[1].committedUrl, "solstice://history");
+  assert.equal(useBrowser.getState().tabs[h.tab].url, "solstice://settings");
 });
 
 test("authenticates the original claim, binding, shell generation and outer channel", () => {

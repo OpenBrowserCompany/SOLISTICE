@@ -81,7 +81,7 @@ export function resolveHostModule(host: ArdiaHost, name: string, method: string)
     const exportHtml = bookmarksExportCall(host);
     return (verb: string, profile: string, args: string) => verb === "exportHtml" ? exportHtml(profile) : callHost(`bookmarks.${verb}`, profile, args, host);
   }
-  if (method === "call" && /^Ardia[A-Z]/.test(name)) {
+  if (method === "call" && /^Solstice[A-Z]/.test(name)) {
     const domain = name.slice(5, 6).toLowerCase() + name.slice(6);
     return (verb: string, profile: string, args: string) => {
       const call = `${domain}.${verb}`;
