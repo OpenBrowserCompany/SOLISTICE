@@ -73,8 +73,8 @@
     },
     {
       "scene": "s7little",
-      "title": "Little Ardia follows the switcher setting",
-      "body": "Two profiles, with Switcher in the sidebar shows set to Nothing. nightly.6 still drew the profile button in Little Ardia's bar. Now it's hidden there too; ⌃1 to ⌃9 still switch.",
+      "title": "Little Solstice follows the switcher setting",
+      "body": "Two profiles, with Switcher in the sidebar shows set to Nothing. nightly.6 still drew the profile button in Little Solstice's bar. Now it's hidden there too; ⌃1 to ⌃9 still switch.",
       "cam": [0, 0, 900, 640],
       "lead": 0.3,
       "tail": 4.2,

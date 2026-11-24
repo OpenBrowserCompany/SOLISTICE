@@ -49,7 +49,7 @@ def busy_press(side, clip):
         raise SystemExit(f"s6busy after: the page showed {waited} ms after the press, once the stall had ended")
     if side == "before" and shown < idle["t"] - 0.05:
         raise SystemExit(f"s6busy before: the page showed {waited} ms after the press, inside the stall")
-    out = [{"t": busy["t"], "text": f"Pressed · Ardia busy for {busy['busy'] / 1000:g} s", "tone": "plain"}]
+    out = [{"t": busy["t"], "text": f"Pressed · Solstice busy for {busy['busy'] / 1000:g} s", "tone": "plain"}]
     if side == "after":
         out.append({"t": shown + 0.35, "text": "Page on screen within a frame of the press", "tone": "good"})
     else:
@@ -65,7 +65,7 @@ def new_tab_field(side, clip):
     if page is None:
         raise SystemExit(f"s6newtab {side}: the page never showed")
     covered = next((t for t, clear in series if page < t < idle["t"] and not clear), None)
-    out = [{"t": busy["t"], "text": f"Switched · Ardia busy for {busy['busy'] / 1000:g} s", "tone": "plain"}]
+    out = [{"t": busy["t"], "text": f"Switched · Solstice busy for {busy['busy'] / 1000:g} s", "tone": "plain"}]
     if side == "before":
         if covered is None:
             raise SystemExit("s6newtab before: the New Tab field never came back over the page")

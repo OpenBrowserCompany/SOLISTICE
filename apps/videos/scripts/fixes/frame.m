@@ -43,7 +43,7 @@ static void Poll(void) {
 __attribute__((constructor)) static void FrameInit(void) {
   NSString *exe = NSProcessInfo.processInfo.arguments.firstObject.lastPathComponent;
   NSString *dir = NSProcessInfo.processInfo.environment[@"ARDIA_DATA_DIR"];
-  if (![exe isEqualToString:@"Ardia"] || !dir) return;
+  if (![exe isEqualToString:@"Solstice"] || !dir) return;
   gInbox = [dir stringByAppendingPathComponent:@"film-frame.txt"];
   gOutbox = [dir stringByAppendingPathComponent:@"film-frame-done.txt"];
   dispatch_async(dispatch_get_main_queue(), ^{
