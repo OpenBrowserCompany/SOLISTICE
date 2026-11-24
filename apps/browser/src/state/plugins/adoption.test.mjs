@@ -96,7 +96,7 @@ test("an Install that finds the old installer busy keeps trying, then offers Try
   host.linkResult = null;
 });
 
-test("a program registry Ardia can't read fails closed and says so", async () => {
+test("a program registry Solstice can't read fails closed and says so", async () => {
   const { claimsOf, loadProgramClaims, useProgramRegistry } = await import("./programRegistry.ts");
   assert.deepEqual(claimsOf(null), { claims: {}, failClosed: true });
   assert.deepEqual(claimsOf({ claims: { ardia: "cli" }, failClosed: false, legacyOwners: [] }), { claims: { ardia: "cli" }, failClosed: false });

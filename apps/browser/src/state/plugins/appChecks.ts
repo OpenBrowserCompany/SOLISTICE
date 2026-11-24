@@ -47,17 +47,17 @@ export function appProblems(m: PluginManifest, settings: Settings, appVersion: s
   m.programs.forEach((p, i) => {
     const at = `plugin.json: ${within}programs[${i}]`;
     const owner = registry.claims[p.name];
-    if (p.claim && !builtIn) problems.push(`${at}.claim is only for Ardia's official plugins`);
-    else if (owner && registry.failClosed) problems.push(`${at}.name: ${p.name} is kept for Ardia's official plugins, and the list of which one owns it couldn't be read`);
-    else if (owner && (owner !== m.name || !builtIn)) problems.push(`${at}.name: ${p.name} belongs to Ardia's official ${owner} plugin`);
-    else if (p.claim && owner !== m.name) problems.push(`${at}.claim: ${p.name} isn't in the list of programs this Ardia reserves for its official plugins`);
+    if (p.claim && !builtIn) problems.push(`${at}.claim is only for Solstice's official plugins`);
+    else if (owner && registry.failClosed) problems.push(`${at}.name: ${p.name} is kept for Solstice's official plugins, and the list of which one owns it couldn't be read`);
+    else if (owner && (owner !== m.name || !builtIn)) problems.push(`${at}.name: ${p.name} belongs to Solstice's official ${owner} plugin`);
+    else if (p.claim && owner !== m.name) problems.push(`${at}.claim: ${p.name} isn't in the list of programs this Solstice reserves for its official plugins`);
   });
-  for (const key of ["alwaysOn", "official", "autoInstall"] as const) if (m[key] && !builtIn) problems.push(`plugin.json: ${key} is only for Ardia's official plugins`);
+  for (const key of ["alwaysOn", "official", "autoInstall"] as const) if (m[key] && !builtIn) problems.push(`plugin.json: ${key} is only for Solstice's official plugins`);
   if (m.autoInstall && !m.alwaysOn) problems.push("plugin.json: autoInstall needs alwaysOn");
   m.programs.forEach((p, i) => {
-    if (p.afterUpdate.length && !builtIn) problems.push(`plugin.json: ${within}programs[${i}].afterUpdate is only for Ardia's official plugins`);
+    if (p.afterUpdate.length && !builtIn) problems.push(`plugin.json: ${within}programs[${i}].afterUpdate is only for Solstice's official plugins`);
   });
-  if (m.requires && appVersion && compareVersions(appVersion, m.requires) < 0) problems.push(`plugin.json: needs Ardia ${m.requires} or later (this is ${appVersion})`);
+  if (m.requires && appVersion && compareVersions(appVersion, m.requires) < 0) problems.push(`plugin.json: needs Solstice ${m.requires} or later (this is ${appVersion})`);
   return problems;
 }
 

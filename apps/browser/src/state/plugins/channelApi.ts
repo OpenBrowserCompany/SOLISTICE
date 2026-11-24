@@ -104,7 +104,7 @@ function workspace(c: ChannelCaller, m: PluginManifest, method: string, params: 
 export function answerMethod(c: ChannelCaller, m: PluginManifest, method: string, params: Record<string, unknown>): Body | Promise<Body> | null {
   switch (method) {
     case "hello":
-      return { result: { app: "Ardia", version: systemInfo().appVersion, protocol: m.main ? CHANNEL_PROTOCOL : LEGACY_CHANNEL_PROTOCOL, plugin: c.name, values: valuesFor(c.name) } };
+      return { result: { app: "Solstice", version: systemInfo().appVersion, protocol: m.main ? CHANNEL_PROTOCOL : LEGACY_CHANNEL_PROTOCOL, plugin: c.name, values: valuesFor(c.name) } };
     case "values":
       return { result: valuesFor(c.name) };
     case "ready":
