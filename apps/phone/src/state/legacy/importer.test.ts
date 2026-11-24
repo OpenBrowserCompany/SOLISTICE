@@ -186,10 +186,10 @@ test("Archive tabs keep their saved state and thumbnail, and Android ids stay ex
   const [news] = readArchivedTabs(run.db, 10);
   assert.equal(news!.id, NEWS);
   assert.equal(news!.archivedAt, T - 7_000);
-  assert.equal(news!.snapshotFileName, "file:///data/user/0/com.ardia.browser.android/files/PageSnapshots/news-1-300x600.jpg");
+  assert.equal(news!.snapshotFileName, "file:///data/user/0/com.openbrowsercompany.solstice.android/files/PageSnapshots/news-1-300x600.jpg");
   assert.equal(readTabState(run.db, NEWS), "BAUG");
   assert.equal(readTabState(run.db, OTTER), "AAECAw==");
-  assert.equal(readOpenTabs(run.db).find((t) => t.id === OTTER)!.snapshotFileName, "file:///data/user/0/com.ardia.browser.android/files/PageSnapshots/otter-1-300x600.jpg");
+  assert.equal(readOpenTabs(run.db).find((t) => t.id === OTTER)!.snapshotFileName, "file:///data/user/0/com.openbrowsercompany.solstice.android/files/PageSnapshots/otter-1-300x600.jpg");
 });
 
 test("on iPhone ids are lowercased with every reference that points at them: state, selection and duplicates", async () => {

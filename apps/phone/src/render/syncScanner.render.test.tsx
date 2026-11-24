@@ -50,7 +50,7 @@ test("without a camera the screen shows the QR viewfinder symbol, and without pe
   unmount(denied);
 });
 
-test("Not an Ardia sync code fades in with the native apps' fade instead of popping", async () => {
+test("Not an Solstice sync code fades in with the native apps' fade instead of popping", async () => {
   const root = await open("granted");
   expect(root.root.findAll((node) => node.props.testID === "scanRejected")).toHaveLength(0);
   const camera = root.root.findAll((node) => typeof node.props.onRejected === "function")[0]!;
@@ -58,7 +58,7 @@ test("Not an Ardia sync code fades in with the native apps' fade instead of popp
   const note = root.root.findAll((node) => node.props.testID === "scanRejected" && node.props.entering !== undefined)[0]!;
   expect(note.props.entering).toBeDefined();
   expect(note.props.exiting).toBeDefined();
-  expect(textOf({ root: note } as never)).toBe("Not an Ardia sync code.");
+  expect(textOf({ root: note } as never)).toBe("Not an Solstice sync code.");
   unmount(root);
 });
 

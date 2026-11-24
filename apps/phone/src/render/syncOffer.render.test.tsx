@@ -66,7 +66,7 @@ onAndroid("where sync isn't offered, Android's Settings has no Sync card and no 
   unmount(root);
 });
 
-test("where sync isn't offered, the start page has no Sync With Your Mac invitation and shows the Ardia mark, and the page menu has no Pin to Mac", async () => {
+test("where sync isn't offered, the start page has no Sync With Your Mac invitation and shows the Solstice mark, and the page menu has no Pin to Mac", async () => {
   act(() => useBrowse.setState({ surface: "start" }));
   const start = inDesign("redesigned", <StartScreen />);
   expect(hosts(start, "startSyncInvitation")).toHaveLength(0);
@@ -84,7 +84,7 @@ test("where sync isn't offered, the start page has no Sync With Your Mac invitat
   unmount(menu);
 });
 
-test("where sync is offered, the start page still shows only the Ardia mark and keeps Sync in Settings, and the page menu offers Pin to Mac", async () => {
+test("where sync is offered, the start page still shows only the Solstice mark and keeps Sync in Settings, and the page menu offers Pin to Mac", async () => {
   mockOffered = true;
   act(() => useBrowse.setState({ surface: "start" }));
   const start = inDesign("redesigned", <StartScreen />);
