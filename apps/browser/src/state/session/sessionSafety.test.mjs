@@ -140,7 +140,7 @@ test("an unreadable session.json is never written over while the copy keeps fail
   assert.deepEqual(savedUrls(), ["https://new.example/"]);
 });
 
-test("with no backup, a damaged session.json is kept aside and Ardia starts fresh", async () => {
+test("with no backup, a damaged session.json is kept aside and Solstice starts fresh", async () => {
   clean();
   stub.docs.set("session.json", "{\"version\":11,\"tabs\":[");
   const stop = startPersistence();
