@@ -30,7 +30,7 @@ case .failure(let failure): hostFail(failure.message)
 }
 
 guard let machine = JSVirtualMachine(), let context = JSContext(virtualMachine: machine) else { hostFail("JavaScriptCore couldn't start") }
-context.name = "Ardia plugin \(ProcessInfo.processInfo.environment["ARDIA_PLUGIN_NAME"] ?? entry)"
+context.name = "Solstice plugin \(ProcessInfo.processInfo.environment["ARDIA_PLUGIN_NAME"] ?? entry)"
 var failedAtStart = false
 var evaluatingEntry = false
 context.exceptionHandler = { _, exception in
@@ -44,7 +44,7 @@ let globals = HostGlobals(context: context, queue: .main)
 let channel = HostChannel(fd: channelFd, queue: .main, onLine: { line in globals.deliver(line) }, onClose: { exit(0) })
 globals.attach(channel)
 evaluatingEntry = true
-let install = context.evaluateScript(HostPrelude.source, withSourceURL: URL(string: "ardia://plugin-host/prelude.js"))
+let install = context.evaluateScript(HostPrelude.source, withSourceURL: URL(string: "solstice://plugin-host/prelude.js"))
 guard !failedAtStart, let install, install.isObject else { hostFail("the plugin host's prelude didn't load") }
 install.call(withArguments: [globals.native()])
 guard !failedAtStart else { hostFail("the plugin host's prelude didn't install") }

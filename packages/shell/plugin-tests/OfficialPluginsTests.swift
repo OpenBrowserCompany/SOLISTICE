@@ -508,7 +508,7 @@ final class OfficialPluginsTests: XCTestCase {
     let version = try XCTUnwrap(PluginPrograms.linkTarget("\(places.store)/tool/current"))
     PluginPrograms.withdraw(plugin: "tool", programs: ["tool"], places: places, keepCopy: true)
     XCTAssertNil(PluginPrograms.linkTarget("\(places.binDir)/tool"), "off takes it off PATH")
-    XCTAssertEqual(PluginPrograms.linkTarget("\(places.store)/tool/current"), version, "but keeps the copy an earlier Ardia made")
+    XCTAssertEqual(PluginPrograms.linkTarget("\(places.store)/tool/current"), version, "but keeps the copy an earlier Solstice made")
     PluginPrograms.withdrawAllBut([], places: places, keepingCopies: ["tool"])
     XCTAssertEqual(PluginPrograms.legacyCopy(plugin: "tool", places: places), "\(places.store)/tool/\(version)", "the launch sweep keeps it too")
     let back = try PluginPrograms.keepLegacy(plugin: "tool", programs: [PluginProgram(name: "tool", path: "bin/tool")], places: places).get()
@@ -571,7 +571,7 @@ final class OfficialPluginsTests: XCTestCase {
     XCTAssertEqual(info.st_mode & 0o777, 0o444)
     let scratch = try XCTUnwrap(store.makeScratch("tool", prefix: ".stage-"))
     XCTAssertEqual(lstat(scratch, &info), 0)
-    XCTAssertEqual(info.st_mode & 0o777, 0o700, "unpacking happens in a folder only Ardia's user can enter")
+    XCTAssertEqual(info.st_mode & 0o777, 0o700, "unpacking happens in a folder only Solstice's user can enter")
     XCTAssertTrue(store.remove("tool"), "removal unseals what it deletes")
   }
 

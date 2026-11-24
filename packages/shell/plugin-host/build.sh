@@ -34,4 +34,4 @@ case "${EXPANDED_CODE_SIGN_IDENTITY_NAME:-}" in
   *) timestamp=--timestamp=none ;;
 esac
 codesign --force --sign "$identity" "$timestamp" --options runtime \
-  --identifier "${PRODUCT_BUNDLE_IDENTIFIER:-com.ardia.browser}.plugin-host" "$helpers/$name"
+  --identifier "${PRODUCT_BUNDLE_IDENTIFIER:-com.openbrowsercompany.solstice}.plugin-host" "$helpers/$name"
