@@ -322,9 +322,9 @@ class ArdiaCoreRsVectorsTest : public testing::Test {
  protected:
   void SetUp() override {
     ASSERT_FALSE(Repo().empty()) << "pass --" << kRepoSwitch
-                                 << "=\"$AC_REPO\", with AC_REPO set to the absolute path of an Ardia checkout";
+                                 << "=\"$AC_REPO\", with AC_REPO set to the absolute path of an Solstice checkout";
     ASSERT_TRUE(base::PathExists(Vectors().AppendASCII("inputs.json")))
-        << Vectors() << " is missing: --" << kRepoSwitch << " must name an Ardia checkout (set AC_REPO to its absolute path)";
+        << Vectors() << " is missing: --" << kRepoSwitch << " must name an Solstice checkout (set AC_REPO to its absolute path)";
   }
 };
 
