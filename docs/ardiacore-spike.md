@@ -14,7 +14,7 @@ Chromium running the app's run loop with a clean quit. All 29 automated checks p
 
 The changes the plan needs:
 - **No mixing in one process.** CEF and ArdiaCore can't both run in the same app process, since each is a full
-  Chromium. So "Little Ardia on ArdiaCore while the main windows stay on CEF" doesn't work. The strangler happens at the
+  Chromium. So "Little Solstice on ArdiaCore while the main windows stay on CEF" doesn't work. The strangler happens at the
   JS API instead: a second native implementation behind the unchanged `packages/cef` API, in its own app build,
   switched over in one go when it reaches parity.
 - **The CEF-in-tree tax.** While CEF stays in the Chromium tree, its patches take things out of Chrome that ArdiaCore
@@ -139,7 +139,7 @@ Chrome's DevTools protocol. The last run passed 29 of 29. The screen was locked,
 
 Codex's review and my own reading agree on this list. It is the bulk of the remaining work.
 
-Before Little Ardia:
+Before Little Solstice:
 - **Key window, focus, keyboard.** Key equivalents, IME and accessibility through `BridgedContentView` and the
   host's views. The test instance can never be key, so input was proved for clicks, not keys.
   `PreHandleKeyboardEvent` returns "not handled" today.
@@ -161,7 +161,7 @@ Before the main windows:
 - **Our own `SidePanelUI`**, `ExtensionsContainer` and install prompt.
 - **The popup pieces.** Blocked-popup replay, COOP/noopener popups across processes, and `activeTab` grants for the
   action popup (we open it directly instead of running the action).
-- **Renderer-side features CEF gives us.** Page script injection, process messages and the `ardia://` scheme
+- **Renderer-side features CEF gives us.** Page script injection, process messages and the `solstice://` scheme
   need an inventory. They become an ArdiaCore `ContentRendererClient` and a mojo interface.
 - **Renaming.** The framework is still called `Chromium Framework` with `Chromium Helper` apps, since the names come
   from the branding file, a GN arg. Rename at the next full rebuild.
@@ -206,12 +206,12 @@ What it deletes when it ships, from the review's inventory:
 ## Migration plan
 
 1. **Now, done:** this spike.
-2. **ArdiaCore runtime work, before any UI** (rec. 1 and 4 land here, as planned): everything under "Before Little Ardia".
+2. **ArdiaCore runtime work, before any UI** (rec. 1 and 4 land here, as planned): everything under "Before Little Solstice".
    That means the key and focus path, cancellable close and quit, `terminate:`, an `ArdiaCore` Expo module skeleton
    with the RN root inside Chromium's loop, a page-script and process-message replacement, and real key/IME tests.
    The acceptance run grows with each.
 3. **`packages/ardiacore`:** the same JS API as `packages/cef`, implemented on `ArdiaCore.h`, built as a second app target
-   (`Ardia ArdiaCore`, dev only). The first surface brought up there is Little Ardia (one tab, one profile, the
+   (`Solstice ArdiaCore`, dev only). The first surface brought up there is Little Solstice (one tab, one profile, the
    simplest window), then the main window with one profile, then profiles, extensions UI, side panels, PiP and
    Cast.
    - Both app targets build from the same JS, so the store and UI keep moving while the native side catches up.
@@ -230,7 +230,7 @@ Codex's estimate, which I adopt: conventional engineer-weeks, then at this repo'
 
 | Stage | Conventional | At our pace |
 |---|---|---|
-| Little Ardia on ArdiaCore behind the existing JS API (includes the runtime work in step 2) | 3–5 weeks | 3–6 working days |
+| Little Solstice on ArdiaCore behind the existing JS API (includes the runtime work in step 2) | 3–5 weeks | 3–6 working days |
 | Main windows at today's parity | +6–10 weeks | +5–13 days |
 | Delete CEF; qualify packaging, notarization and the 155 rebase | +2–4 weeks | +2–5 days |
 | **Total** | **11–19 weeks** | **about 2–5 weeks** |
@@ -291,7 +291,7 @@ Capture `ACHost`'s window (`screencapture -l`, `docs/agent-brief.md`) once the s
 
 ## Stage 1 runtime
 
-Stage 1 (2026-10-01) closes the runtime gaps above under "Before Little Ardia" in the engine. The RN app's
+Stage 1 (2026-10-01) closes the runtime gaps above under "Before Little Solstice" in the engine. The RN app's
 stage-1 work is in `packages/ardiacore` and `docs/ardiacore-parity.md`. `spikes/ardiacore-host/acceptance.mjs` now
 passes 65 checks in a hidden instance: the spike's 29 plus the `S1`–`S6` checks below.
 

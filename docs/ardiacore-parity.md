@@ -13,17 +13,17 @@ change: `packages/ardiacore` registers the same Expo modules and view names (`Ar
 
 The switch shipped in 0.2.22; this was the list it shipped against, kept for the checks each item names.
 
-1. ~~**Cutover commits**~~ done: C1, the fold (8f1074f1: one project, `Ardia-macOS`, `com.ardia.browser`),
+1. ~~**Cutover commits**~~ done: C1, the fold (8f1074f1: one project, `Ardia-macOS`, `com.openbrowsercompany.solstice`),
    and C2 (6bdf66ce, 4b0d0697: `packages/cef` deleted, its JS in `packages/ardiacore/src`, the patch series in
    `engine/patches`, `apps/browser/macos-ardiacore` gone). Left: release.sh/smoke on ArdiaCore. *Release-pipeline agent.*
 2. ~~**Production data dir and migration**~~ done: a release build without `ARDIA_DATA_DIR` opens
-   `~/Library/Application Support/com.ardia.browser/Chromium` in place (`InstalledDataDirectory`), with the
+   `~/Library/Application Support/com.openbrowsercompany.solstice/Chromium` in place (`InstalledDataDirectory`), with the
    login keychain only when Developer ID-signed and the app's documents in the folder above, as on CEF. No migration
-   step: both engines are Chromium 154.0.8037.58 and read the same "Ardia Safe Storage" item. Proven by
+   step: both engines are Chromium 154.0.8037.58 and read the same "Solstice Safe Storage" item. Proven by
    `carryover.sh` (the release smoke test): 0.2.21 made two profiles' tabs, persistent and session cookies,
    localStorage, passwords, bookmarks, history, an address, a site permission, a zoom level and an unpacked
    extension; the ArdiaCore build found and read every one (21/21) without `ARDIA_DATA_DIR`. Left for the owner:
-   the real login keychain's item, which no hidden run reads (both binaries name it "Ardia Safe Storage", and
+   the real login keychain's item, which no hidden run reads (both binaries name it "Solstice Safe Storage", and
    smoke.sh checks the build satisfies 0.2.21's designated requirement, which the item's access trusts).
    Going back works too (`carryover.sh --back`): 0.2.21 → the RC → 0.2.21 on the same folder keeps everything from both
    sessions (tabs, passwords, bookmarks, history, zoom, the extension's setting, persistent cookies, localStorage),
@@ -164,7 +164,7 @@ Moved to `docs/testing.md` › "ArdiaCore acceptance".
 | second-profile, settings-window, incognito-window | A second profile's tab in the same window with its own cookies; the settings window; a private window |
 | move-tab-to-window | A tab moved to a new window keeps its page (same WebContents) and its strip follows |
 | title-bar-close | The title bar's close button asks the app (`windowShouldClose:`), which closes the window |
-| little-ardia | A Little Ardia window opens and navigates |
+| little-ardia | A Little Solstice window opens and navigates |
 | quit | ⌘Q → the app's quit flow → ArdiaCore's quit; the session is saved; no crash report |
 
 ### Activation (who is in front)
@@ -335,14 +335,14 @@ lights are placed again after every switch), `prepareProfiles:forWindow:`, `setT
 | Tab-modal dialogs (HTTP auth, FedCM, passkeys, print) | done | Each tab has its own dialog host (`ac_modal_dialog_host.mm`): centred over that tab's own view (each split pane its own), at most the page's size, activated only when its Browser is the last active one, the app is active and its window is main or key (otherwise shown inactive: no focus steal from another app or a background window), and moved whenever the window's bounds or any view frame in it changes while a dialog is up. Browser-modal dialogs use the window's host, over the active tab |
 | EyeDropper | done | `new EyeDropper().open()` shows macOS's colour sampler, as Chrome (`ShowEyeDropper`). A hidden run never shows it: it picks #123456 |
 | Emoji & Symbols | done | Drops a page's full screen first, as Chrome |
-| `AppController` stand-in | done | Chrome's code asks `AppController.sharedController` for profiles, colours and quit state; ArdiaCore's stand-in answers every selector `app_controller_mac.h` declares, with Chrome's semantics where Ardia can reach them (`safeProfileForNewWindows:`, `keyWindowIsModal`, `lastActiveColorProvider`, `confirmQuitIfNeeded`). Anything else is logged; it answers zero only for a void, scalar or object return, and stops the process otherwise (and always in a hidden run) |
+| `AppController` stand-in | done | Chrome's code asks `AppController.sharedController` for profiles, colours and quit state; ArdiaCore's stand-in answers every selector `app_controller_mac.h` declares, with Chrome's semantics where Solstice can reach them (`safeProfileForNewWindows:`, `keyWindowIsModal`, `lastActiveColorProvider`, `confirmQuitIfNeeded`). Anything else is logged; it answers zero only for a void, scalar or object return, and stops the process otherwise (and always in a hidden run) |
 | Windows Chrome makes (chrome.windows.create, incognito) | done | Routed into the app's windows (`tab:<id>`) through a hidden stray window. Chrome never shows a window of the host's (`ACBrowserWindow::Show` does nothing; the app shows its own), and the host's own hidden pages are no extension's window (`cef::IsHiddenFromExtensions`, `IsOnCurrentWorkspace`, extensions' `browser_window_util`) |
 | Key window, IME, accessibility | partial | Wiring checked in the engine's run; marked text and VoiceOver need an unlocked screen |
 | Native composition of the page under the RN views, bubbles and sheets | needs a visual check | The screen was locked for stages 1 and 2 |
 
 ## Renderer side
 
-CEF ran Ardia's code in each renderer (`packages/cef/helper/helper_main.mm`). ArdiaCore does the same with its own
+CEF ran Solstice's code in each renderer (`packages/cef/helper/helper_main.mm`). ArdiaCore does the same with its own
 renderer client (`ACContentRendererClient`) and a mojo interface (`engine/ardiacore/src/ardia/core/mojom`):
 
 | CEF | ArdiaCore | Used by |

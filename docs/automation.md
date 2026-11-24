@@ -1,12 +1,12 @@
 # Automation: commands and events
 
-The `ardia` command can run Ardia's commands and react to what happens in the browser: tabs opening, pages loading,
-windows taking focus. Hooks run outside the app as ordinary programs, so nothing third-party runs in Ardia's process.
+The `ardia` command can run Solstice's commands and react to what happens in the browser: tabs opening, pages loading,
+windows taking focus. Hooks run outside the app as ordinary programs, so nothing third-party runs in Solstice's process.
 Issue #717. Config files and themes are `docs/config.md`; page scripting over CDP is `docs/cli.md`.
 
 ## The control socket
 
-- While "Let the ardia command control Ardia" (`cliControl`) is on, the app listens on a Unix socket at exactly
+- While "Let the ardia command control Solstice" (`cliControl`) is on, the app listens on a Unix socket at exactly
   `<data dir>/ArdiaControl.sock` (the app's own data dir; `ARDIA_DATA_DIR` for test instances).
 - **Safe place.** The server starts only if the data dir is a real directory (not a symlink) owned by the user, not
   writable by group or others, not on a volume that ignores ownership, and with no macOS access list that allows
@@ -32,9 +32,9 @@ Issue #717. Config files and themes are `docs/config.md`; page scripting over CD
   a reused pid can't stand in for it: a token whose process has gone resolves to nothing) and resolves its code with
   Security.framework off the socket queue (`ControlPeerCore/ControlPeer.swift`): Team ID, signing identifier, path,
   cdhash, hardened runtime, and whether the signature is valid against an Apple anchor. A hardened program signed with
-  Ardia's own Team ID (the bundled `ardia` and its runtime, and any other code Ardia ships, all signed by the release's
-  `sign` job) is the owner, as before. Any other program waits, unread, while Ardia rings a **doorbell**: a sheet on
-  the last focused window, "A program wants to control Ardia", with the program's name right beside who signed it
+  Solstice's own Team ID (the bundled `ardia` and its runtime, and any other code Solstice ships, all signed by the release's
+  `sign` job) is the owner, as before. Any other program waits, unread, while Solstice rings a **doorbell**: a sheet on
+  the last focused window, "A program wants to control Solstice", with the program's name right beside who signed it
   ("Not signed by an identified developer" for anything else) and its path, control and direction characters stripped
   and lengths bounded, so a program can't pass itself off as `ardia` in the headline. Its buttons are Allow Once, Allow
   for 30 Minutes, Always Allow and Don't Allow; Return does nothing, Escape and the initial keyboard focus are Don't
@@ -61,13 +61,13 @@ Issue #717. Config files and themes are `docs/config.md`; page scripting over CD
   asking for 30 s, and its other pending asks end with it. A grant checks every other waiting ask it lets in the same
   way as the one answered. At most 8 connections wait and 8 identity look-ups run at once (counted until each look-up returns,
   across stop and start); one that takes over 10 s is refused. When the JS bridge changes (a reload), its open asks
-  end and Ardia takes their sheets away natively.
+  end and Solstice takes their sheets away natively.
   What it doesn't stop: a process of the user's can still run the bundled `ardia` (or its signed runtime) itself and
   get in as it does, can still read `ArdiaControl.json` for the token connection until the engine stops writing the token there (the
   socket's `control.devtoolsEndpoint` hands it only to programs let in, and the command will move to it;
   `docs/control-socket.md` › The DevTools token), and can write its
   own entry into `ArdiaControlApprovals.json` (the file is the user's, and its entries carry no signature). The doorbell is
-  so a program never drives Ardia without the user seeing its name, not a wall against malware running as the user.
+  so a program never drives Solstice without the user seeing its name, not a wall against malware running as the user.
 - **Test instances keep the old rule.** A test instance (a build not signed for distribution with a scratch
   `ARDIA_DATA_DIR`, `docs/agent-brief.md` › Launch variables) admits every process of the user, as before, so agents'
   and tests' clients keep working against hidden instances. `ARDIA_TEST controlDoorbell` gives one the doorbell to
@@ -120,7 +120,7 @@ Error codes: `bad_request`, `unknown_method`, `unknown_command`, `refused`, `no_
 ### Who's included
 
 One eligibility rule serves `windows`, events and command targets: a window is eligible when it is a normal browser
-window or Little Ardia, and not private; a tab is eligible when its window is eligible and its profile isn't
+window or Little Solstice, and not private; a tab is eligible when its window is eligible and its profile isn't
 incognito. A tab shown in Peek is not part of its window's tabs and sends no events until it lands in one. Events for
 something that closed are built from the previous snapshot, and only if it was eligible there.
 
@@ -129,7 +129,7 @@ bookmark searches) and their fixed page title.
 
 ### Methods
 
-- `hello` `{"caller"?: {"name", "app"?}}` → `{"app": "Ardia", "version": "0.2.44", "protocol": 4}`. Protocol 2 added
+- `hello` `{"caller"?: {"name", "app"?}}` → `{"app": "Solstice", "version": "0.2.44", "protocol": 4}`. Protocol 2 added
   `subscribe`'s options, `run`'s `tab`, `answer` and decide requests; protocol 3 added `workspace` and `apply`
   (Tabs and groups, below); protocol 4 added the plugin methods (`plugins`, `plugins.enable`, `plugins.disable`,
   `plugins.remove`, `plugins.call`, `docs/plugins.md`); older clients keep working. `caller` names
@@ -149,7 +149,7 @@ bookmark searches) and their fixed page title.
   open at all it runs with none, as the menu does (`newTab` and `newWindow` open one); otherwise `no_window`. A
   command that asks for confirmation still asks. `tab` targets one eligible tab without activating or focusing
   it, for commands whose scope is `"page"` and `closeTab`, `togglePin`, `moveTabUp`, `moveTabDown`, `duplicateTab`
-  and `bookmarkPage` (`bad_request` otherwise); a tab target is dispatched before Peek, Little Ardia, sidebar and
+  and `bookmarkPage` (`bad_request` otherwise); a tab target is dispatched before Peek, Little Solstice, sidebar and
   command-panel handling, so `closeTab` closes exactly that tab; with `window` too, the tab must be in that
   window. Window, tab, profile and eligibility are checked just before the command runs: a closed, moved or
   private target is `no_window`, never a fallback to the focused tab.
@@ -169,9 +169,9 @@ bookmark searches) and their fixed page title.
 - `answer` `{"decide", "answer"}`: see Protocol.
 - `workspace` `{"window"?, "profile"?, "usage"?}` and `apply` `{"ops": [...]}`: see Tabs and groups.
 - `offscreen` `{"tab"}` → `{"ok": true}`: takes a tab the ardia command opened, and that was never shown, out of
-  its window and the sidebar into Ardia's automation window for that profile, where `ardia browse set viewport` may
+  its window and the sidebar into Solstice's automation window for that profile, where `ardia browse set viewport` may
   size its page (`docs/cli.md` › The engine's token connection). `refused` for the shown tab, one the command didn't
-  open, one that has been shown, or a page Ardia couldn't move; `no_window` for an unknown or private tab. The tab
+  open, one that has been shown, or a page Solstice couldn't move; `no_window` for an unknown or private tab. The tab
   never comes back: the command opens a new one to show the page.
 
 ### Tabs and groups
@@ -270,12 +270,12 @@ profile goes where the store puts moved tabs.
 - **Refused.** A shared folder's group (`groupKeptOpen`) is never ungrouped, closed, deleted, unpinned, nested or
   moved to another profile here (the sidebar asks first), and no operation may remove or empty one indirectly: closing
   or deleting a child that holds all its tabs (the store closes the outermost group with the same tabs), moving,
-  pinning or regrouping all its members, or moving a child group out with them; Little Ardia tabs aren't organized (it holds one tab); a Top Apps tile
+  pinning or regrouping all its members, or moving a child group out with them; Little Solstice tabs aren't organized (it holds one tab); a Top Apps tile
   doesn't change profile.
 - **URLs** go through the omnibox's own fix-up (`fixupUrl`, so `example.com` works) and then must be http or https
-  with a host and no user info (`lib/urlParts.ts`'s strict reading), `file://`, `about:blank`, or `ardia://history`,
+  with a host and no user info (`lib/urlParts.ts`'s strict reading), `file://`, `about:blank`, or `solstice://history`,
   `bookmarks`, `downloads` or `newtab`. Never `javascript:`, `data:`, `blob:`, `view-source:`, `chrome:`, other
-  `ardia://` pages (settings, flags, extensions…) or schemes that open other apps.
+  `solstice://` pages (settings, flags, extensions…) or schemes that open other apps.
 - **Icons** are what the icon picker offers: an emoji from its list (`lib/emojiData.ts`), `symbol:<name>` (an SF
   Symbol name, lowercase with dots), `"none"` (No Icon: pinned rows, which then show their title alone; a group draws its folder) or null. Names are trimmed text of at most 200
   characters without control characters.
@@ -337,7 +337,7 @@ clipboard writes, internal pages). That is the point of it, and it is opt-in beh
 | `profile.changed` | `profile`, `change` (`created`/`updated`/`removed`), `name`, `keys` (what changed, `default` when it became the default); or `change: "reordered"`, `order` |
 | `permission.prompted` | `windowId`, `tabId`, `id`, `origin`, `permissions`, `queued` |
 | `password.prompted` * | `windowId`, `tabId`, `origin`, `state`, `username`, `usernames` |
-| `menu.opened` | `id`, `kind` (`page`: a context menu a hidden Ardia captured), `windowId`, `tabId`, `items` (a count) |
+| `menu.opened` | `id`, `kind` (`page`: a context menu a hidden Solstice captured), `windowId`, `tabId`, `items` (a count) |
 
 \* Named-only: `"*"` never includes them; a subscriber names each one. Notification text never goes into a hook's
 environment (no `ARDIA_TITLE`, no `ARDIA_URL`) and the runner never logs it.
@@ -383,12 +383,12 @@ nobody listens to pays nothing.
 
 ## Decide hooks
 
-Hooks that answer before something happens, with a deadline after which Ardia does its default.
+Hooks that answer before something happens, with a deadline after which Solstice does its default.
 
 | Event | Asked when | `data` | Answer | Default | Program deadline |
 |---|---|---|---|---|---|
 | `tab.opening` | a top-level navigation the user starts: typed or pasted in the address bar, a link opened in a new tab or window, a URL from another app. Never redirects, subresources, same-tab link clicks, restores or reloads | `url`, `via` (`typed`, `newTab`, `link`, `external`), `windowId`, `tabId`, `profile` | `{"url"}` to rewrite, `{"cancel": true}` | open the original | 250 ms |
-| `link.opening` | a URL arrives from another app, after `tab.opening` | `url`, `source` (`bundleId`, `appName`, null when unknown) | `{"profile"?, "open"?: "tab"\|"littleArdia"\|"window", "window"?}`, `{"drop": true}` | Ardia's usual routing | 250 ms |
+| `link.opening` | a URL arrives from another app, after `tab.opening` | `url`, `source` (`bundleId`, `appName`, null when unknown) | `{"profile"?, "open"?: "tab"\|"littleArdia"\|"window", "window"?}`, `{"drop": true}` | Solstice's usual routing | 250 ms |
 | `download.deciding` | a download has finished (it moves after completion; nothing hooks the engine before the download starts) | `url`, `origin`, `filename`, `mime`, `size`, `path` (where it is now), `profile` | `{"folder"}` | the file stays where it is | 2 s |
 | `permission.requested` | a site asks for camera, microphone, location, notifications… | `origin`, `kinds`, `windowId`, `tabId`, `profile` | `{"permission": "deny"\|"ask"\|"allow"}` | the normal prompt | 2 s |
 
@@ -401,9 +401,9 @@ Hooks that answer before something happens, with a deadline after which Ardia do
   the next hook gets its turn. A program hook that applies while no runner serves it means the default; it never
   falls through. Never "fastest answer wins".
 - **Defaults.** A timeout, a crash, invalid JSON, a disconnect, overload or an answer outside what is allowed all
-  mean the default. One deadline per decision, from the moment Ardia intercepted it, on a monotonic timer; nothing
+  mean the default. One deadline per decision, from the moment Solstice intercepted it, on a monotonic timer; nothing
   waits synchronously on the main thread.
-- **URLs Ardia can't read unambiguously fail closed.** Rules and program answers work on a strict reading of the
+- **URLs Solstice can't read unambiguously fail closed.** Rules and program answers work on a strict reading of the
   URL (`lib/urlParts.ts`), not React Native's `URL`. Hosts are lowercased, Unicode hosts become punycode (with the
   omnibox's `punycodeEncode`, so `https://bücher.de/` matches `https://xn--bcher-kva.de/*` and the other way
   round) and an explicit default port (`:443`, `:80`) is dropped. A URL with a backslash, user info (`@` in the
@@ -417,7 +417,7 @@ Hooks that answer before something happens, with a deadline after which Ardia do
 - **Rewrites.** A rewrite answer must be a canonical http or https URL without credentials; `rewrite` rules build it
   from a template with `{url}`, `{origin}`, `{host}`, `{path}`, `{query}` and `{hash}`. A query-stripping template
   (`{origin}{path}`, `{origin}{path}{hash}`) needs no approval only because the expanded target is checked to have
-  exactly the original origin; if it doesn't, Ardia uses its default. The replacement keeps the original
+  exactly the original origin; if it doesn't, Solstice uses its default. The replacement keeps the original
   disposition and profile and always goes out as not user-initiated (a typed URL that a rule leaves alone keeps its
   value). A link opened in a new tab or window already has contents the engine prepared and started loading before
   JS hears of it: a rewrite adopts those contents into the tab, which keeps the opener, and navigates them to the
@@ -430,7 +430,7 @@ Hooks that answer before something happens, with a deadline after which Ardia do
   once answered (closed again on cancel).
 - **What a program sees.** Decide data has the URL without its query and fragment unless the hook says
   `"fullUrls": true`; a program that rewrites query parameters needs it. The runner trims again on its side.
-- **link.opening** decides before any tab exists. At every launch native holds incoming links (no early Little Ardia
+- **link.opening** decides before any tab exists. At every launch native holds incoming links (no early Little Solstice
   tab, no parked link tabs) until JS reports its link policy with `setHoldIncomingLinks(hold, hooksStamp)`: the app reports it
   once its hooks are loaded and again on every change, `true` while an active `tab.opening` or `link.opening` hook,
   an enabled Air Traffic Control rule or an Everything Else choice exists. `hooksStamp` is the stamp (device, inode, size, mtime, ctime) native returned with the hooks.json read the
@@ -467,7 +467,7 @@ Hooks that answer before something happens, with a deadline after which Ardia do
   answer leaves the file where it is. Folders cross the bridge as `~/…`.
   **Trust boundary.** The checks stop a swapped or linked file from being moved in place of the download; they don't
   stop a process running as the same user that already holds a writable descriptor or a hard link to the file from
-  rewriting it after the check. Such a process is outside what Ardia defends against: it can already read
+  rewriting it after the check. Such a process is outside what Solstice defends against: it can already read
   `ArdiaControl.json` and drive the browser.
   Code: `state/automation/downloadHooks.ts`.
 - **Floods.** At most 64 pending decisions (16 per runner connection), 200 hooks and 50 rewrite rules per hook; the
@@ -482,7 +482,7 @@ the data dir (`air-traffic.json`, version 2: an ordered `rules` list and a `fall
 - **Order.** For a link from another app (after `tab.opening` has had its say): the Settings rules from the top, the
   first enabled one that fits answering; then the hooks.json `link.opening` hooks as above; then the Everything Else
   choice when nothing answered (no hook fit, a route hook's profile is gone, or a program hook gave no answer in
-  time). With no Everything Else choice the link takes Ardia's usual routing.
+  time). With no Everything Else choice the link takes Solstice's usual routing.
 - **A rule** is `from` (an app by bundle id, or by name when it has none; `null` is any app), a link condition (`any`,
   a `site` host that also takes its subdomains, matched as `*://*.<host>/*`, or a `pattern`), a profile
   id (`null` is the profile used last) and `open` (`tab`, `window`, `littleArdia`). Profiles are stored by id, so a
@@ -504,7 +504,7 @@ the data dir (`air-traffic.json`, version 2: an ordered `rules` list and a `fall
   approval in Advanced › Automation; the pane lists them read-only with their state.
 - **The hold.** An enabled rule or an Everything Else choice turns the incoming-link hold on, reported again on every
   change, so the native fast path never opens a link before the rules have seen it. `air-traffic.json` is in native's
-  fast-path fingerprint, so a file changed while Ardia was closed holds the first link of the next launch too. A
+  fast-path fingerprint, so a file changed while Solstice was closed holds the first link of the next launch too. A
   change is saved before the store takes it, so a save that fails changes neither the rules nor the hold.
 - **Versions.** Version 2 added `groupKey`; a version 1 file reads unchanged, its rules naming no group. A build from
   before a version reads a newer file as no rules, since downgrades aren't supported.
@@ -553,7 +553,7 @@ an aborted query is cancelled (the program is killed). The program prints `[{"ti
 
 ### The pill
 
-`run` and `apply` show the "ardia is controlling Ardia" pill like a CDP connection does: it counts as active from the moment
+`run` and `apply` show the "ardia is controlling Solstice" pill like a CDP connection does: it counts as active from the moment
 the request arrives until its reply is written, then the usual 3 s hold. A `run`, `apply` or `caller` on a connection whose
 `hello` named a caller puts that name (and app icon) on the pill, the most recent one winning (`docs/cli.md`). The indicator combines CDP connections and
 socket runs; neither overwrites the other. `hello`, `commands`, `windows`, `workspace` and `subscribe` don't show it, so a hooks
@@ -562,7 +562,7 @@ runner connected all day doesn't keep it up. Stop hides it at once.
 ## The ardia command
 
 Every command finds the socket from `--data-dir` / `$ARDIA_DATA_DIR`, else the installed app's data dir, connects,
-checks the server's uid, and exits 2 with one line when Ardia isn't running, control is off or the check fails.
+checks the server's uid, and exits 2 with one line when Solstice isn't running, control is off or the check fails.
 
 - `ardia run COMMAND [ARG] [--window ID] [--tab ID] [--json]` runs a command (`COMMAND:ARG` works too, as in
   shortcut ids). Exit 1 if refused, unknown (with the closest ids) or `no_window`. A dropped connection after
@@ -573,19 +573,19 @@ checks the server's uid, and exits 2 with one line when Ardia isn't running, con
   spaces, Top Apps, pinned section, groups nested). `--usage` prints one tab per line with its process id, CPU and
   memory, hottest first (`--json`: the tree, or the flat list with `--flat`, with `pid`, `cpu` and `memory` on each
   tab); `--pid N` prints only the tabs in process N (`--json`: a flat list), and exits 1 when no tab runs there
-  (`no_tab`) or the app reports no process ids (`no_pid`). An app from before `usage` gets "update Ardia"; `ardia tabs open|move|pin|unpin|activate|mute|unmute|sleep|wake|close|rename|icon …`
+  (`no_tab`) or the app reports no process ids (`no_pid`). An app from before `usage` gets "update Solstice"; `ardia tabs open|move|pin|unpin|activate|mute|unmute|sleep|wake|close|rename|icon …`
   and `ardia groups [create|update|rename|move|ungroup|close|delete] …` each send one `apply` operation; `ardia groups`
   alone lists the groups. `ardia apply [FILE|-]` sends a batch (a JSON list or `{"ops": [...]}`). Exit 1 for a
-  refusal, a bad request or a stopped batch (with how many operations ran), 2 when Ardia can't be reached or the
-  connection dropped after sending (it may or may not have run; never retried); an Ardia without protocol 3 gets
-  "update Ardia".
+  refusal, a bad request or a stopped batch (with how many operations ran), 2 when Solstice can't be reached or the
+  connection dropped after sending (it may or may not have run; never retried); an Solstice without protocol 3 gets
+  "update Solstice".
 - `ardia events [EVENT…] [--json] [--full-urls] [--idle DURATION]` streams events (default all but the named-only
   ones) until interrupted; `--json` prints the raw lines. Event names are checked against the table above (a typo
   fails with the closest names, exit 1); a lost connection exits 2. `dropped` is reported on stderr in the text
   form. `--idle` sets the threshold for the idle events.
 - `ardia on EVENT[,EVENT…] [--match PATTERN]… [--timeout S] [--idle DURATION] [--full-urls] -- PROGRAM [ARGS…]`
   runs PROGRAM for each event. PROGRAM's stdout and stderr are the terminal's; the runner's own lines go to stderr.
-  Without Ardia it waits and retries like a reconnect.
+  Without Solstice it waits and retries like a reconnect.
 - `ardia hooks run|install|uninstall|list` runs the hooks in `hooks.json` in the config folder (`docs/config.md`'s
   resolver, so a scratch instance uses its own). `list` shows each hook's kind (`event`, `command`, `decide`,
   `scheduled`, `omnibox`), trigger and action.
@@ -644,7 +644,7 @@ checks the server's uid, and exits 2 with one line when Ardia isn't running, con
   (`"HH:MM"`, local time or `timezone`, an IANA name; optional `days`, from `mon` to `sun`), `every` (a duration,
   at least `1m`), or `omnibox` (`{"title", "keyword"}` or `{"title", "global": true}`, with `run`).
 - Actions: `run` (a non-empty list; a string is refused, with the `["/bin/sh", "-c", "…"]` form suggested; `timeout`
-  in seconds, more than 0 and at most 86400, for event and scheduled hooks only), `command` (an Ardia command id,
+  in seconds, more than 0 and at most 86400, for event and scheduled hooks only), `command` (an Solstice command id,
   optional `arg` a variant; no process is spawned: the runner sends `run` targeting the event's window, and its tab
   when the command acts on a page; `app.launched` targets `focusedWindowId`; a schedule targets the last focused
   window), or a decide answer: `rewrite` (1 to 50 `{"match", "to"}`) or `cancel: true` for `tab.opening`; `route`
@@ -665,7 +665,7 @@ checks the server's uid, and exits 2 with one line when Ardia isn't running, con
 
 ### Scheduled hooks
 
-The runner fires them and passes a `schedule.fired` event (it never comes from Ardia): `{"hook", "schedule": "at" |
+The runner fires them and passes a `schedule.fired` event (it never comes from Solstice): `{"hook", "schedule": "at" |
 "every", "occurrence": "name@2026-11-02T09:55", "scheduledAt", "catchUp", "timezone"?}`.
 
 - `at` computes the next occurrence in its time zone and checks at least every 20 s. Occurrences missed while the
