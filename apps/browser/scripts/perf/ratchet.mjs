@@ -459,10 +459,10 @@ function newestApp() {
     .filter((d) => /^\d+\.\d+\.\d+(-rc)?$/.test(d))
     .sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
   for (const v of versions) {
-    const app = join(dist, v, "export/Ardia.app");
+    const app = join(dist, v, "export/Solstice.app");
     if (existsSync(app)) return app;
   }
-  throw new Error("no dist/<version>/export/Ardia.app: pass --app");
+  throw new Error("no dist/<version>/export/Solstice.app: pass --app");
 }
 
 async function jsSetup(flags, out, mark, { counts, serialRuns = 0 }) {
