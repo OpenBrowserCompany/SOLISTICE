@@ -14,4 +14,4 @@ CHROMIUM_SRC="$PWD" "$AC_REPO/engine/patches/build/game-resource.sh" --apply
 read -r -a build_targets <<< "${TARGETS:-$AC_CHROMIUM_TARGET}"
 build_flags=()
 if [[ -n "${JOBS:-}" ]]; then build_flags+=(-j "$JOBS"); fi
-exec autoninja "${build_flags[@]}" -k "${KEEP_GOING:-0}" -C "out/$GN_OUT_CONFIGS" "${build_targets[@]}"
+exec autoninja ${build_flags[@]+"${build_flags[@]}"} -k "${KEEP_GOING:-0}" -C "out/$GN_OUT_CONFIGS" "${build_targets[@]}"
