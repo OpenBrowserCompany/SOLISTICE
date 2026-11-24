@@ -603,8 +603,8 @@ class SyncService(
         const val VISIT_OVERLAP_MS = 300_000L
         const val RESET_CONFIRMATION_MS = 60_000L
         const val RESET_MESSAGE = SyncStatusText.RESET_MESSAGE
-        const val STALLED_MESSAGE = "Ardia couldn’t read or write the sync folder. It will try again."
-        const val UNAVAILABLE_MESSAGE = "Ardia can’t read its sync data right now. It will try again."
+        const val STALLED_MESSAGE = "Solstice couldn’t read or write the sync folder. It will try again."
+        const val UNAVAILABLE_MESSAGE = "Solstice can’t read its sync data right now. It will try again."
 
         fun message(problem: RecoveryPhrase.Problem): String = SyncJoin.message(problem)
     }
