@@ -1,4 +1,4 @@
-package com.ardia.browser
+package com.openbrowsercompany.solstice
 
 import java.net.URLDecoder
 
@@ -22,7 +22,7 @@ sealed interface LinkRoute {
 data class IntentLink(val scheme: String?, val packageName: String?, val fallbackUrl: String?)
 
 object ExternalLinks {
-    private val webSchemes = setOf("http", "https", "about", "data", "blob", "file", BrowserUrl.BROWSE_SCHEME)
+    private val webSchemes = setOf("http", "https", "about", "data", "blob", "file", BrowserUrl.BROWSE_SCHEME, BrowserUrl.LEGACY_BROWSE_SCHEME)
     private val blockedSchemes = setOf("javascript", "vbscript")
     private val storeHosts = setOf("play.google.com", "market.android.com")
     private const val STORE_PACKAGE = "com.android.vending"

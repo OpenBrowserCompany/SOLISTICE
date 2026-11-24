@@ -1,4 +1,4 @@
-package com.ardia.browser
+package com.openbrowsercompany.solstice
 
 object ErrorPages {
     fun titleOnFailure(current: String, titledUrl: String?, failedUrl: String): String {
