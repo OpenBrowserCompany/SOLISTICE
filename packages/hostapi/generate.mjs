@@ -33,7 +33,7 @@ const capitalized = (name) => name[0].toUpperCase() + name.slice(1);
 const sortedKeys = (record) => Object.keys(record).sort();
 const isRecord = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
 
-const MODULE_NAME = /^Solstice[A-Z][A-Za-z]*$/;
+const MODULE_NAME = /^Ardia[A-Z][A-Za-z]*$/;
 const PACKAGE = /^packages\/[a-z][a-z0-9-]*$/;
 const PARAMETER = /^[a-z][a-zA-Z0-9]*$/;
 const MODULE_BINDINGS = { mac: new Set(["custom", "absent"]), desktop: new Set(["custom", "adapted", "host", "absent"]), windows: new Set(["custom", "absent"]) };
@@ -73,7 +73,7 @@ export async function loadModuleDomains() {
   return moduleDomains;
 }
 
-export const nativeTypeOf = (module) => `${module.slice("Solstice".length)}Native`;
+export const nativeTypeOf = (module) => `${module.slice("Ardia".length)}Native`;
 export const modulePaths = (name, pkg) => ({ types: `${pkg}/src/generated/native.ts`, swift: `${pkg}/ios/${capitalized(name)}Native.swift` });
 const packageDependencies = (pkg) => {
   const at = `${ROOT}${pkg}/package.json`;
