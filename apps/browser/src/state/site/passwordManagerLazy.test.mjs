@@ -35,7 +35,7 @@ const pm = await import("./passwordManager.ts");
 pm.startPasswordManager();
 await settle();
 
-test("with no password manager plugin and no profile away from Ardia, nothing listens to the browser store and nothing is pushed", async () => {
+test("with no password manager plugin and no profile away from Solstice, nothing listens to the browser store and nothing is pushed", async () => {
   assert.equal(browserListeners, listenersBefore);
   assert.equal(providerPushes(), 0);
   assert.equal(stub.docs.get("password-manager.json"), undefined);

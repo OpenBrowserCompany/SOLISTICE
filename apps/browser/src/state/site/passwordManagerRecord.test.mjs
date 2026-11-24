@@ -48,7 +48,7 @@ test("offer to save goes off only after its record has landed, and comes back on
     assert.equal(passwords(), true, "the Off waits for its own record, so offer to save stays on");
     choosePasswordManager("default", "ardia");
     await settle();
-    assert.equal(passwords(), true, "so switching back to Ardia finds it on");
+    assert.equal(passwords(), true, "so switching back to Solstice finds it on");
   } finally {
     stub.refusedSaves.on = false;
   }
