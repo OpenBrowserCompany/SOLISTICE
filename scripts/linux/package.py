@@ -167,7 +167,7 @@ def package(output, ui, destination, content_blocker=None, version=None, cli=Non
         launcher.chmod(0o755)
         desktop = root / 'share/applications/ardia.desktop'
         desktop.parent.mkdir(parents=True)
-        desktop.write_text('[Desktop Entry]\nType=Application\nName=Ardia\nExec=ardia %U\nIcon=ardia\nTerminal=false\nCategories=Network;WebBrowser;\nMimeType=text/html;x-scheme-handler/http;x-scheme-handler/https;\nStartupWMClass=ardia\n')
+        desktop.write_text('[Desktop Entry]\nType=Application\nName=Solstice\nExec=ardia %U\nIcon=ardia\nTerminal=false\nCategories=Network;WebBrowser;\nMimeType=text/html;x-scheme-handler/http;x-scheme-handler/https;\nStartupWMClass=ardia\n')
         policy = root / 'share/polkit-1/actions/dev.ardia.linux.policy'
         policy.parent.mkdir(parents=True)
         shutil.copyfile(pathlib.Path(__file__).resolve().parent / 'dev.ardia.linux.policy', policy)
@@ -219,7 +219,7 @@ def main():
     parser.add_argument('--ui', type=pathlib.Path, required=True)
     parser.add_argument('--destination', type=pathlib.Path, required=True)
     parser.add_argument('--content-blocker', type=pathlib.Path)
-    parser.add_argument('--version', help='the Ardia version, written to lib/ardia/VERSION')
+    parser.add_argument('--version', help='the Solstice version, written to lib/ardia/VERSION')
     parser.add_argument('--cli', type=pathlib.Path, help=f'the ardia-cli-<version>-{CLI_PLATFORM}.tar.gz to bundle in lib/ardia/cli (needs --version)')
     parser.add_argument('--deb', type=pathlib.Path, help='also build a .deb at this path (dpkg-deb and readelf; needs --version)')
     parser.add_argument('--appimage', type=pathlib.Path, help='also build an AppImage at this path (a pinned type 2 runtime and mksquashfs)')

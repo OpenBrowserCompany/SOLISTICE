@@ -13,7 +13,7 @@ plain copy beside a <source>.commit file.
 
   --out DIR        the Chromium out dir, e.g. out/Release_GN_linux_x64; copied
                    under the chromium lock and never modified
-  --source DIR     the Ardia source tree the engine was built from
+  --source DIR     the Solstice source tree the engine was built from
   --dest DIR       where the archive goes (default: a new temporary dir);
                    existing archives are never overwritten
   --repo SLUG      the GitHub repo for --upload (default: $ARDIACORE_PREBUILT_REPO

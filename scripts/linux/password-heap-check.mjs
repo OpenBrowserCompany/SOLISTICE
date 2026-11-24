@@ -9,7 +9,7 @@ import { promisify } from "node:util";
 
 const USAGE = `usage: ARDIA_LOGIN_PASSWORD=<password> node scripts/linux/password-heap-check.mjs --executable <ardia> --results <dir> [--dark]
 
-Types passwords into the login-password fallback dialog of a real Ardia build
+Types passwords into the login-password fallback dialog of a real Solstice build
 and scans the browser process's memory for copies of them.
 Runs under X11 (DISPLAY, xdotool and ImageMagick's import), as a user whose
 login password is ARDIA_LOGIN_PASSWORD, where polkit can't ask (no system bus).
@@ -203,9 +203,9 @@ async function main() {
   let answerOf = async () => "unknown";
   const dialog = async () => {
     await pause(1500);
-    const found = await xdotool("search", "--onlyvisible", "--name", " - Ardia$").catch(() => ({ stdout: "" }));
+    const found = await xdotool("search", "--onlyvisible", "--name", " - Solstice$").catch(() => ({ stdout: "" }));
     const id = found.stdout.trim().split("\n").filter(Boolean)[0];
-    if (!id) throw new Error("no Ardia window to type into");
+    if (!id) throw new Error("no Solstice window to type into");
     await xdotool("windowfocus", id).catch(() => {});
     await pause(300);
   };
