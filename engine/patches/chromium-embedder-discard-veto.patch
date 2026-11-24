@@ -5,7 +5,7 @@ g_ardia_keeps_page(const PageNode*) (the same shape and name as Windows' chromiu
 right after its checks that the page is a loaded tab and before the early answer for an external or
 frozen-with-growing-memory discard, and refuses a vetoed page outright as kOptedOut, the reason Chrome already gives a
 page an enterprise policy keeps, recording the decision in Chromium's discard histograms. Performance manager depends
-on no Ardia code and no header changes: ArdiaCore declares the hook itself (ac_discard_veto.mm) and decides what it
+on no Solstice code and no header changes: ArdiaCore declares the hook itself (ac_discard_veto.mm) and decides what it
 vetoes. An external discard (the tab menu's Sleep Tab) is never vetoed. Every other protection is Chrome's. New unit
 test: TestEmbedderVetoKeepsAllButExternal, which covers the frozen-with-growing-memory discard.
 
