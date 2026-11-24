@@ -61,7 +61,7 @@ async function memoryPressure(): Promise<string | null> {
   return state?.memoryPressure ?? null;
 }
 
-const WEBUI_PAGE = /^(?:ardia|chrome):\/\/([a-z0-9-]{1,32})(?:\/([a-z0-9-]{1,32}))?(?=[/?#]|$)/i;
+const WEBUI_PAGE = /^(?:solstice|ardia|chrome):\/\/([a-z0-9-]{1,32})(?:\/([a-z0-9-]{1,32}))?(?=[/?#]|$)/i;
 
 export function webuiPage(url: string | null | undefined): string | null {
   const m = url ? WEBUI_PAGE.exec(url) : null;

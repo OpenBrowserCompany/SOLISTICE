@@ -121,13 +121,13 @@ test("a frame made of message text never goes out, even when the message was sho
   for (const secret of ["Quarterly", "customer.example", "Another line", "notes.js", "PrivateDraft", "sensitive-project", "PrivateReport"]) assert.equal(json.includes(secret), false, secret);
 });
 
-test("frames from Ardia's own code on each platform are sent, and nothing else", () => {
+test("frames from Solstice's own code on each platform are sent, and nothing else", () => {
   const before = queued().length;
   const error = new Error("Platform frames");
   error.stack = [
     "Error: Platform frames",
     "    at choose (http://localhost:8081/index.bundle//&platform=macos&dev=true&minify=false:123:45)",
-    "    at release (address at /Applications/Ardia.app/Contents/Resources/main.jsbundle:1:9876)",
+    "    at release (address at /Applications/Solstice.app/Contents/Resources/main.jsbundle:1:9876)",
     "    at windows (index.windows.bundle:2:3)",
     "    at linux (chrome://ardia/assets/index-AbC123xy.js:4:5)",
     "    at bytecode (InternalBytecode.js:6:7)",
@@ -175,8 +175,8 @@ test("a native crash names its exception and the app's images at the top level, 
       exceptionName: "RCTFatalException",
       exceptionReason: "Unhandled JS Exception: moved to \"native\" earlier, js engine: hermes, stack:\nGroupBlock@1:2",
       frames: [{ image: "Chromium Framework", symbol: "ArdiaCoreMain", symbolOffset: 66417332, offset: 0x41a36e8 }],
-      exceptionFrames: [{ image: "Ardia", offset: 0x38eab8 }],
-      images: [{ name: "Ardia", uuid: "1c77ef99-77d4-3de8-9ba2-6929e276bc60" }],
+      exceptionFrames: [{ image: "Solstice", offset: 0x38eab8 }],
+      images: [{ name: "Solstice", uuid: "1c77ef99-77d4-3de8-9ba2-6929e276bc60" }],
     },
   ];
   await reportNativeCrashes();
@@ -186,8 +186,8 @@ test("a native crash names its exception and the app's images at the top level, 
   assert.deepEqual(props.$exception_types, ["RCTFatalException", "EXC_CRASH"]);
   assert.deepEqual(props.$exception_values, ["Uncaught RCTFatalException", "EXC_CRASH (SIGABRT)"]);
   assert.equal(JSON.stringify(queued().at(-1)).includes("GroupBlock"), false);
-  assert.deepEqual(props.crash_images, [{ name: "Ardia", uuid: "1c77ef99-77d4-3de8-9ba2-6929e276bc60" }]);
-  assert.equal(props.$exception_list[0].stacktrace.frames[0].function, "Ardia + 0x38eab8");
+  assert.deepEqual(props.crash_images, [{ name: "Solstice", uuid: "1c77ef99-77d4-3de8-9ba2-6929e276bc60" }]);
+  assert.equal(props.$exception_list[0].stacktrace.frames[0].function, "Solstice + 0x38eab8");
   assert.equal(props.$exception_list[1].stacktrace.frames[0].function, "Chromium Framework + 0x41a36e8");
   assert.equal(props.$geoip_disable, true);
 });
@@ -268,7 +268,7 @@ test("a native crash carries the last built-in pages from the saved context as p
 test("a browser crash carries the kind of JS fatal that stopped it as crash_js_fatal, never the message, and no other crash does", async () => {
   const time = Date.now() + 3 * 60 * 60_000;
   const hermes = (process, jsFatal, at) => ({ time: at, fileTime: at, process, exceptionType: "EXC_CRASH", signal: "SIGABRT", jsFatal, jsFatalSource: "hermes", frames: [{ image: "hermes", offset: 0x19bea4 }] });
-  const reactNative = (process, jsFatal, at) => ({ time: at, fileTime: at, process, exceptionType: "EXC_BREAKPOINT", signal: "SIGTRAP", exceptionName: "RCTFatalException", jsFatal, jsFatalSource: "reactNative", frames: [{ image: "Ardia", offset: 0x444da4 }] });
+  const reactNative = (process, jsFatal, at) => ({ time: at, fileTime: at, process, exceptionType: "EXC_BREAKPOINT", signal: "SIGTRAP", exceptionName: "RCTFatalException", jsFatal, jsFatalSource: "reactNative", frames: [{ image: "Solstice", offset: 0x444da4 }] });
   const cases = [
     [hermes, "browser", "OOM: error_code(value = 1, category = vm_allocate_category, message = Max heap size was exceeded)", "hermes_heap_limit"],
     [hermes, "browser", "OOM at https://example.com/private?q=secret on /Users/someone/Library/page.json for me@example.com", "hermes_out_of_memory"],

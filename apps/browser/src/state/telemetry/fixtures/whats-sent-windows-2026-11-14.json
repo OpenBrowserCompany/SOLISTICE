@@ -20,8 +20,8 @@
   "Kept on this PC"
  ],
  [
-  "Help fix Ardia?",
-  "Help fix Ardia?"
+  "Help fix Solstice?",
+  "Help fix Solstice?"
  ],
  [
   "Share anonymous crash reports and usage stats. No sites, searches or typing. Ever.",
@@ -40,8 +40,8 @@
   "One anonymous “opened today” count a day: app version, update channel, Windows version, chip, and whether it's this copy's first day, week or month. No persistent ID."
  ],
  [
-  "Either way, Ardia sends one anonymous “opened today” count a day, with its version and macOS version and no persistent ID.",
-  "Either way, Ardia sends one anonymous “opened today” count a day, with its version and Windows version and no persistent ID."
+  "Either way, Solstice sends one anonymous “opened today” count a day, with its version and macOS version and no persistent ID.",
+  "Either way, Solstice sends one anonymous “opened today” count a day, with its version and Windows version and no persistent ID."
  ],
  [
   "ardia.dev counts update checks by version and day, and whether it's this copy's first. Nothing else.",
@@ -60,12 +60,12 @@
   "Crashes, errors, feature counts and speed. Never your sites, typing or tabs."
  ],
  [
-  "Off unless you turn it on. Either way, Ardia sends one anonymous “opened today” count a day, with no ID.",
-  "Off unless you turn it on. Either way, Ardia sends one anonymous “opened today” count a day, with no ID."
+  "Off unless you turn it on. Either way, Solstice sends one anonymous “opened today” count a day, with no ID.",
+  "Off unless you turn it on. Either way, Solstice sends one anonymous “opened today” count a day, with no ID."
  ],
  [
-  "Off unless you turn it on; change it any time in Settings › Privacy & Security. Either way, Ardia sends one anonymous “opened today” count a day, with its version and macOS version and no persistent ID.",
-  "Off unless you turn it on; change it any time in Settings › Privacy & Security. Either way, Ardia sends one anonymous “opened today” count a day, with its version and Windows version and no persistent ID."
+  "Off unless you turn it on; change it any time in Settings › Privacy & Security. Either way, Solstice sends one anonymous “opened today” count a day, with its version and macOS version and no persistent ID.",
+  "Off unless you turn it on; change it any time in Settings › Privacy & Security. Either way, Solstice sends one anonymous “opened today” count a day, with its version and Windows version and no persistent ID."
  ],
  [
   "No anonymous ID yet",
@@ -84,8 +84,8 @@
   "Reset your anonymous ID?"
  ],
  [
-  "Ardia makes a new random ID. Anything sent from now on can't be tied to what was sent before, and the copy kept on this Mac is deleted.",
-  "Ardia makes a new random ID. Anything sent from now on can't be tied to what was sent before, and the copy kept on this PC is deleted."
+  "Solstice makes a new random ID. Anything sent from now on can't be tied to what was sent before, and the copy kept on this Mac is deleted.",
+  "Solstice makes a new random ID. Anything sent from now on can't be tied to what was sent before, and the copy kept on this PC is deleted."
  ],
  [
   "Reset",
@@ -96,8 +96,8 @@
   "Kept on this PC"
  ],
  [
-  "Ardia keeps the last 7 days of what it records here (at most 8 MB), whether sharing is on or off, so a problem report can include what led up to it.",
-  "Ardia keeps the last 7 days of what it records here (at most 8 MB), whether sharing is on or off, so a problem report can include what led up to it."
+  "Solstice keeps the last 7 days of what it records here (at most 8 MB), whether sharing is on or off, so a problem report can include what led up to it.",
+  "Solstice keeps the last 7 days of what it records here (at most 8 MB), whether sharing is on or off, so a problem report can include what led up to it."
  ],
  [
   "View My Data",
@@ -120,8 +120,8 @@
   "With sharing off, they carry no install ID and stay here"
  ],
  [
-  "Kept 7 days and 8 MB at most, oldest first out; checked when Ardia opens and every hour",
-  "Kept 7 days and 8 MB at most, oldest first out; checked when Ardia opens and every hour"
+  "Kept 7 days and 8 MB at most, oldest first out; checked when Solstice opens and every hour",
+  "Kept 7 days and 8 MB at most, oldest first out; checked when Solstice opens and every hour"
  ],
  [
   "Never leaves this Mac unless sharing is on or you attach it to a problem report",
@@ -156,8 +156,8 @@
   "A random install ID, made on this PC once and kept through updates. Nothing is sent with it while sharing is off, except a problem report you send and the 14 days of sharing you can agree to with it"
  ],
  [
-  "A random ID for each time Ardia opens, so one session's events can be read together",
-  "A random ID for each time Ardia opens, so one session's events can be read together"
+  "A random ID for each time Solstice opens, so one session's events can be read together",
+  "A random ID for each time Solstice opens, so one session's events can be read together"
  ],
  [
   "App version and build, macOS version, chip (arm64 or x86_64), engine version",
@@ -188,20 +188,20 @@
   "After a crash: the exception type and name (never its message), and the function names where it was thrown and on the crashing thread, from this app's crash report"
  ],
  [
-  "The same for crashes of Ardia's page, graphics and helper processes, plus the version that crashed, how long the process had run, the total size of its writable memory regions, and how the system ended it (its termination reason, like a signal or a code-signing kill)",
-  "The same for crashes of Ardia's page, graphics and helper processes, plus the version that crashed, how long the process had run, the total size of its writable memory regions, and how the system ended it (its termination reason, like a signal or a code-signing kill)"
+  "The same for crashes of Solstice's page, graphics and helper processes, plus the version that crashed, how long the process had run, the total size of its writable memory regions, and how the system ended it (its termination reason, like a signal or a code-signing kill)",
+  "The same for crashes of Solstice's page, graphics and helper processes, plus the version that crashed, how long the process had run, the total size of its writable memory regions, and how the system ended it (its termination reason, like a signal or a code-signing kill)"
  ],
  [
   "When a page's process stops (crashed, killed, out of memory or failed to start): why, its exit code, whether the tab was on screen, how many tabs, windows and profiles were open, and whether that tab was translating (and at which step) and how many other tabs were translating or translated",
   "When a page's process stops (crashed, killed, out of memory or failed to start): why, its exit code, whether the tab was on screen, how many tabs, windows and profiles were open, and whether that tab was translating (and at which step) and how many other tabs were translating or translated"
  ],
  [
-  "Every 10 minutes Ardia notes on this Mac its tab, window and profile counts, its memory use, rough free disk space, the Mac's memory pressure, how long it has been open, and which of Ardia's own pages (like Settings or History) the tab in front was on, never a website's address. Ardia also takes that note when you open or leave one of those pages. That note is sent only with a crash report, or at the next launch after Ardia didn't quit cleanly, with whether the Mac restarted since. Turning sharing off or deleting a profile erases it",
-  "Every 10 minutes Ardia notes on this PC its tab, window and profile counts, its memory use, rough free disk space, how long it has been open, and which of Ardia's own pages (like Settings or History) the tab in front was on, never a website's address. Ardia also takes that note when you open or leave one of those pages. That note is sent only with a crash report, or at the next launch after Ardia didn't quit cleanly, with whether the PC restarted since. Turning sharing off or deleting a profile erases it"
+  "Every 10 minutes Solstice notes on this Mac its tab, window and profile counts, its memory use, rough free disk space, the Mac's memory pressure, how long it has been open, and which of Solstice's own pages (like Settings or History) the tab in front was on, never a website's address. Solstice also takes that note when you open or leave one of those pages. That note is sent only with a crash report, or at the next launch after Solstice didn't quit cleanly, with whether the Mac restarted since. Turning sharing off or deleting a profile erases it",
+  "Every 10 minutes Solstice notes on this PC its tab, window and profile counts, its memory use, rough free disk space, how long it has been open, and which of Solstice's own pages (like Settings or History) the tab in front was on, never a website's address. Solstice also takes that note when you open or leave one of those pages. That note is sent only with a crash report, or at the next launch after Solstice didn't quit cleanly, with whether the PC restarted since. Turning sharing off or deleting a profile erases it"
  ],
  [
-  "When pages stop reacting to the pointer while Ardia is in front: why (Ardia is only half switched to, a menu was left open in the background, the window isn't active, something covers the page, or keyboard focus went missing), whether macOS and Ardia agree that Ardia is the app in front, whether a menu was open, what kind of window was active instead (none, hidden, a pop-up, another Ardia window), whether the page's window could become active and was still the main one, what covered the page (Ardia's own view or another) and whether it was see-through, whether it came from a click or a pointer move, whether Ardia fixed it by itself and whether that worked, how it ended (the pointer worked again, Ardia fixed it, or you switched apps) and how long it lasted. Never which page",
-  "When pages stop reacting to the pointer while Ardia is in front: why (Ardia is only half switched to, a menu was left open in the background, the window isn't active, something covers the page, or keyboard focus went missing), whether macOS and Ardia agree that Ardia is the app in front, whether a menu was open, what kind of window was active instead (none, hidden, a pop-up, another Ardia window), whether the page's window could become active and was still the main one, what covered the page (Ardia's own view or another) and whether it was see-through, whether it came from a click or a pointer move, whether Ardia fixed it by itself and whether that worked, how it ended (the pointer worked again, Ardia fixed it, or you switched apps) and how long it lasted. Never which page"
+  "When pages stop reacting to the pointer while Solstice is in front: why (Solstice is only half switched to, a menu was left open in the background, the window isn't active, something covers the page, or keyboard focus went missing), whether macOS and Solstice agree that Solstice is the app in front, whether a menu was open, what kind of window was active instead (none, hidden, a pop-up, another Solstice window), whether the page's window could become active and was still the main one, what covered the page (Solstice's own view or another) and whether it was see-through, whether it came from a click or a pointer move, whether Solstice fixed it by itself and whether that worked, how it ended (the pointer worked again, Solstice fixed it, or you switched apps) and how long it lasted. Never which page",
+  "When pages stop reacting to the pointer while Solstice is in front: why (Solstice is only half switched to, a menu was left open in the background, the window isn't active, something covers the page, or keyboard focus went missing), whether macOS and Solstice agree that Solstice is the app in front, whether a menu was open, what kind of window was active instead (none, hidden, a pop-up, another Solstice window), whether the page's window could become active and was still the main one, what covered the page (Solstice's own view or another) and whether it was see-through, whether it came from a click or a pointer move, whether Solstice fixed it by itself and whether that worked, how it ended (the pointer worked again, Solstice fixed it, or you switched apps) and how long it lasted. Never which page"
  ],
  [
   "Warning and error log lines, cleaned the same way",
@@ -236,8 +236,8 @@
   "How many times you switched Auto-hide tabs on or off on this PC, how many windows had their tabs put back in line with that setting at launch, how many new windows made from tabs moved out of another kept that window's hidden or shown tabs, how often the hidden tab strip peeks out from the top edge, how often you open the tab strip's menu or its open and recently closed tabs menu, and how many times hidden tabs peeked out, from the side or the top, while the setting was off, summed up once an hour"
  ],
  [
-  "How many times a page tried to open a link no app on this Mac opens, so Ardia asked nothing, and how many times it asked to open an app, summed up once an hour. Never which page, link or app",
-  "How many times a page tried to open a link no app on this PC opens, so Ardia asked nothing, and how many times it asked to open an app, summed up once an hour. Never which page, link or app"
+  "How many times a page tried to open a link no app on this Mac opens, so Solstice asked nothing, and how many times it asked to open an app, summed up once an hour. Never which page, link or app",
+  "How many times a page tried to open a link no app on this PC opens, so Solstice asked nothing, and how many times it asked to open an app, summed up once an hour. Never which page, link or app"
  ],
  [
   "How many times you collapsed or expanded a tab group from the tab strip across the top, summed up once an hour",
@@ -340,28 +340,28 @@
   "On Windows, how many animations ran and how many of their frames came late, summed up once an hour"
  ],
  [
-  "On Windows, how many links Ardia opened that it was started with while it wasn't running, summed up once an hour. Never which links or which app",
-  "On Windows, how many links Ardia opened that it was started with while it wasn't running, summed up once an hour. Never which links or which app"
+  "On Windows, how many links Solstice opened that it was started with while it wasn't running, summed up once an hour. Never which links or which app",
+  "On Windows, how many links Solstice opened that it was started with while it wasn't running, summed up once an hour. Never which links or which app"
  ],
  [
-  "How many times you asked to make Ardia your default browser (on Windows, how many times that opened Windows Settings), and whether Ardia was your default browser when it started, summed up once an hour",
-  "How many times you asked to make Ardia your default browser (on Windows, how many times that opened Windows Settings), and whether Ardia was your default browser when it started, summed up once an hour"
+  "How many times you asked to make Solstice your default browser (on Windows, how many times that opened Windows Settings), and whether Solstice was your default browser when it started, summed up once an hour",
+  "How many times you asked to make Solstice your default browser (on Windows, how many times that opened Windows Settings), and whether Solstice was your default browser when it started, summed up once an hour"
  ],
  [
   "How many times the command bar completed an address inline as you typed, summed up once an hour. Never what you typed or which address",
   "How many times the command bar completed an address inline as you typed, summed up once an hour. Never what you typed or which address"
  ],
  [
-  "How many launches after an update didn't open the release notes because setting up Ardia for the first time was still under way, summed up once an hour",
-  "How many launches after an update didn't open the release notes because setting up Ardia for the first time was still under way, summed up once an hour"
+  "How many launches after an update didn't open the release notes because setting up Solstice for the first time was still under way, summed up once an hour",
+  "How many launches after an update didn't open the release notes because setting up Solstice for the first time was still under way, summed up once an hour"
  ],
  [
   "How many times the downloads panel opened because a download started, from its button or from Downloads in a menu or shortcut, and how many times it closed with Escape, a click outside it, its button or the command, summed up once an hour. Never which files",
   "How many times the downloads panel opened because a download started, from its button or from Downloads in a menu or shortcut, and how many times it closed with Escape, a click outside it, its button or the command, summed up once an hour. Never which files"
  ],
  [
-  "When a page asked to open another app (mail, a meeting app and so on), how many times you clicked Open, Open with Always allow or Cancel. On Windows also how many links did open, how many Ardia refused to open after you allowed them (the page had gone or the link's app had changed) and how many opened on their own for a site you always allow. Summed up once an hour, never which page, link or app",
-  "When a page asked to open another app (mail, a meeting app and so on), how many times you clicked Open, Open with Always allow or Cancel. On Windows also how many links did open, how many Ardia refused to open after you allowed them (the page had gone or the link's app had changed) and how many opened on their own for a site you always allow. Summed up once an hour, never which page, link or app"
+  "When a page asked to open another app (mail, a meeting app and so on), how many times you clicked Open, Open with Always allow or Cancel. On Windows also how many links did open, how many Solstice refused to open after you allowed them (the page had gone or the link's app had changed) and how many opened on their own for a site you always allow. Summed up once an hour, never which page, link or app",
+  "When a page asked to open another app (mail, a meeting app and so on), how many times you clicked Open, Open with Always allow or Cancel. On Windows also how many links did open, how many Solstice refused to open after you allowed them (the page had gone or the link's app had changed) and how many opened on their own for a site you always allow. Summed up once an hour, never which page, link or app"
  ],
  [
   "On Windows, how many pages were opened while a dialog such as a confirm or a file picker was open, and how many of those hadn't loaded 10 seconds later, summed up once an hour. Never which page or dialog",
@@ -372,8 +372,8 @@
   "How many times bookmarks were exported to an HTML file, passwords were exported to a CSV file, and an extension was installed from a folder, and how many of those exports failed, summed up once an hour. Never which bookmarks, passwords, extensions or files"
  ],
  [
-  "How many times Ardia freed engine memory after tabs closed, how many of those the engine refused, and how many times it gave up because you kept typing or moving the pointer, summed up once an hour",
-  "How many times Ardia freed engine memory after tabs closed, how many of those the engine refused, and how many times it gave up because you kept typing or moving the pointer, summed up once an hour"
+  "How many times Solstice freed engine memory after tabs closed, how many of those the engine refused, and how many times it gave up because you kept typing or moving the pointer, summed up once an hour",
+  "How many times Solstice freed engine memory after tabs closed, how many of those the engine refused, and how many times it gave up because you kept typing or moving the pointer, summed up once an hour"
  ],
  [
   "How many imports from another browser finished, how many kinds of data (bookmarks, history, passwords and so on) came over or failed, and how many times some passwords or cookies were left behind because they couldn't be decrypted, summed up once an hour. Never which browser, pages, names or passwords",
@@ -384,28 +384,28 @@
   "How many times a page open in WebKit was kept out of sight while it waited, ready, to be switched to: the open tab of a neighbouring profile, or the tab that takes over while you drag one away. Summed up once an hour, never which page"
  ],
  [
-  "How many Peek cards and Little Ardia windows you opened or closed with a trackpad pinch, how many Little Ardia windows you closed by swiping back or started to and let go, summed up once an hour",
-  "How many Peek cards and Little Ardia windows you opened or closed with a trackpad pinch, how many Little Ardia windows you closed by swiping back or started to and let go, summed up once an hour"
+  "How many Peek cards and Little Solstice windows you opened or closed with a trackpad pinch, how many Little Solstice windows you closed by swiping back or started to and let go, summed up once an hour",
+  "How many Peek cards and Little Solstice windows you opened or closed with a trackpad pinch, how many Little Solstice windows you closed by swiping back or started to and let go, summed up once an hour"
  ],
  [
-  "How many Little Ardia windows you closed with Escape, and whether the page had the keyboard, nothing in the window did, or the window was still blank, summed up once an hour",
-  "How many Little Ardia windows you closed with Escape, and whether the page had the keyboard, nothing in the window did, or the window was still blank, summed up once an hour"
+  "How many Little Solstice windows you closed with Escape, and whether the page had the keyboard, nothing in the window did, or the window was still blank, summed up once an hour",
+  "How many Little Solstice windows you closed with Escape, and whether the page had the keyboard, nothing in the window did, or the window was still blank, summed up once an hour"
  ],
  [
-  "How many links from other apps opened as a tab or in Little Ardia, each with whether Settings › General › Open links from other apps in Little Ardia was on, summed up once an hour. Never which links or which app",
-  "How many links from other apps opened as a tab or in Little Ardia, each with whether Settings › General › Open links from other apps in Little Ardia was on, summed up once an hour. Never which links or which app"
+  "How many links from other apps opened as a tab or in Little Solstice, each with whether Settings › General › Open links from other apps in Little Solstice was on, summed up once an hour. Never which links or which app",
+  "How many links from other apps opened as a tab or in Little Solstice, each with whether Settings › General › Open links from other apps in Little Solstice was on, summed up once an hour. Never which links or which app"
  ],
  [
   "How many links from other apps an Air Traffic Control rule routed, and how many went by its Everything Else choice, summed up once an hour. Never which links, rules, apps or profiles",
   "How many links from other apps an Air Traffic Control rule routed, and how many went by its Everything Else choice, summed up once an hour. Never which links, rules, apps or profiles"
  ],
  [
-  "How many tab and group changes the ardia command made (counts only, never which tabs or groups), how many of its batches were refused or stopped, how many times its control pill appeared, and how many times Ardia installed or upgraded the ardia command (on its own the first time, after an update, or from Settings) and whether that worked, and whether it turned on control after installing it on its own",
-  "How many tab and group changes the ardia command made (counts only, never which tabs or groups), how many of its batches were refused or stopped, how many times its control pill appeared, and how many times Ardia installed or upgraded the ardia command (on its own the first time, after an update, or from Settings) and whether that worked, and whether it turned on control after installing it on its own"
+  "How many tab and group changes the ardia command made (counts only, never which tabs or groups), how many of its batches were refused or stopped, how many times its control pill appeared, and how many times Solstice installed or upgraded the ardia command (on its own the first time, after an update, or from Settings) and whether that worked, and whether it turned on control after installing it on its own",
+  "How many tab and group changes the ardia command made (counts only, never which tabs or groups), how many of its batches were refused or stopped, how many times its control pill appeared, and how many times Solstice installed or upgraded the ardia command (on its own the first time, after an update, or from Settings) and whether that worked, and whether it turned on control after installing it on its own"
  ],
  [
-  "How many times Ardia ended a page drag that would otherwise have left the page ignoring clicks and typing: one the ardia command or a debugger started and left behind, or one macOS refused to start. Summed up once an hour, never which page",
-  "How many times Ardia ended a page drag that would otherwise have left the page ignoring clicks and typing: one the ardia command or a debugger started and left behind, or one macOS refused to start. Summed up once an hour, never which page"
+  "How many times Solstice ended a page drag that would otherwise have left the page ignoring clicks and typing: one the ardia command or a debugger started and left behind, or one macOS refused to start. Summed up once an hour, never which page",
+  "How many times Solstice ended a page drag that would otherwise have left the page ignoring clicks and typing: one the ardia command or a debugger started and left behind, or one macOS refused to start. Summed up once an hour, never which page"
  ],
  [
   "Opening split view, switching profiles and opening the command bar, with where it opened: at the address, in the center, in the center because the address was out of sight, or for a new tab",
@@ -416,8 +416,8 @@
   "Opening Picture in Picture: video or page, whether its window can show over full-screen apps, and whether it opened while you were in another app because the video's window was out of sight"
  ],
  [
-  "After you let a site use your location: whether macOS gave Ardia location access, you said no in macOS's prompt, it was already off in System Settings, or the check failed, one event each time. Never which site or where you are",
-  "After you let a site use your location: whether macOS gave Ardia location access, you said no in macOS's prompt, it was already off in System Settings, or the check failed, one event each time. Never which site or where you are"
+  "After you let a site use your location: whether macOS gave Solstice location access, you said no in macOS's prompt, it was already off in System Settings, or the check failed, one event each time. Never which site or where you are",
+  "After you let a site use your location: whether macOS gave Solstice location access, you said no in macOS's prompt, it was already off in System Settings, or the check failed, one event each time. Never which site or where you are"
  ],
  [
   "How many times automatic Picture in Picture held back because a playing tab's window was still on a screen, either though macOS reported it covered or when you switched to another app, summed up once an hour",
@@ -428,8 +428,8 @@
   "How many times automatic Picture in Picture held back in a WebKit tab because no video was playing at the moment you left it, summed up once an hour"
  ],
  [
-  "How many times a WebKit tab on a streaming site (Netflix, Spotify, Disney+, Prime Video and the like) had a protected-media fault, by reason: whether the page's request for a Widevine, PlayReady, FairPlay or other key system was granted or refused and why (through either of Safari's two key system interfaces), which key error code a protected-media session raised, which error code a video or audio element reported, and why a play request was rejected. With how many of them came while the tab was muted or while Ardia's content blocker was on for the site. Summed up once an hour and shown in Copy Diagnostics. Never which site, address, title, track or account",
-  "How many times a WebKit tab on a streaming site (Netflix, Spotify, Disney+, Prime Video and the like) had a protected-media fault, by reason: whether the page's request for a Widevine, PlayReady, FairPlay or other key system was granted or refused and why (through either of Safari's two key system interfaces), which key error code a protected-media session raised, which error code a video or audio element reported, and why a play request was rejected. With how many of them came while the tab was muted or while Ardia's content blocker was on for the site. Summed up once an hour and shown in Copy Diagnostics. Never which site, address, title, track or account"
+  "How many times a WebKit tab on a streaming site (Netflix, Spotify, Disney+, Prime Video and the like) had a protected-media fault, by reason: whether the page's request for a Widevine, PlayReady, FairPlay or other key system was granted or refused and why (through either of Safari's two key system interfaces), which key error code a protected-media session raised, which error code a video or audio element reported, and why a play request was rejected. With how many of them came while the tab was muted or while Solstice's content blocker was on for the site. Summed up once an hour and shown in Copy Diagnostics. Never which site, address, title, track or account",
+  "How many times a WebKit tab on a streaming site (Netflix, Spotify, Disney+, Prime Video and the like) had a protected-media fault, by reason: whether the page's request for a Widevine, PlayReady, FairPlay or other key system was granted or refused and why (through either of Safari's two key system interfaces), which key error code a protected-media session raised, which error code a video or audio element reported, and why a play request was rejected. With how many of them came while the tab was muted or while Solstice's content blocker was on for the site. Summed up once an hour and shown in Copy Diagnostics. Never which site, address, title, track or account"
  ],
  [
   "How many times you went back to a video's tab from its Picture in Picture window, for Chromium and WebKit tabs separately, summed up once an hour",
@@ -484,16 +484,16 @@
   "How many deleted profiles had their browsing data removed from this PC and how many removals had to wait or failed, summed up once an hour. Never which profile"
  ],
  [
-  "Pressing Connect Calendar: Ardia's calendar permission before and after (not asked yet, allowed, add-only, denied or restricted), whether macOS returned an error, whether Ardia or the app that opened it was asked, whether System Settings opened, and how long it took. Never your calendars or events",
-  "Pressing Connect Calendar: Ardia's calendar permission before and after (not asked yet, allowed, add-only, denied or restricted), whether macOS returned an error, whether Ardia or the app that opened it was asked, whether System Settings opened, and how long it took. Never your calendars or events"
+  "Pressing Connect Calendar: Solstice's calendar permission before and after (not asked yet, allowed, add-only, denied or restricted), whether macOS returned an error, whether Solstice or the app that opened it was asked, whether System Settings opened, and how long it took. Never your calendars or events",
+  "Pressing Connect Calendar: Solstice's calendar permission before and after (not asked yet, allowed, add-only, denied or restricted), whether macOS returned an error, whether Solstice or the app that opened it was asked, whether System Settings opened, and how long it took. Never your calendars or events"
  ],
  [
   "How many full copies sync wrote to your sync folder and their total size, summed up once an hour. Never what's in them",
   "How many full copies sync wrote to your sync folder and their total size, summed up once an hour. Never what's in them"
  ],
  [
-  "On Windows, how many sync files waited because they were online-only or still being written, and how many online-only sync files Ardia downloaded, summed up once an hour. Never which files or what's in them",
-  "On Windows, how many sync files waited because they were online-only or still being written, and how many online-only sync files Ardia downloaded, summed up once an hour. Never which files or what's in them"
+  "On Windows, how many sync files waited because they were online-only or still being written, and how many online-only sync files Solstice downloaded, summed up once an hour. Never which files or what's in them",
+  "On Windows, how many sync files waited because they were online-only or still being written, and how many online-only sync files Solstice downloaded, summed up once an hour. Never which files or what's in them"
  ],
  [
   "How many times Connect Another Device showed its code, and how many times it didn't because the Touch ID or password request before it was declined, summed up once an hour. Never the code or the words",
@@ -504,8 +504,8 @@
   "Opening Report a Problem and whether it brought back a saved draft (and its recording), when Send was pressed before the report was ready, which field held it back (title, description or contact) and the report's kind, and whether sending worked: at which step it failed, why (no connection, the server's storage, the server, too many reports, an expired upload or a refused report), the server's status code, how many tries it took, and whether it resumed or restarted an earlier attempt. Never what you wrote"
  ],
  [
-  "Whether a sent problem report's recording showed its window's Picture in Picture, and how many of Ardia's other windows over it the recording left out. Never what was in them",
-  "Whether a sent problem report's recording showed its window's Picture in Picture, and how many of Ardia's other windows over it the recording left out. Never what was in them"
+  "Whether a sent problem report's recording showed its window's Picture in Picture, and how many of Solstice's other windows over it the recording left out. Never what was in them",
+  "Whether a sent problem report's recording showed its window's Picture in Picture, and how many of Solstice's other windows over it the recording left out. Never what was in them"
  ],
  [
   "Once a day, your on/off, pick-one and number settings (like light or dark, glass or classic, borderless mode, how much tint, and whether text adjusts to your colour), which app icon you picked, each with its default, how many of your profiles use a custom colour, how many sites you hid unread counts for, how many Air Traffic Control rules are on and whether Everything Else is set, and whether a theme file is on, which of its type, metrics, layout and icons parts it uses, how many parts of the sidebar it hides or moves and how many icons it swaps. Never theme names, fonts, addresses, names, colours, search engines or anything you typed",
@@ -520,8 +520,8 @@
   "Bringing your last window back from the taskbar or at launch: how many tabs came back and how long it was closed, in rough ranges, and whether a pinned tab was showing"
  ],
  [
-  "When you import passwords from another browser or from a CSV file: how many passwords Ardia tried to save, how many it saved, how many the password store refused (invalid, or already saved), how many it didn't store in time, and how many failed for another reason, once per import. Never which sites, usernames or passwords",
-  "When you import passwords from another browser or from a CSV file: how many passwords Ardia tried to save, how many it saved, how many the password store refused (invalid, or already saved), how many it didn't store in time, and how many failed for another reason, once per import. Never which sites, usernames or passwords"
+  "When you import passwords from another browser or from a CSV file: how many passwords Solstice tried to save, how many it saved, how many the password store refused (invalid, or already saved), how many it didn't store in time, and how many failed for another reason, once per import. Never which sites, usernames or passwords",
+  "When you import passwords from another browser or from a CSV file: how many passwords Solstice tried to save, how many it saved, how many the password store refused (invalid, or already saved), how many it didn't store in time, and how many failed for another reason, once per import. Never which sites, usernames or passwords"
  ],
  [
   "Speed",
@@ -560,8 +560,8 @@
   "Each command's name (like history or browse snapshot), its exit and error codes, and the names of the options it was given, never their values"
  ],
  [
-  "How long it took, step by step (starting up, starting its helper, connecting to Ardia, finding the tab, the command itself, waiting for the page to settle), plus counts and sizes: browser calls, steps in a batch, how many coding agents the install gave the agent skill to or skipped, the length of a page snapshot and of the output, how many requests an action sent, how many reading tabs it had to open again, and whether the output was cut short, the input humanized, it gave up waiting for its helper, it set a viewport size, it reloaded a crashed page or Ardia refused it a tab. Times, counts and yes or no only",
-  "How long it took, step by step (starting up, starting its helper, connecting to Ardia, finding the tab, the command itself, waiting for the page to settle), plus counts and sizes: browser calls, steps in a batch, how many coding agents the install gave the agent skill to or skipped, the length of a page snapshot and of the output, how many requests an action sent, how many reading tabs it had to open again, and whether the output was cut short, the input humanized, it gave up waiting for its helper, it set a viewport size, it reloaded a crashed page or Ardia refused it a tab. Times, counts and yes or no only"
+  "How long it took, step by step (starting up, starting its helper, connecting to Solstice, finding the tab, the command itself, waiting for the page to settle), plus counts and sizes: browser calls, steps in a batch, how many coding agents the install gave the agent skill to or skipped, the length of a page snapshot and of the output, how many requests an action sent, how many reading tabs it had to open again, and whether the output was cut short, the input humanized, it gave up waiting for its helper, it set a viewport size, it reloaded a crashed page or Solstice refused it a tab. Times, counts and yes or no only",
+  "How long it took, step by step (starting up, starting its helper, connecting to Solstice, finding the tab, the command itself, waiting for the page to settle), plus counts and sizes: browser calls, steps in a batch, how many coding agents the install gave the agent skill to or skipped, the length of a page snapshot and of the output, how many requests an action sent, how many reading tabs it had to open again, and whether the output was cut short, the input humanized, it gave up waiting for its helper, it set a viewport size, it reloaded a crashed page or Solstice refused it a tab. Times, counts and yes or no only"
  ],
  [
   "Its version, macOS version, chip and Python version, with this Mac's install ID",
@@ -600,8 +600,8 @@
   "Leaves this PC only as the events above while sharing is on, or when you attach it to a problem report. Settings › Privacy › View My Data saves it to your Downloads folder"
  ],
  [
-  "Every hour, how big the local copy is and how long writing it took, so we notice if it ever slows Ardia down",
-  "Every hour, how big the local copy is and how long writing it took, so we notice if it ever slows Ardia down"
+  "Every hour, how big the local copy is and how long writing it took, so we notice if it ever slows Solstice down",
+  "Every hour, how big the local copy is and how long writing it took, so we notice if it ever slows Solstice down"
  ],
  [
   "Never",
