@@ -1,4 +1,4 @@
-The Ardia Linux host draws the whole window itself: its sidebar and page card sit on the BrowserView, and it hides the
+The Solstice Linux host draws the whole window itself: its sidebar and page card sit on the BrowserView, and it hides the
 caption buttons. Where the compositor decorates a window itself (it answered that toplevel's xdg-decoration with
 server-side, as Hyprland does, or there is no answer and the desktop is a tiling one), Chromium's custom Linux frame
 only adds a themed band with its own shadow and rounded corners inside the compositor's. The host names those windows

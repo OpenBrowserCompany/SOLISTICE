@@ -1,5 +1,5 @@
 A Linux window can show tabs of several engine profiles. Chromium needs a tab's Browser to have the tab's profile, so
-the Ardia host keeps one hidden companion Browser per other profile beside the window's own (ac_linux_host.cc). A
+the Solstice host keeps one hidden companion Browser per other profile beside the window's own (ac_linux_host.cc). A
 companion's widget is never shown: BrowserView::Show, ShowInactive and Activate hand the request to the host, which
 focuses the visible window instead, and Restore, Maximize, Minimize, SetBounds, Deactivate, FlashFrame and both the
 synchronous and the asynchronous fullscreen paths (RequestFullscreen) are dropped, since

@@ -54,7 +54,7 @@
 -constexpr char kBrowserDisplayName[] = "chromium-browser";
 -#define PRODUCT_STRING "Chromium"
 +constexpr char kBrowserDisplayName[] = "ardia";
-+#define PRODUCT_STRING "Ardia"
++#define PRODUCT_STRING "Solstice"
  #endif
  
  #if defined(DLOPEN_PULSEAUDIO)
