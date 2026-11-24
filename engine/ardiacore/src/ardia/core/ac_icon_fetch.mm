@@ -34,7 +34,7 @@ constexpr base::TimeDelta kTimeout = base::Seconds(30);
 constexpr net::NetworkTrafficAnnotationTag kTrafficAnnotation =
     net::DefineNetworkTrafficAnnotation("ardia_icon_fetch", R"(
       semantics {
-        sender: "Ardia favicons"
+        sender: "Solstice favicons"
         description:
           "Downloads the favicon of a page the browser shows without a live "
           "tab (a restored or unloaded tab, a bookmark, a history entry)."
