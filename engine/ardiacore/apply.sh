@@ -61,7 +61,7 @@ else
 fi
 
 hook "$src/chrome/BUILD.gn" "//chrome:chrome_dll" <<'PY'
-line = '      "//ardia/core",  # Ardia: ArdiaCore (engine/ardiacore)\n'
+line = '      "//ardia/core",  # Solstice: ArdiaCore (engine/ardiacore)\n'
 def edit(s):
     mac = s.index('target(_dll_target_type, "chrome_dll")')
     anchor = '      "//third_party/cld_3/src/src:cld_3",\n'
@@ -75,7 +75,7 @@ old = """#else  // BUILDFLAG(IS_WIN)
   ChromeMainDelegate chrome_main_delegate(
       {.exe_entry_point_ticks = base::TimeTicks::Now()});"""
 new = """#else  // BUILDFLAG(IS_WIN)
-  // Ardia: ArdiaCore's delegate (engine/ardiacore), a ChromeMainDelegate.
+  // Solstice: ArdiaCore's delegate (engine/ardiacore), a ChromeMainDelegate.
   ardiacore::ACMainDelegate chrome_main_delegate(
       {.exe_entry_point_ticks = base::TimeTicks::Now()});"""
 inc_old = '#if BUILDFLAG(IS_MAC)\n#include "chrome/app/chrome_main_mac.h"\n'
@@ -88,7 +88,7 @@ PY
 
 hook "$src/chrome/browser/ui/browser_window/internal/browser_window_features.cc" "BrowserWindowFeatures' WebContentsDelegate" <<'PY'
 at = "BrowserWindowFeatures::BrowserWindowFeatures() = default;\n"
-decl = """// Ardia: ArdiaCore (engine/ardiacore) makes the WebContentsDelegate of the Browsers it hosts.
+decl = """// Solstice: ArdiaCore (engine/ardiacore) makes the WebContentsDelegate of the Browsers it hosts.
 std::unique_ptr<BrowserWebContentsDelegate> (
     *g_ardia_create_web_contents_delegate)(
     BrowserWindowInterface* browser,
@@ -107,7 +107,7 @@ old = """  browser_web_contents_delegate_ = std::make_unique<BrowserWebContentsD
       *BrowserWindow::FromBrowser(browser),
       *desktop_browser_window_capabilities_, *browser_ui_controller_);
 """
-new = """  // Ardia: ArdiaCore
+new = """  // Solstice: ArdiaCore
   if (g_ardia_create_web_contents_delegate) {
     browser_web_contents_delegate_ = g_ardia_create_web_contents_delegate(
         browser, *exclusive_access_manager_, *browser_command_controller_,
@@ -134,7 +134,7 @@ hook "$src/chrome/browser/ui/read_anything/read_anything_side_panel_controller.c
 old = """    if (!webui_browser::IsWebUIBrowserEnabled()) {
       CHECK_IS_TEST();
     }"""
-new = """    // Ardia: ArdiaCore's Browsers have no BrowserView, so no side panel UI.
+new = """    // Solstice: ArdiaCore's Browsers have no BrowserView, so no side panel UI.
     if (!webui_browser::IsWebUIBrowserEnabled() &&
         !g_ardia_viewless_browsers) {
       CHECK_IS_TEST();
@@ -142,26 +142,26 @@ new = """    // Ardia: ArdiaCore's Browsers have no BrowserView, so no side pane
 def edit(s):
     assert s.count(old) == 1
     return s.replace(old, new)
-hook(["    // Ardia: ArdiaCore's Browsers have no BrowserView, so no side panel UI.\n"], edit, HOOKS)
+hook(["    // Solstice: ArdiaCore's Browsers have no BrowserView, so no side panel UI.\n"], edit, HOOKS)
 PY
 
 hook "$src/chrome/browser/ui/toasts/toast_controller.cc" "ToastController" <<'PY'
 old = """    if (!webui_browser::IsWebUIBrowserEnabled()) {
       CHECK_IS_TEST();
     }"""
-new = """    // Ardia: ArdiaCore's Browsers have no BrowserView to anchor a toast to.
+new = """    // Solstice: ArdiaCore's Browsers have no BrowserView to anchor a toast to.
     if (!webui_browser::IsWebUIBrowserEnabled() &&
         !(browser_window_interface_ && g_ardia_viewless_browsers)) {
       CHECK_IS_TEST();
     }"""
 show_old = """bool ToastController::MaybeShowToast(ToastParams params) {
   if (!CanShowToast(params.toast_id)) {"""
-show_new = """// Ardia: ArdiaCore (engine/ardiacore) runs this process: its Browsers may have no
+show_new = """// Solstice: ArdiaCore (engine/ardiacore) runs this process: its Browsers may have no
 // BrowserView (reading mode's side panel controller reads it too).
 bool g_ardia_viewless_browsers = false;
 
 bool ToastController::MaybeShowToast(ToastParams params) {
-  // Ardia: ArdiaCore shows no toast without an anchor, before any state is set.
+  // Solstice: ArdiaCore shows no toast without an anchor, before any state is set.
   if (browser_window_interface_ && g_ardia_viewless_browsers) {
     const ToastSpecification* spec =
         toast_registry_->GetToastSpecification(params.toast_id);
@@ -174,22 +174,22 @@ bool ToastController::MaybeShowToast(ToastParams params) {
 def edit(s):
     assert s.count(old) == 1 and s.count(show_old) == 1
     return s.replace(old, new).replace(show_old, show_new)
-hook(["    // Ardia: ArdiaCore's Browsers have no BrowserView to anchor a toast to.\n",
+hook(["    // Solstice: ArdiaCore's Browsers have no BrowserView to anchor a toast to.\n",
       "bool g_ardia_viewless_browsers = false;\n",
-      "  // Ardia: ArdiaCore shows no toast without an anchor, before any state is set.\n"], edit, HOOKS)
+      "  // Solstice: ArdiaCore shows no toast without an anchor, before any state is set.\n"], edit, HOOKS)
 PY
 
 hook "$src/chrome/browser/ui/browser_commands.cc" "CloseTab's pinned tab toast" <<'PY'
 old = """  ToastController* toast_controller = ToastController::From(browser);
   if (!toast_controller) {"""
 new = """  ToastController* toast_controller = ToastController::From(browser);
-  // Ardia: ArdiaCore's Browsers have no BrowserView, so no pinned tab toast.
+  // Solstice: ArdiaCore's Browsers have no BrowserView, so no pinned tab toast.
   if (!toast_controller || (g_ardia_viewless_browsers &&
                             !BrowserView::GetBrowserViewForBrowser(browser))) {"""
 def edit(s):
     assert s.count(old) == 1
     return s.replace(old, new)
-hook(["  // Ardia: ArdiaCore's Browsers have no BrowserView, so no pinned tab toast.\n"], edit, HOOKS)
+hook(["  // Solstice: ArdiaCore's Browsers have no BrowserView, so no pinned tab toast.\n"], edit, HOOKS)
 PY
 
 hook "$src/chrome/browser/ui/webui/settings/settings_clear_browsing_data_handler.cc" "ClearBrowsingDataHandler" <<'PY'
@@ -197,7 +197,7 @@ old = """  CHECK(browser_element);
   ui::ElementTracker::GetFrameworkDelegate()->NotifyCustomEvent(browser_element,
                                                                 event_type);
 }"""
-new = """  // Ardia: ArdiaCore's Browsers have no BrowserView element.
+new = """  // Solstice: ArdiaCore's Browsers have no BrowserView element.
   CHECK(browser_element || g_ardia_viewless_browsers);
   if (browser_element) {
     ui::ElementTracker::GetFrameworkDelegate()->NotifyCustomEvent(
@@ -207,12 +207,12 @@ new = """  // Ardia: ArdiaCore's Browsers have no BrowserView element.
 def edit(s):
     assert s.count(old) == 1
     return s.replace(old, new)
-hook(["  // Ardia: ArdiaCore's Browsers have no BrowserView element.\n"], edit, HOOKS)
+hook(["  // Solstice: ArdiaCore's Browsers have no BrowserView element.\n"], edit, HOOKS)
 PY
 
 hook "$src/chrome/browser/ui/browser.cc" "Browser window creation" <<'PY'
 old_ctor = "Browser::Browser(BrowserWindowCreateParams params)\n"
-decl = ("// Ardia: ArdiaCore (engine/ardiacore) supplies the window of a Browser it hosts.\n"
+decl = ("// Solstice: ArdiaCore (engine/ardiacore) supplies the window of a Browser it hosts.\n"
         "BrowserWindow* (*g_ardia_browser_window_factory)(Browser*) = nullptr;\n\n")
 old = """  features_->Init(this);
 
@@ -227,11 +227,11 @@ old = """  features_->Init(this);
 """
 new = """  features_->Init(this);
 
-  // Ardia: ArdiaCore's own window for a Browser it makes (tests only, otherwise).
+  // Solstice: ArdiaCore's own window for a Browser it makes (tests only, otherwise).
   if (custom_window && !g_ardia_browser_window_factory) {
     CHECK_IS_TEST() << "BrowserWindowCreateParams::window is a test-only param";
   }
-  // Ardia: ArdiaCore may host a Browser Chrome makes itself.
+  // Solstice: ArdiaCore may host a Browser Chrome makes itself.
   BrowserWindow* const hosted_window =
       !custom_window && g_ardia_browser_window_factory
           ? g_ardia_browser_window_factory(this)
@@ -247,7 +247,7 @@ def edit(s):
     assert s.count(old_ctor) == 1 and s.count(old) == 1
     return s.replace(old_ctor, decl + old_ctor).replace(old, new)
 hook(["BrowserWindow* (*g_ardia_browser_window_factory)(Browser*) = nullptr;\n",
-      "  // Ardia: ArdiaCore's own window for a Browser it makes (tests only, otherwise).\n",
+      "  // Solstice: ArdiaCore's own window for a Browser it makes (tests only, otherwise).\n",
       "          ? g_ardia_browser_window_factory(this)\n"], edit, HOOKS)
 PY
 
@@ -257,15 +257,15 @@ def gate(s, start, end, why):
     j = s.index(end, i) + len(end)
     body = "".join(("  " + l if l.strip() and not l.startswith("#") else l)
                    for l in s[i:j].splitlines(True))
-    return s[:i] + "  // Ardia: ArdiaCore " + why + "\n  if (!g_ardia_embedder) {\n" + body + "  }\n" + s[j:]
+    return s[:i] + "  // Solstice: ArdiaCore " + why + "\n  if (!g_ardia_embedder) {\n" + body + "  }\n" + s[j:]
 decl_at = """#if BUILDFLAG(IS_ANDROID)
 ChromeMainDelegate::ChromeMainDelegate()
     : ChromeMainDelegate(StartupTimestamps{}) {}
 #else
 """
-decl = """// Ardia: ArdiaCore (engine/ardiacore) embeds Chrome: it does some of Chrome's startup itself.
+decl = """// Solstice: ArdiaCore (engine/ardiacore) embeds Chrome: it does some of Chrome's startup itself.
 bool g_ardia_embedder = false;
-// Ardia: ArdiaCore's ResourceBundle delegate (its product strings).
+// Solstice: ArdiaCore's ResourceBundle delegate (its product strings).
 ui::ResourceBundle::Delegate* g_ardia_resource_bundle_delegate = nullptr;
 
 """
@@ -275,12 +275,12 @@ reps = [
 """,
 """  std::string actual_locale = LoadLocalState(
       chrome_feature_list_creator,
-      g_ardia_resource_bundle_delegate,  // Ardia: ArdiaCore
+      g_ardia_resource_bundle_delegate,  // Solstice: ArdiaCore
       invoked_in_browser->is_running_test);
 """),
 ("""            locale, nullptr, ui::ResourceBundle::LOAD_COMMON_RESOURCES);
 """,
-"""            locale, g_ardia_resource_bundle_delegate,  // Ardia: ArdiaCore
+"""            locale, g_ardia_resource_bundle_delegate,  // Solstice: ArdiaCore
             ui::ResourceBundle::LOAD_COMMON_RESOURCES);
 """),
 ("""  bool record = true;
@@ -289,7 +289,7 @@ reps = [
       base::FeatureList::IsEnabled(chrome::android::kUmaBackgroundSessions);
 #endif
 """,
-"""  // Ardia: ArdiaCore records no core system profile.
+"""  // Solstice: ArdiaCore records no core system profile.
   bool record = !g_ardia_embedder;
 #if BUILDFLAG(IS_ANDROID)
   record =
@@ -314,11 +314,11 @@ def edit(s):
     return gate(s, start2, end2, "has no crash reporter.")
 hook(["bool g_ardia_embedder = false;\n",
       "    crash_reporter::InitializeCrashKeys();\n",
-      "      g_ardia_resource_bundle_delegate,  // Ardia: ArdiaCore\n",
-      "            locale, g_ardia_resource_bundle_delegate,  // Ardia: ArdiaCore\n",
+      "      g_ardia_resource_bundle_delegate,  // Solstice: ArdiaCore\n",
+      "            locale, g_ardia_resource_bundle_delegate,  // Solstice: ArdiaCore\n",
       "  bool record = !g_ardia_embedder;\n",
-      "  // Ardia: ArdiaCore has no crash reporter (nor the Mac's Crashpad), and sets up its data dir itself.\n",
-      "  // Ardia: ArdiaCore has no crash reporter.\n"], edit, HOOKS)
+      "  // Solstice: ArdiaCore has no crash reporter (nor the Mac's Crashpad), and sets up its data dir itself.\n",
+      "  // Solstice: ArdiaCore has no crash reporter.\n"], edit, HOOKS)
 PY
 
 hook "$src/chrome/browser/chrome_browser_main.cc" "ChromeBrowserMainParts (embedder)" <<'PY'
@@ -327,7 +327,7 @@ old = """  // This step is costly.
                               base::FilePath(), profile_info,
                               last_opened_profiles)) {"""
 new = """  // This step is costly.
-  // Ardia: ArdiaCore opens its own windows and runs the main loop itself.
+  // Solstice: ArdiaCore opens its own windows and runs the main loop itself.
   if (!g_ardia_embedder &&
       browser_creator_->Start(*base::CommandLine::ForCurrentProcess(),
                               base::FilePath(), profile_info,
@@ -335,23 +335,23 @@ new = """  // This step is costly.
 def edit(s):
     assert s.count(old) == 1
     return s.replace(old, new)
-hook(["  // Ardia: ArdiaCore opens its own windows and runs the main loop itself.\n"], edit, HOOKS)
+hook(["  // Solstice: ArdiaCore opens its own windows and runs the main loop itself.\n"], edit, HOOKS)
 PY
 
 hook "$src/chrome/browser/chrome_browser_main_mac.mm" "ChromeBrowserMainPartsMac (embedder)" <<'PY'
 start = "  // Create the app delegate by requesting the shared AppController.\n"
 end = "  [app_controller mainMenuCreated];\n"
 old = "  [AppController.sharedController didEndMainMessageLoop];\n"
-new = ("  // Ardia: ArdiaCore\n  if (!g_ardia_embedder) {\n"
+new = ("  // Solstice: ArdiaCore\n  if (!g_ardia_embedder) {\n"
        "    [AppController.sharedController didEndMainMessageLoop];\n  }\n")
 def edit(s):
     assert s.count(start) == 1 and s.count(end) == 1 and s.count(old) == 1
     i = s.index(start); j = s.index(end, i) + len(end)
     body = "".join(("  " + l if l.strip() else l) for l in s[i:j].splitlines(True))
-    s = s[:i] + ("  // Ardia: ArdiaCore's app has its own NSApp delegate and main menu.\n"
+    s = s[:i] + ("  // Solstice: ArdiaCore's app has its own NSApp delegate and main menu.\n"
                  "  if (!g_ardia_embedder) {\n") + body + "  }\n" + s[j:]
     return s.replace(old, new)
-hook(["  // Ardia: ArdiaCore's app has its own NSApp delegate and main menu.\n", new], edit, HOOKS)
+hook(["  // Solstice: ArdiaCore's app has its own NSApp delegate and main menu.\n", new], edit, HOOKS)
 PY
 
 hook "$src/chrome/browser/chrome_content_browser_client.cc" "ChromeContentBrowserClient's URL handlers (embedder)" <<'PY'
@@ -360,7 +360,7 @@ old = """  // chrome: & friends.
                           &ChromeContentBrowserClient::HandleWebUIReverse);
 """
 new = """  // chrome: & friends.
-  // Ardia: ArdiaCore maps its own URLs (as CEF's build did).
+  // Solstice: ArdiaCore maps its own URLs (as CEF's build did).
   if (!g_ardia_embedder) {
     handler->AddHandlerPair(&ChromeContentBrowserClient::HandleWebUI,
                             &ChromeContentBrowserClient::HandleWebUIReverse);
@@ -369,14 +369,14 @@ new = """  // chrome: & friends.
 def edit(s):
     assert s.count(old) == 1
     return s.replace(old, new)
-hook(["  // Ardia: ArdiaCore maps its own URLs (as CEF's build did).\n"], edit, HOOKS)
+hook(["  // Solstice: ArdiaCore maps its own URLs (as CEF's build did).\n"], edit, HOOKS)
 PY
 
 hook "$src/chrome/browser/policy/chrome_browser_policy_connector.cc" "ChromeBrowserPolicyConnector's platform provider (embedder)" <<'PY'
 old = """ChromeBrowserPolicyConnector::CreatePlatformProvider() {
 """
 new = """ChromeBrowserPolicyConnector::CreatePlatformProvider() {
-  // Ardia: ArdiaCore reads no platform policy (as CEF's build, which made none without a policy id).
+  // Solstice: ArdiaCore reads no platform policy (as CEF's build, which made none without a policy id).
   if (g_ardia_embedder) {
     return nullptr;
   }
@@ -384,7 +384,7 @@ new = """ChromeBrowserPolicyConnector::CreatePlatformProvider() {
 def edit(s):
     assert s.count(old) == 1
     return s.replace(old, new)
-hook(["  // Ardia: ArdiaCore reads no platform policy (as CEF's build, which made none without a policy id).\n"],
+hook(["  // Solstice: ArdiaCore reads no platform policy (as CEF's build, which made none without a policy id).\n"],
      edit, HOOKS)
 PY
 
@@ -395,7 +395,7 @@ bool ShouldShowPermissionPromptEvenIfOmniboxEditedOrEmpty(
 """
 decl = """}  // namespace
 
-// Ardia: ArdiaCore (engine/ardiacore) shows the prompts of the tabs it hosts.
+// Solstice: ArdiaCore (engine/ardiacore) shows the prompts of the tabs it hosts.
 std::unique_ptr<permissions::PermissionPrompt> (
     *g_ardia_create_permission_prompt)(
     content::WebContents* web_contents,
@@ -408,7 +408,7 @@ old = """std::unique_ptr<permissions::PermissionPrompt> CreatePermissionPrompt(
     content::WebContents* web_contents,
     permissions::PermissionPrompt::Delegate* delegate) {
 """
-new = old + """  // Ardia: ArdiaCore
+new = old + """  // Solstice: ArdiaCore
   if (g_ardia_create_permission_prompt) {
     bool default_handling = true;
     auto prompt = g_ardia_create_permission_prompt(web_contents, delegate,
@@ -433,7 +433,7 @@ old = """  BrowserView* browser_view = BrowserView::GetBrowserViewForBrowser(bro
   CHECK(browser_view, base::NotFatalUntil::M162);
 """
 new = """  BrowserView* browser_view = BrowserView::GetBrowserViewForBrowser(browser);
-  // Ardia: ArdiaCore's Browsers have no BrowserView (engine/ardiacore).
+  // Solstice: ArdiaCore's Browsers have no BrowserView (engine/ardiacore).
   if (!browser_view) {
     return nullptr;
   }
@@ -441,18 +441,18 @@ new = """  BrowserView* browser_view = BrowserView::GetBrowserViewForBrowser(bro
 def edit(s):
     assert s.count(old) == 1
     return s.replace(old, new)
-hook(["  // Ardia: ArdiaCore's Browsers have no BrowserView (engine/ardiacore).\n"], edit)
+hook(["  // Solstice: ArdiaCore's Browsers have no BrowserView (engine/ardiacore).\n"], edit)
 PY
 
 hook "$src/chrome/browser/ui/autofill/autofill_popup_controller_impl.cc" "AutofillPopupControllerImpl" <<'PY'
 old_fn = "void AutofillPopupControllerImpl::Show(\n"
-decl = ("// Ardia: ArdiaCore (engine/ardiacore) hears of each dropdown shown.\n"
+decl = ("// Solstice: ArdiaCore (engine/ardiacore) hears of each dropdown shown.\n"
         "void (*g_ardia_autofill_suggestions_shown)(\n"
         "    content::WebContents* web_contents,\n"
         "    base::span<const Suggestion> suggestions) = nullptr;\n\n")
 old = """  delegate_->OnSuggestionsShown(non_filtered_suggestions_, GetPopupMetadata());
 """
-new = """  // Ardia: ArdiaCore
+new = """  // Solstice: ArdiaCore
   if (g_ardia_autofill_suggestions_shown && IsRootPopup() && web_contents_) {
     g_ardia_autofill_suggestions_shown(web_contents_.get(),
                                            non_filtered_suggestions_);
@@ -464,7 +464,7 @@ old2 = """    if (!view_->Show(autoselect_first_suggestion)) {
 """
 new2 = """    auto ardia_alive = GetWeakPtr();
     if (!view_->Show(autoselect_first_suggestion)) {
-      // Ardia: ArdiaCore hears of a dropdown on screen whose search bar couldn't
+      // Solstice: ArdiaCore hears of a dropdown on screen whose search bar couldn't
       // take focus (an app that isn't active), which Chrome doesn't count as shown.
       if (ardia_alive && view_ && g_ardia_autofill_suggestions_shown &&
           IsRootPopup() && web_contents_) {
@@ -484,7 +484,7 @@ PY
 
 hook "$src/content/browser/renderer_host/render_widget_host_view_base.cc" "RenderWidgetHostViewBase" <<'PY'
 old_fn = "void RenderWidgetHostViewBase::CopyBackgroundColorIfPresentFrom(\n"
-decl = ("// Ardia: ArdiaCore (engine/ardiacore) has a translucent page background.\n"
+decl = ("// Solstice: ArdiaCore (engine/ardiacore) has a translucent page background.\n"
         "bool g_ardia_opacity_from_default_color = false;\n\n")
 old = """  bool was_opaque = IsBackgroundColorOpaque();
   content_background_color_ = other_base.content_background_color_;
@@ -493,7 +493,7 @@ old = """  bool was_opaque = IsBackgroundColorOpaque();
   bool opaque = IsBackgroundColorOpaque();
 """
 new = """  bool was_opaque = IsBackgroundColorOpaque();
-  // Ardia: ArdiaCore
+  // Solstice: ArdiaCore
   const auto ardia_opaque = [this] {
     return !default_background_color_ ||
            SkColorGetA(*default_background_color_) == SK_AlphaOPAQUE;
@@ -517,7 +517,7 @@ PY
 hook "$src/chrome/browser/external_protocol/external_protocol_handler.cc" "external protocol dialog" <<'PY'
 old_ns = "\nnamespace {\n"
 decl = """
-// Ardia: ArdiaCore (engine/ardiacore) shows this dialog itself for the tabs it hosts.
+// Solstice: ArdiaCore (engine/ardiacore) shows this dialog itself for the tabs it hosts.
 bool (*g_ardia_external_protocol_dialog)(
     const GURL& url,
     content::WebContents* web_contents,
@@ -529,7 +529,7 @@ old = """  CHECK(web_contents, base::NotFatalUntil::M161);
   if (delegate) {
     delegate->RunExternalProtocolDialog(url, web_contents, page_transition,"""
 new = """  CHECK(web_contents, base::NotFatalUntil::M161);
-  // Ardia: ArdiaCore
+  // Solstice: ArdiaCore
   if (!delegate && g_ardia_external_protocol_dialog &&
       g_ardia_external_protocol_dialog(url, web_contents, initiating_origin,
                                            initiator_document, program_name)) {
@@ -547,13 +547,13 @@ PY
 
 hook "$src/chrome/browser/history/history_tab_helper.cc" "HistoryTabHelper" <<'PY'
 old_fn = "bool HistoryTabHelper::IsEligibleTab(\n"
-decl = ("// Ardia: ArdiaCore (engine/ardiacore) keeps its own pages out of history.\n"
+decl = ("// Solstice: ArdiaCore (engine/ardiacore) keeps its own pages out of history.\n"
         "bool (*g_ardia_history_eligible)(content::WebContents*) = nullptr;\n\n")
 old = """  if (force_eligible_tab_for_testing_) {
     return true;
   }
 """
-new = old + """  // Ardia: ArdiaCore
+new = old + """  // Solstice: ArdiaCore
   if (g_ardia_history_eligible && web_contents() &&
       !g_ardia_history_eligible(web_contents())) {
     return false;
@@ -568,7 +568,7 @@ PY
 
 hook "$src/extensions/browser/api/declarative_net_request/action_tracker.cc" "declarativeNetRequest's ActionTracker" <<'PY'
 old_ns = "namespace extensions::declarative_net_request {\n"
-decl = ("// Ardia: ArdiaCore (engine/ardiacore) counts what extensions' rules did to a tab's requests.\n"
+decl = ("// Solstice: ArdiaCore (engine/ardiacore) counts what extensions' rules did to a tab's requests.\n"
         "void (*g_ardia_dnr_rule_matched)(\n"
         "    content::BrowserContext* browser_context,\n"
         "    int tab_id,\n"
@@ -577,7 +577,7 @@ decl = ("// Ardia: ArdiaCore (engine/ardiacore) counts what extensions' rules di
 old = """  const int tab_id =
       GetTabIdForMatchedRule(browser_context_, request_info.frame_data.tab_id);
 """
-new = old + """  // Ardia: ArdiaCore
+new = old + """  // Solstice: ArdiaCore
   if (g_ardia_dnr_rule_matched) {
     g_ardia_dnr_rule_matched(browser_context_, tab_id, request_action,
                                  request_info);
@@ -592,7 +592,7 @@ PY
 
 hook "$src/extensions/browser/api/declarative_net_request/rules_monitor_service.cc" "declarativeNetRequest's RulesMonitorService" <<'PY'
 old_ns = "namespace extensions {\nnamespace declarative_net_request {\n"
-decl = ("// Ardia: ArdiaCore (engine/ardiacore) holds a profile's navigations until a content blocker's\n"
+decl = ("// Solstice: ArdiaCore (engine/ardiacore) holds a profile's navigations until a content blocker's\n"
         "// rulesets are in force.\n"
         "void (*g_ardia_dnr_rulesets_in_force)(\n"
         "    content::BrowserContext* browser_context,\n"
@@ -607,7 +607,7 @@ void RulesMonitorService::OnNewStaticRulesetsLoaded(
 new = """  update_dynamic_or_session_rules_queue_map_[load_data.extension_id]
       .SetReadyToExecuteApiCalls();
 
-  // Ardia: ArdiaCore
+  // Solstice: ArdiaCore
   if (g_ardia_dnr_rulesets_in_force) {
     g_ardia_dnr_rulesets_in_force(
         context_, load_data.extension_id,
@@ -631,7 +631,7 @@ old_load = """      if (!helper.GetStaticRulesetChecksum(extension->id(), source
 """
 new_load = """      const bool indexed = helper.GetStaticRulesetChecksum(
           extension->id(), source.id(), expected_ruleset_checksum);
-      // Ardia: ArdiaCore. A component extension was never installed, so
+      // Solstice: ArdiaCore. A component extension was never installed, so
       // nothing indexed its rulesets: index them now, as for a ruleset
       // enabled after install (no expected checksum), and keep the checksum.
       if (!indexed &&
@@ -653,7 +653,7 @@ def edit(s):
     return s.replace(old_ns, decl + old_ns).replace(old, new).replace(old_load, new_load)
 hook(["void (*g_ardia_dnr_rulesets_in_force)(\n",
       "    g_ardia_dnr_rulesets_in_force(\n",
-      "      // Ardia: ArdiaCore. A component extension was never installed, so\n"], edit, CONTENT_HOOKS)
+      "      // Solstice: ArdiaCore. A component extension was never installed, so\n"], edit, CONTENT_HOOKS)
 PY
 
 hook "$src/chrome/browser/extensions/browser_window_util.cc" "extensions' browser_window_util" <<'PY'
@@ -663,7 +663,7 @@ old = """  if (restrict_to_normal_browsers &&
   }
 """
 new = old + """
-  // Ardia: ArdiaCore. The host's own hidden pages are no extension's window.
+  // Solstice: ArdiaCore. The host's own hidden pages are no extension's window.
   if (g_ardia_hidden_from_extensions &&
       g_ardia_hidden_from_extensions(&browser)) {
     return false;
@@ -672,12 +672,12 @@ new = old + """
 def edit(s):
     assert s.count(old) == 1
     return s.replace(old, new)
-hook(["  // Ardia: ArdiaCore. The host's own hidden pages are no extension's window.\n"], edit, HOOKS)
+hook(["  // Solstice: ArdiaCore. The host's own hidden pages are no extension's window.\n"], edit, HOOKS)
 PY
 
 hook "$src/chrome/browser/ui/extensions/extension_install_ui_desktop.cc" "the extension post-install UI" <<'PY'
 old_ns = "using content::BrowserThread;\n"
-decl = ("// Ardia: ArdiaCore (engine/ardiacore) shows the post-install UI for the windows it hosts.\n"
+decl = ("// Solstice: ArdiaCore (engine/ardiacore) shows the post-install UI for the windows it hosts.\n"
         "bool (*g_ardia_extension_installed)(\n"
         "    Profile* profile,\n"
         "    scoped_refptr<const extensions::Extension> extension,\n"
@@ -685,7 +685,7 @@ decl = ("// Ardia: ArdiaCore (engine/ardiacore) shows the post-install UI for th
 old = """  // Extensions aren't enabled by default in incognito so we confirm
   // the install in a normal window.
 """
-new = """  // Ardia: ArdiaCore
+new = """  // Solstice: ArdiaCore
   if (g_ardia_extension_installed &&
       g_ardia_extension_installed(profile(), extension, icon)) {
     return;
@@ -701,12 +701,12 @@ PY
 
 hook "$src/chrome/browser/download/download_crx_util.cc" "download_crx_util's install prompt" <<'PY'
 old_ns = "namespace download_crx_util {\n"
-decl = ("// Ardia: ArdiaCore (engine/ardiacore) shows the install prompt itself, without a tab.\n"
+decl = ("// Solstice: ArdiaCore (engine/ardiacore) shows the install prompt itself, without a tab.\n"
         "bool g_ardia_prompts_without_tab = false;\n\n")
 old = """  if (!web_contents) {
     BrowserWindowInterface* browser =
 """
-new = """  // Ardia: ArdiaCore
+new = """  // Solstice: ArdiaCore
   if (!web_contents && g_ardia_prompts_without_tab) {
     return std::make_unique<ExtensionInstallPrompt>(
         profile, gfx::NativeWindow(),
@@ -725,7 +725,7 @@ hook "$src/chrome/browser/picture_in_picture/auto_picture_in_picture_tab_strip_o
 old = """ private:
   void UpdateIsTabActivated(const TabStripModel* tab_strip_model);
 """
-new = """  // Ardia: ArdiaCore's host showed or hid `contents`: if it is this helper's tab, read it
+new = """  // Solstice: ArdiaCore's host showed or hid `contents`: if it is this helper's tab, read it
   // again, as on a strip change (true).
   bool ArdiaHostVisibilityChanged(content::WebContents* contents);
 
@@ -738,18 +738,18 @@ PY
 
 hook "$src/chrome/browser/picture_in_picture/auto_picture_in_picture_tab_strip_observer_helper.cc" "auto picture-in-picture's tab strip observer" <<'PY'
 old_fn = "// static\nstd::unique_ptr<AutoPictureInPictureTabObserverHelperBase>\n"
-decl = """// Ardia: ArdiaCore (engine/ardiacore) shows tabs itself: 1 shown, 0 hidden, -1 the strip decides.
+decl = """// Solstice: ArdiaCore (engine/ardiacore) shows tabs itself: 1 shown, 0 hidden, -1 the strip decides.
 int (*g_ardia_tab_shown_by_host)(content::WebContents*) = nullptr;
 
 namespace {
-// Ardia: ArdiaCore: the helpers observing a strip, to tell of the host's changes.
+// Solstice: ArdiaCore: the helpers observing a strip, to tell of the host's changes.
 std::set<AutoPictureInPictureTabStripObserverHelper*>& ArdiaObserving() {
   static base::NoDestructor<std::set<AutoPictureInPictureTabStripObserverHelper*>> helpers;
   return *helpers;
 }
 }  // namespace
 
-// Ardia: ArdiaCore
+// Solstice: ArdiaCore
 void ArdiaAutoPictureInPictureHostVisibilityChanged(
     content::WebContents* contents) {
   for (AutoPictureInPictureTabStripObserverHelper* helper : ArdiaObserving()) {
@@ -777,17 +777,17 @@ include = '#include "chrome/browser/picture_in_picture/auto_picture_in_picture_t
 includes = include + "\n#include <set>\n\n#include \"base/no_destructor.h\"\n"
 start_old = """  is_observing_ = true;
 """
-start_new = start_old + """  ArdiaObserving().insert(this);  // Ardia: ArdiaCore
+start_new = start_old + """  ArdiaObserving().insert(this);  // Solstice: ArdiaCore
 """
 stop_old = """  is_observing_ = false;
 """
-stop_new = stop_old + """  ArdiaObserving().erase(this);  // Ardia: ArdiaCore
+stop_new = stop_old + """  ArdiaObserving().erase(this);  // Solstice: ArdiaCore
 """
 update_old = """  if (tab_strip_model) {
     // If there is not currently a selected tab, then the tabstrip is still
 """
 update_new = """  if (tab_strip_model) {
-    // Ardia: ArdiaCore (a split's other pane is shown, a tab under the host's own page isn't)
+    // Solstice: ArdiaCore (a split's other pane is shown, a tab under the host's own page isn't)
     const int shown = g_ardia_tab_shown_by_host
                           ? g_ardia_tab_shown_by_host(GetObservedWebContents())
                           : -1;
@@ -801,7 +801,7 @@ active_old = """  return observed_tab_strip_model_->GetActiveWebContents();
 }
 """
 active_new = """  content::WebContents* active = observed_tab_strip_model_->GetActiveWebContents();
-  // Ardia: ArdiaCore (a tab the host hides isn't the one the user went to)
+  // Solstice: ArdiaCore (a tab the host hides isn't the one the user went to)
   if (active && g_ardia_tab_shown_by_host &&
       g_ardia_tab_shown_by_host(active) == 0) {
     return nullptr;
@@ -816,21 +816,21 @@ def edit(s):
              .replace(stop_old, stop_new).replace(update_old, update_new).replace(active_old, active_new))
 hook(["int (*g_ardia_tab_shown_by_host)(content::WebContents*) = nullptr;\n",
       "void ArdiaAutoPictureInPictureHostVisibilityChanged(\n",
-      "  ArdiaObserving().insert(this);  // Ardia: ArdiaCore\n",
-      "  ArdiaObserving().erase(this);  // Ardia: ArdiaCore\n",
+      "  ArdiaObserving().insert(this);  // Solstice: ArdiaCore\n",
+      "  ArdiaObserving().erase(this);  // Solstice: ArdiaCore\n",
       "                          ? g_ardia_tab_shown_by_host(GetObservedWebContents())\n",
       "      g_ardia_tab_shown_by_host(active) == 0) {\n"], edit, HOOKS)
 PY
 
 hook "$src/components/permissions/permission_request_manager.cc" "the permission request manager's tab activation" <<'PY'
 old_ns = "namespace permissions {\n"
-decl = """// Ardia: ArdiaCore (engine/ardiacore) shows tabs itself: 1 shown, 0 hidden, -1 the strip decides.
+decl = """// Solstice: ArdiaCore (engine/ardiacore) shows tabs itself: 1 shown, 0 hidden, -1 the strip decides.
 int (*g_ardia_permission_tab_shown)(content::WebContents*) = nullptr;
 
 """
 helper = """
 namespace {
-// Ardia: ArdiaCore: whether a tab can prompt, as the host shows it (or `chrome_says`).
+// Solstice: ArdiaCore: whether a tab can prompt, as the host shows it (or `chrome_says`).
 bool ArdiaTabActive(content::WebContents* contents, bool chrome_says) {
   const int shown = g_ardia_permission_tab_shown && contents
                         ? g_ardia_permission_tab_shown(contents)
@@ -847,7 +847,7 @@ vis_old = """  // If `tab_subscriptions_` isn't empty, defer to those listeners 
   tab_is_active_ = visibility != content::Visibility::HIDDEN;
 """
 vis_new = """  // If `tab_subscriptions_` isn't empty, defer to those listeners instead.
-  // Ardia: ArdiaCore (unless the host says)
+  // Solstice: ArdiaCore (unless the host says)
   const bool host_says =
       g_ardia_permission_tab_shown &&
       g_ardia_permission_tab_shown(web_contents()) >= 0;
@@ -861,13 +861,13 @@ vis_new = """  // If `tab_subscriptions_` isn't empty, defer to those listeners 
 adopt_old = """  tab_is_active_ = tab_interface->IsActivated();
 """
 adopt_new = """  tab_is_active_ =
-      ArdiaTabActive(web_contents(), tab_interface->IsActivated());  // Ardia: ArdiaCore
+      ArdiaTabActive(web_contents(), tab_interface->IsActivated());  // Solstice: ArdiaCore
 """
 status_old = """  const bool prior_tab_is_active_ = tab_is_active_;
   tab_is_active_ = is_active;
 """
 status_new = """  const bool prior_tab_is_active_ = tab_is_active_;
-  tab_is_active_ = ArdiaTabActive(web_contents(), is_active);  // Ardia: ArdiaCore
+  tab_is_active_ = ArdiaTabActive(web_contents(), is_active);  // Solstice: ArdiaCore
 """
 def edit(s):
     for old in (old_ns, vis_old, adopt_old, status_old):
@@ -876,9 +876,9 @@ def edit(s):
              .replace(adopt_old, adopt_new).replace(status_old, status_new))
 hook(["int (*g_ardia_permission_tab_shown)(content::WebContents*) = nullptr;\n",
       "bool ArdiaTabActive(content::WebContents* contents, bool chrome_says) {\n",
-      "  // Ardia: ArdiaCore (unless the host says)\n",
-      "      ArdiaTabActive(web_contents(), tab_interface->IsActivated());  // Ardia: ArdiaCore\n",
-      "  tab_is_active_ = ArdiaTabActive(web_contents(), is_active);  // Ardia: ArdiaCore\n"],
+      "  // Solstice: ArdiaCore (unless the host says)\n",
+      "      ArdiaTabActive(web_contents(), tab_interface->IsActivated());  // Solstice: ArdiaCore\n",
+      "  tab_is_active_ = ArdiaTabActive(web_contents(), is_active);  // Solstice: ArdiaCore\n"],
      edit, CONTENT_HOOKS)
 PY
 
@@ -888,14 +888,14 @@ old = """void ShowFileSystemAccessRestorePermissionDialog(
     base::OnceCallback<void(permissions::PermissionAction)> callback,
     content::WebContents* web_contents) {
 """
-decl = """// Ardia: ArdiaCore (engine/ardiacore) asks its host; it takes `callback` when it does.
+decl = """// Solstice: ArdiaCore (engine/ardiacore) asks its host; it takes `callback` when it does.
 bool (*g_ardia_file_system_restore_prompt)(
     const FileSystemAccessPermissionRequestManager::RequestData& request,
     base::OnceCallback<void(permissions::PermissionAction)>& callback,
     content::WebContents* web_contents) = nullptr;
 
 """
-new = decl + old + """  // Ardia: ArdiaCore
+new = decl + old + """  // Solstice: ArdiaCore
   if (g_ardia_file_system_restore_prompt &&
       g_ardia_file_system_restore_prompt(request, callback, web_contents)) {
     return;
@@ -912,7 +912,7 @@ hook "$src/chrome/browser/ui/tabs/tab_dialog_manager.cc" "TabDialogManager's vis
 old = """  return GetWidgetVisibility(tab_interface_->IsVisible(), is_minimized,
                              params_->should_show_callback);
 """
-new = """  // Ardia: ArdiaCore (the host's reading, when it gave one)
+new = """  // Solstice: ArdiaCore (the host's reading, when it gave one)
   const int shown =
       g_ardia_tab_shown_by_host
           ? g_ardia_tab_shown_by_host(tab_interface_->GetContents())
@@ -925,7 +925,7 @@ bg_old = """void TabDialogManager::TabWillEnterBackground(TabInterface* tab_inte
   if (widget_) {
 """
 bg_new = """void TabDialogManager::TabWillEnterBackground(TabInterface* tab_interface) {
-  // Ardia: ArdiaCore
+  // Solstice: ArdiaCore
   if (widget_ && g_ardia_tab_shown_by_host &&
       g_ardia_tab_shown_by_host(tab_interface_->GetContents()) == 1) {
     return;
@@ -941,7 +941,7 @@ PY
 
 hook "$src/chrome/browser/extensions/api/extension_action/extension_action_api.cc" "chrome.action.openPopup" <<'PY'
 old_ns = "namespace extensions {\n"
-decl = ("// Ardia: ArdiaCore (engine/ardiacore) shows action popups in the host's own panel. Empty: not\n"
+decl = ("// Solstice: ArdiaCore (engine/ardiacore) shows action popups in the host's own panel. Empty: not\n"
         "// its Browser; true: shown (it runs `callback`); false: refused, with `error`.\n"
         "std::optional<bool> (*g_ardia_open_action_popup)(\n"
         "    BrowserWindowInterface& browser,\n"
@@ -952,7 +952,7 @@ old = """                        ShowPopupCallback callback) {
 #if !BUILDFLAG(IS_ANDROID)
 """
 new = """                        ShowPopupCallback callback) {
-  // Ardia: ArdiaCore
+  // Solstice: ArdiaCore
   if (g_ardia_open_action_popup) {
     if (std::optional<bool> shown = g_ardia_open_action_popup(
             browser, extension, callback, error)) {
@@ -972,7 +972,7 @@ hook(["std::optional<bool> (*g_ardia_open_action_popup)(\n",
 PY
 
 hook "$src/chrome/browser/ui/views/extensions/extension_keybinding_registry_views.cc" "extension commands' reserved keys" <<'PY'
-decl = ("// Ardia: ArdiaCore. True when the key being pressed runs one of the host's reserved commands.\n"
+decl = ("// Solstice: ArdiaCore. True when the key being pressed runs one of the host's reserved commands.\n"
         "bool (*g_ardia_reserved_accelerator)(const ui::Accelerator& accelerator) = nullptr;\n\n")
 ctor = "ExtensionKeybindingRegistryViews::ExtensionKeybindingRegistryViews(\n"
 old = """    const ui::Accelerator& accelerator) {
@@ -1012,9 +1012,9 @@ hook "$src/chrome/browser/extensions/extension_commands_global_registry.cc" "glo
 stale = "g_ardia_host_takes_global_accelerator"
 if stale in s:
     sys.exit(f"apply.sh: {name}: {path} still has a3258b69's OnKeyPressed hook: restore the file from the series base (docs/engine-build.md)")
-decl = ("// Ardia: ArdiaCore. True when the accelerator is bound to one of the host's reserved commands.\n"
+decl = ("// Solstice: ArdiaCore. True when the accelerator is bound to one of the host's reserved commands.\n"
         "bool (*g_ardia_reserved_global_accelerator)(const ui::Accelerator& accelerator) = nullptr;\n"
-        "// Ardia: ArdiaCore. Called when shortcut handling resumes.\n"
+        "// Solstice: ArdiaCore. Called when shortcut handling resumes.\n"
         "void (*g_ardia_global_shortcuts_resumed)() = nullptr;\n\n")
 old_ns = "namespace extensions {\n"
 old = """  auto* instance = GetGlobalAcceleratorListener();
