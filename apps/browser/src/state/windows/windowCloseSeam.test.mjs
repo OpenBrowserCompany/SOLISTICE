@@ -152,7 +152,7 @@ test("a window close request with several tabs asks once; Cancel keeps it and th
   assert.equal(S().settings.warnBeforeClosingLastTab, true);
 });
 
-test("confirming the window warning removes the window, and Little Ardia closes without it", async () => {
+test("confirming the window warning removes the window, and Little Solstice closes without it", async () => {
   const id = windowWith(["https://a.example/", "https://b.example/", "https://c.example/"]);
   stub.windows.emit({ type: "closeRequest", id });
   await settle();

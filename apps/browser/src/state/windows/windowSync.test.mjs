@@ -160,7 +160,7 @@ test("startup sweep: closes native windows the store doesn't have, keeps utility
   assert.deepEqual(native.of("setTitle"), [["setTitle", a, windowTitle(S(), a)]]);
 });
 
-test("a frame the host fitted to a smaller display keeps the saved Little Ardia size; a user's resize saves", () => {
+test("a frame the host fitted to a smaller display keeps the saved Little Solstice size; a user's resize saves", () => {
   reset();
   S().updateSettings({ littleArdiaSize: [2406, 1085] });
   const small = S().createWindow({ kind: "small", url: "https://link.example/" });
@@ -178,7 +178,7 @@ test("a frame the host fitted to a smaller display keeps the saved Little Ardia 
   assert.deepEqual(S().settings.littleArdiaSize, [1200, 800]);
 });
 
-test("a fitted Little Ardia moved to another profile and then dragged keeps the saved size; only a resize saves", () => {
+test("a fitted Little Solstice moved to another profile and then dragged keeps the saved size; only a resize saves", () => {
   reset();
   S().updateSettings({ littleArdiaSize: [2406, 1085] });
   const replacement = S().createWindow({ kind: "small", url: "https://link.example/", frame: [-1512, 0, 1512, 950] });
@@ -193,7 +193,7 @@ test("a fitted Little Ardia moved to another profile and then dragged keeps the 
   assert.deepEqual(S().settings.littleArdiaSize, [1300, 900]);
 });
 
-test("each time the host fits a Little Ardia window below the saved size is counted once, a repeat of the fitted size or a fit that keeps the size is not", () => {
+test("each time the host fits a Little Solstice window below the saved size is counted once, a repeat of the fitted size or a fit that keeps the size is not", () => {
   reset();
   S().updateSettings({ littleArdiaSize: [2406, 1085] });
   const small = S().createWindow({ kind: "small", url: "https://link.example/" });
