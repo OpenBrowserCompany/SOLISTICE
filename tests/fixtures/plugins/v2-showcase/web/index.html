@@ -128,7 +128,7 @@ hr { border: 0; border-top: 1px solid var(--ardia-divider, rgba(127,127,127,0.2)
 
   const ask = (type, body) =>
     new Promise((resolve, reject) => {
-      if (!host) return reject(new Error("This page runs inside Ardia."));
+      if (!host) return reject(new Error("This page runs inside Solstice."));
       const requestId = "q" + ++nextRequest;
       pending.set(requestId, { resolve, reject });
       host.send(Object.assign({ type, requestId }, body || {}));
@@ -216,7 +216,7 @@ hr { border: 0; border-top: 1px solid var(--ardia-divider, rgba(127,127,127,0.2)
     .then(({ page, plugin }) => {
       $("page-title").textContent = page ? page.title || "Untitled" : "No page is open";
       $("page-url").textContent = page ? page.url : "";
-      if (plugin && plugin.version) $("version").textContent = "Ardia " + plugin.version;
+      if (plugin && plugin.version) $("version").textContent = "Solstice " + plugin.version;
     })
     .catch((error) => {
       $("page-title").textContent = "Couldn't reach the plugin";

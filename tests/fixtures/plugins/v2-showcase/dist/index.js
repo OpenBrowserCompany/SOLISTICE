@@ -1250,7 +1250,7 @@
   function bridge() {
     const found = globalThis.__ardiaBridge;
     if (!found || typeof found.send !== "function" || typeof found.onLine !== "function") {
-      throw new Error("There's no __ardiaBridge; plugins built with @ardia/plugin-sdk run inside Ardia's plugin host.");
+      throw new Error("There's no __ardiaBridge; plugins built with @ardia/plugin-sdk run inside Solstice's plugin host.");
     }
     return found;
   }
