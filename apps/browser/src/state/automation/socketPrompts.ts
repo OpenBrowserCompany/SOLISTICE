@@ -17,7 +17,7 @@ const AUTOFILL_DECISIONS = ["accept", "decline", "dismiss"] as const;
 const LISTED_USERNAMES = 20;
 const USERNAME_CHARS = 256;
 
-const CLOSED = "The prompt closed or changed before Ardia could answer it; list the prompts again.";
+const CLOSED = "The prompt closed or changed before Solstice could answer it; list the prompts again.";
 
 function confirmed(outcome: ConfirmedAnswer) {
   if (outcome === "gone") throw new OpError("no_window", CLOSED);

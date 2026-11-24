@@ -226,7 +226,7 @@ test("a held store prompt aimed at a private window shows in a main window inste
   gates.install = null;
 });
 
-test("a held store prompt can go to an open Little Ardia when the main window is closing", async () => {
+test("a held store prompt can go to an open Little Solstice when the main window is closing", async () => {
   const { folders, gates, windowId } = await setup();
   const { startClosingWindow, stopClosingWindow } = await import("../windows/closingWindows.ts");
   folders.set("/tmp/l/ext", { id: "lll" });

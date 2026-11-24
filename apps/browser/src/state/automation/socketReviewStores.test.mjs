@@ -26,7 +26,7 @@ test("sites.clearData takes a site, clears the whole site in both engines, and r
   assert.deepEqual(stub.clearedSiteData.map((c) => [c.origin, c.engine]).sort(), [["https://example.com", "chromium"], ["https://example.com", "webkit"]]);
 });
 
-test("windows.close asks first when the user set Ardia to, and keeps the last window to reopen", async () => {
+test("windows.close asks first when the user set Solstice to, and keeps the last window to reopen", async () => {
   const { windowId } = await freshWindow();
   const other = S().createWindow({ url: "https://b.example/" });
   S().newTab(other, { url: "https://c.example/", background: true });
