@@ -121,6 +121,14 @@ jobs:
         run: git clone --depth 1 https://chromium.googlesource.com/chromium/tools/depot_tools.git "$HOME/chromium-build/depot_tools"
       - name: Sync a fresh Chromium tree
         run: scripts/agent/locked chromium --as release --wait 3600 -- engine/patches/build/01-sync.sh --apply
+      - name: Check out Helium sources
+        run: |
+          git clone --no-checkout https://github.com/imputnet/helium-chromium.git "$HOME/chromium-build/helium"
+          git -C "$HOME/chromium-build/helium" fetch --depth 1 origin f32f2c066787492b9ba112dc1be1ad230b53658a
+          git -C "$HOME/chromium-build/helium" checkout -q --detach FETCH_HEAD
+          git clone --no-checkout https://github.com/imputnet/helium-macos.git "$HOME/chromium-build/helium-macos"
+          git -C "$HOME/chromium-build/helium-macos" fetch --depth 1 origin 3a89c36d8835fa94b11a57df8cc54afc1d4eec8a
+          git -C "$HOME/chromium-build/helium-macos" checkout -q --detach FETCH_HEAD
       - name: Helium and its substitutions
         run: scripts/agent/locked chromium --as release -- python3 scripts/engine/run-step3.py --apply --platform mac
       - name: Capture the series base
@@ -144,6 +152,59 @@ jobs:
           git add packages/ardiacore/prebuilt-engines.tsv
           git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
             commit -m "chore: add prebuilt macOS engine ${TREE:0:12}"
+          git push origin HEAD:main
+
+  engine-linux:
+    name: Build and publish Linux engine
+    needs: preflight
+    runs-on: namespace-profile-solistice-browser
+    timeout-minutes: 480
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Create the build root
+        run: |
+          mkdir -p "$HOME/chromium-build"
+          touch "$HOME/chromium-build/.metadata_never_index"
+      - name: Install depot_tools
+        run: |
+          git clone --depth 1 https://chromium.googlesource.com/chromium/tools/depot_tools.git "$HOME/chromium-build/depot_tools"
+          "$HOME/chromium-build/depot_tools/ensure_bootstrap"
+      - name: Check out Helium sources
+        run: |
+          git clone --no-checkout https://github.com/imputnet/helium-chromium.git "$HOME/chromium-build/helium"
+          git -C "$HOME/chromium-build/helium" fetch --depth 1 origin f32f2c066787492b9ba112dc1be1ad230b53658a
+          git -C "$HOME/chromium-build/helium" checkout -q --detach FETCH_HEAD
+          git clone --no-checkout https://github.com/imputnet/helium-linux.git "$HOME/chromium-build/helium-linux"
+          git -C "$HOME/chromium-build/helium-linux" fetch --depth 1 origin d77f716db31b6009e88c75ce94d5a2bf21794286
+          git -C "$HOME/chromium-build/helium-linux" checkout -q --detach FETCH_HEAD
+      - name: Sync a fresh Chromium tree
+        run: scripts/agent/locked chromium --as release --wait 3600 -- engine/patches/build/01-sync.sh --apply
+      - name: Helium and its substitutions
+        run: scripts/agent/locked chromium --as release -- python3 scripts/engine/run-step3.py --apply --platform linux
+      - name: Capture the series base
+        run: scripts/agent/locked chromium --as release -- python3 scripts/engine/run-capture.py --platform linux --cpu x64
+      - name: Build and package the engine
+        run: scripts/agent/locked chromium --as release --wait 3600 -- scripts/linux/build.sh --apply --generate
+      - name: Publish the engine
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: scripts/linux/publish-engine.sh --out "$HOME/chromium-build/chromium_git/chromium/src/out/Release_GN_linux_x64" --source "$GITHUB_WORKSPACE" --repo "$GITHUB_REPOSITORY" --upload
+      - name: Commit the prebuilt engine row
+        env:
+          TREE: ${{ needs.preflight.outputs.linux_tree }}
+        run: |
+          if git diff --quiet -- packages/ardiacore/prebuilt-engines-linux.tsv; then
+            echo "engine table unchanged"
+            exit 0
+          fi
+          git add packages/ardiacore/prebuilt-engines-linux.tsv
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -m "chore: add prebuilt Linux engine ${TREE:0:12}"
           git push origin HEAD:main
 
   checks:
@@ -400,7 +461,7 @@ jobs:
           retention-days: 14
 
   linux:
-    needs: preflight
+    needs: [preflight, engine-linux]
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     env:
@@ -409,6 +470,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
+          ref: main
           persist-credentials: false
       - uses: ./.github/actions/linux-setup
         with:
