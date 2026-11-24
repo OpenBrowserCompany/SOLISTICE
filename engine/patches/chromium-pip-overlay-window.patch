@@ -4,7 +4,7 @@
        const VideoOverlayWindowViews::PlaybackState playback_state);
  
   private:
-+  // Ardia: Dia's glyphs (chrome/browser/ardia/pip/ac_pip_controls.h).
++  // Solstice: Dia's glyphs (chrome/browser/ardia/pip/ac_pip_controls.h).
 +  friend class ArdiaPlaybackButton;
 +
    void UpdateImageAndText();
@@ -17,7 +17,7 @@
    }
  };
 +
-+// Ardia: Dia's window, defined in //chrome/browser/ardia (pip/). Not a
++// Solstice: Dia's window, defined in //chrome/browser/ardia (pip/). Not a
 +// GN dependency: it resolves at link time in the binary we build (ArdiaCore's
 +// chrome_dll links that target).
 +std::unique_ptr<VideoOverlayWindowViews> NewArdiaVideoOverlayWindow(
@@ -70,7 +70,7 @@
  
   private:
    friend class VideoPictureInPictureWindowControllerBrowserTest;
-+  // Ardia: Dia's window (chrome/browser/ardia/pip/ac_pip_window.h)
++  // Solstice: Dia's window (chrome/browser/ardia/pip/ac_pip_window.h)
 +  // overrides the methods made virtual here.
 +  friend class ArdiaVideoOverlayWindow;
  
