@@ -1,4 +1,4 @@
-// Copyright 2026 Ardia. Apache-2.0.
+// Copyright 2026 Solstice. Apache-2.0.
 
 #include <algorithm>
 #include <map>
@@ -60,8 +60,8 @@ namespace {
 
 constexpr int kNavigationStateVersion = 1;
 constexpr int kMaxNavigationEntryBytes = 256 * 1024;
-constexpr char kTabHistoryDir[] = "Ardia Tab History";
-constexpr char kTabHistoryCleared[] = "Ardia Tab History Cleared";
+constexpr char kTabHistoryDir[] = "Solstice Tab History";
+constexpr char kTabHistoryCleared[] = "Solstice Tab History Cleared";
 constexpr int kTabHistoryVersion = 1;
 constexpr base::TimeDelta kTabHistorySaveDelay = base::Milliseconds(2500);
 constexpr base::TimeDelta kTabHistoryKeep = base::Days(90);
