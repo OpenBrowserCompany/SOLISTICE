@@ -38,7 +38,7 @@ import Testing
     let items = try #require(URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems)
     let query = Dictionary(uniqueKeysWithValues: items.map { ($0.name, $0.value ?? "") })
     #expect(query["client_id"] == "dynamic_agent_client")
-    #expect(query["agent_name_hint"] == "Ardia")
+    #expect(query["agent_name_hint"] == "Solstice")
     #expect(query["redirect_uri"] == "http://127.0.0.1:51234/auth/callback")
     #expect(query["scope"] == "openid profile email offline_access resource.invoke chatgpt.tokens.use.direct")
     #expect(query["resource"] == "https://api.openai.com/v1")
