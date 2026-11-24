@@ -20,7 +20,7 @@ export function mute(results: OpResult[], op: Op, muted: boolean): OpResult {
     const s = store();
     if (!muted && isSiteMuted(s, s.tabs[id]!)) s.setSiteMuted(id, false);
     if (store().tabs[id]!.muted !== muted) store().setMuted([id], muted);
-    if (store().tabs[id]?.muted !== muted) throw new OpError("failed", `Ardia didn't do that: tab ${id} isn't ${muted ? "muted" : "unmuted"}.`);
+    if (store().tabs[id]?.muted !== muted) throw new OpError("failed", `Solstice didn't do that: tab ${id} isn't ${muted ? "muted" : "unmuted"}.`);
   }
   return { tabs: ids };
 }
@@ -41,7 +41,7 @@ async function settled(work: Promise<string>, id: string, doing: string, done: s
   const outcome = await withDeadline(work, NATIVE_DEADLINE_MS, LATE);
   if (outcome === LATE) {
     awaitLate(id, work, { connection: owner, serving: stillOn });
-    throw stopped(`Tab ${id} didn't finish ${doing} within ${NATIVE_DEADLINE_MS / 1000} s: outcome unknown. Ardia stopped waiting; the tab is busy until the engine answers, and a later batch reports what happened under late.`, done);
+    throw stopped(`Tab ${id} didn't finish ${doing} within ${NATIVE_DEADLINE_MS / 1000} s: outcome unknown. Solstice stopped waiting; the tab is busy until the engine answers, and a later batch reports what happened under late.`, done);
   }
   if (!stillOn()) throw stopped(`Control was turned off while tab ${id} was ${doing}; the tabs after it were left alone.`, CHANGED.has(outcome) ? [...done, id] : done);
   return outcome;
@@ -109,7 +109,7 @@ export function closeTabs(results: OpResult[], op: Op): OpResult {
   store().closeTabs(ids);
   const s = store();
   const left = ids.find((id) => s.tabs[id] && !inPinnedContainer(s, id));
-  if (left) throw new OpError("failed", `Ardia didn't do that: tab ${left} is still open.`);
+  if (left) throw new OpError("failed", `Solstice didn't do that: tab ${left} is still open.`);
   return { tabs: ids };
 }
 
@@ -119,7 +119,7 @@ export function rename(results: OpResult[], op: Op): OpResult {
   const name = (op.title as string | null) ?? "";
   const customTitle = name && name !== t.title ? name : null;
   store().updateTab(id, { customTitle });
-  if (store().tabs[id]?.customTitle !== customTitle) throw new OpError("failed", `Ardia didn't do that: tab ${id} wasn't renamed.`);
+  if (store().tabs[id]?.customTitle !== customTitle) throw new OpError("failed", `Solstice didn't do that: tab ${id} wasn't renamed.`);
   return { tabs: [id] };
 }
 
@@ -129,6 +129,6 @@ export function tabIcon(results: OpResult[], op: Op): OpResult {
   if (none && !isPinnedRow(store().tabs[id])) throw new OpError("bad_request", "\"none\" is for groups and pinned rows; give null to reset a tab's icon.");
   const icon = none ? NO_ROW_ICON : (op.icon as IconValue);
   store().updateTab(id, { customIcon: icon });
-  if (store().tabs[id]?.customIcon !== icon) throw new OpError("failed", `Ardia didn't do that: tab ${id}'s icon didn't change.`);
+  if (store().tabs[id]?.customIcon !== icon) throw new OpError("failed", `Solstice didn't do that: tab ${id}'s icon didn't change.`);
   return { tabs: [id] };
 }

@@ -75,12 +75,12 @@ export function openableUrl(value: string): string | { error: string } {
   if (!value.trim()) return { error: "An empty URL." };
   if (value.length > MAX_URL) return { error: "A URL longer than 8192 characters." };
   const url = fixupUrl(value);
-  if (!url || isJavaScriptUrl(url)) return { error: `${JSON.stringify(value.slice(0, 200))} isn't a URL Ardia opens.` };
+  if (!url || isJavaScriptUrl(url)) return { error: `${JSON.stringify(value.slice(0, 200))} isn't a URL Solstice opens.` };
   if (url === "about:blank" || internalPageOf(url)) return url;
-  if (url === "ardia://newtab" || url === "ardia://newtab/") return "";
+  if (url === "solstice://newtab" || url === "solstice://newtab/") return "";
   const parts = urlParts(url);
   if (parts && (parts.scheme === "http" || parts.scheme === "https" || (parts.scheme === "file" && parts.authority))) return url;
-  return { error: `${JSON.stringify(value.slice(0, 200))}: the ardia command opens http, https and file URLs, about:blank and ardia://history, bookmarks, downloads and newtab.` };
+  return { error: `${JSON.stringify(value.slice(0, 200))}: the ardia command opens http, https and file URLs, about:blank and solstice://history, bookmarks, downloads and newtab.` };
 }
 
 const isRef = (value: unknown, index: number) =>
@@ -125,7 +125,7 @@ function check(kind: Kind, value: unknown, index: number, op: OpName, urlRule: U
       return typeof value === "string" && (value === "neutral" || value === "none" || COLORS.has(value)) ? value : { bad: `one of neutral, none, ${TAB_GROUP_COLORS.join(", ")}` };
     case "icon": {
       const icon = iconValue(value);
-      return icon === undefined ? { bad: "an emoji from Ardia's picker, symbol:<SF Symbol name>, \"none\", or null to reset" } : icon;
+      return icon === undefined ? { bad: "an emoji from Solstice's picker, symbol:<SF Symbol name>, \"none\", or null to reset" } : icon;
     }
     case "urls": {
       const list = typeof value === "string" ? [value] : value;
