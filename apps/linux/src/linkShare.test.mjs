@@ -17,7 +17,7 @@ const surface = (choice = null) => {
 afterEach(() => setShareSurface(null));
 
 test("an email link carries the title as its subject and the address as its body", () => {
-  assert.equal(mailtoLink("https://ardia.dev/a b?x=1&y=2", "Ardia & friends"), "mailto:?subject=Ardia%20%26%20friends&body=https%3A%2F%2Fardia.dev%2Fa%20b%3Fx%3D1%26y%3D2");
+  assert.equal(mailtoLink("https://ardia.dev/a b?x=1&y=2", "Solstice & friends"), "mailto:?subject=Solstice%20%26%20friends&body=https%3A%2F%2Fardia.dev%2Fa%20b%3Fx%3D1%26y%3D2");
   assert.equal(mailtoLink("https://ardia.dev/", null), "mailto:?subject=https%3A%2F%2Fardia.dev%2F&body=https%3A%2F%2Fardia.dev%2F");
 });
 
@@ -42,15 +42,15 @@ test("Share offers Copy Link and Email Link for a web page and only Copy Link fo
 
 test("Share opens below its anchor, copies the link, or emails it through the window's page", async () => {
   const copy = surface("copy");
-  await appModuleFallback(host, "ArdiaApp", "share")("https://ardia.dev/", "Ardia", "w1", [10, 20, 30, 40]);
+  await appModuleFallback(host, "ArdiaApp", "share")("https://ardia.dev/", "Solstice", "w1", [10, 20, 30, 40]);
   assert.deepEqual(copy.menus[0].at, { x: 10, y: 64 });
   assert.deepEqual(copy.copied, ["https://ardia.dev/"]);
   const email = surface("email");
-  await shareLink("https://ardia.dev/", "Ardia", "w1", null);
+  await shareLink("https://ardia.dev/", "Solstice", "w1", null);
   assert.equal(email.menus[0].at, undefined);
-  assert.deepEqual(email.opened, [["mailto:?subject=Ardia&body=https%3A%2F%2Fardia.dev%2F", "w1"]]);
+  assert.deepEqual(email.opened, [["mailto:?subject=Solstice&body=https%3A%2F%2Fardia.dev%2F", "w1"]]);
   const dismissed = surface(null);
-  await shareLink("https://ardia.dev/", "Ardia", "w1", null);
+  await shareLink("https://ardia.dev/", "Solstice", "w1", null);
   assert.deepEqual([dismissed.copied, dismissed.opened], [[], []]);
 });
 

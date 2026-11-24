@@ -40,41 +40,41 @@ export function linuxUpdaterFor(host: ArdiaHost): LinuxUpdater {
     refresh: refreshDocument,
     ask: (release, current, failed) =>
       confirm({
-        title: `Ardia ${release.version} is available`,
+        title: `Solstice ${release.version} is available`,
         message: failed
-          ? `You have Ardia ${current}. Ardia couldn't install the update itself: download the new package from its release page.`
-          : `You have Ardia ${current}. Ardia on Linux doesn't update itself: download the new package from its release page.`,
+          ? `You have Solstice ${current}. Solstice couldn't install the update itself: download the new package from its release page.`
+          : `You have Solstice ${current}. Solstice on Linux doesn't update itself: download the new package from its release page.`,
         confirmTitle: "Open Release Page",
         cancelTitle: "Later",
         windowId,
       }).then((answer) => answer.confirmed, () => false),
     tell: async (title, message) => toast(windowId, title, message, { icon: UPDATE_ICON }),
     offer: (release, failed) =>
-      toast(windowId, `Ardia ${release.version} is available`, failed ? "Ardia couldn't install it. Download it from its release page." : "Download it from its release page.", {
+      toast(windowId, `Solstice ${release.version} is available`, failed ? "Solstice couldn't install it. Download it from its release page." : "Download it from its release page.", {
         icon: UPDATE_ICON,
         sticky: true,
         action: { title: "View", run: () => (noteUpdatePageOpened(), open(release.url)) },
       }),
     offerInstall: (release, install) =>
-      toast(windowId, `Ardia ${release.version} is available`, "Update now and restart when you're ready.", {
+      toast(windowId, `Solstice ${release.version} is available`, "Update now and restart when you're ready.", {
         icon: UPDATE_ICON,
         sticky: true,
         action: { title: "Update", run: install },
       }),
     ready: (version, restart) =>
-      toast(windowId, `Ardia ${version} is ready`, "Restart to finish updating.", {
+      toast(windowId, `Solstice ${version} is ready`, "Restart to finish updating.", {
         icon: UPDATE_ICON,
         sticky: true,
         action: { title: "Restart", run: restart },
       }),
     managed: async (release, current, asked) => {
       if (!asked) {
-        toast(windowId, `Ardia ${release.version} is available`, `Update it with your package manager, like ${AUR_UPDATE_COMMAND}.`, { icon: UPDATE_ICON, sticky: true });
+        toast(windowId, `Solstice ${release.version} is available`, `Update it with your package manager, like ${AUR_UPDATE_COMMAND}.`, { icon: UPDATE_ICON, sticky: true });
         return;
       }
       const answer = await confirm({
-        title: `Ardia ${release.version} is available`,
-        message: `You have Ardia ${current}. Your package manager installed Ardia, so update it there: for the AUR package, run ${AUR_UPDATE_COMMAND} or use your AUR helper.`,
+        title: `Solstice ${release.version} is available`,
+        message: `You have Solstice ${current}. Your package manager installed Solstice, so update it there: for the AUR package, run ${AUR_UPDATE_COMMAND} or use your AUR helper.`,
         confirmTitle: "Copy Command",
         cancelTitle: "OK",
         windowId,

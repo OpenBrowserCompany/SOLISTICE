@@ -38,7 +38,7 @@ const MODULES = [
 
 const section = (text, from, to) => text.slice(text.indexOf(from), text.indexOf(to, text.indexOf(from)));
 const EXPECTED = [
-  ["components/settings/panes/CalendarSection.tsx", ["<Button title=\"Try Again\" onPress={() => void connectCalendar()} />", "Ardia reads your calendars through Evolution Data Server, which isn't running", "Evolution Data Server refused to share your calendars"], []],
+  ["components/settings/panes/CalendarSection.tsx", ["<Button title=\"Try Again\" onPress={() => void connectCalendar()} />", "Solstice reads your calendars through Evolution Data Server, which isn't running", "Evolution Data Server refused to share your calendars"], []],
   ["components/settings/panes/ProfilePasswords.tsx", ["system password"], []],
   ["components/settings/panes/SyncSection.tsx", ["End-to-end encrypted through a synced folder you choose.", "like one that Syncthing, Nextcloud or Dropbox keeps in sync", "title: \"Open Sync Folder\""], ["Linking.openURL", "Open iCloud Settings"]],
   ["components/settings/panes/SyncSheets.tsx", ["title={`Add to This Computer`}", "system keyring", "return folder.path.replace(/^\\/home\\/[^/]+(?=\\/|$)/, \"~\");", "<Button title=\"Save as Text…\" kind=\"primary\" onPress={() => void save(\"text\")} />", "<Button title=\"Copy Words\" onPress={() => void copyRecoveryPhrase()} />"], ["recoveryKitPreview(", "copyRecoveryKit()", "shareRecoveryKit()", "save(\"pdf\")", "title=\"Other Options\""]],
@@ -69,7 +69,7 @@ const EXPECTED = [
   ["state/releaseNotes/releaseNotes.ts", ["from any page with Ctrl+L."], ["⌘L"]],
   ["state/sync/scopeAdapters.ts", ["`This Computer`"], ["This ${PLATFORM_TERMS.computerTitle}"]],
   ["components/import/steps/ChooseStep.tsx", ["were found on this computer."], []],
-  ["state/telemetry/copy.ts", ["Ctrl+Tab switcher", "Alt+Enter in the command bar", "from the taskbar or at launch", "the crash dump Chromium's crash handler keeps on this computer", "the signal that ended it", "reached Ardia's page script, summed up once an hour. Never the notification's text"], ["Dock", "Touch ID", "⌘", "⌥", "⌃", "from this app's crash report", "code-signing kill", "writable memory regions", "the error code the system gave"]],
+  ["state/telemetry/copy.ts", ["Ctrl+Tab switcher", "Alt+Enter in the command bar", "from the taskbar or at launch", "the crash dump Chromium's crash handler keeps on this computer", "the signal that ended it", "reached Solstice's page script, summed up once an hour. Never the notification's text"], ["Dock", "Touch ID", "⌘", "⌥", "⌃", "from this app's crash report", "code-signing kill", "writable memory regions", "the error code the system gave"]],
   ["state/report/details.ts", ["`Linux ${app.osVersion}`, app.model"], ["`${PLATFORM_TERMS.os} ${app.osVersion}`"]],
   ["components/report/ReportPreview.tsx", ["Exactly what leaves your computer when you press Send."], ["leaves your ${PLATFORM_TERMS.computer}"]],
   ["components/report/ReportSheet.tsx", ["Contact and details stay private.", "share errors and usage for 14 days"], ["Recordings, contact and details stay private.", "share crash reports and usage"]],
@@ -178,7 +178,7 @@ test("the Linux platform layer finds browsers through the import list and says c
 
 test("Linux's What's Sent, after its source wording, says nothing about freezes", () => {
   const said = strings(linuxCopy("state/telemetry/copy.ts")).join("\n");
-  for (const freeze of ["stopped responding for a quarter of a second", "freezes for 0.4 seconds or more", "program addresses", "the last 20 times Ardia froze", "Copy Last Freeze"]) assert.ok(!said.includes(freeze), freeze);
+  for (const freeze of ["stopped responding for a quarter of a second", "freezes for 0.4 seconds or more", "program addresses", "the last 20 times Solstice froze", "Copy Last Freeze"]) assert.ok(!said.includes(freeze), freeze);
   assert.ok(said.includes("How many times a page stopped responding"), "page hangs are counted on Linux too");
   assert.equal(LINUX_FEATURES.freezeWatch, false);
 });
