@@ -167,10 +167,10 @@ void AskAboutKey(int status, base::OnceClosure retry) {
   NSButton* quit = nil;
   NSButton* second = nil;
   if (missing) {
-    alert.messageText = @"Ardia can't read its Safe Storage key.";
+    alert.messageText = @"Solstice can't read its Safe Storage key.";
     alert.informativeText =
         @"Your saved passwords and cookies are locked with a key kept in your "
-        @"login keychain, and Ardia couldn't read it. Quit and open Ardia "
+        @"login keychain, and Solstice couldn't read it. Quit and open Solstice "
         @"again later, or start over with a new key. If you start over, your "
         @"saved passwords and cookies can't be recovered.";
     quit = [alert addButtonWithTitle:@"Quit"];
@@ -181,32 +181,32 @@ void AskAboutKey(int status, base::OnceClosure retry) {
       second.keyEquivalent = @"\e";
     }
   } else if (problem == KeyProblem::kLocked) {
-    alert.messageText = @"Ardia can't open its Safe Storage key.";
+    alert.messageText = @"Solstice can't open its Safe Storage key.";
     alert.informativeText =
         @"Your saved passwords and cookies are locked with a key kept in your "
-        @"login keychain, and Ardia isn't allowed to open it. Unlock your "
-        @"login keychain, or allow Ardia to use \u201CArdia Safe Storage\u201D "
+        @"login keychain, and Solstice isn't allowed to open it. Unlock your "
+        @"login keychain, or allow Solstice to use \u201CArdia Safe Storage\u201D "
         @"in Keychain Access, then choose Try Again.";
     quit = [alert addButtonWithTitle:@"Quit"];
     second = [alert addButtonWithTitle:@"Try Again"];
   } else if (problem == KeyProblem::kEntitlement) {
-    alert.messageText = @"This copy of Ardia can't use your keychain.";
+    alert.messageText = @"This copy of Solstice can't use your keychain.";
     alert.informativeText =
-        @"Ardia keeps the key to your saved passwords and cookies in your "
-        @"login keychain, and this copy of Ardia isn't allowed to open it. "
-        @"Reinstall Ardia from ardia.dev, then open it again.";
+        @"Solstice keeps the key to your saved passwords and cookies in your "
+        @"login keychain, and this copy of Solstice isn't allowed to open it. "
+        @"Reinstall Solstice from ardia.dev, then open it again.";
     quit = [alert addButtonWithTitle:@"Quit"];
     second = [alert addButtonWithTitle:@"Try Again"];
   } else if (problem == KeyProblem::kOther) {
-    alert.messageText = @"Ardia couldn't open its Safe Storage key.";
+    alert.messageText = @"Solstice couldn't open its Safe Storage key.";
     alert.informativeText =
         @"Your saved passwords and cookies are locked with a key kept in your "
-        @"login keychain, and Ardia couldn't open it just now. Try again, or "
-        @"quit and open Ardia later.";
+        @"login keychain, and Solstice couldn't open it just now. Try again, or "
+        @"quit and open Solstice later.";
     quit = [alert addButtonWithTitle:@"Quit"];
     second = [alert addButtonWithTitle:@"Try Again"];
   } else {
-    alert.messageText = @"Ardia's Safe Storage key is damaged.";
+    alert.messageText = @"Solstice's Safe Storage key is damaged.";
     alert.informativeText =
         @"Your saved passwords and cookies are locked with a key kept in your "
         @"login keychain, and that key can't be used. Restore your login "
