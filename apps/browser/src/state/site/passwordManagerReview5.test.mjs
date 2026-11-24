@@ -60,7 +60,7 @@ test("a retry after a failed save never takes the staged copy for the saved reco
   assert.equal(offerToSave(""), false);
 });
 
-test("a second Off after a failed clear is refused too, while disk still says Ardia turned saving off", async () => {
+test("a second Off after a failed clear is refused too, while disk still says Solstice turned saving off", async () => {
   assert.ok(onDisk().includes(""));
   setPref(true);
   stub.refusedSaves.on = true;

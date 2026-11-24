@@ -115,7 +115,7 @@ test("a give-back native refuses (profile not loaded) leaves the record, and a r
   await settle();
   await wait(20);
   assert.equal(offerToSave(""), false);
-  assert.ok(record().includes(""), "the record still says Ardia turned it off");
+  assert.ok(record().includes(""), "the record still says Solstice turned it off");
   stub.profileToggles.unloadable.delete("");
   await wait(400);
   assert.equal(offerToSave(""), true, "given back on retry");
@@ -141,7 +141,7 @@ test("turning offer to save off in Settings is refused while the record can't dr
   assert.ok(!record().includes(""), "cleared once the write works");
 });
 
-test("turning offer to save off while Ardia is giving it back leaves no record that could turn it on again", async () => {
+test("turning offer to save off while Solstice is giving it back leaves no record that could turn it on again", async () => {
   stub.profileToggles.user.set("", { ...stub.profileToggles.user.get(""), passwords: true });
   pm.choosePasswordManager("default", "ardia");
   await settle();
@@ -160,5 +160,5 @@ test("turning offer to save off while Ardia is giving it back leaves no record t
   await settle();
   await wait(50);
   assert.equal(offerToSave(""), false, "the person's Off stands");
-  assert.ok(!record().includes(""), "no record says Ardia turned it off");
+  assert.ok(!record().includes(""), "no record says Solstice turned it off");
 });

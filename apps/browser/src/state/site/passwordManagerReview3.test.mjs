@@ -68,7 +68,7 @@ for (const [why, arm] of [
   });
 }
 
-test("b: plugin → Ardia → plugin while the record can't be written keeps the profile in the record, leaves saving on, and a timer turns it off once the record lands", async () => {
+test("b: plugin → Solstice → plugin while the record can't be written keeps the profile in the record, leaves saving on, and a timer turns it off once the record lands", async () => {
   offer.OFFER_TO_SAVE_RETRY.firstMs = 50;
   turnOn("one-pm");
   pm.choosePasswordManager("default", "plugin:one-pm");
@@ -85,7 +85,7 @@ test("b: plugin → Ardia → plugin while the record can't be written keeps the
   for (const land of stub.heldSaves.queue.splice(0)) land();
   await settle();
   await settle();
-  assert.ok(record().includes(""), "never dropped from the record, so a restart still knows Ardia turned it off");
+  assert.ok(record().includes(""), "never dropped from the record, so a restart still knows Solstice turned it off");
   assert.equal(offerToSave(""), true, "the Off waits until its own record lands");
   stub.refusedSaves.on = false;
   await wait(400);
