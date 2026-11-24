@@ -5,16 +5,16 @@ export const FIRST_RELEASE = "September 25, 2026";
 export const MAKER = "Mantra Patel";
 
 export const SHORT =
-  "Ardia is a free, open-source Mac browser with Arc’s sidebar and Dia’s look, built on Chromium.";
-export const LONG = `Ardia is a web browser for Mac with Arc’s sidebar and Dia’s look, built on Chromium and Chrome’s own framework, so sites, extensions and DevTools behave as they do in Chrome. The full uBlock Origin is built in, so ads, trackers and cookie banners stay out, and Google’s background services are compiled out. Profiles keep work and home apart, and Sync runs end-to-end encrypted through a folder the user picks, iCloud Drive by default. Ardia is free and open source under GPL-3.0, notarized by Apple, and runs on Apple Silicon Macs with ${MIN_MACOS} or later, with builds for Linux and an early one for Windows. The first public build shipped on ${FIRST_RELEASE}.`;
+  "Solstice is a free, open-source Mac browser with Arc’s sidebar and Dia’s look, built on Chromium.";
+export const LONG = `Solstice is a web browser for Mac with Arc’s sidebar and Dia’s look, built on Chromium and Chrome’s own framework, so sites, extensions and DevTools behave as they do in Chrome. The full uBlock Origin is built in, so ads, trackers and cookie banners stay out, and Google’s background services are compiled out. Profiles keep work and home apart, and Sync runs end-to-end encrypted through a folder the user picks, iCloud Drive by default. Solstice is free and open source under GPL-3.0, notarized by Apple, and runs on Apple Silicon Macs with ${MIN_MACOS} or later, with builds for Linux and an early one for Windows. The first public build shipped on ${FIRST_RELEASE}.`;
 
 export const FACTS: { term: string; value: string; href?: string }[] = [
-  { term: "Name", value: "Ardia" },
+  { term: "Name", value: "Solstice" },
   { term: "What", value: "A web browser for Mac" },
   { term: "Engine", value: "Chromium, on Chrome’s own framework" },
   { term: "Runs on", value: `Apple Silicon, ${MIN_MACOS} or later. Also Linux, and Windows in early form` },
   { term: "Price", value: "Free" },
-  { term: "License", value: "GPL-3.0 (Ardia’s own code: Apache-2.0)" },
+  { term: "License", value: "GPL-3.0 (Solstice’s own code: Apache-2.0)" },
   { term: "First release", value: FIRST_RELEASE },
   { term: "Made by", value: MAKER },
   { term: "Website", value: SITE, href: `https://${SITE}` },
@@ -58,11 +58,11 @@ export interface Logo {
 }
 
 export const LOGOS: Logo[] = [
-  { id: "app-icon", title: "App icon", use: "The one to use. The painted tile, as it sits in the Dock.", ground: "light", formats: ["png"] },
-  { id: "mark-painted", title: "Painted mark", use: "The hills without the tile, for when the logo stands on its own.", ground: "light", formats: ["png"] },
-  { id: "mark-colour", title: "Flat mark", use: "Three flat colors, for small sizes and print.", ground: "light", formats: ["svg", "png"] },
-  { id: "mark-black", title: "One color, black", use: "On light backgrounds.", ground: "light", formats: ["svg", "png"] },
-  { id: "mark-white", title: "One color, white", use: "On dark backgrounds and photos.", ground: "night", formats: ["svg", "png"] },
+  { id: "app-icon", title: "App icon", use: "The browser icon, as it sits in the Dock.", ground: "light", formats: ["png"] },
+  { id: "mark-painted", title: "Brand mark", use: "The emblem on its own, for when the logo stands by itself.", ground: "light", formats: ["png"] },
+  { id: "mark-colour", title: "Metallic mark", use: "The silver mark, for light backgrounds and print.", ground: "light", formats: ["png"] },
+  { id: "mark-black", title: "One color, black", use: "On light backgrounds.", ground: "light", formats: ["png"] },
+  { id: "mark-white", title: "One color, white", use: "On dark backgrounds and photos.", ground: "night", formats: ["png"] },
 ];
 
 export const SHOTS: { id: string; title: string }[] = [
@@ -71,7 +71,7 @@ export const SHOTS: { id: string; title: string }[] = [
   { id: "tab-group", title: "Tab groups" },
   { id: "pip", title: "The mini player" },
   { id: "address-sidebar", title: "Address bar in the sidebar" },
-  { id: "little-ardia", title: "Little Ardia" },
+  { id: "little-ardia", title: "Little Solstice" },
   { id: "extensions", title: "Chrome Web Store" },
   { id: "privacy", title: "Privacy settings" },
 ];

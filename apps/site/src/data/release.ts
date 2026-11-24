@@ -8,19 +8,19 @@ export const REPO = `https://github.com/${REPO_SLUG}`;
 export const TESTFLIGHT = "https://testflight.apple.com/join/yXHasDmr";
 export const DISCORD = "https://discord.gg/TdhuXrbcA6";
 export const RELEASES = `${REPO}/releases/latest`;
-export const DMG = `${REPO}/releases/download/v${VERSION}/Ardia-${VERSION}.dmg`;
+export const DMG = `${REPO}/releases/download/v${VERSION}/Solstice-${VERSION}.dmg`;
 export const NIGHTLY = "/nightly";
 const DOWNLOADS = "https://github.com/ardia-browser/ardia/releases/download";
 export const WINDOWS_SETUP = {
-  x64: `${DOWNLOADS}/windows-alpha/Ardia-Setup-x64.exe`,
-  arm64: `${DOWNLOADS}/windows-alpha/Ardia-Setup-arm64.exe`,
+  x64: `${DOWNLOADS}/windows-alpha/Solstice-Setup-x64.exe`,
+  arm64: `${DOWNLOADS}/windows-alpha/Solstice-Setup-arm64.exe`,
 } as const;
 export type WindowsArch = keyof typeof WINDOWS_SETUP;
 export const ANDROID_VERSION = release.android;
-export const ANDROID_APK = `${DOWNLOADS}/android-v${ANDROID_VERSION}/Ardia-${ANDROID_VERSION}.apk`;
+export const ANDROID_APK = `${DOWNLOADS}/android-v${ANDROID_VERSION}/Solstice-${ANDROID_VERSION}.apk`;
 export const LINUX_VERSION = release.linux;
 export const LINUX_NIGHTLY = LINUX_VERSION.includes("-nightly.");
-export const LINUX_TARBALL = `${DOWNLOADS}/v${LINUX_VERSION}/Ardia-${LINUX_VERSION}-linux-x64.tar.xz`;
+export const LINUX_TARBALL = `${DOWNLOADS}/v${LINUX_VERSION}/Solstice-${LINUX_VERSION}-linux-x64.tar.xz`;
 export const MIN_MACOS_MAJOR = 14;
 export const MIN_MACOS = `macOS ${MIN_MACOS_MAJOR} Sonoma`;
 export const SENT_REFS = ["mac", "share", "email"] as const;
