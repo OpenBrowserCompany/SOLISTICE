@@ -67,7 +67,7 @@ export const URL_SCHEMES = {
   blob: "blob:https://ardia-fixture.invalid/00000000-0000-0000-0000-000000000000",
   filesystem: "filesystem:https://ardia-fixture.invalid/temporary/x",
   aboutSrcdoc: "about:srcdoc",
-  ardiaUnknown: "ardia://ardia-fixture-unknown",
+  ardiaUnknown: "solstice://ardia-fixture-unknown",
   arcLegacyUnknown: "arc://ardia-fixture-unknown",
   credentials: "https://user:pass@ardia-fixture.invalid/",
   backslashHost: "https:\\\\ardia-fixture.invalid",

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-usage="usage: token-smoke.sh <Ardia.app> <ardia command> [metro host:port]
-Runs ardia browse read, open, set viewport and cookies against a hidden instance of <Ardia.app> over the real token
+usage="usage: token-smoke.sh <Solstice.app> <ardia command> [metro host:port]
+Runs ardia browse read, open, set viewport and cookies against a hidden instance of <Solstice.app> over the real token
 connection (no DevTools port), with the given ardia command (the release smoke passes the app's built-in one). A Debug
 build needs its Metro as the third argument."
 case "${1:-}" in -h | --help | "") echo "$usage"; [ -n "${1:-}" ] && exit 0 || exit 64 ;; esac
@@ -68,7 +68,7 @@ if [ "$(field success <<<"$viewport")" = true ]; then
   browse set viewport reset >/dev/null
 else
   [ "$(field code <<<"$viewport")" = viewport_needs_hidden_tab ] && [ "$(field data.result <<<"$sized")" != 390x844 ] && ok=1 || ok=0
-  check "ardia browse set viewport is refused on a tab Ardia has shown" $ok "$(head -c 300 <<<"$viewport")"
+  check "ardia browse set viewport is refused on a tab Solstice has shown" $ok "$(head -c 300 <<<"$viewport")"
 fi
 cookies="$(browse cookies --json)"
 [ "$(field success <<<"$cookies")" = true ] && ok=1 || ok=0
