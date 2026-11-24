@@ -136,16 +136,42 @@ Engine files are in `engine/ardiacore/src/ardia/core`, app files in `packages/ar
   in `public/ac_engine.h` and `ac_engine.h`; a new file goes in that `BUILD.gn`; `ac_engine.exports` exports every
   `ac_*`). A private window's calls arrive with `offTheRecord: true` and are refused unless the call says
   `ardia::OffTheRecord::kAllow`: the engine alone decides which calls serve a private session; (2) `scripts/agent/engine-build`; (3) call it with
-  `ArdiaEngineBridge call:` (`callWithSecret:` for secrets); for JS, add `"verb": EngineCall.passing("ac_<domain>_<verb>")`
-  to the domain module's call table and its `"domain.verb": [args, result]` row to `packages/ardiacore/src/engine/api.ts`.
-  **Host API schema:** for a domain in `packages/hostapi/schema` (`bookmarks`, `favicons` and `history` so far), add the
-  row there instead, with its `service`, its explicit `desktop` binding (`route`, `custom` or `absent`) and any
-  `mac`/`windows` override (`custom` when that host serves it with its own code; a call no host passes straight through
-  may leave out `service`), then run `node packages/hostapi/generate.mjs --write`. It writes the domain's TS types and
+  `ArdiaEngineBridge call:` (`callWithSecret:` for secrets); for JS, add the call to its domain's host API schema
+  (below), which generates the Mac call table's `EngineCall.passing("ac_<domain>_<verb>")` row and the TS types.
+  **Host API schema:** every engine domain but `media` lives in `packages/hostapi/schema`, and `api.ts` writes rows by
+  hand only for `media` (`engine/ardiacore-linux/tests/test_cast.py`, a Linux key input, reads them there); add
+  the row there instead, with its `service`, its
+  explicit `desktop` binding (`route`, `custom` or `absent`) and any `mac`/`windows` override (`custom` when that host
+  serves it with its own code; a call no host passes straight through may leave out `service`). A Linux route that
+  answers with one field of the engine's reply, or with null, says so in `routeField` (kRoutes' third column). Each
+  event names its `payload` and its explicit `desktop` binding (`forward`, `custom` or `absent`), with `mac`/`windows`
+  overrides (default `forward`) and a `topic` when the engine topic isn't the event's own name (`engine.cliControl`
+  comes from `cliControl`). Payload types come from paths relative to the generated folder or from a package
+  `packages/ardiacore` depends on (`@ardia/core`). Then run `node packages/hostapi/generate.mjs --write`. It writes the domain's TS types and
   manifest in `packages/ardiacore/src/engine/generated/`, and its whole Swift module when every call is `passing`;
   otherwise it writes `<Domain>Calls.swift`, a `<domain>CallTable(...)` function taking one handler per Mac `custom`
-  call, which the hand-written `<Domain>Module.swift` calls for its `calls`. Never edit generated files by hand. `pnpm -C packages/hostapi test` checks they're current and that Linux's `kRoutes` and Windows'
-  `forwarded.json` agree with the schema; those two tables stay hand-written until the desktop host generates them.
+  call, which the hand-written `<Domain>Module.swift` calls for its `calls` (`.dropping(...)` removes calls a launch
+  mode doesn't serve, as Tabs and WebKit do for test-instance calls). Never edit generated files by hand. `pnpm -C packages/hostapi test`
+  checks they're current and that Linux's `kRoutes` and `EventName`, the Mac's `ForwardedTopics` and Windows'
+  `forwarded.json` agree with the schema; those tables stay hand-written until the desktop host generates them.
+  A domain Windows has no module for (`webKit`) is absent there call by call and never named in `forwarded.json`.
+  **Module domains** (positional Expo functions: `shaders`, `shell`, `sync`, `import`) are listed in the schema's `moduleDomains`
+  through `defineModuleDomain`: the package, then per Expo module (`ArdiaWindowBackdrop`) its functions, each with
+  positional `args` (`[name, type]`, plus a Swift type when the TS one isn't a primitive), `result`, `async`, optional
+  `promise`/`queue`, `optional`, `swiftAsync`/`throws`, `instance` (`strong`, or `weak` with a `fallback`) and `debug`, and
+  explicit `mac` (`custom`/`absent`), `desktop` (`custom`, `adapted` when the UI answers in front of the host's own
+  dispatch, `host` or `absent`) and `windows` (`custom`/`absent`) bindings, plus its `constants` and module events. The generator writes `<package>/src/generated/native.ts`
+  (`<Name>Native` per module, `<Domain>Modules` for all of them; the package calls `requireNativeModule` through
+  them), `<package>/ios/<Domain>Native.swift` (a protocol of the Mac module's static functions, plus
+  `moduleName`, `<fn>Function` and `eventsDefinition` definitions), and the domain's entry under the manifest's
+  `modules`. The hand-written module conforms (`class WindowBackdropModule: Module, WindowBackdropNative`), writes
+  `Name(Self.moduleName)` and `Self.holdKeyLookFunction` in its `definition()` and implements the static bodies, so a
+  schema change that the body doesn't follow fails to compile (Swift keyword names are backticked). The manifest keeps
+  each written file's SHA-256, and `--write` never overwrites or deletes one that no longer matches it. The tests check
+  that conformance and that no function, event or name is registered by hand, that the package never types a module
+  past the generated map (both TypeScript scans use the compiler's syntax tree), that the desktop UI answers exactly the `custom` functions (a Promise when `async`), and
+  that the Linux host (`if (method == …)` dispatch outside `bool` helpers, `SendEvent`) and Windows (`REACT_METHOD`, the `writtenInJs` object's
+  members, `moduleDefaults` keys, `EmitEvent`/`emitNativeEvent`) serve exactly the functions and events bound to them.
 - **The page script** is `packages/ardiacore/ios/page_script.js`, a pod resource: `ArdiaHostEngineDelegate.mm` hands it to the
   engine at launch and the renderer runs it in every http(s) and file frame. Changing it needs an app rebuild, not an
   engine one. Its `post(kind, json)` crosses the page channel to `-[ArdiaWebView tab:didReceivePageMessage:…]` (`ArdiaWebView+PageMessages.mm`),

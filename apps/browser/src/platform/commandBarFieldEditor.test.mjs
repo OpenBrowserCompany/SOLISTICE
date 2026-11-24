@@ -18,7 +18,7 @@ function fieldEditorForView() {
   const start = added.indexOf("- (NSTextView *)fieldEditorForView:(NSView *)controlView");
   assert.notEqual(start, -1, "the patch no longer overrides fieldEditorForView:");
   const end = added.indexOf("} // Ardia]", start);
-  assert.notEqual(end, -1, "fieldEditorForView: lost its closing Ardia marker");
+  assert.notEqual(end, -1, "fieldEditorForView: lost its closing Solstice marker");
   return added.slice(start, end);
 }
 

@@ -4,11 +4,12 @@
   "frame": "any frame, including cross-origin and sandboxed iframes",
   "main-world": "a value returned from script evaluated in the page's main world, which the page can rewrite (Chromium evaluates there; WebKit uses an isolated world)",
   "sync": "a record from another device that holds the sync key",
-  "other-app": "another app on this Mac, through an opened URL, an Apple Event or a notification",
+  "other-app": "another app on this Mac, through an opened URL, an Apple Event, a notification, or an input event posted while it is in front",
   "plugin": "an approved plugin, within its manifest's permissions",
   "socket": "a same-user process on the control socket while Settings > Advanced > Let programs control Solstice is on",
   "native": "the browser's own native layer, relaying OS input",
-  "import": "a file or browser profile the user chose to import"
+  "import": "a file or browser profile the user chose to import",
+  "update": "a release manifest, its signature and the package the browser downloaded for the self-updater, trusted only once the release key's signature verifies"
  },
  "customEvents": {
   "ardia:media-element": "Page-world shim names a media element for the isolated world to track; only an HTMLMediaElement is taken, and only its own playback state is read",
@@ -1401,6 +1402,21 @@
    ]
   },
   {
+   "id": "socket-family:devtools",
+   "source": "socket",
+   "guard": "Native listener checks the peer UID and a 0600 socket; params checked against the method's JSON schema (socketSchema.schemaProblem); tabs through tabOf; reload and logpoints only on tabs the command opened (controlOwnsTab); a session sends only INSPECTION_METHODS, never an emulation or network override, and every session ends when its connection closes or control stops (closeInspectionsFor); logpoint conditions always answer false (D3: any same-user process is the owner)",
+   "checks": [
+    "apps/browser/src/state/automation/socketSchema.ts#schemaProblem",
+    "apps/browser/src/state/automation/devToolsSession.ts#INSPECTION_METHODS",
+    "apps/browser/src/state/automation/devToolsSession.ts#closeInspectionsFor",
+    "apps/browser/src/state/automation/devToolsLogpoints.ts#logpointCondition",
+    "apps/browser/src/state/automation/socketDevToolsLogpoints.ts#controlOwnsTab"
+   ],
+   "findings": [
+    "D3"
+   ]
+  },
+  {
    "id": "raw-settings-write:state/engines/actions.ts",
    "source": "native",
    "guard": "Sets engineMode to one of the engine modes from a user action",
@@ -1626,6 +1642,26 @@
    "detected": false
   },
   {
+   "id": "engine-token-connection:ardia-page-signals",
+   "source": "socket",
+   "guard": "Ardia.consoleDelta, Ardia.focusedFrameOrigin and Ardia.hitTest are answered by the engine, not the page: TokenClient::StartPageSignal takes them only after FilterCommand's framing checks and only on a session this client attached to a page or tab target, so they pass the same inspection gate as that attach (Chrome's DevTools availability policy and the frame checks in ShouldAllowSession); the browser session, an iframe's session and any targetId are refused, and RunPageSignal checks IsInspectionAllowed for the tab again at answer time (ContentsInspectable), the focused frame's own policy before reading its origin, and the ring withholds entries from frames the policy keeps from inspection (FrameInspectable). RunPageSignal refuses any parameter it doesn't know (UnknownParam), takes after, generation and limit only as whole numbers in range (WholeNumber), x and y only as finite numbers within a million CSS pixels (Coordinate), backendNodeId only as a positive integer, and expectedOrigin only as a bare http or https origin that serializes back to itself (the hostile corpus caught chrome:// and chrome-untrusted:// origins getting through before); the focused frame's origin and document id come from the browser's own RenderFrameHost, never from the page; the hit test's DevTools answers are parsed field by field with types checked, its ancestor walk runs in an isolated world the page can't reach, at most 32 ancestors, node names cut to 64 characters, a 3 second deadline, at most 4 probes at once, refused for a frame at the point the policy keeps from inspection (FrameInspectable), re-run when the page scrolled between reading the scroll position and hit-testing, cancelled when the session detaches or the client goes (teardown deferred to a later task) and stopped when the page or the hit frame navigates, and a cross-site iframe is reported as a remote frame rather than a blocker; console text the ring keeps is sliced in UTF-16 before conversion and cut to 2048 bytes and source URLs to 512 at a UTF-8 boundary, at most 200 entries per tab, with a generation so a replaced ring reads as reset. Replies go back only to the asking connection while its session is still attached. Live: packages/ardiacore/scripts/token-signals-check.mjs, which also sends every value of the shared hostile-input corpus as each parameter and as a parameter name and checks each reply is refused unless the value is valid",
+   "checks": [
+    "engine/chromium/src/chrome/browser/ardia/ac_cli_token_policy.cc#StartPageSignal",
+    "engine/chromium/src/chrome/browser/ardia/ac_cli_page_signals.cc#UnknownParam",
+    "engine/chromium/src/chrome/browser/ardia/ac_cli_page_signals.cc#WholeNumber",
+    "engine/chromium/src/chrome/browser/ardia/ac_cli_page_signals.cc#Coordinate",
+    "engine/chromium/src/chrome/browser/ardia/ac_cli_page_signals.cc#ReadFocusedFrameOrigin",
+    "engine/chromium/src/chrome/browser/ardia/ac_cli_console_ring.cc#ContentsInspectable",
+    "engine/chromium/src/chrome/browser/ardia/ac_cli_console_ring.cc#FrameInspectable",
+    "engine/chromium/src/chrome/browser/ardia/ac_cli_console_ring.cc#Truncated",
+    "packages/ardiacore/scripts/token-signals-check.mjs#check",
+    "engine/chromium/src/chrome/browser/ardia/ac_cli_hit_probe.cc#kMaxProbesInFlight",
+    "engine/chromium/src/chrome/browser/ardia/ac_cli_hit_probe_helpers.cc#FrameInspectable",
+    "packages/ardiacore/scripts/token-signals-check.mjs#HOSTILE_VALUES"
+   ],
+   "detected": false
+  },
+  {
    "id": "import:bookmarks",
    "source": "import",
    "guard": "Imported bookmarks keep their URLs; javascript: entries become bookmarklets as in Chrome (C4)",
@@ -1657,6 +1693,39 @@
    "findings": [
     "C11",
     "C12"
+   ],
+   "detected": false
+  },
+  {
+   "id": "import:chromium-bookmarks-rust",
+   "source": "import",
+   "guard": "Rust Chromium bookmarks parser behind libardia_import, which the Mac reads every Chrome-family Bookmarks and AccountBookmarks file through (ChromiumBookmarks.swift, linked as libardia_apple in ArdiaCoreRS.xcframework): a Bookmarks file over 64 MiB is refused before it is read, RFC JSON only with at most 200 nested containers, 64 folder levels and 250,000 nodes; titles and URLs reach the tree verbatim and scheme policy stays with import:bookmarks; the shared hostile list runs through the static library and every vector through the Swift caller",
+   "checks": [
+    "packages/core-rs/crates/ardia-import-core/src/chromium_bookmarks.rs",
+    "packages/import/ios/Core/ChromiumBookmarks.swift",
+    "packages/core-rs/tests/import-bookmarks/test_import_bookmarks.py"
+   ],
+   "detected": false
+  },
+  {
+   "id": "update:linux-manifest",
+   "source": "update",
+   "guard": "The Linux self-update helper copies the downloaded manifest (at most 4096 bytes), its signature (at most 64) and the package as the user, then lib/ardia/ardia-update-verify (ardia-update-core) refuses anything the release key didn't sign, any manifest that isn't canonical format 1 for the version its file name gives, any version not newer than lib/ardia/VERSION and any package whose size or SHA-256 differs; it opens nothing through a symbolic link and answers one fixed line, so no manifest byte reaches the shell; the shared hostile list runs through the binary",
+   "checks": [
+    "scripts/linux/ardia-update#verify()",
+    "packages/core-rs/crates/ardia-update-verify/src/main.rs#fn verify(",
+    "packages/core-rs/crates/ardia-update-core/src/manifest.rs#pub fn verify_linux_update",
+    "packages/core-rs/tests/linux-update/test_linux_update.py#test_no_hostile_string_passes_the_verifier"
+   ],
+   "detected": false
+  },
+  {
+   "id": "import:netscape-html-rust",
+   "source": "import",
+   "guard": "Rust Netscape HTML bookmarks parser behind libardia_import, not linked by any host yet: a file over 64 MiB is refused before it is read, 64 folder levels and 250,000 nodes with each folder reserved before its contents, no recursion on the input, and one slot per attribute the parser reads whatever a tag carries; entities decode once and titles and URLs reach the tree verbatim, place: queries are skipped and scheme policy stays with import:bookmarks; the shared hostile list runs through the static library",
+   "checks": [
+    "packages/core-rs/crates/ardia-import-core/src/netscape_bookmarks.rs",
+    "packages/core-rs/tests/import-netscape/test_import_netscape.py"
    ],
    "detected": false
   },
@@ -1714,6 +1783,80 @@
     "apps/browser/src/state/tabs/busyTabWatch.ts#freshOwners",
     "apps/browser/src/state/tabs/busyTabWatch.ts#toastName",
     "apps/browser/src/state/tabs/busyTabWatch.ts#stillBusyIn"
+   ],
+   "detected": false
+  },
+  {
+   "id": "windows-webui-bridge:ardiaRequest",
+   "source": "frame",
+   "guard": "Windows WebUI pilot (--ardia-shell=webui): ardiaRequest is taken only from the shell WebContents' live primary main frame whose committed origin is chrome://ardia/, by the handler bound to that document's generation; a new document (reload or renderer swap) or a renderer exit retires the generation, dropping its pending replies, events and pages, and a page asked for by a retired document is never created and its profile never loaded; OnJavascriptDisallowed drops that handler's pending replies at once and retires the generation only if the handler no longer owns the live document; requests of the wrong shape are dropped; tab URLs pass AllowedPageUrl before any profile loads and before each navigation, refusing javascript:, chrome://ardia in any spelling or behind view-source:, non-text URLs and anything unparsable; private profiles are refused; scripts/windows/webui-pilot/bridge.ps1 sends the hostile cases at the sinks in a Windows guest",
+   "checks": [
+    "scripts/windows/engine/src/ardia/win/webui/webui_shell.cc#Trusted",
+    "scripts/windows/engine/src/ardia/win/webui/webui_shell.cc#OwnsHandler",
+    "scripts/windows/engine/src/ardia/win/webui/webui_shell.cc#DeliverReply",
+    "scripts/windows/engine/src/ardia/win/webui/webui_shell.cc#CreatePageIn",
+    "scripts/windows/engine/src/ardia/win/webui/webui_shell.cc#StartPage",
+    "scripts/windows/engine/src/ardia/win/webui/webui_shell.cc#AllowedPageUrl"
+   ],
+   "detected": false
+  },
+  {
+   "id": "native-monitor:pinchFromOtherApp",
+   "source": "other-app",
+   "guard": "A magnify event seen while another app is in front only resizes a Picture in Picture window: the monitor exists only while Solstice is inactive with a zoomable window, a missing CGEvent falls back to the mouse location, a non-finite or far-off pointer is refused before hit-testing, the window must be the topmost under the pointer, and a non-finite or huge magnification becomes a factor between 0.05 and 4 before the clamped, finite-checked resize",
+   "checks": [
+    "packages/ardiacore/ios/ArdiaPictureInPicture.mm#PinchFromOtherApp",
+    "packages/ardiacore/ios/ArdiaPiPZoomMath.h#UsablePointer",
+    "packages/ardiacore/ios/ArdiaPiPZoomMath.h#MagnifyFactor",
+    "packages/ardiacore/ios/ArdiaPiPController.mm#if (!backing) return NSEvent.mouseLocation;",
+    "packages/ardiacore/tests/pip-zoom.test.cc#for (double hostile"
+   ],
+   "detected": false
+  },
+  {
+   "id": "windows-engine:renderer-efficiency-counts",
+   "source": "native",
+   "guard": "Background renderer efficiency counts kept by the Windows engine layer itself, asked for and kept per consent epoch; only whole positive numbers under the seven known keys are added, anything else counts as 0",
+   "checks": [
+    "packages/expo-windows/src/engine/rendererEfficiency.ts",
+    "scripts/windows/engine/src/ardia/win/renderer_efficiency.cc"
+   ],
+   "detected": false
+  },
+  {
+   "id": "devtools-page-data:trace",
+   "source": "page",
+   "guard": "Trace events describe what the page did: each field is type-checked and length-capped, event count capped at MAX_TRACE_EVENTS; only the inspected tab's main frame navigation, frames and renderer process count, bounded to the selected navigation; only numbers, enums and capped URLs reach the reply; nothing is stored",
+   "checks": [
+    "apps/browser/src/state/automation/devToolsInsights.ts#analyzeTrace"
+   ],
+   "detected": false
+  },
+  {
+   "id": "devtools-page-data:issues",
+   "source": "page",
+   "guard": "Audits issues are read field by field into a fixed shape; codes must be letters only; cookie names, domains and paths only, never the raw cookie line or value; capped at MAX_ISSUES",
+   "checks": [
+    "apps/browser/src/state/automation/devToolsIssues.ts#describeIssue"
+   ],
+   "detected": false
+  },
+  {
+   "id": "devtools-page-data:styles",
+   "source": "page",
+   "guard": "Matched styles are read into a fixed shape with capped strings, rule and inheritance counts; the selector goes to DOM.querySelector as data and property names must match a CSS identifier pattern",
+   "checks": [
+    "apps/browser/src/state/automation/devToolsCascade.ts#cascadeFor"
+   ],
+   "detected": false
+  },
+  {
+   "id": "devtools-page-data:source-maps",
+   "source": "page",
+   "guard": "Source maps come only from what the caller passes (a map, its JSON, a data: URL, or a script's text whose inline data: map is read) or a script's own inline data: sourceMapURL from Debugger.scriptParsed; Solstice fetches nothing, so a page's sourceURL or sourceMappingURL can't make it reach the network. Size, section, line and segment counts capped; all logpoint sessions together keep at most MAX_HELD_MAP_BYTES of maps, each keeps at most MAX_HELD_FRAMES frames, and a navigated frame's scripts are dropped; mappings with a wrong segment length or a negative position, and negative section offsets, are refused",
+   "checks": [
+    "apps/browser/src/state/automation/devToolsSourceMaps.ts#inlineMapText",
+    "apps/browser/src/state/automation/devToolsSourceMaps.ts#parseSourceMap"
    ],
    "detected": false
   }

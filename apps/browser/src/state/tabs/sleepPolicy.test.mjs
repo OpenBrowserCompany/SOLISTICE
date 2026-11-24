@@ -1,7 +1,12 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { capWarmPanes, warmOrder, engineVeto, FREQUENT_SWITCHES, MINUTE, RECENTLY_AUDIBLE_MS, RECENTLY_SEEN_MS, sleepRules, sleepVeto, tabsToSleep } from "./sleepPolicy.ts";
-import { countSwitches } from "./tabSwitches.ts";
+import { countSwitch } from "./tabSwitches.ts";
+import { frontTabChanges } from "../windows/frontTabs.ts";
+
+const countSwitches = (prev, next, counts) => {
+  for (const change of frontTabChanges(prev, next)) countSwitch(change, counts);
+};
 
 const NOW = 1_000_000_000_000;
 const idle = (id, minutesAgo, extra = {}) => ({
@@ -105,7 +110,7 @@ test("warm pages are capped after split tabs expand into their panes, the next t
 test("each engine's own kept-by codes keep their meaning: the Mac veto's 100-103 may be asked past from the tab menu, Windows' 100-105 never", async () => {
   const mac = (await import("./engineKeptCodes.ts")).ENGINE_KEPT_CODES;
   const windows = (await import("./engineKeptCodes.windows.ts")).ENGINE_KEPT_CODES;
-  const linux = (await import("./engineKeptCodes.linux.ts")).ENGINE_KEPT_CODES;
+  const linux = (await import("./engineKeptCodes.desktop.ts")).ENGINE_KEPT_CODES;
   assert.deepEqual(mac.map((k) => [k.code, k.veto, k.userMayOverride]), [[100, "postedDocument", true], [101, "beforeUnload", true], [102, "download", true], [103, "cliSession", true]]);
   assert.deepEqual(windows.map((k) => k.code), [100, 101, 102, 103, 104, 105], "Windows' kept_pages.h codes: live opener, unsaved after use, Web Lock, blocking IndexedDB, live connection, another DevTools client");
   assert.ok(windows.every((k) => !k.userMayOverride), "a Windows page holding a Web Lock or unsaved work is never put to sleep from the tab menu");

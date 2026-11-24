@@ -49,15 +49,15 @@ test("a test instance needs an absolute scratch folder clear of the real profile
 
 test("the test-build marker never reaches an installer, and the harnesses that need test keys write it", () => {
   const script = (name) => readFileSync(new URL(name, scripts), "utf8");
-  assert.match(script("assemble.ps1"), /if \(\$relative -ieq "Ardia\.test-build"\) \{ continue \}/);
-  assert.match(script("make-installer.ps1"), /-Filter "Ardia\.test-build"[^\n]*throw/);
-  assert.match(script("installer-check.ps1"), /-Filter "Ardia\.test-build"[^\n]*throw/);
+  assert.match(script("assemble.ps1"), /if \(\$relative -ieq "Solstice\.test-build"\) \{ continue \}/);
+  assert.match(script("make-installer.ps1"), /-Filter "Solstice\.test-build"[^\n]*throw/);
+  assert.match(script("installer-check.ps1"), /-Filter "Solstice\.test-build"[^\n]*throw/);
   const smoke = script("launch-smoke.ps1");
   for (const kind of ["no test-build marker", "a relative ARDIA_DATA_DIR", "the real profile folder", "a junction to the real profile folder"]) assert.ok(smoke.includes(`"${kind}"`), kind);
-  assert.match(script("launch-smoke.ps1"), /"Ardia\.test-build"\r?\nNew-Item -ItemType File -Force -Path \$testBuild/);
-  assert.match(script("tour.ps1"), /exit 0\r?\n\}\r?\n\$App = \(Resolve-Path -LiteralPath \$App\)\.Path\r?\nNew-Item -ItemType File -Force -Path \(Join-Path \(Split-Path -Parent \$App\) "Ardia\.test-build"\)/);
-  for (const packaging of ["make-installer.ps1", "installer-check.ps1"]) assert.match(script(packaging), /-Recurse -File -Force -Filter "Ardia\.test-build"/, packaging);
-  assert.match(source("TestGate.h"), /constexpr wchar_t TestBuildMarker\[\] = L"Ardia\.test-build";/);
+  assert.match(script("launch-smoke.ps1"), /"Solstice\.test-build"\r?\nNew-Item -ItemType File -Force -Path \$testBuild/);
+  assert.match(script("tour.ps1"), /exit 0\r?\n\}\r?\n\$App = \(Resolve-Path -LiteralPath \$App\)\.Path\r?\nNew-Item -ItemType File -Force -Path \(Join-Path \(Split-Path -Parent \$App\) "Solstice\.test-build"\)/);
+  for (const packaging of ["make-installer.ps1", "installer-check.ps1"]) assert.match(script(packaging), /-Recurse -File -Force -Filter "Solstice\.test-build"/, packaging);
+  assert.match(source("TestGate.h"), /constexpr wchar_t TestBuildMarker\[\] = L"Solstice\.test-build";/);
 });
 
 test("a test instance seals its sync key under its own DPAPI purpose, so it can't unseal or stand in for the real one", () => {

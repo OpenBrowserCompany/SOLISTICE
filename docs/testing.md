@@ -72,7 +72,7 @@ holds the rest.
   picks the jobs from the change: `typecheck, tests and Mac bundle` (typecheck, the portable tests, the store
   simulator and the Mac bundle, Metro then Hermes) for the workspace code; the browser's tests in six shares
   (`--test-shard=I/6`) for what those tests read, which reaches past `apps/browser` into every package, the engine
-  sources, `apps/linux/src`, `scripts/{lib,security,windows}`, `tests/` and two docs; and `repository, vouch and
+  sources, `apps/desktop/src`, `scripts/{lib,security,windows}`, `tests/` and two docs; and `repository, vouch and
   stale tests` (`test:root`, no install) for `scripts/`, `engine/`, `.github/`, `.claude/`, the site, the release
   notes, `docs/dia-feature-parity.md` and any test file (for the promises lock and the parity citations). A
   docs-only change (other than the parity doc), phone-app, dashboard or videos change starts none of them, unless it
@@ -88,7 +88,7 @@ holds the rest.
 - When GitHub's runners are busy, the long jobs of `checks.yml`, `linux.yml` and `android.yml` move to Boat CI
   (`boat-large`); the `which checks run` job or a `route` job decides, and each run's summary says why
   ([ci-boat-overflow.md](ci-boat-overflow.md)).
-- `linux.yml` starts on what the Linux build and its fixture suites read (`apps/linux`, the shared UI and the desktop
+- `linux.yml` starts on what the Linux build and its fixture suites read (`apps/desktop`, the shared UI and the desktop
   packages' sources, the engine sources, its scripts, and the few Mac files the parity fixtures compare against,
   which `workflow-paths.test.mjs` finds in the suites and checks), not on the rest of the Mac, iPhone, Android or
   Windows native code; `windows.yml`
@@ -144,6 +144,12 @@ Test hygiene the run keeps (each was a real failure):
 - A check that needs a page on screen (permission prompts, choosers, context menus) shows it first: Chrome holds
   those for hidden tabs. Checks that need "no user activation" reload the page first (CDP's `userGesture` leaves
   one behind).
+
+`node packages/ardiacore/scripts/token-signals-check.mjs <app> [metro host:port] [scratch dir]` runs the engine-answered
+`Ardia.*` DevTools methods and `tabs.hold {untilDisconnect, live}` over the real token connection and control socket in
+one hidden instance (no DevTools port): the console ring, watermarks and generations, hit tests (listeners, cover,
+delegation, a cross-site iframe as a remote frame, cancellation on disconnect, the 4-probe cap), the focused frame's
+origin and document id, refusals off a tab session and for bad parameters, and SIGKILL ending a live hold.
 
 `node packages/ardiacore/scripts/drag-end-check.mjs <Debug app> [scratch dir]` checks that a page keeps taking clicks and keys
 after a drag nobody ends (`chromium-drag-always-ends.patch`, `docs/engine-build.md`): a DevTools session that took a drag and went
