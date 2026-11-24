@@ -38,7 +38,7 @@ async function fixture() {
   const shared = S().groupTabs([one, two], { pinned: true, name: "Team" });
   const profileId = S().groups[shared].profileId;
   const key = pinKeyOf(S().groups[shared]);
-  bindFolder(profileId, key, "/scratch/Ardia Shared/Team", { device: 1, inode: 5 });
+  bindFolder(profileId, key, "/scratch/Solstice Shared/Team", { device: 1, inode: 5 });
   bound = [profileId, key];
   return { windowId, one, two, loose, other, shared };
 }

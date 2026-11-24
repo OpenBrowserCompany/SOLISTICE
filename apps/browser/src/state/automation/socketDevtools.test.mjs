@@ -124,7 +124,7 @@ test("a server that isn't on, an unreadable or out-of-date token, and a host wit
   }
   stub.controlSocket.devtoolsEndpoint = null;
   const missing = await socketClient(406).call(DEVTOOLS_ENDPOINT);
-  assert.equal(missing.error?.code, "unknown_method", "a Mac whose native module lacks the call answers as an older Ardia does");
+  assert.equal(missing.error?.code, "unknown_method", "a Mac whose native module lacks the call answers as an older Solstice does");
   assert.equal(takeCliCounts().cli_socket_devtools_endpoint_unsupported, 1);
 });
 

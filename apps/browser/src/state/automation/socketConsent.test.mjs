@@ -20,7 +20,7 @@ function holdConfirm() {
   dialogs.confirm = () => new Promise((resolve) => waiting.push(resolve));
   return async (answer) => {
     for (let i = 0; i < 50 && !waiting.length; i++) await tick();
-    assert.equal(waiting.length, 1, "Ardia asked");
+    assert.equal(waiting.length, 1, "Solstice asked");
     S().updateSettings({ cliControl: false });
     waiting[0](answer);
   };
