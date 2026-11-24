@@ -11,7 +11,7 @@ private struct Choice: Sendable, CustomTestStringConvertible {
 }
 
 private let choices = [
-  Choice(name: "Ardia", passwordsOn: true, systemProvider: false, fill: .ardia, offerToSave: .ardia),
+  Choice(name: "Solstice", passwordsOn: true, systemProvider: false, fill: .ardia, offerToSave: .ardia),
   Choice(name: "none", passwordsOn: false, systemProvider: false, fill: .ardia, offerToSave: .offerToSaveOff),
   Choice(name: "a plugin filling through the system panel", passwordsOn: false, systemProvider: true, fill: .leftToManager, offerToSave: .leftToManager),
   Choice(name: "a plugin chosen before Offer to save turned off", passwordsOn: true, systemProvider: true, fill: .leftToManager, offerToSave: .leftToManager),
@@ -20,14 +20,14 @@ private let choices = [
 
 @Suite struct PasswordManagerChoiceGate {
   @Test(arguments: choices)
-  fileprivate func `WebKit fills from Ardia unless a manager fills through the system panel, and offers to save only when the manager is Ardia, like Chromium`(_ choice: Choice) {
+  fileprivate func `WebKit fills from Solstice unless a manager fills through the system panel, and offers to save only when the manager is Solstice, like Chromium`(_ choice: Choice) {
     #expect(WebKitPasswordGate.verdict(.fill, passwordsOn: choice.passwordsOn, systemProvider: choice.systemProvider, privateProfile: false) == choice.fill)
     #expect(
       WebKitPasswordGate.verdict(.offerToSave, passwordsOn: choice.passwordsOn, systemProvider: choice.systemProvider, privateProfile: false)
         == choice.offerToSave)
   }
 
-  @Test func `a private window fills from Ardia but never offers to save`() {
+  @Test func `a private window fills from Solstice but never offers to save`() {
     #expect(WebKitPasswordGate.verdict(.fill, passwordsOn: true, systemProvider: false, privateProfile: true) == .ardia)
     #expect(WebKitPasswordGate.verdict(.offerToSave, passwordsOn: true, systemProvider: false, privateProfile: true) == .privateProfile)
   }

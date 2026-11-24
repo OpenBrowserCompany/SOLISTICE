@@ -284,7 +284,7 @@ test("the cleanup runs before the engines load, holds back My filters reads and 
   assert.match(script, /rawText = µb\.ardiaCleanHidingRules\(rawText\)\.text;/);
   assert.match(script, /compiledMagic: 173,/);
   assert.match(script, /selfieMagic: 173,/);
-  assert.match(script, /selfie\/staticArdia2/);
+  assert.match(script, /selfie\/staticSolstice-2/);
 });
 
 function startupFlow() {

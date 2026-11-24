@@ -56,7 +56,7 @@ test("a key a WebKit tab handed to the input source is counted, and the count is
   assert.ok(focus.includes('Function("takeInputSourceKeys") { () -> Int in InputSourceKeys.takeWebKitTabKeys() }'));
 });
 
-test("Ardia's own text views use the same helper, so the two engines cannot drift apart", () => {
+test("Solstice's own text views use the same helper, so the two engines cannot drift apart", () => {
   const patches = read("../../shell/ios/AppKitPatches.swift");
   assert.ok(patches.includes("if InputSourceKeys.consume(event) { return }"));
   assert.doesNotMatch(patches, /kVK_JIS_Eisu|kVK_JIS_Kana|processInputKeyBindings/);
