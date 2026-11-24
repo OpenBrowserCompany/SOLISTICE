@@ -30,7 +30,7 @@
     {
       "name": "chrome export with the bookmarks bar, nested folders, dates and other bookmarks",
       "file": {
-        "text": "<!DOCTYPE NETSCAPE-Bookmark-file-1>\n<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=UTF-8\">\n<TITLE>Bookmarks</TITLE>\n<H1>Bookmarks</H1>\n<DL><p>\n    <DT><H3 ADD_DATE=\"1700000000\" LAST_MODIFIED=\"1700000500\" PERSONAL_TOOLBAR_FOLDER=\"true\">Bookmarks bar</H3>\n    <DL><p>\n        <DT><A HREF=\"https://ardia.dev/\" ADD_DATE=\"1700000001\" ICON=\"data:image/png;base64,iVBORw0KGgo=\">Ardia</A>\n        <DT><H3 ADD_DATE=\"1700000002\" LAST_MODIFIED=\"0\">Work</H3>\n        <DL><p>\n            <DT><A HREF=\"https://docs.example/a?b=c&amp;d=e#f\" ADD_DATE=\"1700000003\">Docs</A>\n            <DT><H3 ADD_DATE=\"1700000004\">Empty</H3>\n            <DL><p>\n            </DL><p>\n        </DL><p>\n    </DL><p>\n    <DT><H3 ADD_DATE=\"1700000005\" UNFILED_BOOKMARKS_FOLDER=\"true\">Other bookmarks</H3>\n    <DL><p>\n        <DT><A HREF=\"https://other.example/\" ADD_DATE=\"1700000006\">Other</A>\n    </DL><p>\n</DL><p>\n"
+        "text": "<!DOCTYPE NETSCAPE-Bookmark-file-1>\n<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=UTF-8\">\n<TITLE>Bookmarks</TITLE>\n<H1>Bookmarks</H1>\n<DL><p>\n    <DT><H3 ADD_DATE=\"1700000000\" LAST_MODIFIED=\"1700000500\" PERSONAL_TOOLBAR_FOLDER=\"true\">Bookmarks bar</H3>\n    <DL><p>\n        <DT><A HREF=\"https://ardia.dev/\" ADD_DATE=\"1700000001\" ICON=\"data:image/png;base64,iVBORw0KGgo=\">Solstice</A>\n        <DT><H3 ADD_DATE=\"1700000002\" LAST_MODIFIED=\"0\">Work</H3>\n        <DL><p>\n            <DT><A HREF=\"https://docs.example/a?b=c&amp;d=e#f\" ADD_DATE=\"1700000003\">Docs</A>\n            <DT><H3 ADD_DATE=\"1700000004\">Empty</H3>\n            <DL><p>\n            </DL><p>\n        </DL><p>\n    </DL><p>\n    <DT><H3 ADD_DATE=\"1700000005\" UNFILED_BOOKMARKS_FOLDER=\"true\">Other bookmarks</H3>\n    <DL><p>\n        <DT><A HREF=\"https://other.example/\" ADD_DATE=\"1700000006\">Other</A>\n    </DL><p>\n</DL><p>\n"
       },
       "expect": {
         "ok": {
@@ -44,7 +44,7 @@
               "children": [
                 {
                   "type": "url",
-                  "title": "Ardia",
+                  "title": "Solstice",
                   "url": "https://ardia.dev/",
                   "dateAdded": 1700000001000.0
                 },

@@ -275,7 +275,7 @@ class LinuxUpdateParityTests(unittest.TestCase):
                 (entry['id'], 'name', base['manifest'].replace(deb[1], value)),
                 (entry['id'], 'digest', base['manifest'].replace(deb[2], value)),
                 (entry['id'], 'size', base['manifest'].replace(f' {deb[3]}\n', f' {value}\n', 1)),
-                (entry['id'], 'kind', base['manifest'].replace('deb Ardia', f'{value} Ardia')),
+                (entry['id'], 'kind', base['manifest'].replace('deb Solstice', f'{value} Solstice')),
                 (entry['id'], 'line', base['manifest'] + value + '\n'),
             ]
         encoded = [text.encode('utf-8', 'surrogatepass') for _, _, text in forged]
