@@ -179,7 +179,7 @@ class PhoneInbox(private val file: File, private val clock: () -> Long = System:
         } catch (error: JSONException) {
             setAside(text)
             failNextWrite = true
-            report("Ardia couldn’t read the tabs and history changes waiting from your Mac, and set them aside.")
+            report("Solstice couldn’t read the tabs and history changes waiting from your Mac, and set them aside.")
             return Contents(mutableListOf(), ArrayDeque(), 0)
         }
         val entries = ArrayList<Entry>()
@@ -191,7 +191,7 @@ class PhoneInbox(private val file: File, private val clock: () -> Long = System:
         }
         if (unreadable.length() > 0) {
             setAside(unreadable.toString())
-            report("Ardia set aside some tabs and history changes from your Mac it couldn’t read.")
+            report("Solstice set aside some tabs and history changes from your Mac it couldn’t read.")
         }
         val applied = ArrayDeque<String>()
         parsed.applied?.let { list -> for (index in 0 until list.length()) list.optString(index).takeIf { it.isNotEmpty() }?.let(applied::addLast) }

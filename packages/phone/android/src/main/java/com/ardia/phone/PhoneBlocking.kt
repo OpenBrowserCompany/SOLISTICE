@@ -10,7 +10,7 @@ import com.ardia.blocking.FilterLists
 import com.ardia.blocking.FilterListsState
 import com.ardia.blocking.HttpFilterListDownloader
 import com.ardia.blocking.SharedPreferencesBlockingStore
-import com.ardia.browser.PageFilter
+import com.openbrowsercompany.solstice.PageFilter
 import java.io.File
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
