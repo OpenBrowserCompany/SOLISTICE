@@ -29,7 +29,7 @@ env:
 
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: namespace-profile-solistice-browser
     timeout-minutes: 120
     permissions:
       contents: write
