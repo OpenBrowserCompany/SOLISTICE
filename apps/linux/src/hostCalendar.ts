@@ -181,7 +181,7 @@ const calendarError = (code: string, message: string) => Object.assign(new Error
 function createLinuxCalendar(host: ArdiaHost): LinuxCalendar {
   const supported = CALENDAR_CAPABILITIES.every((method) => hostSupports(method, host));
   let status: CalendarAuthorization = !supported ? "restricted" : consentGranted(host) ? "fullAccess" : "notDetermined";
-  let message = supported ? "" : "This Ardia engine was built without the Linux calendar service";
+  let message = supported ? "" : "This Solstice engine was built without the Linux calendar service";
   let known: KnownCalendar[] = [];
   let report: CalendarRefreshReport = { truncatedCalendars: [], truncatedEvents: [], skippedObjects: 0, failedCalendars: [] };
   const invoke = <T>(method: string, args: unknown[]) => invokeHost<T>(`ArdiaCalendar.${method}`, { args }, host);
@@ -276,7 +276,7 @@ function createLinuxCalendar(host: ArdiaHost): LinuxCalendar {
       }
       if (failures.length === wanted.length) {
         const denied = failures.find((f) => f.status === "denied");
-        throw calendarError(denied ? "ERR_CALENDAR_DENIED" : "ERR_CALENDAR_FAILED", (denied ?? failures[0])!.message || "Ardia couldn't read your calendars");
+        throw calendarError(denied ? "ERR_CALENDAR_DENIED" : "ERR_CALENDAR_FAILED", (denied ?? failures[0])!.message || "Solstice couldn't read your calendars");
       }
       if (failures.length) warnFor(consent, "[ardia linux] calendars skipped", failures.map((f) => f.message));
       return found.sort((a, b) => a.start - b.start);

@@ -2,7 +2,7 @@ import { unavailableError } from "./hostCapabilities.ts";
 import { hostSupports } from "./host.ts";
 
 export const CAST_UNAVAILABLE_TITLE = "Casting Isn't Available";
-const CAST_UNAVAILABLE_MESSAGE = "Ardia for Linux can't cast tabs yet.";
+const CAST_UNAVAILABLE_MESSAGE = "Solstice for Linux can't cast tabs yet.";
 
 const UNAVAILABLE: Record<string, string> = {
   startCasting: "Casting",
@@ -10,7 +10,7 @@ const UNAVAILABLE: Record<string, string> = {
   closeCastDialog: "Casting",
   terminateCastRoute: "Casting",
   changeCaptureSource: "Switching the shared tab",
-  stopCapture: "Stopping a capture from Ardia",
+  stopCapture: "Stopping a capture from Solstice",
 };
 
 async function noticeCastUnavailable(args: string) {
