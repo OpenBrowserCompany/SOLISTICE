@@ -465,7 +465,7 @@ export function resolveCppConstant(usage, own, all, aliases = new Map()) {
   return undefined;
 }
 
-const MODULE_METHOD = /^Ardia[A-Za-z]+\.[a-z][A-Za-z]*$/;
+const MODULE_METHOD = /^Solstice[A-Za-z]+\.[a-z][A-Za-z]*$/;
 
 export function linuxModuleDispatch(sources) {
   const methods = new Set();
@@ -475,15 +475,15 @@ export function linuxModuleDispatch(sources) {
     const code = stripCppComments(written);
     const masked = maskCppLiterals(code);
     const aliases = cppNamespaceAliases(code);
-    const flags = [...code.matchAll(/\bconst\s+bool\s+(\w+)\s*=\s*(?:method|name)\s*==\s*"(Ardia[A-Za-z]+\.[a-z][A-Za-z]*)"\s*;/g)].map((match) => ({ flag: match[1], method: match[2], at: match.index }));
+    const flags = [...code.matchAll(/\bconst\s+bool\s+(\w+)\s*=\s*(?:method|name)\s*==\s*"(Solstice[A-Za-z]+\.[a-z][A-Za-z]*)"\s*;/g)].map((match) => ({ flag: match[1], method: match[2], at: match.index }));
     const literalOrConstant = (literal, constant) => literal ?? (constant === undefined ? undefined : resolveCppConstant(constant, tables[index], tables, aliases));
     for (const match of masked.matchAll(/\b(?:Send)?Event\(\s*"/g)) {
-      const call = /^(?:Send)?Event\(\s*"(Ardia[A-Za-z]+)"\s*,\s*(?:"([a-zA-Z]+)"|((?:::)?[A-Za-z_][\w]*(?:::[A-Za-z_]\w*)*))\s*[,)]/.exec(code.slice(match.index));
+      const call = /^(?:Send)?Event\(\s*"(Solstice[A-Za-z]+)"\s*,\s*(?:"([a-zA-Z]+)"|((?:::)?[A-Za-z_][\w]*(?:::[A-Za-z_]\w*)*))\s*[,)]/.exec(code.slice(match.index));
       const event = call && literalOrConstant(call[2], call[3]);
       if (event && /^[a-zA-Z]+$/.test(event)) events.add(`${call[1]}.${event}`);
     }
     for (const row of masked.matchAll(/\{\s*"/g)) {
-      const entry = /^\{\s*"(Ardia[A-Za-z]+\.[a-z][A-Za-z]*)"\s*,\s*Route::k\w+\s*\}/.exec(code.slice(row.index));
+      const entry = /^\{\s*"(Solstice[A-Za-z]+\.[a-z][A-Za-z]*)"\s*,\s*Route::k\w+\s*\}/.exec(code.slice(row.index));
       if (entry) methods.add(entry[1]);
     }
     const functions = cppFunctions(masked);
@@ -519,7 +519,7 @@ export function windowsNativeModules(sources) {
   const events = new Set();
   for (const written of sources) {
     const source = stripCppComments(written);
-    for (const match of source.matchAll(/\bEmitEvent\([^,]+,\s*L"(Ardia[A-Za-z]+)"\s*,\s*L"([a-zA-Z]+)"/g)) events.add(`${match[1]}.${match[2]}`);
+    for (const match of source.matchAll(/\bEmitEvent\([^,]+,\s*L"(Solstice[A-Za-z]+)"\s*,\s*L"([a-zA-Z]+)"/g)) events.add(`${match[1]}.${match[2]}`);
     const modules = [...source.matchAll(/REACT_MODULE\(\s*\w+\s*,\s*L"([^"]+)"\s*\)/g)].map((match) => match[1]);
     if (modules.length > 1) throw new Error(`one header registers ${modules.join(" and ")}; the scan reads one module per header`);
     if (!modules.length) continue;
@@ -694,7 +694,7 @@ export function windowsJsModules(read, exists) {
   const modulesPath = `${WINDOWS_JS}modules.ts`;
   const members = new Map();
   walk(topLevelObject(parseTs(modulesPath, read(modulesPath)), "writtenInJs"), (node) => {
-    if (ts.isPropertyAssignment(node) && keyOf(node)?.startsWith("Ardia")) {
+    if (ts.isPropertyAssignment(node) && keyOf(node)?.startsWith("Solstice")) {
       const value = node.initializer;
       members.set(keyOf(node), () => {
         const inner = unwrap(value);
@@ -709,7 +709,7 @@ export function windowsJsModules(read, exists) {
   const defaults = new Map();
   for (const property of topLevelObject(parseTs(defaultsPath, read(defaultsPath)), "moduleDefaults").properties) {
     const value = ts.isPropertyAssignment(property) ? unwrap(property.initializer) : null;
-    if (keyOf(property)?.startsWith("Ardia") && value && ts.isObjectLiteralExpression(value)) defaults.set(keyOf(property), new Set(objectMembers(value)));
+    if (keyOf(property)?.startsWith("Solstice") && value && ts.isObjectLiteralExpression(value)) defaults.set(keyOf(property), new Set(objectMembers(value)));
   }
   const events = new Set();
   for (const path of filesUnder(WINDOWS_JS, /\.tsx?$/).filter((file) => !/\.test\./.test(file))) {

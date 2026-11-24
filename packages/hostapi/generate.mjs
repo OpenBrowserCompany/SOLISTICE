@@ -33,7 +33,7 @@ const capitalized = (name) => name[0].toUpperCase() + name.slice(1);
 const sortedKeys = (record) => Object.keys(record).sort();
 const isRecord = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
 
-const MODULE_NAME = /^Ardia[A-Z][A-Za-z]*$/;
+const MODULE_NAME = /^Solstice[A-Z][A-Za-z]*$/;
 const PACKAGE = /^packages\/[a-z][a-z0-9-]*$/;
 const PARAMETER = /^[a-z][a-zA-Z0-9]*$/;
 const MODULE_BINDINGS = { mac: new Set(["custom", "absent"]), desktop: new Set(["custom", "adapted", "host", "absent"]), windows: new Set(["custom", "absent"]) };
@@ -73,7 +73,7 @@ export async function loadModuleDomains() {
   return moduleDomains;
 }
 
-export const nativeTypeOf = (module) => `${module.slice("Ardia".length)}Native`;
+export const nativeTypeOf = (module) => `${module.slice("Solstice".length)}Native`;
 export const modulePaths = (name, pkg) => ({ types: `${pkg}/src/generated/native.ts`, swift: `${pkg}/ios/${capitalized(name)}Native.swift` });
 const packageDependencies = (pkg) => {
   const at = `${ROOT}${pkg}/package.json`;
@@ -117,7 +117,7 @@ export function validateModuleDomain(name, domain) {
   }
   if (!isRecord(domain.modules) || Object.keys(domain.modules).length === 0) fail("modules lists at least one Expo module by its native name");
   for (const [module, entry] of Object.entries(domain.modules)) {
-    if (!MODULE_NAME.test(module)) fail(`module ${module} is an Expo module name, Ardia followed by UpperCamelCase letters`);
+    if (!MODULE_NAME.test(module)) fail(`module ${module} is an Expo module name, Solstice followed by UpperCamelCase letters`);
     declare(nativeTypeOf(module), "module");
     if (!isRecord(entry) || !isRecord(entry.functions) || !isRecord(entry.events)) fail(`module ${module} is { functions, events }`);
     if (entry.constants !== undefined && !isRecord(entry.constants)) fail(`module ${module}'s constants map names to { type, mac, desktop, windows }`);
