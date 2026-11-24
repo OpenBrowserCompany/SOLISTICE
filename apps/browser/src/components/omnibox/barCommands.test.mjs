@@ -74,7 +74,7 @@ const ENTRIES = [
   },
   {
     id: "newLittleArdia",
-    title: "New Little Ardia Window",
+    title: "New Little Solstice Window",
     keywords: ["little arc", "mini window"],
     ran: ({ w }) => assert.equal(Object.values(S().windows).filter((x) => x.kind === "small" && x.id !== w).length, 1),
   },
@@ -128,7 +128,7 @@ test("with no page only the four app commands are offered; View Source needs a w
   for (const id of appOnly) assert.ok(empty.has(id), `${id} on an empty tab`);
   for (const id of pageOnly) assert.ok(!empty.has(id), `${id} not on an empty tab`);
 
-  const internal = ids(setup("ardia://history").w);
+  const internal = ids(setup("solstice://history").w);
   assert.ok(!internal.has("viewSource"), "no View Source on an internal page");
   for (const id of pageOnly.filter((id) => id !== "viewSource")) assert.ok(internal.has(id), `${id} on an internal page`);
 
