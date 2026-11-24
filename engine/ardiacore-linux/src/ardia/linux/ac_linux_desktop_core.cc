@@ -362,11 +362,11 @@ InstalledEntry FindInstalledEntry(const Install& install) {
 std::string_view EntryProblem(EntryState state) {
   switch (state) {
     case EntryState::kUsable: return "";
-    case EntryState::kMissing: return "Ardia has no installed desktop entry";
-    case EntryState::kUnreadable: return "Ardia's desktop entry cannot be read";
-    case EntryState::kHidden: return "Ardia's desktop entry is hidden";
-    case EntryState::kOtherInstall: return "The installed desktop entry starts another copy of Ardia";
-    case EntryState::kNoHandlers: return "Ardia's desktop entry does not handle web links";
+    case EntryState::kMissing: return "Solstice has no installed desktop entry";
+    case EntryState::kUnreadable: return "Solstice's desktop entry cannot be read";
+    case EntryState::kHidden: return "Solstice's desktop entry is hidden";
+    case EntryState::kOtherInstall: return "The installed desktop entry starts another copy of Solstice";
+    case EntryState::kNoHandlers: return "Solstice's desktop entry does not handle web links";
   }
   return "";
 }
@@ -401,7 +401,7 @@ std::string_view LoginStatusName(LoginStatus status) {
 std::string AutostartEntry(const Install& install) {
   const std::string exec = QuoteExec(install.launcher);
   if (exec.empty()) return {};
-  return "[Desktop Entry]\nType=Application\nName=Ardia\nExec=" + exec +
+  return "[Desktop Entry]\nType=Application\nName=Solstice\nExec=" + exec +
          "\nIcon=ardia\nTerminal=false\nX-GNOME-Autostart-enabled=true\n";
 }
 
@@ -440,7 +440,7 @@ LoginChange SetLaunchAtLogin(const Install& install, bool enabled) {
   }
   const std::string text = AutostartEntry(install);
   if (text.empty() || !ExecutableFile(install.launcher)) {
-    return LoginFailure("This copy of Ardia has no launcher to start at login");
+    return LoginFailure("This copy of Solstice has no launcher to start at login");
   }
   if (!MakeDirectories(install.autostart_directory)) return LoginFailure("The autostart folder cannot be created");
   Descriptor directory(open(install.autostart_directory.c_str(), O_RDONLY | O_DIRECTORY | O_CLOEXEC));
