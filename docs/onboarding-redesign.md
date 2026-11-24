@@ -5,7 +5,7 @@ instead of reading about it.
 
 ## Idea
 
-Ardia is Dia's polish with Arc's sidebar, and many settings already say "as in Arc" or "as in Dia". Onboarding
+Solstice is Dia's polish with Arc's sidebar, and many settings already say "as in Arc" or "as in Dia". Onboarding
 asks once which browser feels like home, uses the answer to fill in a preset, and then shows this-or-that cards.
 Each card has a small animated illustration that plays its demo. The panel on the right is a mock window that
 reflects every choice so far and animates from one state to the next.
@@ -21,7 +21,7 @@ reflects every choice so far and animates from one state to the next.
 | 5 | Look | Theme color · Auto / Light / Dark · Page frame: Framed / Thin / Edge to edge and a slider (asked with every preset) · Website color in the tab bar on / off. More options: app icon, hide toolbar while scrolling, bookmarks bar. |
 | 6 | Search & privacy | Search engine tiles · Block ads, trackers, cookie banners · Crash reports (today's receipt). |
 | 7 | Pin your apps | today's step, preselected from the imported history once the import has finished |
-| 8 | Make it home | Default browser (7-day trial), Dock, open at login, links from other apps in Little Ardia / a tab |
+| 8 | Make it home | Default browser (7-day trial), Dock, open at login, links from other apps in Little Solstice / a tab |
 | 9 | Want the extras? | Official plugins (`docs/plugins.md` › where they're offered): Command Line, ticked. Install shows what it gets and asks before anything is installed. Left out where no official plugin can be offered. |
 | 10 | Outro | postcard listing what you picked · Get Started / Take the Tour |
 
@@ -32,7 +32,7 @@ command is offered as an official plugin on screen 9 and in Settings › Plugins
 
 Every browser on the "Where are you coming from?" screen has its own preset (`PRESETS` in
 `state/onboarding/onboarding.ts`), so each screen starts out the way that browser behaves. "Starting fresh" keeps
-Ardia's defaults except where its column says otherwise. Chrome, Firefox, Safari, Brave and Edge share one classic-tabs base.
+Solstice's defaults except where its column says otherwise. Chrome, Firefox, Safari, Brave and Edge share one classic-tabs base.
 
 Picking a browser applies its whole preset when you press Continue and skips every question the preset answers, so
 the flow is Source → Color → Crash reports → Pins → Default browser → Outro (6 steps). Everything stays in
@@ -57,7 +57,7 @@ Settings. "Starting fresh" or skipping the Source screen keeps the full question
 | Hide toolbar while scrolling (`hideToolbarWhileScrolling`) | on | on | off | off | off | off | off | off | off |
 | Bookmarks bar (`bookmarksBar`) | never | never | never | New Tab | New Tab | never | New Tab | New Tab | never |
 | Search engine (`searchEngine`) | Google | Google | Google | Google | Google | Google | Brave Search | Bing | Google |
-| Links from other apps (`openLinksInLittleArdia`) | Little Ardia | Little Ardia | tab | tab | tab | tab | tab | tab | Little Ardia |
+| Links from other apps (`openLinksInLittleArdia`) | Little Solstice | Little Solstice | tab | tab | tab | tab | tab | tab | Little Solstice |
 
 Deliberate departures from the source browser:
 

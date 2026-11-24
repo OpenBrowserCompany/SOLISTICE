@@ -104,7 +104,7 @@ that catches it. Every check writes its geometry, identity and frame trace to th
 
 | # | Failure | How it shows | Check |
 | --- | --- | --- | --- |
-| P21 | A real trackpad pinch never reaches the Peek: the magnify monitor was only installed by `MagnifyArea`, which Peek no longer uses, and the synthetic test called the router directly | pinching zooms the page instead | `pinch-monitor`: a magnify event posted through `NSApp` (not the router) with no Little Ardia window open moves the card |
+| P21 | A real trackpad pinch never reaches the Peek: the magnify monitor was only installed by `MagnifyArea`, which Peek no longer uses, and the synthetic test called the router directly | pinching zooms the page instead | `pinch-monitor`: a magnify event posted through `NSApp` (not the router) with no Little Solstice window open moves the card |
 | P22 | The page is drawn at `k²` inside a card sized for `k`, so a wide border shows around it | WindowServer capture: page rect ≠ the card's page slot | `rest-capture`: the drawn page edge sits `inset` from the card edge (±2 pt) in a WindowServer capture |
 | P23 | The Genie collapses to a 28 × 18 pt point or folds where rows cross | neck size, fold at the link's row | `genie-shape`: the narrowest warped card is ≥ 10 % of the card's width and the entrance settles in ≤ 500 ms; WindowServer captures show one smooth funnel edge |
 | P24 | Closing doesn't retrace the entrance | close plays a zoom while open played a Genie | `close-genie`: close by ×, Esc and pinch-in all warp back into the link; with the mesh off it zooms back |
