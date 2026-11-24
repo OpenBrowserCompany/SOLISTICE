@@ -9,10 +9,10 @@ cat >"$S/film.entitlements" <<'PLIST'
 PLIST
 for side in before after; do
   src=$([ "$side" = before ] && echo "${BEFORE_SRC:-}" || echo "${AFTER_SRC:-}")
-  if [ ! -d "$S/$side/Ardia.app" ] && [ -n "$src" ]; then
+  if [ ! -d "$S/$side/Solstice.app" ] && [ -n "$src" ]; then
     mkdir -p "$S/$side"
-    ditto "$src" "$S/$side/Ardia.app"
-    codesign -f -s - --options runtime --entitlements "$S/film.entitlements" "$S/$side/Ardia.app" >/dev/null 2>&1
+    ditto "$src" "$S/$side/Solstice.app"
+    codesign -f -s - --options runtime --entitlements "$S/film.entitlements" "$S/$side/Solstice.app" >/dev/null 2>&1
   fi
 done
 node "$REPO/apps/videos/scripts/fixes/sessions-0247n6.mjs" "$S"

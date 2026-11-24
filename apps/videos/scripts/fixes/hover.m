@@ -30,7 +30,7 @@ static void MarkHover(void) {
 
 __attribute__((constructor)) static void HoverInit(void) {
   NSString *exe = NSProcessInfo.processInfo.arguments.firstObject.lastPathComponent;
-  if (![exe isEqualToString:@"Ardia"]) return;
+  if (![exe isEqualToString:@"Solstice"]) return;
   Method m1 = class_getClassMethod([NSEvent class], @selector(mouseLocation));
   gMouseLocation = method_setImplementation(m1, (IMP)FakeMouseLocation);
   Method m2 = class_getClassMethod([NSWindow class], @selector(windowNumberAtPoint:belowWindowWithWindowNumber:));

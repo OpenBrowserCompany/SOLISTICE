@@ -114,7 +114,7 @@ static void Poll(void) {
 __attribute__((constructor)) static void InputInit(void) {
   NSString *exe = NSProcessInfo.processInfo.arguments.firstObject.lastPathComponent;
   NSString *dir = NSProcessInfo.processInfo.environment[@"ARDIA_DATA_DIR"];
-  if (![exe isEqualToString:@"Ardia"] || !dir) return;
+  if (![exe isEqualToString:@"Solstice"] || !dir) return;
   gInbox = [dir stringByAppendingPathComponent:@"film-input.json"];
   gOutbox = [dir stringByAppendingPathComponent:@"film-input-done.json"];
   Method m = class_getClassMethod([NSEvent class], @selector(mouseLocation));
