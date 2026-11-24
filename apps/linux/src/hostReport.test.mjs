@@ -217,9 +217,9 @@ test("with both capabilities Report a Problem opens the sheet without recording,
     assert.equal(state.sent.issueNumber, 77);
     assert.deepEqual(posts.map((post) => post.url), [FEEDBACK_URL, `${FEEDBACK_URL}/r1/complete`]);
     assert.equal(posts[0].body.title, "Tabs flicker");
-    assert.deepEqual(Object.keys(posts[0].headers).sort(), ["Content-Type", "X-Ardia-Key"]);
+    assert.deepEqual(Object.keys(posts[0].headers).sort(), ["Content-Type", "X-Solstice-Key"]);
     assert.equal(posts[0].headers["Content-Type"], "application/json");
-    assert.deepEqual(Object.keys(posts[1].headers).sort(), ["Authorization", "Content-Type", "X-Ardia-Key"]);
+    assert.deepEqual(Object.keys(posts[1].headers).sort(), ["Authorization", "Content-Type", "X-Solstice-Key"]);
     assert.equal(posts[1].headers.Authorization, "Bearer tok");
     assert.ok(host.invoked.every(([, args]) => args.length === 3 && typeof args[1] === "string"));
   } finally {

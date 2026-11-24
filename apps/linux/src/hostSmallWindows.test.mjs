@@ -51,7 +51,7 @@ function fakeHost({ reject, pending = false, windowId = "main" } = {}) {
 const opener = (host, store) => createHostWindowOpener(host, () => S(), () => {}, (id) => dropRefusedWindow(useBrowser, id), { storage: store, screen: () => SCREEN });
 const secondRenderer = (windowId, saved, store, now) => initialHostSession({ bootstrap: { windowId, profileId: "default", pageProfile: "", startup: false } }, saved, now);
 
-test("a Little Ardia window's own renderer starts as that small window, with its page", async () => {
+test("a Little Solstice window's own renderer starts as that small window, with its page", async () => {
   mainSession();
   const saved = snapshotHostSession(S());
   const id = S().createWindow({ kind: "small", url: "https://example.com/a" });
@@ -59,7 +59,7 @@ test("a Little Ardia window's own renderer starts as that small window, with its
   const store = storage();
   const host = fakeHost();
   await opener(host, store)(id, { kind: "small", size: [900, 640], profile: "", frame: null });
-  assert.deepEqual(host.calls[0][1].args[1].frame, [510, 220, 900, 640], "it opens at the Little Ardia size, centred as on the Mac");
+  assert.deepEqual(host.calls[0][1].args[1].frame, [510, 220, 900, 640], "it opens at the Little Solstice size, centred as on the Mac");
   assert.ok(store.items.has(SMALL_WINDOW_SEED_PREFIX + id));
   const session = withSmallWindow({ bootstrap: { windowId: id, profileId: "default", pageProfile: "", startup: false } }, saved, store);
   assert.equal(session.windows[id].kind, "small");
@@ -152,7 +152,7 @@ test("seeds are checked before they are used", () => {
   assert.equal(secondRenderer(id, saved, undefined, now).windows[id].kind, "main", "without a seed the window is an ordinary one");
 });
 
-test("the Little Ardia frame is the Mac's: the saved size, at least 420 by 300 and at most 80 % of the work area, centred in it", () => {
+test("the Little Solstice frame is the Mac's: the saved size, at least 420 by 300 and at most 80 % of the work area, centred in it", () => {
   assert.deepEqual(smallWindowFrame([900, 640], SCREEN), [510, 220, 900, 640]);
   assert.deepEqual(smallWindowFrame(undefined, SCREEN), [510, 220, 900, 640]);
   assert.deepEqual(smallWindowFrame([100, 100], SCREEN), [750, 390, 420, 300]);
@@ -162,7 +162,7 @@ test("the Little Ardia frame is the Mac's: the saved size, at least 420 by 300 a
   assert.equal(smallWindowFrame([900, 640], { ...SCREEN, availWidth: 0 }), undefined);
 });
 
-test("a blank Little Ardia window starts on its command bar; one with a page doesn't", () => {
+test("a blank Little Solstice window starts on its command bar; one with a page doesn't", () => {
   mainSession();
   const blank = S().createWindow({ kind: "small" });
   const page = S().createWindow({ kind: "small", url: "https://example.com/" });

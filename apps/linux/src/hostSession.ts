@@ -210,7 +210,7 @@ function withLaunchWindowAdopted(saved: HydrateData, windowId: string): HydrateD
 export function initialHostSession(host: ArdiaHost, saved: HydrateData | null | undefined, now = Date.now(), onRestored?: (windowId: string) => void): HydrateData {
   const { windowId } = host.bootstrap;
   const profileId = seedProfile(host.bootstrap);
-  if (!windowId || !profileId || /[\\/\0]/.test(windowId + profileId)) throw new Error("Invalid Ardia host bootstrap IDs");
+  if (!windowId || !profileId || /[\\/\0]/.test(windowId + profileId)) throw new Error("Invalid Solstice host bootstrap IDs");
   if (saved) saved = linuxSessionShape(saved);
   if (host.bootstrap.startup !== false && saved?.settings?.restoreSession === false) saved = withoutRestoredWindows(saved, now);
   if (saved?.closedWindows) saved = { ...saved, closedWindows: inClosingOrder(saved.closedWindows) };
