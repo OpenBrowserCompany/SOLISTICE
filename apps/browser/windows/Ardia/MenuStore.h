@@ -14,7 +14,7 @@
 #include "NativeModules.h"
 #include "Paths.h"
 
-namespace Ardia::Menus {
+namespace Solstice::Menus {
 
 struct MenuEntryValue {
   std::string id;

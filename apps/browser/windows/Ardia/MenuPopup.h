@@ -22,7 +22,7 @@
 #include "ModalThread.h"
 #include "Paths.h"
 
-namespace Ardia::Menus {
+namespace Solstice::Menus {
 
 struct PopupItem {
   bool separator = false;
@@ -335,7 +335,7 @@ inline std::atomic<int> &OpenMenus() noexcept {
 inline std::shared_ptr<Popup> PreparePopup(std::vector<PopupItem> const &items, HWND owner) noexcept {
   try {
     if (!owner || !IsWindow(owner)) {
-      MenuLog("pop-up menu not shown: no Ardia window to own it");
+      MenuLog("pop-up menu not shown: no Solstice window to own it");
       return nullptr;
     }
     auto popup = std::make_shared<Popup>();
@@ -375,7 +375,7 @@ inline void TrackOnThisThread(Popup &popup, bool takesForeground) noexcept {
   if (takesForeground) {
     registry.menuThread = thread;
     if (!SetForegroundWindow(window) || !ForegroundIsOurs()) {
-      MenuLog("pop-up menu not shown: Ardia is no longer in front");
+      MenuLog("pop-up menu not shown: Solstice is no longer in front");
       parent.Release();
       registry.menuThread.compare_exchange_strong(thread, 0);
       return;

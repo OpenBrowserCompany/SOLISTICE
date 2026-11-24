@@ -12,7 +12,7 @@
 #include "NativeModules.h"
 #include "WindowManager.h"
 
-namespace Ardia {
+namespace Solstice {
 
 REACT_MODULE(MenusModule, L"ArdiaMenus")
 struct MenusModule {
