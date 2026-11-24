@@ -23,7 +23,7 @@ concurrency:
 
 jobs:
   name-frames:
-    runs-on: ubuntu-latest
+    runs-on: namespace-profile-solistice-browser
     timeout-minutes: 40
     env:
       CLICKHOUSE_URL: ${{ secrets.TELEMETRY_CLICKHOUSE_URL }}

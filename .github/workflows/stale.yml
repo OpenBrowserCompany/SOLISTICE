@@ -25,7 +25,7 @@ permissions:
 
 jobs:
   stale:
-    runs-on: ubuntu-latest
+    runs-on: namespace-profile-solistice-browser
     timeout-minutes: 30
     if: >-
       (github.event_name != 'pull_request_target' ||

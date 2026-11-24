@@ -49,7 +49,7 @@ concurrency:
 jobs:
   gate:
     if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository
-    runs-on: ubuntu-latest
+    runs-on: namespace-profile-solistice-browser
     timeout-minutes: 5
     permissions:
       contents: read
@@ -218,7 +218,7 @@ jobs:
   plugin-broker:
     needs: gate
     if: ${{ !cancelled() && (needs.gate.result == 'skipped' || (needs.gate.result == 'success' && needs.gate.outputs.run == 'true')) }}
-    runs-on: ubuntu-latest
+    runs-on: namespace-profile-solistice-browser
     timeout-minutes: 30
     defaults:
       run:
