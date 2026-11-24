@@ -72,7 +72,7 @@ async function engineDeleted(deleting: Promise<unknown>) {
   try {
     await deleting;
   } catch (error) {
-    throw new OpError("failed", `Ardia hid those pages, but the history database didn't delete them, so they may come back after a restart: ${String((error as Error)?.message ?? error)}`);
+    throw new OpError("failed", `Solstice hid those pages, but the history database didn't delete them, so they may come back after a restart: ${String((error as Error)?.message ?? error)}`);
   }
 }
 

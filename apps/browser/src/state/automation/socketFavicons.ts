@@ -39,7 +39,7 @@ export const FAVICON_METHODS: MethodSpec[] = [
   {
     name: "favicons.get",
     mutates: false,
-    description: "A page's icon as Ardia keeps it: the image as base64, from the app's cache or the profile's icon database",
+    description: "A page's icon as Solstice keeps it: the image as base64, from the app's cache or the profile's icon database",
     params: obj({ url: { type: "string", description: "A page address like https://example.com/" }, profile: PROFILE }, ["url"]),
     result: "{url, profile, found, mime, data}",
     run: favicon,

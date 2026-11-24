@@ -69,7 +69,7 @@ test("tile folders: make one of tabs, which become tiles; rename, add, take out,
   assert.deepEqual(await ok("pins.folders"), []);
 });
 
-test("tile folders refuse tabs from two windows and Little Ardia", async () => {
+test("tile folders refuse tabs from two windows and Little Solstice", async () => {
   const { tabs: [a] } = await setup();
   const other = S().createWindow({ url: "https://z.example/" });
   assert.equal(await code("pins.createFolder", { tabs: [a, S().windows[other].tabIds[0]] }), "bad_request");
