@@ -8,7 +8,7 @@ type Checked = { patch: Partial<Settings> } | { problem: string };
 type Rule = (value: unknown, settings: Settings, requested: Record<string, unknown>) => Checked;
 
 const SCHEME = /^[a-z][\w+.-]*:\/\//i;
-const NO_WEBKIT = "WebKit isn't part of Ardia on this platform, so pages always open in Chromium";
+const NO_WEBKIT = "WebKit isn't part of Solstice on this platform, so pages always open in Chromium";
 
 const shaped = (key: SettingKey, value: unknown, then: () => Checked): Checked => (validSettingValue(key, value) ? then() : { problem: `${key} isn't a value Settings can choose` });
 
@@ -29,7 +29,7 @@ function websiteEngines(value: unknown): Checked {
 
 function newTabUrl(value: unknown): Checked {
   const url = (value as string).trim();
-  if (url && !customNewTabUrl({ newTabOpens: "page", minimalismMode: false, newTabUrl: url })) return { problem: "newTabUrl: a New Tab page is an http or https address, about:blank or an Ardia page" };
+  if (url && !customNewTabUrl({ newTabOpens: "page", minimalismMode: false, newTabUrl: url })) return { problem: "newTabUrl: a New Tab page is an http or https address, about:blank or an Solstice page" };
   return { patch: { newTabUrl: url } };
 }
 

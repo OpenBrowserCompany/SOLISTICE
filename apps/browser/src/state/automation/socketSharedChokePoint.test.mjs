@@ -37,7 +37,7 @@ async function fixture() {
   S().updateGroup(inner, { name: "Inner" });
   const profileId = S().groups[shared].profileId;
   const key = pinKeyOf(S().groups[shared]);
-  bindFolder(profileId, key, "/scratch/Ardia Shared/Team", { device: 1, inode: 3 });
+  bindFolder(profileId, key, "/scratch/Solstice Shared/Team", { device: 1, inode: 3 });
   bound = [profileId, key];
   return { windowId, one, blank, loose, shared, inner, profileId, innerKey: pinKeyOf(S().groups[inner]) };
 }

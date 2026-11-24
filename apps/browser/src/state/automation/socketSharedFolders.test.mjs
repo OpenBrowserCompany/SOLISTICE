@@ -6,7 +6,7 @@ const listing = { exists: true, root: { entries: [], manifest: null, manifestPen
 let iCloud = true;
 globalThis.acTestNativeModules = {
   ArdiaSharedFolders: {
-    location: () => ({ path: "/scratch/Ardia Shared", iCloudAvailable: iCloud, iCloudPath: "/scratch" }),
+    location: () => ({ path: "/scratch/Solstice Shared", iCloudAvailable: iCloud, iCloudPath: "/scratch" }),
     read: async () => listing,
     apply: async () => ({ conflicts: [] }),
     create: async (parent, _parentIdentity, name) => (created.push([parent, name]), { path: `${parent}/${name}`, device: 1, inode: `${parent}/${name}`.length }),
@@ -63,11 +63,11 @@ test("shared folders over the socket: list reads the sidebar's shared folders; t
   assert.deepEqual(await ok("sharedFolders.list"), []);
   const group = S().groupTabs([tab], { pinned: true, name: "Team" });
   const profileId = S().groups[group].profileId;
-  bindFolder(profileId, pinKeyOf(S().groups[group]), "/scratch/Ardia Shared/Team", { device: 1, inode: 7 });
+  bindFolder(profileId, pinKeyOf(S().groups[group]), "/scratch/Solstice Shared/Team", { device: 1, inode: 7 });
   const rows = await ok("sharedFolders.list");
   assert.equal(rows.length, 1);
-  assert.equal(rows[0].path, "/scratch/Ardia Shared/Team");
-  assert.equal(rows[0].url, "file:///scratch/Ardia%20Shared/Team/");
+  assert.equal(rows[0].path, "/scratch/Solstice Shared/Team");
+  assert.equal(rows[0].url, "file:///scratch/Solstice%20Shared/Team/");
   assert.deepEqual(rows[0].groups, [group]);
   assert.equal(rows[0].name, "Team");
   for (const method of ["sharedFolders.share", "sharedFolders.add", "sharedFolders.sync", "sharedFolders.stop"]) assert.equal(await code(method, { group, path: "/scratch/x", window: windowId }), "unknown_method", method);
