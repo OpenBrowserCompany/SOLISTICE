@@ -12,7 +12,7 @@
 #include "MaterialSupport.h"
 #include "WindowManager.h"
 
-namespace Ardia {
+namespace Solstice {
 
 REACT_STRUCT(MaterialCapabilities)
 struct MaterialCapabilities {

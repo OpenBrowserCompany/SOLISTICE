@@ -19,7 +19,7 @@
 #include "Paths.h"
 #include "WindowManager.h"
 
-namespace Ardia::Menus {
+namespace Solstice::Menus {
 
 struct ActiveWindow {
   HWND hwnd = nullptr;
