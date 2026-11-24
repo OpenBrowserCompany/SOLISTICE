@@ -16,14 +16,14 @@ const url = new URL("benchmarks/", home).href;
 const card = bench ? scorecardOf(bench) : null;
 const rivalNames = bench?.rivals ?? ["Dia", "Helium"];
 const rivals = rivalNames.length > 1 ? `${rivalNames.slice(0, -1).join(", ")} and ${rivalNames.at(-1)}` : rivalNames.join("");
-const versus = ["Ardia", ...rivalNames].join(" vs ");
+const versus = ["Solstice", ...rivalNames].join(" vs ");
 const dataPath = "apps/site/src/data/bench.json";
 const dataPage = `${REPO}/blob/main/${dataPath}`;
 const dataFile = `${REPO.replace("https://github.com/", "https://raw.githubusercontent.com/")}/main/${dataPath}`;
-const description = `Ardia against ${rivals} on one Mac: launch, tabs, memory, idle CPU, Speedometer 3 and power.${
+const description = `Solstice against ${rivals} on one Mac: launch, tabs, memory, idle CPU, Speedometer 3 and power.${
   card ? ` ${card.total} tests, medians only, losses left in.` : ""
 }`;
-const organization = { "@type": "Organization", name: "Ardia", url: home };
+const organization = { "@type": "Organization", name: "Solstice", url: home };
 const jsonLd = [
   ...(bench
     ? [
@@ -63,7 +63,7 @@ const jsonLd = [
             <header class="method-head">
               <p class="label kicker">The method</p>
               <h2 class="poster" id="method-title">No warm starts.</h2>
-              <p class="sub">Same Mac, same script, same pages for every browser. The rows Ardia loses stay on the board.</p>
+              <p class="sub">Same Mac, same script, same pages for every browser. The rows Solstice loses stay on the board.</p>
             </header>
             <dl class="facts">
               <div class="fact">

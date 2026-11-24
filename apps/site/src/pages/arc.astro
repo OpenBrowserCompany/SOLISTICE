@@ -10,9 +10,9 @@ import { aboutArdiaPage, breadcrumbs } from "../data/jsonLd";
 
 const home = homeUrl(Astro.site);
 const url = new URL("arc/", home).href;
-const title = "Moving from Arc? A free Arc replacement for Mac · Ardia";
+const title = "Moving from Arc? A free Arc replacement for Mac · Solstice";
 const description =
-  "Arc stops working on December 22, 2026. Ardia is a free, open-source Mac browser with Arc’s sidebar that imports your spaces, pinned tabs, folders, themes and link rules.";
+  "Arc stops working on December 22, 2026. Solstice is a free, open-source Mac browser with Arc’s sidebar that imports your spaces, pinned tabs, folders, themes and link rules.";
 const jsonLd = [aboutArdiaPage({ home, url, title, description }), breadcrumbs(home, ["Moving from Arc", url])];
 
 const carried = [
@@ -21,9 +21,9 @@ const carried = [
   { from: "Pinned folders", to: "Pinned groups. Folders inside folders stay nested." },
   { from: "Favorites", to: "Tiles at the top of the sidebar." },
   { from: "Split views", to: "Splits, pinned or open, where they were. A four-pane split becomes three panes and a row." },
-  { from: "Open tabs", to: "An “Imported” group. Tabs already open in Ardia, and internal pages like arc://, are skipped." },
+  { from: "Open tabs", to: "An “Imported” group. Tabs already open in Solstice, and internal pages like arc://, are skipped." },
   { from: "Bookmarks, history, passwords, cookies", to: "Into the first profile, so you’re still signed in there." },
-  { from: "Air Traffic Control", to: "Link routing rules in Arc’s order, sending links to the profiles your spaces became, or to Little Ardia." },
+  { from: "Air Traffic Control", to: "Link routing rules in Arc’s order, sending links to the profiles your spaces became, or to Little Solstice." },
   { from: "Archived tabs", to: "Recently Cleaned in the same profile: the newest 100, kept for a week." },
   { from: "Extensions", to: "Listed after the import, so you can add them back from the Chrome Web Store." },
 ];
@@ -41,9 +41,9 @@ const timeline = [
     <section class="intro" aria-labelledby="arc-title">
       <div class="wrap">
         <p class="label kicker">Moving from Arc</p>
-        <h1 class="poster" id="arc-title"><span class="visually-hidden">Moving from Arc to Ardia: </span>Keep the sidebar.</h1>
+        <h1 class="poster" id="arc-title"><span class="visually-hidden">Moving from Arc to Solstice: </span>Keep the sidebar.</h1>
         <p class="lede">
-          Arc stops opening on December 22, 2026. Ardia is a free, open-source Arc alternative for Mac: Arc’s sidebar on real
+          Arc stops opening on December 22, 2026. Solstice is a free, open-source Arc alternative for Mac: Arc’s sidebar on real
           Chromium, and it imports your spaces, pinned tabs, folders, themes and link rules in one go.
         </p>
         <div class="cta">
@@ -79,8 +79,8 @@ const timeline = [
             <p>Pinned tabs, groups and today’s tabs down the side, in Arc’s layout. Hide it when you want the whole screen.</p>
           </div>
           <div class="col">
-            <h3>Split view, Peek, Little Ardia</h3>
-            <p>Up to three pages side by side. ⇧-click a link to peek at it. ⌥⌘N opens a Little Ardia window, like Little Arc.</p>
+            <h3>Split view, Peek, Little Solstice</h3>
+            <p>Up to three pages side by side. ⇧-click a link to peek at it. ⌥⌘N opens a Little Solstice window, like Little Arc.</p>
           </div>
           <div class="col">
             <h3>The command bar</h3>
@@ -107,7 +107,7 @@ const timeline = [
         <h2 class="poster" id="missing-title">What doesn’t</h2>
         <ul class="plain">
           <li><strong>Boosts and Easels.</strong> Neither is built in.</li>
-          <li><strong>Arc Max.</strong> Ardia has no AI built in, on purpose.</li>
+          <li><strong>Arc Max.</strong> Solstice has no AI built in, on purpose.</li>
           <li><strong>Intel Macs.</strong> Mac needs Apple Silicon and {MIN_MACOS}+. Windows has an early nightly, not signed yet.</li>
         </ul>
       </div>
@@ -117,10 +117,10 @@ const timeline = [
       <div class="wrap">
         <h2 class="poster" id="switch-title">How to switch</h2>
         <ol class="steps">
-          <li>Download Ardia and drag it into Applications.</li>
-          <li>Keep Arc installed. In Ardia, open Ardia › Import from Another Browser… and pick Arc.</li>
+          <li>Download Solstice and drag it into Applications.</li>
+          <li>Keep Arc installed. In Solstice, open Solstice › Import from Another Browser… and pick Arc.</li>
           <li>Pick the spaces to bring. macOS asks once to unlock Arc’s saved passwords, so they and your cookies come too.</li>
-          <li>Make Ardia your default browser in Settings › General.</li>
+          <li>Make Solstice your default browser in Settings › General.</li>
         </ol>
       </div>
     </section>
@@ -146,7 +146,7 @@ const timeline = [
       <div class="wrap">
         <h2 class="poster" id="dia-title">Why not Dia?</h2>
         <p class="note">
-          The Browser Company points Arc users to Dia, which is built around AI. Ardia looks like Dia, keeps Arc’s sidebar, and
+          The Browser Company points Arc users to Dia, which is built around AI. Solstice looks like Dia, keeps Arc’s sidebar, and
           leaves built-in AI out. Both import from Arc, so try both.
         </p>
       </div>
