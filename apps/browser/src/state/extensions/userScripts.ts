@@ -45,7 +45,7 @@ const openedTargets = (targets: Map<string, string[]>) => new Map([...targets].f
 const withoutPrivate = (path: string) => path.replace(/^\/private(?=\/(tmp|var|etc)\/)/, "");
 const loadedFrom = (ext: InstalledExtension, path: string) => !!ext.path && withoutPrivate(ext.path) === withoutPrivate(path);
 
-const BLOCKED = "Ardia Scripts can only hold content scripts, and the engine blocked this copy.";
+const BLOCKED = "Solstice Scripts can only hold content scripts, and the engine blocked this copy.";
 
 async function load(profile: string, path: string): Promise<ScriptsOutcome> {
   try {

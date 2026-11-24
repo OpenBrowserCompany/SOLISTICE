@@ -14,7 +14,7 @@ const HOSTS = [
   "github.com", "www.github.com", "docs.github.com", "x.com", "news.ycombinator.com", "en.wikipedia.org", "news.bbc.co.uk",
   "127.0.0.1:9471", "[::1]:8080", "localhost:3000", "café.example", "xn--caf-dma.example", "mail.google.com", "a.b", " x.com", "ab.cd",
 ];
-const OTHER_URLS = ["about:blank", "file:///Users/a/b.txt", "ardia://settings", "not a url", "", "data:text/plain,hi"];
+const OTHER_URLS = ["about:blank", "file:///Users/a/b.txt", "solstice://settings", "not a url", "", "data:text/plain,hi"];
 const SEPARATORS = [" / ", " | ", " - ", " — ", " – ", " · ", " • ", " :: "];
 const FAKE_SEPARATORS = ["-", "|", ":", " ", "/", "::", " :", "— ", " —", "  -  ", " - ", "　|　"];
 const SPACES = ["", "", "", " ", "  ", "\t", " ", "　", "﻿", " ", " ", "\n", "​", "᠎"];
