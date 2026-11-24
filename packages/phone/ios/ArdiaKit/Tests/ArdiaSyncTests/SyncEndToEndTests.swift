@@ -113,7 +113,7 @@ import Testing
     await service.syncNow()
     #expect(service.phase == .updated)
     #expect(service.statusText == "Updated just now")
-    #expect(service.folderName == "Ardia Sync")
+    #expect(service.folderName == "Solstice Sync")
     let profile = try #require(service.snapshot.defaultProfile)
     #expect(profile.name == "Personal")
     #expect(profile.deviceTabs.map(\.deviceName) == ["MacBook Pro"])

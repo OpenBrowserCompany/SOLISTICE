@@ -34,8 +34,8 @@ final class FakeICloud {
   private let fileManager = FileManager.default
 
   init(root: URL, seed: UInt64 = 1) throws {
-    macFolder = root.appendingPathComponent("Mac/Ardia Sync", isDirectory: true)
-    phoneFolder = root.appendingPathComponent("Phone/Ardia Sync", isDirectory: true)
+    macFolder = root.appendingPathComponent("Mac/Solstice Sync", isDirectory: true)
+    phoneFolder = root.appendingPathComponent("Phone/Solstice Sync", isDirectory: true)
     random = SeededRandom(seed: seed)
     try fileManager.createDirectory(at: macFolder, withIntermediateDirectories: true)
     try fileManager.createDirectory(at: phoneFolder, withIntermediateDirectories: true)
