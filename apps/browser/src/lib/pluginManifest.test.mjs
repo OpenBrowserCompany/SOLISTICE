@@ -38,11 +38,11 @@ test("a settings-only plugin from before manifests reads as version 1, its setti
   assert.deepEqual(contributionsOf(manifest), ["settings"]);
 });
 
-test("a newer manifest needs a newer Ardia and never loads", () => {
+test("a newer manifest needs a newer Solstice and never loads", () => {
   const read = readManifest(JSON.stringify({ ...base(), manifest: MANIFEST_VERSION + 1 }));
   assert.equal(read.manifest, null);
   assert.equal(read.newer, true);
-  assert.match(read.problems[0], /needs a newer Ardia/);
+  assert.match(read.problems[0], /needs a newer Solstice/);
 });
 
 test("every problem is reported at once, with its path", () => {
@@ -91,9 +91,9 @@ test("a page command checks its context, side and the row that picks the side", 
   assert.ok(problems(noPage).some((p) => p.includes("open needs a page")));
 });
 
-test("a plugin with a page can't take one of Ardia's own page names", () => {
-  assert.ok(problems({ ...base(), name: "history" }).some((p) => p.includes("ardia://history")));
-  assert.ok(problems({ ...base(), name: "flags" }).some((p) => p.includes("ardia://flags")));
+test("a plugin with a page can't take one of Solstice's own page names", () => {
+  assert.ok(problems({ ...base(), name: "history" }).some((p) => p.includes("solstice://history")));
+  assert.ok(problems({ ...base(), name: "flags" }).some((p) => p.includes("solstice://flags")));
 });
 
 test("a page names exactly one source, inside the plugin's folder", () => {
@@ -181,7 +181,7 @@ test("programs: a name like a plugin's and a file in the plugin's folder", () =>
   assert.equal(readManifest(JSON.stringify({ ...base(), alwaysOn: true })).manifest.alwaysOn, true);
   assert.equal(readManifest(FIXTURE).manifest.alwaysOn, false);
   assert.ok(problems({ ...base(), alwaysOn: false }).includes("plugin.json: alwaysOn must be true"));
-  assert.ok(problems({ ...base(), programs: [{ name: "Ardia", path: "bin/ardia" }] }).some((p) => p.includes("programs[0].name")));
+  assert.ok(problems({ ...base(), programs: [{ name: "Solstice", path: "bin/ardia" }] }).some((p) => p.includes("programs[0].name")));
   for (const path of ["/usr/bin/true", "../escape", "bin/../../x", "", "a\\b"]) assert.ok(problems({ ...base(), programs: [{ name: "a", path }] }).some((p) => p.includes("programs[0].path")), path);
   assert.ok(problems({ ...base(), programs: [{ name: "a", path: "a" }, { name: "a", path: "b" }] }).some((p) => p.includes("two programs named a")));
   assert.ok(problems({ ...base(), programs: Array.from({ length: 5 }, (_, i) => ({ name: `p${i}`, path: "a" })) }).some((p) => p.includes("programs must be a list of at most 4")));
@@ -453,7 +453,7 @@ test("a rendered tree is held to its limits, and its text cleaned", () => {
   assert.deepEqual(quickPickItemsOf([{ id: "a", title: "A", icon: "star", keywords: ["x"], picked: true, extra: 1 }]), [{ id: "a", title: "A", icon: "star", keywords: ["x"], picked: true }]);
 });
 
-test("when clauses refuse hasSelection, which Ardia never fills, rather than taking an always-false key", () => {
+test("when clauses refuse hasSelection, which Solstice never fills, rather than taking an always-false key", () => {
   const read = parseWhen("hasSelection");
   assert.equal(read.ok, false);
   assert.match(read.problem, /names hasSelection, which isn't one of/);
