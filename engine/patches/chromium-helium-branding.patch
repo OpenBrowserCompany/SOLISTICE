@@ -1,28 +1,28 @@
 SPDX-License-Identifier: GPL-3.0-only
 
-Helium shows as Ardia, and Helium's own services, update feed and crash server can't be reached.
+Helium shows as Solstice, and Helium's own services, update feed and crash server can't be reached.
 Applied first in the series, on the tree 03-helium.py leaves (strings already renamed by ardia_namesub.py,
 icons already replaced from ardia_resources.txt); it covers what those can't reach, literals in source:
 - Helium's internal-page scheme alias is unregistered: the engine neither registers, rewrites nor shows it, and shows
-  chrome:// as chrome:// (the app shows those as ardia:// and owns ardia:// itself, as before Helium);
-- the crash product is Ardia, there is no crash upload URL and no switch to set one; the browser update feed is empty;
+  chrome:// as chrome:// (the app shows those as solstice:// and owns solstice:// itself, as before Helium);
+- the crash product is Solstice, there is no crash upload URL and no switch to set one; the browser update feed is empty;
 - Helium services are off for good: ShouldAccessServices is false whatever the prefs say, every services URL is
   an unresolvable placeholder, the settings row that opens them is gone and the page's input has no Helium host;
 - extension update pings are enabled for no domain (they were for helium.computer);
-- chrome://credits names Ardia and its source repository; Helium's GPL-3.0 licence entry stays in the list;
-- chrome://crashes files bugs on Ardia's issue tracker; the Safari import dialog has no help link (it pointed at
+- chrome://credits names Solstice and its source repository; Helium's GPL-3.0 licence entry stays in the list;
+- chrome://crashes files bugs on Solstice's issue tracker; the Safari import dialog has no help link (it pointed at
   Helium's wiki);
-- screenshots save as ardia_screenshot*.png; the Web Store's button says "Add to Ardia";
-- chrome://flags: descriptions say Ardia, Helium's flag ids are ardia-*, and the updater channel and update server
+- screenshots save as ardia_screenshot*.png; the Web Store's button says "Add to Solstice";
+- chrome://flags: descriptions say Solstice, Helium's flag ids are ardia-*, and the updater channel and update server
   flags are gone (the app has its own updater), as are the Proxy server and Proxy bypass list flags (on a real profile
   ArdiaCore drops --proxy-server from the browser's command line, after chrome://flags apply);
-- cr:chrome-product is Ardia's mark (the one-color mark, with a cut between the hills), as are the product
+- cr:chrome-product is Solstice's mark (the one-color mark, with a cut between the hills), as are the product
   vector icons and logos ardia_resources.txt copies in;
 - Helium's indigo palette is undone (helium-color-scheme.patch reversed): chrome:// pages and dialogs use
-  Chromium's colours, as Ardia does today;
-- the onboarding page and Helium's uBlock Origin aren't registered (Ardia has its own onboarding and its own uBlock
+  Chromium's colours, as Solstice does today;
+- the onboarding page and Helium's uBlock Origin aren't registered (Solstice has its own onboarding and its own uBlock
   Origin; chromium-helium-onboarding-off.patch and chromium-helium-ublock-off.patch leave out their paks);
-- chrome/app/theme/chromium/BRANDING is Chromium's again (Ardia builds with chrome/app/theme/ardia/BRANDING).
+- chrome/app/theme/chromium/BRANDING is Chromium's again (Solstice builds with chrome/app/theme/ardia/BRANDING).
 --- a/chrome/app/chrome_crash_reporter_client.cc
 +++ b/chrome/app/chrome_crash_reporter_client.cc
 @@ -137,7 +137,7 @@
@@ -30,7 +30,7 @@ icons already replaced from ardia_resources.txt); it covers what those can't rea
    CHECK(product_info);
  
 -  const char* product_name = "Helium";
-+  const char* product_name = "Ardia";
++  const char* product_name = "Solstice";
  
  #if BUILDFLAG(IS_ANDROID)
    std::string_view version = version_info::GetVersionNumber();
@@ -259,13 +259,13 @@ icons already replaced from ardia_resources.txt); it covers what those can't rea
            };
          } else {
 -          console.warn('Helium: unverified Chrome eligibility check: ' +
-+          console.warn('Ardia: unverified Chrome eligibility check: ' +
++          console.warn('Solstice: unverified Chrome eligibility check: ' +
                String(key));
          }
          eligibilityCandidates.set(key, override);
          if (eligibilityCandidates.size > 1) {
 -          console.warn('Helium: ambiguous Chrome eligibility check: ' +
-+          console.warn('Ardia: ambiguous Chrome eligibility check: ' +
++          console.warn('Solstice: ambiguous Chrome eligibility check: ' +
                Array.from(eligibilityCandidates.keys(), String).join(', '));
          }
        } else {
@@ -276,7 +276,7 @@ icons already replaced from ardia_resources.txt); it covers what those can't rea
    const replaceDownloadButtonText = (el) => {
      if (el.nodeType === Node.TEXT_NODE) {
 -      const replacement = el.nodeValue.replace(CHROME_NAME_REGEX, 'Helium');
-+      const replacement = el.nodeValue.replace(CHROME_NAME_REGEX, 'Ardia');
++      const replacement = el.nodeValue.replace(CHROME_NAME_REGEX, 'Solstice');
        if (replacement === el.nodeValue) {
          return false;
        }
@@ -323,7 +323,7 @@ icons already replaced from ardia_resources.txt); it covers what those can't rea
              1,
              "Automatic component updates are now available. They're managed by the same toggle that enables automatic browser updates.\n"
 -            "From now on, you'll be notified about major changes to Helium services. Even though these notifications are extremely rare, you can choose to ignore them and accept all future changes automatically."
-+            "From now on, you'll be notified about major changes to Ardia services. Even though these notifications are extremely rare, you can choose to ignore them and accept all future changes automatically."
++            "From now on, you'll be notified about major changes to Solstice services. Even though these notifications are extremely rare, you can choose to ignore them and accept all future changes automatically."
            }
            // TODO: before enabling kHeliumWebPush by default, add this entry,
            // bump kHeliumCurrentSchemaVersion to 2 and require
@@ -541,7 +541,7 @@ icons already replaced from ardia_resources.txt); it covers what those can't rea
      {
 -      'opensource_project': 'Helium',
 -      'opensource_link': 'https://github.com/imputnet/helium',
-+      'opensource_project': 'Ardia',
++      'opensource_project': 'Solstice',
 +      'opensource_link': 'https://github.com/mantrakp04/ardia',
      },
      escape=False,
