@@ -123,7 +123,7 @@ void WatchTracingStart(std::shared_ptr<TracingStart> start, int checks_left) {
                                            attributes:nil
                                                 error:nil];
   NSString* path = [folder
-      stringByAppendingPathComponent:[NSString stringWithFormat:@"Ardia Trace %@.json",
+      stringByAppendingPathComponent:[NSString stringWithFormat:@"Solstice Trace %@.json",
                                                                 [format stringFromDate:NSDate.date]]];
   const bool stopped = content::TracingController::GetInstance()->StopTracing(
       content::TracingController::CreateFileEndpoint(

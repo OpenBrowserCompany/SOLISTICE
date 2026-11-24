@@ -111,7 +111,7 @@ class ACPageObserver : public content::RenderFrameObserver,
     }
     if (!page_color_.empty() && IsMainErrorDocument()) {
       render_frame()->GetWebFrame()->ExecuteScript(
-          Source(PageColorScript(), "ardia://page-color"));
+          Source(PageColorScript(), "solstice://page-color"));
     }
     InstallPageScript(context);
   }
@@ -162,7 +162,7 @@ class ACPageObserver : public content::RenderFrameObserver,
     installed_for_web_ = IsWebDocument();
     base::WeakPtr<ACPageObserver> alive = weak_factory_.GetWeakPtr();
     v8::Local<v8::Value> install = frame->ExecuteScriptAndReturnValue(
-        Source(PageScript(), "ardia://page-script"));
+        Source(PageScript(), "solstice://page-script"));
     if (!alive || install.IsEmpty() || !install->IsFunction()) {
       return;
     }
@@ -209,7 +209,7 @@ class ACPageObserver : public content::RenderFrameObserver,
 
   void Execute(const std::string& code) override {
     render_frame()->GetWebFrame()->ExecuteScript(
-        Source(code, "ardia://execute"));
+        Source(code, "solstice://execute"));
   }
 
   bool HasPictureInPictureCandidate(blink::WebLocalFrame* frame) {
@@ -217,7 +217,7 @@ class ACPageObserver : public content::RenderFrameObserver,
     v8::Local<v8::Value> found = frame->ExecuteScriptInIsolatedWorldAndReturnValue(
         ISOLATED_WORLD_ID_CHROME_INTERNAL,
         Source(PictureInPictureScript(kHasPictureInPictureCandidateScript),
-               "ardia://picture-in-picture-candidate"),
+               "solstice://picture-in-picture-candidate"),
         blink::BackForwardCacheAware::kAllow);
     return !found.IsEmpty() && found->IsTrue();
   }
@@ -251,7 +251,7 @@ class ACPageObserver : public content::RenderFrameObserver,
     const std::string script =
         PictureInPictureScript(kPictureInPictureForUserScript);
     const blink::WebScriptSource source =
-        Source(script, "ardia://picture-in-picture-for-user");
+        Source(script, "solstice://picture-in-picture-for-user");
     frame->NotifyUserActivation(
         blink::mojom::UserActivationNotificationType::kInteraction);
     frame->RequestExecuteScript(
@@ -286,7 +286,7 @@ class ACPageObserver : public content::RenderFrameObserver,
     v8::Context::Scope context_scope(context);
     v8::Local<v8::Value> fn = frame->ExecuteScriptAndReturnValue(
         Source("(function(post){'use strict';\n" + code + "\n})",
-               "ardia://evaluate"));
+               "solstice://evaluate"));
     if (fn.IsEmpty() || !fn->IsFunction()) {
       std::move(callback).Run(std::nullopt);
       return;
@@ -318,7 +318,7 @@ class ACPageObserver : public content::RenderFrameObserver,
     page_color_ = next;
     if (IsMainErrorDocument()) {
       render_frame()->GetWebFrame()->ExecuteScript(
-          Source(PageColorScript(), "ardia://page-color"));
+          Source(PageColorScript(), "solstice://page-color"));
     }
   }
 
