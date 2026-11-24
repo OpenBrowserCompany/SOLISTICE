@@ -138,7 +138,7 @@ reaches Solstice two ways (`docs/automation.md`, `docs/control-socket.md`):
     meanwhile, and one still running when its session detaches or its connection closes is called off.
 
   Background tabs the command attaches to keep drawing while its session is attached (`ac_cli_visible_tabs.cc`), and
-  every engine-side state of a connection (sessions, visible holds, running hit tests, pending `Ardia.*` replies)
+  every engine-side state of a connection (sessions, visible holds, running hit tests, pending `Solstice.*` replies)
   goes the moment the connection closes, so a command that crashes or is killed leaves nothing behind. The control socket's
   `tabs.hold {untilDisconnect: true, live: true}` gives a tab the same lifetime from a control connection, owned by that
   connection, so another connection using the same session name can't replace or release it

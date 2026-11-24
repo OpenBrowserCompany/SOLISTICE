@@ -70,10 +70,10 @@ Phase B is real work but it does not block Phase A, and doing it on the owner's 
 
 | Surface | File | Current value |
 |---|---|---|
-| Display name (JS) | `apps/browser/app.json` | `"Ardia"` |
-| Display name (macOS) | `apps/browser/macos/Ardia-macOS/Info.plist` | `CFBundleDisplayName = Ardia` |
-| Product name / binary | `apps/browser/macos/Ardia.xcodeproj/project.pbxproj` | `PRODUCT_NAME = Ardia` |
-| Bundle id | same | `com.ardia.browser` |
+| Display name (JS) | `apps/browser/app.json` | `"Solstice"` |
+| Display name (macOS) | `apps/browser/macos/Ardia-macOS/Info.plist` | `CFBundleDisplayName = Solstice` |
+| Product name / binary | `apps/browser/macos/Ardia.xcodeproj/project.pbxproj` | `PRODUCT_NAME = Solstice` |
+| Bundle id | same | `com.openbrowsercompany.solstice` |
 | Development team | same | `U5L5T3NGVV` (owner's; no account on this Mac) |
 | Target / scheme | `Ardia.xcodeproj`, `Ardia.xcworkspace`, `Ardia-macOS.xcscheme` | `Ardia-macOS` |
 | Native source folder | `apps/browser/macos/Ardia-macOS/` | `Ardia-macOS` |
@@ -82,12 +82,12 @@ Phase B is real work but it does not block Phase A, and doing it on the owner's 
 | Helpers | build products | `ArdiaPluginHost`, `ArdiaDockTile.plugin` |
 | Engine release repo | `.github/workflows/release.yml` | `ardia-browser/ardia` |
 | CLI command | `apps/browser/official-plugins.json` | program `ardia`, repo `ardia-browser/plugins` |
-| iOS display name | `apps/phone/ios/Ardia/Info.plist` | `Ardia` |
-| Android id | `apps/phone/android/app/build.gradle` | `com.ardia.browser.android` |
+| iOS display name | `apps/phone/ios/Ardia/Info.plist` | `Solstice` |
+| Android id | `apps/phone/android/app/build.gradle` | `com.openbrowsercompany.solstice.android` |
 | Package scope | every `package.json` | `@ardia/*` |
 | Site domain | `apps/site` | `ardia.dev` |
 | Brand pipeline | `docs/brand/ardia/` | `build.py`, `source/` |
-| Legal | `NOTICE` | `Ardia`, Copyright 2026 Mantra Patel |
+| Legal | `NOTICE` | `Solstice`, Copyright 2026 Mantra Patel |
 
 The bundle id is the highest-risk single value. Changing it moves Application Support, Keychain items, WebAuthn credentials, cookies, safaris' data, the update feed and every native host path at once. It is a deliberate decision, not a find-and-replace.
 
@@ -106,7 +106,7 @@ The UI does not have one central brand constant; it has several, plus about 700 
 
 A single shared constant is the first refactor to make before string replacement, or every later rename costs another pass over 748 files.
 
-Feature names also carry the brand, for example **Little Ardia** (the small window), which needs a new feature name that is not a concatenation of the product name.
+Feature names also carry the brand, for example **Little Solstice** (the small window), which needs a new feature name that is not a concatenation of the product name.
 
 ## 5. Asset matrix and its slots
 
@@ -133,17 +133,17 @@ Not present today and required by the brief: a splash/loading treatment, an inst
 
 1. Product display name: `[NEW_BROWSER_NAME]`.
 2. Company and copyright line: "The Open Browser Company" versus the existing `Copyright 2026 Mantra Patel` notice.
-3. Reverse-DNS bundle id: `com.ardia.browser` → new prefix. Affects data location, Keychain, WebAuthn, updates.
+3. Reverse-DNS bundle id: `com.openbrowsercompany.solstice` → new prefix. Affects data location, Keychain, WebAuthn, updates.
 4. Domains: `ardia.dev`, the appcast, the release repo.
 5. Repositories and organization presentation.
 6. CLI command: `ardia` → new command name, and the plugin release repo.
 7. Internal identifiers: keep (Phase A) or rename (Phase B, engine rebuild).
-8. Feature names containing the brand: "Little Ardia" and any others.
+8. Feature names containing the brand: "Little Solstice" and any others.
 9. Historical release notes: keep as written, or relabel the archive.
 
 ## 7. Licensing constraint
 
-`NOTICE` states that the app as distributed is GPL-3.0 because its engine carries Helium's patches, while Ardia's own source files are Apache-2.0. Rebranding does **not** change either licence, and Apache-2.0 §4 and GPL-3.0 §5 require keeping the copyright notices and the offer of corresponding source.
+`NOTICE` states that the app as distributed is GPL-3.0 because its engine carries Helium's patches, while Solstice's own source files are Apache-2.0. Rebranding does **not** change either licence, and Apache-2.0 §4 and GPL-3.0 §5 require keeping the copyright notices and the offer of corresponding source.
 
 So: the product name, icons and UI can all change, but `NOTICE` keeps the upstream copyright line and the source links must keep resolving to a repository containing this code. A rebrand that deletes the attribution is a licence violation, and a rebrand that keeps the name is a trademark problem. This plan does the first correctly.
 
@@ -156,7 +156,7 @@ No build will run on this Mac, so the rebrand cannot be verified the usual way h
 - asset validation (dimensions, alpha, `.icon` layers, `.ico` sizes);
 - a build on CI or another Mac before any release.
 
-The macOS build is currently unbuildable here for signing reasons as well (`com.ardia.browser` has no provisioning profile and the only identity has no validated team), so the rebrand does not remove an existing capability.
+The macOS build is currently unbuildable here for signing reasons as well (`com.openbrowsercompany.solstice` has no provisioning profile and the only identity has no validated team), so the rebrand does not remove an existing capability.
 
 ## 9. Sequence
 
