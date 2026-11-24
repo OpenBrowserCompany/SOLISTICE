@@ -48,7 +48,7 @@ public enum ChatGPTAuth {
   public static let planUsageScope = "chatgpt.tokens.use.direct"
   public static let callbackPath = "/auth/callback"
   public static let dynamicClient = "dynamic_agent_client"
-  public static let appName = "Ardia"
+  public static let appName = "Solstice"
   public static let finishedScheme = "ardia-chatgpt"
   public static let finishedURL = URL(string: "ardia-chatgpt://signed-in")!
 
@@ -184,11 +184,11 @@ public struct LoopbackRequest: Equatable, Sendable {
     case .notFound:
       return Data("HTTP/1.1 404 Not Found\r\n\(headers)Content-Length: 0\r\n\r\n".utf8)
     case .badState:
-      let body = "Invalid sign-in state. Start again from Ardia."
+      let body = "Invalid sign-in state. Start again from Solstice."
       return Data("HTTP/1.1 400 Bad Request\r\n\(headers)Content-Type: text/plain; charset=utf-8\r\nContent-Length: \(body.utf8.count)\r\n\r\n\(body)".utf8)
     case .finish:
       let url = ChatGPTAuth.finishedURL.absoluteString
-      let body = "<!doctype html><meta charset=utf-8><meta name=viewport content=\"width=device-width\"><title>Return to Ardia</title><body style=\"font:17px system-ui;margin:20vh 24px\"><h1>Return to Ardia</h1><p><a href=\"\(url)\">Back to Ardia</a></p>"
+      let body = "<!doctype html><meta charset=utf-8><meta name=viewport content=\"width=device-width\"><title>Return to Solstice</title><body style=\"font:17px system-ui;margin:20vh 24px\"><h1>Return to Solstice</h1><p><a href=\"\(url)\">Back to Solstice</a></p>"
       return Data("HTTP/1.1 302 Found\r\n\(headers)Location: \(url)\r\nContent-Type: text/html; charset=utf-8\r\nContent-Length: \(body.utf8.count)\r\n\r\n\(body)".utf8)
     }
   }
@@ -340,14 +340,14 @@ public enum ChatGPTFailure: Error, Equatable, Sendable {
     switch self {
     case .cancelled: String(localized: "Sign-in was cancelled.")
     case .discoveryFailed: String(localized: "Couldn’t reach ChatGPT’s sign-in. Try again in a moment.")
-    case .signInIncomplete: String(localized: "ChatGPT didn’t finish connecting Ardia. Try signing in again.")
+    case .signInIncomplete: String(localized: "ChatGPT didn’t finish connecting Solstice. Try signing in again.")
     case .denied: String(localized: "Sign-in wasn’t completed. You can try again when you’re ready.")
-    case .invalidTokenResponse, .invalidIdentity: String(localized: "ChatGPT sent back something Ardia couldn’t verify. Sign in again.")
-    case .planUsageNotGranted: String(localized: "ChatGPT didn’t allow Ardia to use your plan. Sign in again and allow it.")
+    case .invalidTokenResponse, .invalidIdentity: String(localized: "ChatGPT sent back something Solstice couldn’t verify. Sign in again.")
+    case .planUsageNotGranted: String(localized: "ChatGPT didn’t allow Solstice to use your plan. Sign in again and allow it.")
     case .accountMismatch: String(localized: "That’s a different ChatGPT account. Sign in with the one you connected.")
     case .expired: String(localized: "Your ChatGPT connection expired. Sign in again.")
     case .notEligible: String(localized: "Your ChatGPT plan can’t be used in other apps. It takes Plus or Pro.")
-    case .usageLimit: String(localized: "You’ve hit your ChatGPT limit for Ardia. Check usage in ChatGPT’s settings.")
+    case .usageLimit: String(localized: "You’ve hit your ChatGPT limit for Solstice. Check usage in ChatGPT’s settings.")
     case .unsupported: String(localized: "ChatGPT doesn’t support this request with your plan.")
     case .rejected: String(localized: "ChatGPT turned down the request.")
     case .unavailable: String(localized: "ChatGPT is busy right now. Try again shortly.")

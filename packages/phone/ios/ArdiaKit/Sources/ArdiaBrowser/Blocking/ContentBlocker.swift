@@ -59,11 +59,11 @@ public final class ContentBlocker {
     do {
       try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
     } catch {
-      state = .failed(String(localized: "Ardia couldn’t set up content blocking. Restart Ardia to try again."))
+      state = .failed(String(localized: "Solstice couldn’t set up content blocking. Restart Solstice to try again."))
       return
     }
     guard let store = WKContentRuleListStore(url: directory.appending(path: "Store", directoryHint: .isDirectory)) else {
-      state = .failed(String(localized: "Ardia couldn’t set up content blocking. Restart Ardia to try again."))
+      state = .failed(String(localized: "Solstice couldn’t set up content blocking. Restart Solstice to try again."))
       return
     }
     self.store = store
