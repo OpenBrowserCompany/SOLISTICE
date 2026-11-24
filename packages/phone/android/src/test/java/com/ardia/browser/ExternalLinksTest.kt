@@ -1,4 +1,4 @@
-package com.ardia.browser
+package com.openbrowsercompany.solstice
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -9,7 +9,7 @@ import org.junit.Test
 class ExternalLinksTest {
     @Test
     fun webSchemesStayInThePage() {
-        for (url in listOf("https://example.com", "http://example.com/a", "about:blank", "data:text/html,hi", "blob:https://x/1", "ardia://start")) {
+        for (url in listOf("https://example.com", "http://example.com/a", "about:blank", "data:text/html,hi", "blob:https://x/1", "solstice://start")) {
             assertEquals(url, LinkRoute.Web, ExternalLinks.route(url))
         }
     }

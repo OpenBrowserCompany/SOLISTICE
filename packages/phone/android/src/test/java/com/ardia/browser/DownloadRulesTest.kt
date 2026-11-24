@@ -1,4 +1,4 @@
-package com.ardia.browser
+package com.openbrowsercompany.solstice
 
 import java.io.ByteArrayInputStream
 import java.util.concurrent.CountDownLatch
@@ -304,7 +304,7 @@ class DownloadRulesTest {
         assertNull(DownloadRules.referer("https://a.example/page", "http://a.example/file"))
         assertEquals("http://a.example/", DownloadRules.referer("http://a.example/page", "https://b.example/file"))
         assertNull(DownloadRules.referer(null, "https://b.example/file"))
-        assertNull(DownloadRules.referer("ardia://start", "https://b.example/file"))
+        assertNull(DownloadRules.referer("solstice://start", "https://b.example/file"))
     }
 
     @Test
