@@ -3,7 +3,7 @@ import { test } from "node:test";
 
 const { sendReport, uploadUrlsFrom, issueNumberOf, resolveUrl, uploadFraction, isBusy, failureClass, failureMessage, restartReason, RETRY_DELAYS_MS } = await import("./upload.ts");
 
-const endpoint = { url: "http://127.0.0.1:4319/api/feedback", key: "ak_app_x", keyHeader: "X-Ardia-Key" };
+const endpoint = { url: "http://127.0.0.1:4319/api/feedback", key: "ak_app_x", keyHeader: "X-Solstice-Key" };
 const files = [
   { name: "recording.mp4", path: "/d/recording.mp4", bytes: 1000, type: "video/mp4" },
   { name: "trace.json.gz", path: "/d/trace.json.gz", bytes: 500, type: "application/gzip" },
@@ -51,7 +51,7 @@ test("a report is created, each file uploaded with the bearer token, then comple
   assert.equal(result.sent.issueNumber, 1234);
   assert.equal(result.sent.bytes, 1500);
   assert.deepEqual(server.calls.map((c) => c.kind), ["post", "put", "put", "post"]);
-  assert.equal(server.calls[0].headers["X-Ardia-Key"], "ak_app_x");
+  assert.equal(server.calls[0].headers["X-Solstice-Key"], "ak_app_x");
   assert.equal(server.calls[1].url, "http://127.0.0.1:4319/api/feedback/FB-7KQ2/files/recording.mp4");
   assert.equal(server.calls[2].url, "http://127.0.0.1:4319/api/feedback/FB-7KQ2/files/trace.json.gz");
   assert.equal(server.calls[1].headers.Authorization, "Bearer tok");
@@ -68,7 +68,7 @@ test("a refused report fails at create with the server's reason and nothing uplo
   assert.equal(result.stage, "create");
   assert.equal(result.created, null);
   assert.equal(result.errorClass, "rejected");
-  assert.equal(result.message, "Ardia's report server couldn't accept this report (title: required). Your draft is kept.");
+  assert.equal(result.message, "Solstice's report server couldn't accept this report (title: required). Your draft is kept.");
   assert.equal(server.calls.length, 1);
   assert.deepEqual(server.deps.sleeps, []);
 });
@@ -83,7 +83,7 @@ test("no connection says so", async () => {
   assert.equal(result.errorClass, "offline");
   assert.equal(result.attempts, 3);
   assert.deepEqual(server.deps.sleeps, [...RETRY_DELAYS_MS]);
-  assert.match(result.message, /^Couldn't reach Ardia's report server\. .*draft is kept\.$/);
+  assert.match(result.message, /^Couldn't reach Solstice's report server\. .*draft is kept\.$/);
 });
 
 test("storage down is retried twice with backoff, then explained in a sentence", async () => {
@@ -95,7 +95,7 @@ test("storage down is retried twice with backoff, then explained in a sentence",
   assert.equal(result.phase, "failed");
   assert.equal(result.errorClass, "storage");
   assert.equal(result.status, 502);
-  assert.equal(result.message, "Ardia's report server couldn't store this right now. Your draft is kept; try again in a minute.");
+  assert.equal(result.message, "Solstice's report server couldn't store this right now. Your draft is kept; try again in a minute.");
 });
 
 test("a server that recovers during the retries sends the report and counts the retries", async () => {
