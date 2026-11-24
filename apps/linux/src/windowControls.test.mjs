@@ -62,7 +62,7 @@ test("with the window buttons hidden every layout keeps the header's hamburger a
   }
 });
 
-test("with the traffic lights or the buttons hidden a hamburger is drawn even where Minimalism or the theme hides the profile, and in Little Ardia's bar; the native buttons keep it beside them", async () => {
+test("with the traffic lights or the buttons hidden a hamburger is drawn even where Minimalism or the theme hides the profile, and in Little Solstice's bar; the native buttons keep it beside them", async () => {
   const { readFileSync } = await import("node:fs");
   const { registerHooks } = await import("node:module");
   const indicatorUrl = new URL("./ProfileIndicator.tsx", import.meta.url).href;
@@ -89,7 +89,7 @@ test("with the traffic lights or the buttons hidden a hamburger is drawn even wh
   assert.match(strip, /const controls = minimal \? profileChip :/);
   const little = source("../../browser/src/components/littleArdia/LittleArdiaWindow.tsx");
   assert.match(little, /const appMenu = useAppMenuInHeader\(\);/);
-  assert.match(little, /\.\.\.\(appMenu \? \[<HeaderAppMenu key="menu" size=\{SMALL_BAR_BUTTON\} \/>\] : \[\]\)/, "Little Ardia's bar holds the hamburger");
+  assert.match(little, /\.\.\.\(appMenu \? \[<HeaderAppMenu key="menu" size=\{SMALL_BAR_BUTTON\} \/>\] : \[\]\)/, "Little Solstice's bar holds the hamburger");
   const S = () => useBrowser.getState();
   S().hydrate({ profiles: { default: { id: "default", name: "Personal", color: "plum", icon: null, createdAt: 0 } }, profileOrder: ["default"] });
   const windowId = S().createWindow({ url: "https://menu.ardia.test/" });
@@ -126,10 +126,10 @@ test("with the traffic lights or the buttons hidden a hamburger is drawn even wh
     };
     for (const [name, chrome] of [["trafficLights", TRAFFIC_LIGHTS_CHROME], ["hidden", HIDDEN_BUTTONS_CHROME]]) {
       Object.assign(WINDOW_CHROME, chrome);
-      assert.equal(barMenus(), 1, `Little Ardia: ${name}`);
+      assert.equal(barMenus(), 1, `Little Solstice: ${name}`);
     }
     Object.assign(WINDOW_CHROME, windowsChrome);
-    assert.equal(barMenus(), 0, "Little Ardia: native keeps the menu beside its buttons");
+    assert.equal(barMenus(), 0, "Little Solstice: native keeps the menu beside its buttons");
   } finally {
     Object.assign(WINDOW_CHROME, saved);
   }
@@ -220,7 +220,7 @@ test("never two menu buttons with F11 full screen: the … while the window butt
     assert.equal(menuBesideWindowButtons(state(settings, { fullScreen: true }), "w", false, windowsChrome), false, JSON.stringify(settings));
     assert.equal(linuxSidebarHeaderCollapsed(state(settings, { fullScreen: true }), "w", false, windowsChrome), false, JSON.stringify(settings));
   }
-  assert.equal(menuBesideWindowButtons(state({}, { kind: "small" }), "w", false, windowsChrome), true, "Little Ardia's bar holds it");
+  assert.equal(menuBesideWindowButtons(state({}, { kind: "small" }), "w", false, windowsChrome), true, "Little Solstice's bar holds it");
   const fullScreen = state({}, { fullScreen: true });
   assert.equal(sidebarHeaderCollapsed(fullScreen, "w", windowsChrome), true, "the Windows rule hides the header in full screen");
   assert.equal(linuxSidebarHeaderCollapsed(state(), "w", false, windowsChrome), true, "with the menu beside the buttons the header collapses as on Windows");

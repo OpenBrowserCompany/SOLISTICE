@@ -50,7 +50,7 @@ test("a window opened inside the session save delay survives a second renderer's
   assert.ok(!titled.includes(fresh));
 });
 
-test("a Little Ardia window the session never saves survives a reloaded renderer's sweep", async () => {
+test("a Little Solstice window the session never saves survives a reloaded renderer's sweep", async () => {
   S().hydrate(initialLinuxSession({ bootstrap: { windowId: "main", profileId: "default", startup: false } }, null));
   const small = S().createWindow({ kind: "small", url: "https://example.com/" });
   const saved = snapshotHostSession(S());
