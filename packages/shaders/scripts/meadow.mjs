@@ -82,7 +82,7 @@ const STYLE = `html,body{margin:0;width:100%;height:100%;overflow:hidden;backgro
 const MAC_LOOK = {
   csp: "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'",
   body: ' aria-hidden="true"',
-  title: '<span class="line"><span class="icon"></span></span><span class="line"><span class="wordmark">Ardia</span></span><span class="line"><span class="tagline">Your new home on the internet</span></span>',
+  title: '<span class="line"><span class="icon"></span></span><span class="line"><span class="wordmark">Solstice</span></span><span class="line"><span class="tagline">Your new home on the internet</span></span>',
   shim: "",
   scripts: true,
 };
