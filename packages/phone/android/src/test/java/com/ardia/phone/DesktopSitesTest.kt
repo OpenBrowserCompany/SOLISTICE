@@ -1,6 +1,6 @@
 package com.ardia.phone
 
-import com.ardia.browser.DesktopSites
+import com.openbrowsercompany.solstice.DesktopSites
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

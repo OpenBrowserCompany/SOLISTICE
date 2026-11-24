@@ -105,7 +105,7 @@ internal class DownloadedFilesTest {
     fun addressesOutsideTheDownloadsCollectionAreRefused() {
         for (outside in listOf(
             "file:///storage/emulated/0/Download/report.pdf",
-            "file:///data/data/com.ardia.browser.android/shared_prefs/site.xml",
+            "file:///data/data/com.openbrowsercompany.solstice.android/shared_prefs/site.xml",
             "content://com.other.provider/downloads/1",
             ContentUris.withAppendedId(MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY), 1).toString(),
             DownloadedFiles.collection().toString(),
