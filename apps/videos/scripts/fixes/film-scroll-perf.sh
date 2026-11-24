@@ -5,7 +5,7 @@
 #   apps/videos/scripts/fixes/film-scroll-perf.sh before|after [scene ...]
 #
 # Scenes: scrollperf-strip scrollperf-swipe scrollperf-sidebar (default: all three).
-# BEFORE_APP / AFTER_APP     the Debug or Release Ardia.app of that side (never one in /Applications)
+# BEFORE_APP / AFTER_APP     the Debug or Release Solstice.app of that side (never one in /Applications)
 # BEFORE_BUNDLE / AFTER_BUNDLE  a production main.jsbundle for that side (js-bench.mjs bundle <dir>); "none" keeps the app's own
 # FILM_TAKES                 takes per scene (default 3); the metrics give each take and the median take
 # FIXES_SCRATCH              default /tmp/ardia-perf/film; footage lands in $FIXES_SCRATCH/footage/<side>/<scene>-<kind>-t<n>.mov
