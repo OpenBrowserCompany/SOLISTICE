@@ -1,6 +1,6 @@
 package com.ardia.phone
 
-import com.ardia.browser.BrowserUrl
+import com.openbrowsercompany.solstice.BrowserUrl
 import com.ardia.design.FaviconPixels
 import com.ardia.design.FaviconTone
 import com.ardia.design.HttpFaviconFetcher

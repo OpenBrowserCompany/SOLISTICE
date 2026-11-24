@@ -9,7 +9,7 @@ import android.widget.FrameLayout
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import com.ardia.browser.FullscreenVideo
+import com.openbrowsercompany.solstice.FullscreenVideo
 
 internal object FullscreenRotation {
     fun whileShowing(held: Int): Int? = if (held == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) ActivityInfo.SCREEN_ORIENTATION_FULL_USER else null

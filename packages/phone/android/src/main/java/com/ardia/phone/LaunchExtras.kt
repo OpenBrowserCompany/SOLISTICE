@@ -2,10 +2,10 @@ package com.ardia.phone
 
 import android.content.Intent
 import com.ardia.appmodel.LaunchArguments
-import com.ardia.browser.BuildConfig
+import com.openbrowsercompany.solstice.BuildConfig
 
 object LaunchExtras {
-    private val prefixes = listOf("Ardia", "Browse")
+    private val prefixes = listOf("Solstice", "Browse")
 
     val allowedInThisBuild: Boolean get() = PhoneLab.isOn || BuildConfig.DEBUG
 
