@@ -255,10 +255,10 @@ bool WaitForStartingOwner(const std::wstring& chromium_user_data_dir) {
   if (waited >= kLockFilePollMs) {
     const std::string line =
         "launch guard: waited " + std::to_string(waited) +
-        " ms for the Ardia starting on this profile" +
+        " ms for the Solstice starting on this profile" +
         (acquired ? std::string(", then took its place")
                   : std::string(", then handed over to it"));
-    LOG(WARNING) << "Ardia " << line;
+    LOG(WARNING) << "Solstice " << line;
     AppendLog(line);
   }
   return acquired;
@@ -315,17 +315,17 @@ bool WaitForExitingPredecessor(const std::wstring& key,
   state.facts.predecessor_wait_ms = waited;
   std::string line;
   if (stayed) {
-    line = "launch guard: another Ardia took over this profile after " +
+    line = "launch guard: another Solstice took over this profile after " +
            std::to_string(waited) + " ms";
   } else if (!state.owns_alive) {
-    line = "launch guard: the previous Ardia on this profile was still "
+    line = "launch guard: the previous Solstice on this profile was still "
            "exiting after " +
            std::to_string(waited) + " ms; starting anyway";
   } else {
     line = "launch guard: waited " + std::to_string(waited) +
-           " ms for the previous Ardia on this profile to finish exiting";
+           " ms for the previous Solstice on this profile to finish exiting";
   }
-  LOG(WARNING) << "Ardia " << line;
+  LOG(WARNING) << "Solstice " << line;
   AppendLog(line);
   if (stayed) {
     return WaitForStartingOwner(chromium_user_data_dir);
@@ -353,7 +353,7 @@ std::wstring AppDataDirectory() {
     return requested;
   }
   const std::wstring local = LocalAppData();
-  return local.empty() ? std::wstring() : Joined(local, L"Ardia");
+  return local.empty() ? std::wstring() : Joined(local, L"Solstice");
 }
 
 void SetAppDataDirectory(const std::wstring& directory) {
@@ -438,16 +438,16 @@ void GuardBrowserLaunch(const std::wstring& chromium_user_data_dir,
     const std::string line =
         "launch guard: this launch doesn't own the profile's guard; this "
         "start is not counted and nothing is recovered";
-    LOG(WARNING) << "Ardia " << line;
+    LOG(WARNING) << "Solstice " << line;
     AppendLog(line);
     return;
   }
   if (ProfileHeldByAnotherBrowser(chromium_user_data_dir)) {
     state.facts.profile_held_by_another = true;
     const std::string line =
-        "launch guard: another Ardia still holds this profile; this start "
+        "launch guard: another Solstice still holds this profile; this start "
         "is not counted and nothing is recovered";
-    LOG(WARNING) << "Ardia " << line;
+    LOG(WARNING) << "Solstice " << line;
     AppendLog(line);
     return;
   }
@@ -473,7 +473,7 @@ void GuardBrowserLaunch(const std::wstring& chromium_user_data_dir,
              : "the restore state was set aside in " +
                    base::WideToUTF8(state.facts.recovered_to)) +
         ", and " + std::to_string(gpu_caches) + " graphics caches were cleared";
-    LOG(WARNING) << "Ardia " << line;
+    LOG(WARNING) << "Solstice " << line;
     AppendLog(line);
   }
   WriteUnfinishedStarts(starts, next);

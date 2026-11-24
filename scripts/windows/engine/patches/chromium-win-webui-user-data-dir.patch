@@ -89,7 +89,7 @@
 +    const std::wstring base = GetEnvironmentString(variable);
 +    if (base.empty())
 +      continue;
-+    const std::wstring root = WithTrailingSlash(base) + L"Ardia";
++    const std::wstring root = WithTrailingSlash(base) + L"Solstice";
 +    folders.push_back(ResolvedFolder(root));
 +    folders.push_back(ResolvedFolder(root + L"\\User Data"));
 +  }
@@ -289,7 +289,7 @@
 +  if (webui && user_data_dir.empty()) {
 +    const std::wstring local = GetEnvironmentString(L"LOCALAPPDATA");
 +    if (!local.empty())
-+      user_data_dir = WithTrailingSlash(local) + L"Ardia WebUI\\Chromium";
++      user_data_dir = WithTrailingSlash(local) + L"Solstice WebUI\\Chromium";
 +  }
 +
    // Headless Chrome instances are expected to run in parallel with the headful
@@ -425,7 +425,7 @@
 +    {L"   chrome.exe --ardia-shell=webui", 1},
 +    {L" --ardia-shell=webui", 0},
 +    {L"\"--ardia-shell=webui\" --other", 0},
-+    {L"\"C:\\Program Files\\Ardia\\chrome.exe\" --ardia-shell=webui", 1},
++    {L"\"C:\\Program Files\\Solstice\\chrome.exe\" --ardia-shell=webui", 1},
 +    {L"chrome.exe --user-data-dir=\"C:\\a b\" --ardia-shell=webui", 1},
 +    {L"chrome.exe --ardia-shell=webui \"\"", 1},
 +    {L"chrome.exe \"\"--ardia-shell=webui", kEither},

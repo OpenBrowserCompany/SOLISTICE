@@ -4,7 +4,7 @@
    // Synchronous implementation of PasswordStoreBackend interface.
    base::expected<std::vector<StoredCredential>, PasswordStoreBackendError>
    GetAllLogins();
-+  // Ardia: every login or an error, never the readable part of a list.
++  // Solstice: every login or an error, never the readable part of a list.
    base::expected<std::vector<StoredCredential>, PasswordStoreBackendError>
 +  GetAllLoginsWithNoneSkipped();
 +  base::expected<std::vector<StoredCredential>, PasswordStoreBackendError>
@@ -17,9 +17,9 @@
    return credentials;
  }
  
-+// Ardia: a list that left out a login it couldn't decrypt fails with
++// Solstice: a list that left out a login it couldn't decrypt fails with
 +// kKeychainError, and any other failure, a database that didn't open
-+// included, with kUncategorized, so a reader that publishes the list (Ardia's
++// included, with kUncategorized, so a reader that publishes the list (Solstice's
 +// Sync) never takes a partial one for the whole.
  base::expected<std::vector<StoredCredential>, PasswordStoreBackendError>
 +LoginDatabaseAsyncHelper::GetAllLoginsWithNoneSkipped() {
@@ -62,7 +62,7 @@
        &PasswordStoreBuiltInBackend::InjectAffiliationAndBrandingInformation,
        weak_ptr_factory_.GetWeakPtr(), std::move(callback));
 -  GetAllLoginsAsync(std::move(affiliation_injection));
-+  // Ardia: Settings, export and fill keep what could be read; only the plain
++  // Solstice: Settings, export and fill keep what could be read; only the plain
 +  // GetAllLogins is strict.
 +  background_task_runner_->PostTaskAndReplyWithResult(
 +      FROM_HERE,
@@ -83,7 +83,7 @@
      AffiliationSource::ResultCallback response_callback) {
    on_password_forms_received_callback_ = std::move(response_callback);
 -  store_->GetAllLogins(weak_ptr_factory_.GetWeakPtr());
-+  // Ardia: keeps the readable logins; the plain GetAllLogins is strict.
++  // Solstice: keeps the readable logins; the plain GetAllLogins is strict.
 +  store_->GetAllLoginsWithAffiliationAndBrandingInformation(
 +      weak_ptr_factory_.GetWeakPtr());
  }
