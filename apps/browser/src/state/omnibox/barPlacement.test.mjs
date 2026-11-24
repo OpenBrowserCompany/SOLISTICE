@@ -19,7 +19,7 @@ test("the In the centre setting still sends ⌘L to the centre", () => {
   assert.equal(keyBarPlacement({ setting: "centred", small: false, fieldShown: false }), "centred");
 });
 
-test("Little Ardia keeps its own dropdown", () => {
+test("Little Solstice keeps its own dropdown", () => {
   assert.equal(keyBarPlacement({ setting: "centred", small: true, fieldShown: false }), "field");
 });
 
@@ -37,7 +37,7 @@ test("with In the centre, a click on the address still opens at the field", () =
   assert.equal(commandBarPlacementLabel(S().windowUi[w].panel), "field");
 });
 
-test("In the centre, also on click sends a click on the address to the centre, as ⌘L, except in Little Ardia", () => {
+test("In the centre, also on click sends a click on the address to the centre, as ⌘L, except in Little Solstice", () => {
   assert.equal(keyBarPlacement({ setting: "centredOnClick", small: false, fieldShown: true }), "centred");
   assert.equal(keyBarPlacement({ setting: "centredOnClick", small: true, fieldShown: true }), "field");
   let w = pageWindow({ commandBarPlacement: "centredOnClick" });
