@@ -50,6 +50,6 @@ final class PluginPageAnswerTests: XCTestCase {
     XCTAssertEqual(posted?.json, "1")
     let full = decode(PluginPageMessages.answer(escaped, hasPage: true) { _ in "overloaded" })
     XCTAssertEqual((full["error"] as? [String: Any])?["code"] as? String, "overloaded")
-    XCTAssertNil(PluginPageMessages.answer("{\"id\":2,\"method\":\"windows\"}", hasPage: true) { _ in nil }, "other methods go on to Ardia")
+    XCTAssertNil(PluginPageMessages.answer("{\"id\":2,\"method\":\"windows\"}", hasPage: true) { _ in nil }, "other methods go on to Solstice")
   }
 }

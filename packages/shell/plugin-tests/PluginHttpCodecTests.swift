@@ -87,7 +87,7 @@ final class PluginHttpCodecTests: XCTestCase {
     let notModified = try parse(["HTTP/1.1 304 Not Modified\r\nContent-Encoding: gzip\r\nETag: \"v1\"\r\n\r\n"])
     XCTAssertEqual(notModified.status, 304)
     XCTAssertEqual(notModified.body, Data())
-    XCTAssertEqual(refusal { try self.parse(["HTTP/1.1 200 OK\r\nContent-Encoding: gzip\r\nContent-Length: 4\r\n\r\nabcd"]) }, "the answer is compressed (gzip), which Ardia doesn't decode")
+    XCTAssertEqual(refusal { try self.parse(["HTTP/1.1 200 OK\r\nContent-Encoding: gzip\r\nContent-Length: 4\r\n\r\nabcd"]) }, "the answer is compressed (gzip), which Solstice doesn't decode")
   }
 
   func testInterimResponsesAreSkipped() throws {

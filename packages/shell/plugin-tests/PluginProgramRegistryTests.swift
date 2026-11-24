@@ -13,8 +13,8 @@ final class PluginProgramRegistryTests: XCTestCase {
     let registry = resolve(info: signed)
     XCTAssertFalse(registry.failClosed)
     XCTAssertNil(registry.refusal(program: "ardia", plugin: "cli", builtIn: true))
-    XCTAssertEqual(registry.refusal(program: "ardia", plugin: "cli", builtIn: false), "ardia belongs to Ardia's official cli plugin")
-    XCTAssertEqual(registry.refusal(program: "ardia", plugin: "copycat", builtIn: true), "ardia belongs to Ardia's official cli plugin")
+    XCTAssertEqual(registry.refusal(program: "ardia", plugin: "cli", builtIn: false), "ardia belongs to Solstice's official cli plugin")
+    XCTAssertEqual(registry.refusal(program: "ardia", plugin: "copycat", builtIn: true), "ardia belongs to Solstice's official cli plugin")
     XCTAssertNil(registry.refusal(program: "other", plugin: "copycat", builtIn: false))
     XCTAssertEqual(registry.adoption(for: "cli", programs: ["ardia"], builtIn: true)?.folder, "/Users/someone/Library/Application Support/Ardia/CLI")
     XCTAssertNil(registry.adoption(for: "cli", programs: ["ardia"], builtIn: false))
@@ -100,8 +100,8 @@ final class PluginProgramRegistryTests: XCTestCase {
     XCTAssertFalse(PluginPrograms.legacyInstalled(entry), "a current pointing outside the home isn't a legacy install")
     unlink("\(entry.folder)/current")
     XCTAssertEqual(symlink("0.2.41", "\(entry.folder)/current"), 0)
-    try FileManager.default.moveItem(atPath: "\(root)/Library/Application Support/Ardia", toPath: "\(root)/elsewhere")
-    XCTAssertEqual(symlink("\(root)/elsewhere", "\(root)/Library/Application Support/Ardia"), 0)
+    try FileManager.default.moveItem(atPath: "\(root)/Library/Application Support/Solstice", toPath: "\(root)/elsewhere")
+    XCTAssertEqual(symlink("\(root)/elsewhere", "\(root)/Library/Application Support/Solstice"), 0)
     XCTAssertFalse(PluginPrograms.legacyInstalled(entry), "a symlinked folder on the way in isn't followed")
   }
 }
