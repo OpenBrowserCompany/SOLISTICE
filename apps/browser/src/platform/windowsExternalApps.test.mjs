@@ -21,7 +21,7 @@ const ask = (fields = {}) => ({ id: "x1", url: "mailto:someone@example.com", ori
 
 test("a link with a handler asks with the handler's name and icon, in the Mac's words", async () => {
   const { apps, opened } = fakes();
-  const request = await apps.request(ask(), "Ardia p-1", "tab-1");
+  const request = await apps.request(ask(), "Solstice p-1", "tab-1");
   assert.match(request?.id ?? "", /^w\d+$/);
   assert.deepEqual({ ...request, id: "x1" }, {
     id: "x1",
@@ -40,39 +40,39 @@ test("a link with a handler asks with the handler's name and icon, in the Mac's 
 
 test("no opens without a yes, and a no or an unknown id opens nothing", async () => {
   const { apps, opened } = fakes();
-  const first = await apps.request(ask(), "Ardia p-1", "tab-1");
+  const first = await apps.request(ask(), "Solstice p-1", "tab-1");
   assert.equal(await apps.resolve(first.id, false, false), false);
   assert.equal(await apps.resolve(first.id, true, false), false);
   assert.equal(await apps.resolve("x1", true, false), false);
   assert.equal(await apps.resolve("nope", true, false), false);
   assert.deepEqual(opened, []);
-  const second = await apps.request(ask({ id: "x2" }), "Ardia p-1", "tab-1");
+  const second = await apps.request(ask({ id: "x2" }), "Solstice p-1", "tab-1");
   assert.equal(await apps.resolve(second.id, true, false), true);
   assert.deepEqual(opened, ["mailto:someone@example.com"]);
 });
 
 test("a remembered site opens the app with a gesture and asks without one; remembering needs a trustworthy origin and no private profile", async () => {
   const { apps, opened, docs } = fakes();
-  const first = await apps.request(ask(), "Ardia p-1", "tab-1");
+  const first = await apps.request(ask(), "Solstice p-1", "tab-1");
   await apps.resolve(first.id, true, true);
   assert.equal(docs.size, 1);
   windowsExternalAppCounts.takeLaunches();
-  assert.equal(await apps.request(ask({ id: "x2" }), "Ardia p-1", "tab-1"), null);
+  assert.equal(await apps.request(ask({ id: "x2" }), "Solstice p-1", "tab-1"), null);
   assert.equal(opened.length, 2);
   assert.deepEqual(windowsExternalAppCounts.takeLaunches(), { opened: 0, refused: 0, automatic: 1 });
-  const noGesture = await apps.request(ask({ id: "x3", userGesture: false }), "Ardia p-1", "tab-1");
+  const noGesture = await apps.request(ask({ id: "x3", userGesture: false }), "Solstice p-1", "tab-1");
   assert.equal(noGesture?.app, "Mail");
   assert.equal(opened.length, 2);
-  assert.equal((await apps.request(ask({ id: "x4", origin: "http://mail.example" }), "Ardia p-1", "tab-1"))?.remember, null);
-  assert.equal((await apps.request(ask({ id: "x5", offTheRecord: true }), "Ardia p-1", "tab-1"))?.remember, null);
-  assert.deepEqual(await apps.list("Ardia p-1", "tab-1"), [{ origin: "https://mail.example", scheme: "mailto", app: "Mail", icon: "data:image/png;base64,AA==" }]);
-  apps.remove("Ardia p-1", "https://mail.example", "mailto");
-  assert.deepEqual(await apps.list("Ardia p-1", "tab-1"), []);
+  assert.equal((await apps.request(ask({ id: "x4", origin: "http://mail.example" }), "Solstice p-1", "tab-1"))?.remember, null);
+  assert.equal((await apps.request(ask({ id: "x5", offTheRecord: true }), "Solstice p-1", "tab-1"))?.remember, null);
+  assert.deepEqual(await apps.list("Solstice p-1", "tab-1"), [{ origin: "https://mail.example", scheme: "mailto", app: "Mail", icon: "data:image/png;base64,AA==" }]);
+  apps.remove("Solstice p-1", "https://mail.example", "mailto");
+  assert.deepEqual(await apps.list("Solstice p-1", "tab-1"), []);
 });
 
 test("a scheme with no handler says so and can't be opened", async () => {
   const { apps, opened } = fakes();
-  const request = await apps.request(ask({ url: "zoommtg://join?x=1" }), "Ardia p-1", "tab-1");
+  const request = await apps.request(ask({ url: "zoommtg://join?x=1" }), "Solstice p-1", "tab-1");
   assert.equal(request?.app, null);
   assert.equal(request?.message, "Your PC doesn’t have an app for “zoommtg:” links.");
   assert.equal(await apps.resolve(request.id, true, true), false);
@@ -120,13 +120,13 @@ test("app link prompts and answers are counted and reset once taken", () => {
 
 test("an ask the engine no longer holds, or whose page moved on, opens nothing", async () => {
   const { apps, opened, gone } = fakes();
-  const first = await apps.request(ask(), "Ardia p-1", "tab-1");
+  const first = await apps.request(ask(), "Solstice p-1", "tab-1");
   gone.add("x1");
   assert.equal(await apps.resolve(first.id, true, false), false);
-  const second = await apps.request(ask({ id: "x2" }), "Ardia p-1", "tab-1");
+  const second = await apps.request(ask({ id: "x2" }), "Solstice p-1", "tab-1");
   apps.forgetPage("tab-1");
   assert.equal(await apps.resolve(second.id, true, false), false);
-  const third = await apps.request(ask({ id: "x3" }), "Ardia p-1", "tab-2");
+  const third = await apps.request(ask({ id: "x3" }), "Solstice p-1", "tab-2");
   apps.forget(third.id);
   assert.equal(await apps.resolve(third.id, true, false), false);
   assert.deepEqual(opened, []);
@@ -134,19 +134,19 @@ test("an ask the engine no longer holds, or whose page moved on, opens nothing",
 
 test("a remembered site opens nothing once its page is gone, and deleting a profile forgets its allowances", async () => {
   const { apps, opened, gone } = fakes();
-  const mine = await apps.request(ask(), "Ardia p-1", "tab-1");
+  const mine = await apps.request(ask(), "Solstice p-1", "tab-1");
   await apps.resolve(mine.id, true, true);
-  const theirs = await apps.request(ask({ id: "o1" }), "Ardia p-2", "tab-2");
+  const theirs = await apps.request(ask({ id: "o1" }), "Solstice p-2", "tab-2");
   await apps.resolve(theirs.id, true, true);
   gone.add("tab-1");
-  assert.equal(await apps.request(ask({ id: "x2" }), "Ardia p-1", "tab-1"), null);
+  assert.equal(await apps.request(ask({ id: "x2" }), "Solstice p-1", "tab-1"), null);
   assert.equal(opened.length, 2);
-  const waiting = await apps.request(ask({ id: "x3", userGesture: false }), "Ardia p-1", "tab-3");
-  apps.forgetProfile("Ardia p-1");
+  const waiting = await apps.request(ask({ id: "x3", userGesture: false }), "Solstice p-1", "tab-3");
+  apps.forgetProfile("Solstice p-1");
   assert.equal(await apps.resolve(waiting.id, true, false), false);
-  assert.deepEqual(await apps.list("Ardia p-1"), []);
-  assert.equal((await apps.list("Ardia p-2")).length, 1);
-  assert.notEqual(await apps.request(ask({ id: "x4" }), "Ardia p-1", "tab-3"), null);
+  assert.deepEqual(await apps.list("Solstice p-1"), []);
+  assert.equal((await apps.list("Solstice p-2")).length, 1);
+  assert.notEqual(await apps.request(ask({ id: "x4" }), "Solstice p-1", "tab-3"), null);
 });
 
 const mailOnly = (opened) => ({ describe: async () => ({ name: "Mail", path: null, icon: null }), open: async (url) => (opened.push(url), true) });
@@ -155,8 +155,8 @@ test("two pages whose asks carry the same engine id each open only their own lin
   const opened = [];
   const asked = [];
   const apps = windowsExternalApps(() => mailOnly(opened), () => null, async (page, id) => (asked.push(`${page}/${id}`), true));
-  const a = await apps.request(ask({ url: "mailto:a@a.example", origin: "https://a.example" }), "Ardia p-1", "tab-A");
-  const b = await apps.request(ask({ url: "mailto:b@b.example", origin: "https://b.example" }), "Ardia p-1", "tab-B");
+  const a = await apps.request(ask({ url: "mailto:a@a.example", origin: "https://a.example" }), "Solstice p-1", "tab-A");
+  const b = await apps.request(ask({ url: "mailto:b@b.example", origin: "https://b.example" }), "Solstice p-1", "tab-B");
   assert.notEqual(a.id, b.id);
   assert.equal(await apps.resolve(a.id, true, false), true);
   assert.deepEqual(opened, ["mailto:a@a.example"]);
@@ -172,13 +172,13 @@ test("a profile deleted while a yes waits for the engine keeps no allowance and 
   let answer;
   const documents = { readDocument: (name) => docs.get(name) ?? null, writeDocument: (name, text) => void docs.set(name, text) };
   const apps = windowsExternalApps(() => mailOnly(opened), () => documents, () => new Promise((resolve) => (answer = resolve)));
-  const asked = await apps.request(ask(), "Ardia p-1", "tab-1");
+  const asked = await apps.request(ask(), "Solstice p-1", "tab-1");
   const answered = apps.resolve(asked.id, true, true);
   await new Promise((resolve) => setImmediate(resolve));
-  apps.forgetProfile("Ardia p-1");
+  apps.forgetProfile("Solstice p-1");
   answer(true);
   assert.equal(await answered, false);
-  assert.deepEqual(await apps.list("Ardia p-1"), []);
+  assert.deepEqual(await apps.list("Solstice p-1"), []);
   assert.deepEqual(opened, []);
 });
 
@@ -219,13 +219,13 @@ test("a remembered open whose profile is deleted while the engine answers opens 
   const documents = { readDocument: (name) => docs.get(name) ?? null, writeDocument: (name, text) => void docs.set(name, text) };
   const native = { describe: async () => HANDLERS.mailto, open: async (url) => (opened.push(url), true) };
   const apps = windowsExternalApps(() => native, () => documents, (page) => (page === "slow" ? new Promise((resolve) => (answer = resolve)) : Promise.resolve(true)));
-  const first = await apps.request(ask(), "Ardia p-1", "tab-1");
+  const first = await apps.request(ask(), "Solstice p-1", "tab-1");
   await apps.resolve(first.id, true, true);
   opened.length = 0;
   windowsExternalAppCounts.takeLaunches();
-  const automatic = apps.request(ask({ id: "x2" }), "Ardia p-1", "slow");
+  const automatic = apps.request(ask({ id: "x2" }), "Solstice p-1", "slow");
   while (!answer) await new Promise((resolve) => setImmediate(resolve));
-  apps.forgetProfile("Ardia p-1");
+  apps.forgetProfile("Solstice p-1");
   answer(true);
   assert.equal(await automatic, null);
   assert.deepEqual(opened, []);
@@ -240,10 +240,10 @@ test("a yes counts as a click, and only a launch Windows confirmed counts as a l
   assert.deepEqual([clicked.external_app_allows, clicked.external_app_launches], [1, 0]);
   const { apps, gone } = fakes();
   windowsExternalAppCounts.takeLaunches();
-  const stale = await apps.request(ask(), "Ardia p-1", "tab-1");
+  const stale = await apps.request(ask(), "Solstice p-1", "tab-1");
   gone.add("tab-1");
   assert.equal(await apps.resolve(stale.id, true, false), false);
-  const live = await apps.request(ask({ id: "x2", url: "ardiatest:x" }), "Ardia p-1", "tab-2");
+  const live = await apps.request(ask({ id: "x2", url: "ardiatest:x" }), "Solstice p-1", "tab-2");
   assert.equal(await apps.resolve(live.id, true, false), true);
   assert.deepEqual(windowsExternalAppCounts.takeLaunches(), { opened: 1, refused: 1, automatic: 0 });
 });
@@ -256,28 +256,28 @@ test("a host with a trailing dot keeps its site name and its own allowance, and 
     assert.equal(serializedOrigin(lookAlike), null, lookAlike);
   }
   const { apps } = fakes();
-  const dotted = await apps.request(ask({ origin: "https://example.com." }), "Ardia p-1", "tab-1");
+  const dotted = await apps.request(ask({ origin: "https://example.com." }), "Solstice p-1", "tab-1");
   assert.equal(dotted.message, "https://example.com. wants to open this application.");
   assert.notEqual(dotted.remember, null);
   await apps.resolve(dotted.id, true, true);
-  assert.deepEqual((await apps.list("Ardia p-1")).map((allowance) => allowance.origin), ["https://example.com."]);
-  assert.notEqual(await apps.request(ask({ id: "x2", origin: "https://example.com" }), "Ardia p-1", "tab-1"), null);
+  assert.deepEqual((await apps.list("Solstice p-1")).map((allowance) => allowance.origin), ["https://example.com."]);
+  assert.notEqual(await apps.request(ask({ id: "x2", origin: "https://example.com" }), "Solstice p-1", "tab-1"), null);
 });
 
 test("the engine hears of every ask the app drops without asking it again, so it never keeps one", async () => {
   const dropped = [];
   const native = { describe: async (scheme) => HANDLERS[scheme] ?? null, open: async () => true };
   const apps = windowsExternalApps(() => native, () => null, async () => true, (page, id) => dropped.push(`${page}/${id}`));
-  const cancelled = await apps.request(ask({ id: "x1" }), "Ardia p-1", "tab-1");
+  const cancelled = await apps.request(ask({ id: "x1" }), "Solstice p-1", "tab-1");
   await apps.resolve(cancelled.id, false, false);
-  await apps.request(ask({ id: "x2", url: "nohandler:hello" }), "Ardia p-1", "tab-1");
-  const forgotten = await apps.request(ask({ id: "x3" }), "Ardia p-1", "tab-1");
+  await apps.request(ask({ id: "x2", url: "nohandler:hello" }), "Solstice p-1", "tab-1");
+  const forgotten = await apps.request(ask({ id: "x3" }), "Solstice p-1", "tab-1");
   apps.forget(forgotten.id);
-  await apps.request(ask({ id: "x4" }), "Ardia p-1", "tab-2");
+  await apps.request(ask({ id: "x4" }), "Solstice p-1", "tab-2");
   apps.forgetPage("tab-2");
-  await apps.request(ask({ id: "x5" }), "Ardia p-2", "tab-3");
-  apps.forgetProfile("Ardia p-2");
-  const opened = await apps.request(ask({ id: "x6" }), "Ardia p-1", "tab-1");
+  await apps.request(ask({ id: "x5" }), "Solstice p-2", "tab-3");
+  apps.forgetProfile("Solstice p-2");
+  const opened = await apps.request(ask({ id: "x6" }), "Solstice p-1", "tab-1");
   await apps.resolve(opened.id, true, false);
   assert.deepEqual(dropped, ["tab-1/x1", "tab-1/x2", "tab-1/x3", "tab-2/x4", "tab-3/x5"], "a no, no handler, a forgotten prompt, a closed page and a forgotten profile; an opened ask was consumed by externalAppAlive");
 });

@@ -39,8 +39,8 @@ test("only LaunchConfig.h reads ARDIA_TEST, ARDIA_TRACE, ARDIA_CONFIG_DIR and AR
 test("a test instance needs an absolute scratch folder clear of the real profile and a test build", () => {
   const gate = source("TestGate.h");
   assert.match(gate, /if \(!requested\.is_absolute\(\)\) return/);
-  assert.match(gate, /FOLDERID_LocalAppData, L"LOCALAPPDATA"\) \/ L"Ardia"/);
-  assert.match(gate, /FOLDERID_RoamingAppData, L"APPDATA"\) \/ L"Ardia"/);
+  assert.match(gate, /FOLDERID_LocalAppData, L"LOCALAPPDATA"\) \/ L"Solstice"/);
+  assert.match(gate, /FOLDERID_RoamingAppData, L"APPDATA"\) \/ L"Solstice"/);
   assert.match(gate, /RealFolderClash\(\{Paths::DataDirectory\(\), Paths::DataDirectory\(\) \/ L"Chromium", Paths::DataDirectory\(\) \/ L"Sync"\}, L"ARDIA_DATA_DIR"\)/);
   assert.match(source("LaunchConfig.h"), /TestGate::RealFolderClash\(\{requested\}, L"ARDIA_CONFIG_DIR"\);\n    if \(clash\.empty\(\)\) return Paths::Ensured\(requested\);/);
   assert.match(gate, /VOLUME_NAME_GUID \| FILE_NAME_NORMALIZED/);
@@ -75,7 +75,7 @@ test("a test instance seals its sync key under its own DPAPI purpose, so it can'
 test("an app folder the Windows workflow uploads has lost its test-build marker, with no harness run after that", () => {
   const workflow = readFileSync(new URL("../../../../.github/workflows/windows.yml", import.meta.url), "utf8").replace(/\r\n/g, "\n");
   const harness = /launch-smoke\.ps1|tour\.ps1/;
-  const appFolder = /^\s+(?:path: )?(\$\{\{ runner\.temp \}\}\/Ardia|\$\{\{ env\.APP \}\}|apps\/browser\/windows\/\w+\/Release)$/gm;
+  const appFolder = /^\s+(?:path: )?(\$\{\{ runner\.temp \}\}\/Solstice|\$\{\{ env\.APP \}\}|apps\/browser\/windows\/\w+\/Release)$/gm;
   const stepLists = workflow.split(/\n  (?=[a-z0-9-]+:\n)/).slice(1).flatMap((job) => {
     const at = job.search(/\n    steps:(?: &\w+)?\n/);
     return at < 0 ? [] : [job.slice(at).split("\n      - ").slice(1)];

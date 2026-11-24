@@ -83,7 +83,7 @@ test("a gradient-only Surface cuts no page window, and every gradient drawn sits
   assert.deepEqual(using(/\bfillColors=|\bfadeStops=/), ["../components/ui/GradientFill.tsx"], "only GradientFill gives a Surface a gradient");
   assert.deepEqual(using(/<GradientFill\b/), ["../components/sidebar/EdgeGlow.tsx", "../components/toolbar/FieldLoadFill.tsx"], "only the field glow and the sidebar's edge glow draw a GradientFill");
   assert.deepEqual(using(/<EdgeGlow\b/), ["../components/sidebar/Sidebar.tsx"], "the edge glow sits in the sidebar, inside its plate");
-  assert.deepEqual(using(/<FieldLoadFill\b/), ["../components/littleArdia/SmallChrome.tsx", "../components/toolbar/Toolbar.tsx"], "the glow sits in the toolbar, sidebar and Little Ardia fields");
+  assert.deepEqual(using(/<FieldLoadFill\b/), ["../components/littleArdia/SmallChrome.tsx", "../components/toolbar/Toolbar.tsx"], "the glow sits in the toolbar, sidebar and Little Solstice fields");
 });
 
 test("a gradient brush that fails reports it once, at once, and every mounted layer reading it draws the striped fallback", () => {
@@ -94,7 +94,7 @@ test("a gradient brush that fails reports it once, at once, and every mounted la
   assert.match(source("../../windows/Ardia/MaterialSupport.h"), /inline std::atomic<bool> &GradientFailed\(\) noexcept \{/);
   assert.match(source("../../windows/Ardia/MaterialsModule.h"), /m_context = context;\n\s+Materials::ReportGradientFailuresTo\(context\);/);
   assert.match(source("../../windows/Ardia/MaterialsModule.h"), /answer\.gradient = Materials::GradientAvailable\(\);/);
-  assert.match(source("../../windows/Ardia/Ardia.cpp"), /Ardia::Materials::ReportGradientFailuresTo\(nullptr\);\n  host\.engine = nullptr;\n  SetFocus\(nullptr\);\n  if \(host\.queue\) host\.queue\.ShutdownQueue\(\);/);
+  assert.match(source("../../windows/Ardia/Ardia.cpp"), /Solstice::Materials::ReportGradientFailuresTo\(nullptr\);\n  host\.engine = nullptr;\n  SetFocus\(nullptr\);\n  if \(host\.queue\) host\.queue\.ShutdownQueue\(\);/);
   assert.ok(source("../../windows/Ardia/Ardia.vcxproj").includes('<ClInclude Include="GradientFailures.h" />'));
   const surface = source("../../../../packages/expo-windows/src/views/Surface.tsx");
   assert.match(surface, /const \[draws, setDraws\] = useState\(gradientDrawsNow\);\n\s+useEffect\(\(\) => \(draws \? followGradientFailure\(\(\) => setDraws\(false\)\) : undefined\), \[draws\]\);/);
