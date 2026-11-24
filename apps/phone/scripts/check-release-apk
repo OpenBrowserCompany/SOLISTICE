@@ -50,7 +50,7 @@ planned="$(node --no-warnings "$here/android-version.ts" "$release")"
 "$tools/apksigner" verify "$apk" > /dev/null && echo "ok: the signature verifies" || { echo "FAILED: the signature doesn't verify"; failed=1; }
 check "the signer" "$("$tools/apksigner" verify --print-certs "$apk" | sed -n 's/.*certificate SHA-256 digest: //p' | head -1 | plain)" "$(printf '%s' "$signer" | plain)"
 badging="$("$tools/aapt2" dump badging "$apk")"
-check "the package" "$(sed -n "s/^package: name='\([^']*\)'.*/\1/p" <<<"$badging")" "com.ardia.browser.android"
+check "the package" "$(sed -n "s/^package: name='\([^']*\)'.*/\1/p" <<<"$badging")" "com.openbrowsercompany.solstice.android"
 check "versionName" "$(sed -n "s/.*versionName='\([^']*\)'.*/\1/p" <<<"$badging" | head -1)" "$(sed -n 's/^name=//p' <<<"$planned")"
 check "versionCode" "$(sed -n "s/.*versionCode='\([0-9]*\)'.*/\1/p" <<<"$badging" | head -1)" "$(sed -n 's/^code=//p' <<<"$planned")"
 check "debuggable" "$(grep -c "^application-debuggable" <<<"$badging" || true)" "0"
@@ -65,7 +65,7 @@ check "the release version stamp" "$(stamp string/ardia_release_version)" "$rele
 offered="$(printf '%s\n' "$resources" | grep -A1 "bool/ardia_sync_offered" | tail -1)"
 check "sync offered" "$(grep -o -E 'true|false|0x[0-9a-f]+' <<<"$offered" | head -1 | sed 's/^0x0*$/false/; s/^0xffffffff$/true/')" "false"
 manifest="$("$tools/aapt2" dump xmltree --file AndroidManifest.xml "$apk")"
-main_orientation="$(awk '/E: activity /{inside=0} /android:name\(0x01010003\)="com.ardia.browser.android.MainActivity"/{inside=1} inside && /android:screenOrientation/{sub(/.*=/, ""); print; exit}' <<<"$manifest")"
+main_orientation="$(awk '/E: activity /{inside=0} /android:name\(0x01010003\)="com.openbrowsercompany.solstice.android.MainActivity"/{inside=1} inside && /android:screenOrientation/{sub(/.*=/, ""); print; exit}' <<<"$manifest")"
 orientation_named() {
   case "$1" in
     1 | 0x1 | 0x00000001) echo portrait ;;

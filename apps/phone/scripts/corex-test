@@ -13,8 +13,8 @@
 # filters are class names) and prints the same counts; it builds nothing, and the commit names what was installed.
 # One device test needs UiAutomation, which agentos holds while it leases a phone, so on a leased phone --device-run
 # counts it failed ("UiAutomationService … already registered") while every other one passes: run it through agentos's
-# test tool, package com.ardia.browser.test, runner androidx.test.runner.AndroidJUnitRunner, with the argument
-# class=com.ardia.browser.PageSnapshotTest#aSnapshotRightAfterANightModeChangeShowsThePage.
+# test tool, package com.openbrowsercompany.solstice.test, runner androidx.test.runner.AndroidJUnitRunner, with the argument
+# class=com.openbrowsercompany.solstice.PageSnapshotTest#aSnapshotRightAfterANightModeChangeShowsThePage.
 set -euo pipefail
 if [ $# -lt 1 ] || [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
   sed -n '2,17p' "$0" | sed 's/^# \{0,1\}//'
@@ -43,7 +43,7 @@ testApp="$base/device-tests.apk"
 if [ "${device#run:}" != "$device" ]; then
   serial="${device#run:}"
   adb -s "$serial" get-state > /dev/null 2>&1 || { echo "no phone $serial on adb" >&2; exit 64; }
-  adb -s "$serial" shell pm path com.ardia.browser.test > /dev/null 2>&1 || { echo "the test app com.ardia.browser.test isn't on $serial: install $testApp first" >&2; exit 64; }
+  adb -s "$serial" shell pm path com.openbrowsercompany.solstice.test > /dev/null 2>&1 || { echo "the test app com.openbrowsercompany.solstice.test isn't on $serial: install $testApp first" >&2; exit 64; }
   classes=""
   for filter in ${filters[@]+"${filters[@]}"}; do
     [ "$filter" = "--tests" ] || classes="${classes:+$classes,}$filter"
@@ -51,7 +51,7 @@ if [ "${device#run:}" != "$device" ]; then
   started=$(date +%s)
   status=0
   raw="$base/device-run.txt"
-  adb -s "$serial" shell am instrument -w -r ${classes:+-e class "$classes"} com.ardia.browser.test/androidx.test.runner.AndroidJUnitRunner > "$raw" 2>&1 || true
+  adb -s "$serial" shell am instrument -w -r ${classes:+-e class "$classes"} com.openbrowsercompany.solstice.test/androidx.test.runner.AndroidJUnitRunner > "$raw" 2>&1 || true
   (python3 - "$raw" <<'INSTRUMENTED'
 import re, sys
 text = open(sys.argv[1], encoding="utf-8", errors="replace").read()
@@ -65,7 +65,7 @@ for line in text.splitlines():
     if not code or int(code.group(1)) == 1:
         continue
     result = int(code.group(1))
-    name = current.get("class", "?").replace("com.ardia.phone.", "").replace("com.ardia.browser.", "")
+    name = current.get("class", "?").replace("com.ardia.phone.", "").replace("com.openbrowsercompany.solstice.", "")
     passed, ran = classes.get(name, (0, 0))
     if result in (-3, -4):
         skipped += 1

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Fail before App Store Connect does on a missing or refused privacy key (ITMS-90683).
 #
-#   apps/phone/scripts/check-privacy-keys <Ardia.app> [--default-browser]
+#   apps/phone/scripts/check-privacy-keys <Solstice.app> [--default-browser]
 #   apps/phone/scripts/check-privacy-keys -h | --help
 #
 # App Store Connect reads the symbols each binary imports. When one calls an API that needs a purpose string
