@@ -86,7 +86,7 @@ test("with the ad blocker off in Settings, the trusted list still changes and th
   assert.deepEqual(await ok("sites.allowAds", { site: "applovin.com" }), { site: "applovin.com", trusted: true, covers: "applovin.com and its subdomains", enabled: false, allowedSites: ["applovin.com"] });
 });
 
-test("an Ardia whose host can't check a site or take one entry out refuses both, and nothing reaches the blocker", async () => {
+test("an Solstice whose host can't check a site or take one entry out refuses both, and nothing reaches the blocker", async () => {
   await freshWindow();
   reset();
   blocker.allowed.add("applovin.com");
@@ -100,7 +100,7 @@ test("an Ardia whose host can't check a site or take one entry out refuses both,
   assert.deepEqual([...blocker.allowed], ["applovin.com"]);
 });
 
-test("an ad blocker state Ardia couldn't read fails the call instead of answering from an empty list", async () => {
+test("an ad blocker state Solstice couldn't read fails the call instead of answering from an empty list", async () => {
   await freshWindow();
   reset();
   blocker.allowed.add("applovin.com");

@@ -45,7 +45,7 @@ function harness() {
 
 test("the doorbell names the program beside who signed it, has no default button and Escape means Don't Allow", () => {
   const options = doorbellOptions(ask(1));
-  assert.equal(options.title, "A program wants to control Ardia");
+  assert.equal(options.title, "A program wants to control Solstice");
   assert.ok(options.message.startsWith("“tool”: Signed by X Inc (XXXXXXXXXX)\n/opt/tool\n\n"));
   assert.deepEqual(options.choices, ["Allow Once", "Allow for 30 Minutes", "Always Allow", "Don't Allow"]);
   assert.equal(options.cancelChoice, 3);
@@ -134,7 +134,7 @@ test("wired up: the native ask reaches the dialog, the answer reaches the socket
   stub.controlPeers.chooseResult = { choice: 1 };
   stub.emitControlPeerAsk(ask(41));
   await settle();
-  assert.equal(stub.controlPeers.chosen.at(-1).title, "A program wants to control Ardia");
+  assert.equal(stub.controlPeers.chosen.at(-1).title, "A program wants to control Solstice");
   assert.deepEqual(stub.controlPeers.answers.at(-1), [41, "halfHour"]);
   stub.emitControlPeerAskEnded(41, "halfHour");
   stub.controlPeers.chooseResult = { choice: -1, unshown: true };

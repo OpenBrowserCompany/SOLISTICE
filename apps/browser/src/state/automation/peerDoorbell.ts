@@ -30,9 +30,9 @@ export function doorbellOptions(ask: ControlPeerAsk): Omit<ChooseOptions, "windo
   const choices = choicesFor(ask);
   const who = [`“${plainText(ask.name, 64)}”: ${plainText(ask.signedBy, 120)}`, plainText(ask.path, 300)].filter(Boolean).join("\n");
   const lines = [who, "It could open, read and change your tabs and pages, with your logins, as the ardia command can."];
-  if (!ask.remember) lines.push("Ardia can't recognize this program next time, so it can only be allowed once.");
+  if (!ask.remember) lines.push("Solstice can't recognize this program next time, so it can only be allowed once.");
   return {
-    title: "A program wants to control Ardia",
+    title: "A program wants to control Solstice",
     message: lines.join("\n\n"),
     choices: choices.map(([title]) => title),
     cancelChoice: choices.length - 1,
