@@ -617,16 +617,16 @@ class PackagingTests(unittest.TestCase):
                     self.assertEqual(lines, [])
                     self.assertIn("can't start Chromium's sandbox", result.stderr)
                 if label == 'APPIMAGE without APPDIR':
-                    self.assertNotIn("Ardia won't run without the sandbox", result.stderr)
+                    self.assertNotIn("Solstice won't run without the sandbox", result.stderr)
                 if label.startswith('AppImage') and code == 1:
-                    self.assertIn("Ardia won't run without the sandbox", result.stderr)
-                    self.assertIn("Install Ardia's .deb, which sets up the sandbox helper and its AppArmor profile", result.stderr)
+                    self.assertIn("Solstice won't run without the sandbox", result.stderr)
+                    self.assertIn("Install Solstice's .deb, which sets up the sandbox helper and its AppArmor profile", result.stderr)
                 if label == 'AppImage, restricted':
                     self.assertIn('allow user namespaces with sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0.', result.stderr)
                 if label == 'AppImage, clone off':
                     self.assertIn('allow user namespaces with sudo sysctl -w kernel.unprivileged_userns_clone=1.', result.stderr)
                 if label in ('asked', 'AppImage, asked'):
-                    self.assertEqual(lines, ['--ardia-sandbox-decision=Ardia was started with --no-sandbox', '--marker', '--no-sandbox'])
+                    self.assertEqual(lines, ['--ardia-sandbox-decision=Solstice was started with --no-sandbox', '--marker', '--no-sandbox'])
 
     def test_an_instance_with_its_own_user_data_dir_keeps_its_crash_dumps_there(self):
         cases = [
@@ -680,7 +680,7 @@ class PackagingTests(unittest.TestCase):
             self.assertIn('Provides: www-browser', fields)
             for package in ('libc6 (>= 2.17)', 'libgtk-3-0t64 | libgtk-3-0', 'libsecret-1-0', 'xdg-utils', 'curl', 'openssl'):
                 self.assertIn(package, fields)
-            self.assertIn('Upstream-Name: Ardia', (unpacked / 'usr/share/doc/ardia/copyright').read_text())
+            self.assertIn('Upstream-Name: Solstice', (unpacked / 'usr/share/doc/ardia/copyright').read_text())
             with gzip.open(unpacked / 'usr/share/doc/ardia/changelog.gz', 'rt') as changelog:
                 self.assertIn('ardia (0.2.47~nightly.3) stable', changelog.read())
             sums = dict(reversed(line.split('  ', 1)) for line in (scripts / 'md5sums').read_text().splitlines())
