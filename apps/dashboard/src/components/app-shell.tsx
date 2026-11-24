@@ -99,7 +99,7 @@ function Brand() {
       <img src="/app-icon.png" alt="" className="size-8 rounded-[9px] shadow-sm" width={32} height={32} />
       <span className="grid leading-tight">
         <span className="text-[0.95rem] font-semibold tracking-[-0.01em]" style={{ fontStretch: "88%" }}>
-          Ardia
+          Solstice
         </span>
         <span className="label-mono text-muted-foreground">Dashboard</span>
       </span>
@@ -181,7 +181,7 @@ export function AppShell({ email, children }: { email: string; children: ReactNo
           <SidebarTrigger className="-ml-1 md:hidden" />
           <div className="flex min-w-0 items-center gap-2 md:hidden">
             <img src="/app-icon.png" alt="" className="size-6 rounded-md" width={24} height={24} />
-            <span className="text-sm font-semibold">Ardia</span>
+            <span className="text-sm font-semibold">Solstice</span>
           </div>
           <div className="ml-auto flex items-center gap-2">
             <RefreshCw className={cn("size-3.5 text-muted-foreground transition-opacity", loading ? "animate-spin opacity-100" : "opacity-0")} aria-hidden />
