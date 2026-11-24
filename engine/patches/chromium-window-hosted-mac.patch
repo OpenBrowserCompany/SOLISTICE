@@ -4,7 +4,7 @@
  // ends.
  @property(assign, nonatomic) BOOL deferInputContextActivation;
  
-+// Ardia: a view the embedder added as a subview of this one to show its
++// Solstice: a view the embedder added as a subview of this one to show its
 +// own UI over the widget's views (ArdiaCore's windows, engine/ardiacore). Hit
 +// testing and accessibility ask it first, so
 +// the points it covers reach its views and assistive technologies see its
@@ -29,7 +29,7 @@
    // superview is taller than the contentView.
    NSPoint pointInView = [self convertPoint:point fromView:self.superview];
 +
-+  // Ardia: the embedder's views come first.
++  // Solstice: the embedder's views come first.
 +  if (NSView* embedded = [self ardiaEmbeddedSubview]) {
 +    if (NSView* hit = [embedded hitTest:pointInView]) {
 +      return hit;
@@ -42,7 +42,7 @@
  // NSAccessibility formal protocol implementation:
  
  - (NSArray*)accessibilityChildren {
-+  // Ardia: the embedder's views cover the widget's.
++  // Solstice: the embedder's views cover the widget's.
 +  if (NSView* embedded = [self ardiaEmbeddedSubview]) {
 +    return NSAccessibilityUnignoredChildren(@[ embedded ]);
 +  }
@@ -62,7 +62,7 @@
        accessibilityHitTest:point];
  }
  
-+// Ardia: ardiaEmbeddedView while it is a visible subview of this view.
++// Solstice: ardiaEmbeddedView while it is a visible subview of this view.
 +- (NSView*)ardiaEmbeddedSubview {
 +  NSView* embedded = self.ardiaEmbeddedView;
 +  return embedded && embedded.superview == self && !embedded.hidden ? embedded

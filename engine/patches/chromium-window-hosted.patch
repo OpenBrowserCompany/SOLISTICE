@@ -4,12 +4,12 @@
    OnActiveTabChanged(change, selection);
  }
  
-+// Ardia: ArdiaCore (engine/ardiacore) keeps its windows open without tabs.
++// Solstice: ArdiaCore (engine/ardiacore) keeps its windows open without tabs.
 +bool (*g_ardia_keeps_window_without_tabs)(
 +    const BrowserWindowInterface* browser) = nullptr;
 +
  void Browser::TabStripEmpty() {
-+  // Ardia: a window ArdiaCore shows its own UI in stays open without tabs,
++  // Solstice: a window ArdiaCore shows its own UI in stays open without tabs,
 +  // unless it is closing.
 +  if (g_ardia_keeps_window_without_tabs &&
 +      g_ardia_keeps_window_without_tabs(this) &&
@@ -33,7 +33,7 @@
  }
  
  void UnloadController::TabStripEmpty() {
-+  // Ardia: see Browser::TabStripEmpty. The window stays open for new tabs.
++  // Solstice: see Browser::TabStripEmpty. The window stays open for new tabs.
 +  if (!is_attempting_to_close_browser() &&
 +      g_ardia_keeps_window_without_tabs &&
 +      g_ardia_keeps_window_without_tabs(browser_.get())) {
