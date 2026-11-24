@@ -111,8 +111,16 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
-      - name: Build the engine
-        run: scripts/agent/engine-build --as release --wait 3600 chrome_framework
+      - name: Sync a fresh Chromium tree
+        run: scripts/agent/locked chromium --as release --wait 3600 -- engine/patches/build/01-sync.sh --apply
+      - name: Helium and its substitutions
+        run: scripts/agent/locked chromium --as release -- python3 scripts/engine/run-step3.py --apply --platform mac
+      - name: Capture the series base
+        run: scripts/agent/locked chromium --as release -- python3 scripts/engine/run-capture.py --platform mac --cpu arm64
+      - name: Apply our patch series
+        run: scripts/agent/locked chromium --as release -- engine/patches/build/04-series.sh --apply
+      - name: Build the framework
+        run: scripts/agent/locked chromium --as release -- engine/patches/build/05-build.sh --apply
       - name: Publish the engine
         env:
           GH_TOKEN: ${{ github.token }}
