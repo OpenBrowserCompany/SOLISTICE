@@ -3,7 +3,7 @@ package com.ardia.phone
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
-import com.ardia.browser.NightShadeMode
+import com.openbrowsercompany.solstice.NightShadeMode
 import java.io.File
 import java.security.MessageDigest
 import java.sql.Connection

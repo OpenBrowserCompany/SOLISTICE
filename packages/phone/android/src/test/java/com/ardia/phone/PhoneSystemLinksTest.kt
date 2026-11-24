@@ -30,19 +30,19 @@ class PhoneSystemLinksTest {
 
     @Test
     fun ardiaLinksBecomeTheirKindsFromWidgetsAndShortcuts() {
-        assertEquals(mapOf("kind" to "search", "source" to "system"), PhoneSystemLinks.link(view("ardia://search")))
-        assertEquals(mapOf("kind" to "search", "query" to "red pandas", "source" to "system"), PhoneSystemLinks.link(view("ardia://search?q=red%20pandas")))
-        assertEquals(mapOf("kind" to "voiceSearch", "source" to "system"), PhoneSystemLinks.link(view("ardia://voice")))
-        assertEquals(mapOf("kind" to "incognito", "source" to "system"), PhoneSystemLinks.link(view("ardia://incognito")))
-        assertEquals(mapOf("kind" to "macTabs", "source" to "system"), PhoneSystemLinks.link(view("ardia://mac-tabs")))
-        assertEquals(mapOf("kind" to "tab", "id" to "t-1", "source" to "system"), PhoneSystemLinks.link(view("ardia://tab/t-1")))
-        assertEquals(mapOf("kind" to "open", "url" to "https://example.com/", "source" to "system"), PhoneSystemLinks.link(view("ardia://open?url=https%3A%2F%2Fexample.com%2F")))
-        assertEquals(mapOf("kind" to "inbox", "source" to "system"), PhoneSystemLinks.link(view("ardia://inbox")))
-        assertNull(PhoneSystemLinks.link(view("ardia://open?url=javascript%3Aalert(1)")))
-        assertNull(PhoneSystemLinks.link(view("ardia://nothing")))
-        val shortcut = view("ardia://incognito").putExtra(PhoneSystemLinks.SOURCE_EXTRA, "shortcut")
+        assertEquals(mapOf("kind" to "search", "source" to "system"), PhoneSystemLinks.link(view("solstice://search")))
+        assertEquals(mapOf("kind" to "search", "query" to "red pandas", "source" to "system"), PhoneSystemLinks.link(view("solstice://search?q=red%20pandas")))
+        assertEquals(mapOf("kind" to "voiceSearch", "source" to "system"), PhoneSystemLinks.link(view("solstice://voice")))
+        assertEquals(mapOf("kind" to "incognito", "source" to "system"), PhoneSystemLinks.link(view("solstice://incognito")))
+        assertEquals(mapOf("kind" to "macTabs", "source" to "system"), PhoneSystemLinks.link(view("solstice://mac-tabs")))
+        assertEquals(mapOf("kind" to "tab", "id" to "t-1", "source" to "system"), PhoneSystemLinks.link(view("solstice://tab/t-1")))
+        assertEquals(mapOf("kind" to "open", "url" to "https://example.com/", "source" to "system"), PhoneSystemLinks.link(view("solstice://open?url=https%3A%2F%2Fexample.com%2F")))
+        assertEquals(mapOf("kind" to "inbox", "source" to "system"), PhoneSystemLinks.link(view("solstice://inbox")))
+        assertNull(PhoneSystemLinks.link(view("solstice://open?url=javascript%3Aalert(1)")))
+        assertNull(PhoneSystemLinks.link(view("solstice://nothing")))
+        val shortcut = view("solstice://incognito").putExtra(PhoneSystemLinks.SOURCE_EXTRA, "shortcut")
         assertEquals(mapOf("kind" to "incognito", "source" to "shortcut"), PhoneSystemLinks.link(shortcut))
-        val spoofed = view("ardia://incognito").putExtra(PhoneSystemLinks.SOURCE_EXTRA, "web")
+        val spoofed = view("solstice://incognito").putExtra(PhoneSystemLinks.SOURCE_EXTRA, "web")
         assertEquals("system", PhoneSystemLinks.link(spoofed)?.get("source"))
     }
 
@@ -105,7 +105,7 @@ class PhoneSystemLinksTest {
 
     @Test
     fun aFreshActivityDropsLinksAnEarlierOneLeftUntakenButKeepsItsOwnAndLaterOnes() {
-        PhoneSystemLinks.receive(view("ardia://voice").putExtra(PhoneSystemLinks.SOURCE_EXTRA, "shortcut"))
+        PhoneSystemLinks.receive(view("solstice://voice").putExtra(PhoneSystemLinks.SOURCE_EXTRA, "shortcut"))
         PhoneSystemLinks.activityStarted(view("https://example.com/"), restored = false)
         PhoneSystemLinks.receive(view("https://example.org/"))
         assertEquals("https://example.com/", PhoneSystemLinks.takeInitial()?.get("url"))

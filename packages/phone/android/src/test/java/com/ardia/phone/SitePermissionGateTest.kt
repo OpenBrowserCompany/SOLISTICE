@@ -1,7 +1,7 @@
 package com.ardia.phone
 
 import android.Manifest
-import com.ardia.browser.SitePermission
+import com.openbrowsercompany.solstice.SitePermission
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
