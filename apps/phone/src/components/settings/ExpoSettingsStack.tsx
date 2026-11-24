@@ -63,7 +63,7 @@ const TITLES: Record<SettingsRoute["page"], string> = {
   syncConnect: syncWords.connect,
   syncWords: syncWords.enterRecoveryPhrase,
   syncScan: syncWords.scanCode,
-  about: "About Ardia",
+  about: "About Solstice",
   licenses: "Open Source Licenses",
   whatsSent: PHONE_SHARING_COPY.whatsSent,
 };

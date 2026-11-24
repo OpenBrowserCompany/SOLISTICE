@@ -27,7 +27,7 @@ import { destinationWords } from "../../lib/sharedWords";
 
 const INTERVALS = (Object.keys(AUTO_ARCHIVE_INTERVALS) as AutoArchiveInterval[]).map((id) => ({ id, title: autoArchiveTitle(id) }));
 const APP_LINKS = [
-  { id: "ardia", title: "Ardia" },
+  { id: "ardia", title: "Solstice" },
   { id: "app", title: "App" },
 ] as const;
 const SHORTCUTS = [{ id: "archive", title: destinationWords.archive }, { id: "spaces", title: destinationWords.spaces }];
@@ -163,7 +163,7 @@ export function ExpoSettingsRoot() {
             <ExpoRowLabel title="Show Onboarding" systemImage="hand.wave.fill" tint="onboarding" />
           </Button>
           <NavigationLink value={link({ page: "about" })}>
-            <ExpoRowLabel title="About Ardia" systemImage="info" tint="neutral" />
+            <ExpoRowLabel title="About Solstice" systemImage="info" tint="neutral" />
           </NavigationLink>
         </Section>
       </Form>
