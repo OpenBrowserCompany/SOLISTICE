@@ -61,8 +61,8 @@
     },
     {
       "scene": "littleback",
-      "title": "Back and forward in Little Ardia",
-      "body": "Little Ardia's bar has back and forward buttons. On 0.2.42 the same click landed in the address field.",
+      "title": "Back and forward in Little Solstice",
+      "body": "Little Solstice's bar has back and forward buttons. On 0.2.42 the same click landed in the address field.",
       "layout": "side",
       "cam": [200, 60, 640, 460],
       "lead": 1.0,

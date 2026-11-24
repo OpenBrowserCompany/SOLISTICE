@@ -22,7 +22,7 @@
     {
       "scene": "barfolder",
       "title": "Bookmark folders with favicons",
-      "body": "Click a folder on the bookmarks bar: the menu is now Ardia's own, with each site's icon, and a click elsewhere closes it. Then the bar's new Large size. 0.2.43-nightly.3 opened a native menu with a globe on every row, and had no Large size.",
+      "body": "Click a folder on the bookmarks bar: the menu is now Solstice's own, with each site's icon, and a click elsewhere closes it. Then the bar's new Large size. 0.2.43-nightly.3 opened a native menu with a globe on every row, and had no Large size.",
       "layout": "side",
       "cam": [262, 0, 640, 440],
       "note": "Before menu drawn from the items nightly.3 logged",
