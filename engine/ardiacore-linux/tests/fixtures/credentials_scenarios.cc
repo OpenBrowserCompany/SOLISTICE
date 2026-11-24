@@ -139,8 +139,8 @@ void TypedMethods() {
   Plan exporting = PlanInvoke("ArdiaPasswords.export", Values({Arg::String("")}));
   assert(exporting.ok() && exporting.asks_for_path && exporting.service.empty() && exporting.reply == Reply::kExport);
   assert(exporting.requires_stores == std::vector<Store>{Store::kPasswords});
-  ExpectEngine(PlanExport("/tmp/scratch/Ardia Passwords.csv"), "ac_passwords_export",
-               R"({"path":"/tmp/scratch/Ardia Passwords.csv"})", Reply::kExport, {Store::kPasswords});
+  ExpectEngine(PlanExport("/tmp/scratch/Solstice Passwords.csv"), "ac_passwords_export",
+               R"({"path":"/tmp/scratch/Solstice Passwords.csv"})", Reply::kExport, {Store::kPasswords});
   ExpectInvalid(PlanExport("relative.csv"), "ERR_EXPORT_PATH");
   ExpectInvalid(PlanExport(""), "ERR_EXPORT_PATH");
   ExpectInvalid(PlanExport(std::string("/tmp/a\0b", 8)), "ERR_EXPORT_PATH");

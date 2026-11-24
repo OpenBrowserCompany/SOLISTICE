@@ -48,9 +48,9 @@ void ShortcutBookScenarios() {
   Expect(decision.route == shortcuts::Route::kNone, "modifiers must match exactly");
 
   decision = book.Decide(action, false, true);
-  Expect(decision.route == shortcuts::Route::kNone && decision.extension_id.empty(), "an Ardia shortcut is never shadowed by an action");
+  Expect(decision.route == shortcuts::Route::kNone && decision.extension_id.empty(), "an Solstice shortcut is never shadowed by an action");
   decision = book.Decide(named, false, true);
-  Expect(decision.route == shortcuts::Route::kNone, "an Ardia shortcut is never shadowed by a command");
+  Expect(decision.route == shortcuts::Route::kNone, "an Solstice shortcut is never shadowed by a command");
 
   book.Unregister(named);
   Expect(!book.Contains(named) && book.Decide(named, false, false).route == shortcuts::Route::kNone, "unregistered commands stop");

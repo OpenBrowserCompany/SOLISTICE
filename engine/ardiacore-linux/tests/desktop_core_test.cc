@@ -53,7 +53,7 @@ std::vector<std::string> Listing(const std::string& folder) {
 }
 
 std::string Entry(const std::string& exec, const std::string& extra = kHandlers) {
-  return "[Desktop Entry]\nType=Application\nName=Ardia\nExec=" + exec + " %U\n" + extra;
+  return "[Desktop Entry]\nType=Application\nName=Solstice\nExec=" + exec + " %U\n" + extra;
 }
 
 desktop::Install Installed(const std::string& root) {
@@ -70,10 +70,10 @@ desktop::Install Installed(const std::string& root) {
 
 void Entries() {
   const auto keys = desktop::ParseEntry(
-      "# a comment\n\n[Desktop Entry]\r\nType=Application\nName = Ardia \nName[fr]=Ardia FR\nExec=/opt/a\\sb/ardia %U\n"
+      "# a comment\n\n[Desktop Entry]\r\nType=Application\nName = Solstice \nName[fr]=Solstice FR\nExec=/opt/a\\sb/ardia %U\n"
       "Hidden=false\n[Desktop Action new]\nExec=/other\nName=New\n");
   assert(keys && keys->size() == 4);
-  assert(keys->at("Type") == "Application" && keys->at("Name") == "Ardia" && keys->at("Hidden") == "false");
+  assert(keys->at("Type") == "Application" && keys->at("Name") == "Solstice" && keys->at("Hidden") == "false");
   assert(keys->at("Exec") == "/opt/a b/ardia %U");
   assert(!desktop::ParseEntry(""));
   assert(!desktop::ParseEntry("Type=Application\n[Desktop Entry]\n"));
@@ -236,12 +236,12 @@ void DefaultBrowser(const std::string& root) {
   const std::vector<std::string> set = {tool, "set", "default-web-browser", "ardia.desktop"};
 
   auto answer = desktop::IsDefaultBrowser(install, scripted);
-  assert(!answer.is_default && answer.problem == "Ardia has no installed desktop entry" && calls.empty());
+  assert(!answer.is_default && answer.problem == "Solstice has no installed desktop entry" && calls.empty());
   answer = desktop::SetAsDefaultBrowser(install, scripted);
-  assert(!answer.is_default && answer.problem == "Ardia has no installed desktop entry" && calls.empty());
+  assert(!answer.is_default && answer.problem == "Solstice has no installed desktop entry" && calls.empty());
   Write(shared, Entry(root + "/other/ardia"));
   answer = desktop::SetAsDefaultBrowser(install, scripted);
-  assert(!answer.is_default && answer.problem == "The installed desktop entry starts another copy of Ardia" && calls.empty());
+  assert(!answer.is_default && answer.problem == "The installed desktop entry starts another copy of Solstice" && calls.empty());
   Write(shared, Entry(install.launcher));
   answer = desktop::IsDefaultBrowser(install, scripted);
   assert(!answer.is_default && answer.problem == "xdg-settings is not installed" && calls.empty());
@@ -316,7 +316,7 @@ void Login(const std::string& root) {
   assert(!Exists(root + "/home/config"));
 
   assert(desktop::SetLaunchAtLogin(install, true).ok);
-  assert(Slurp(entry) == "[Desktop Entry]\nType=Application\nName=Ardia\nExec=" + install.launcher +
+  assert(Slurp(entry) == "[Desktop Entry]\nType=Application\nName=Solstice\nExec=" + install.launcher +
                              "\nIcon=ardia\nTerminal=false\nX-GNOME-Autostart-enabled=true\n");
   assert(Slurp(entry) == desktop::AutostartEntry(install));
   assert(Mode(entry) == 0644);
@@ -393,7 +393,7 @@ void Login(const std::string& root) {
   raw.launcher = root + "/out/bin/ardia";
   assert(desktop::LaunchAtLoginStatus(raw) == desktop::LoginStatus::kNotFound);
   change = desktop::SetLaunchAtLogin(raw, true);
-  assert(!change.ok && change.message == "This copy of Ardia has no launcher to start at login");
+  assert(!change.ok && change.message == "This copy of Solstice has no launcher to start at login");
   assert(!Exists(root + "/raw"));
   Write(raw.launcher, "#!/bin/sh\n", 0644);
   assert(desktop::LaunchAtLoginStatus(raw) == desktop::LoginStatus::kNotFound);
