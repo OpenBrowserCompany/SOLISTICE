@@ -82,7 +82,7 @@ test("an event over 1 MiB goes out summarized instead of whole", async () => {
   await ok("subscribe", { events: [] });
 });
 
-test("a decide request over 1 MiB isn't sent, and Ardia goes on as if nobody answered", async () => {
+test("a decide request over 1 MiB isn't sent, and Solstice goes on as if nobody answered", async () => {
   const hooks = [{ name: "prog", on: "tab.opening", run: ["~/bin/decide"] }];
   await freshWindow();
   resetApprovalsForTests();

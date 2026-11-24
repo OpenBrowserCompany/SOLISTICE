@@ -77,7 +77,7 @@ async function closeWindow(params: Record<string, unknown>, call: SocketCall, ki
 function openLittle(params: Record<string, unknown>) {
   const profileId = params.profile !== undefined ? profileArg(params.profile) : undefined;
   const id = openLittleArdia(url(params.url), profileId);
-  expect(!!id && eligibleKind(now(), id) === "little", "Little Ardia didn't open.");
+  expect(!!id && eligibleKind(now(), id) === "little", "Little Solstice didn't open.");
   return windowRow(now(), id);
 }
 
@@ -102,7 +102,7 @@ export const WINDOW_METHODS: MethodSpec[] = [
   {
     name: "windows.close",
     mutates: true,
-    description: "Close a window as its close button does: Ardia asks first when the user set it to (refused when nobody can see the question), and the last window is kept to reopen (its tabs go to recently closed)",
+    description: "Close a window as its close button does: Solstice asks first when the user set it to (refused when nobody can see the question), and the last window is kept to reopen (its tabs go to recently closed)",
     params: obj({ window: WINDOW }, ["window"]),
     result: "{ok}",
     run: closeWindow,
@@ -140,7 +140,7 @@ export const WINDOW_METHODS: MethodSpec[] = [
       return windowRow(now(), w.id);
     },
   },
-  { name: "littleArdia.open", mutates: true, description: "Open a Little Ardia window", params: obj({ url: text("Its page; a New Tab when left out"), profile: PROFILE }), result: "window", run: openLittle },
-  { name: "littleArdia.close", mutates: true, description: "Close a Little Ardia window; the reply comes once it's closed", params: obj({ window: WINDOW }, ["window"]), result: "{ok}", run: (p, call) => closeWindow(p, call, ["little"]) },
-  { name: "littleArdia.toMain", mutates: true, description: "Move a Little Ardia's page into a main window as a tab", params: obj({ window: WINDOW }, ["window"]), result: "{tab, window}", run: littleToMain },
+  { name: "littleArdia.open", mutates: true, description: "Open a Little Solstice window", params: obj({ url: text("Its page; a New Tab when left out"), profile: PROFILE }), result: "window", run: openLittle },
+  { name: "littleArdia.close", mutates: true, description: "Close a Little Solstice window; the reply comes once it's closed", params: obj({ window: WINDOW }, ["window"]), result: "{ok}", run: (p, call) => closeWindow(p, call, ["little"]) },
+  { name: "littleArdia.toMain", mutates: true, description: "Move a Little Solstice's page into a main window as a tab", params: obj({ window: WINDOW }, ["window"]), result: "{tab, window}", run: littleToMain },
 ];

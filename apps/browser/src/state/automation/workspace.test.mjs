@@ -46,9 +46,9 @@ test("URLs: only what the omnibox opens, never script or app schemes", () => {
   assert.equal(openableUrl("example.com"), "https://example.com");
   assert.equal(openableUrl("https://a.example/x?y#z"), "https://a.example/x?y#z");
   assert.equal(openableUrl("about:blank"), "about:blank");
-  assert.equal(openableUrl("ardia://history"), "ardia://history");
-  assert.equal(openableUrl("ardia://newtab"), "");
-  for (const bad of ["javascript:alert(1)", " javascript:alert(1)", "data:text/html,hi", "ardia://settings", "chrome://flags", "ardia://extensions", "mailto:a@b.c", "slack://open", "https://user:pw@a.example/", "hello world", "view-source:https://a.example/"]) {
+  assert.equal(openableUrl("solstice://history"), "solstice://history");
+  assert.equal(openableUrl("solstice://newtab"), "");
+  for (const bad of ["javascript:alert(1)", " javascript:alert(1)", "data:text/html,hi", "solstice://settings", "chrome://flags", "solstice://extensions", "mailto:a@b.c", "slack://open", "https://user:pw@a.example/", "hello world", "view-source:https://a.example/"]) {
     assert.equal(typeof openableUrl(bad), "object", bad);
   }
 });
