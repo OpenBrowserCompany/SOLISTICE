@@ -3,7 +3,7 @@
 // (ARDIA_BACKGROUND=1, its own data dir and DevTools port; scripts/lib/instance.mjs), serves fixture pages, and
 // drives the real app through its dev harness (lib/devHarness.ts) and Chrome's DevTools protocol.
 //
-//   node packages/ardiacore/scripts/acceptance.mjs <Ardia.app> <scratch dir> [--keep] [check…]
+//   node packages/ardiacore/scripts/acceptance.mjs <Solstice.app> <scratch dir> [--keep] [check…]
 //   node packages/ardiacore/scripts/acceptance.mjs --attach <scratch dir> [check…]
 //   node packages/ardiacore/scripts/acceptance.mjs --list
 //
@@ -179,7 +179,7 @@ if (attaching || keep) {
 const [appArg, scratchArg, ...only] = attaching ? [kept.app, ...argv] : argv;
 const { run: selected, deps } = selection(only);
 if (!appArg || !scratchArg) {
-  console.error("usage: acceptance.mjs <Ardia.app> <scratch dir> [--keep] [check…] | --attach <scratch dir> [check…] | --list | --help");
+  console.error("usage: acceptance.mjs <Solstice.app> <scratch dir> [--keep] [check…] | --attach <scratch dir> [check…] | --list | --help");
   process.exit(64);
 }
 const app = resolve(appArg);
@@ -404,7 +404,7 @@ const server = createServer((req, res) => {
           if (e.key === "f") document.fullscreenElement ? document.exitFullscreen() : document.body.requestFullscreen();
         });
       if (location.search.includes("handlers")) {
-        navigator.mediaSession.metadata = new MediaMetadata({ title: "Fixture video", artist: "Ardia" });
+        navigator.mediaSession.metadata = new MediaMetadata({ title: "Fixture video", artist: "Solstice" });
         for (const action of ["play", "pause", "seekbackward", "seekforward", "previoustrack", "nexttrack", "seekto"])
           navigator.mediaSession.setActionHandler(action, () => {});
       }
@@ -1162,7 +1162,7 @@ try {
       const text = (await cdp(t, "Runtime.evaluate", { expression: "document.body?.innerText ?? ''", returnByValue: true })).result?.value ?? "";
       const product = text.split("\n").find((l) => /^\w+\t\d+\.\d+\./.test(l) && !/^CEF/.test(l));
       const credit = text.match(/Copyright \d+ The Chromium Authors/)?.[0];
-      if (!/^Ardia\t/.test(product ?? "") || !credit) throw new Error(`version page: ${product} / ${credit}`);
+      if (!/^Solstice\t/.test(product ?? "") || !credit) throw new Error(`version page: ${product} / ${credit}`);
       return { product, credit };
     } finally {
       await evalApp(`ac.store.getState().navigate("${first.id}", "${base}/a", { userInitiated: true }); return true`);
@@ -1354,7 +1354,7 @@ try {
       if (!(await engine("media.showCastDialog", { tabId: first.id }))) throw new Error("showCastDialog said no");
       return until("the test sink in the app's dialog", async () => {
         const d = await dialogNow();
-        const sink = d?.sinks?.find((s) => s.name === "Ardia Test Sink" && s.state === "available");
+        const sink = d?.sinks?.find((s) => s.name === "Solstice Test Sink" && s.state === "available");
         return sink ? { dialog: d, sink } : null;
       }, 10000).catch(async (e) => { throw new Error(`${e.message}; dialog ${JSON.stringify(await dialogNow())}`); });
     };
@@ -1604,7 +1604,7 @@ try {
         }, 5000);
         if (unclicked !== "InvalidStateError" || (await asks()) !== asked) throw new Error(`${kind} without a click: ${unclicked}, picker asks ${(await asks()) - asked}`);
         await cdp(t, "Runtime.evaluate", { expression: `share(${JSON.stringify(kind)})`, userGesture: true });
-        await until(`Ardia's picker for ${kind}`, async () => ((await asks()) > asked ? true : null), 10000);
+        await until(`Solstice's picker for ${kind}`, async () => ((await asks()) > asked ? true : null), 10000);
         const source = await evalApp(`return ac.webviews.get("${target.id}").mediaCaptureSourceId()`);
         if (!source) throw new Error("no capture source id for the target tab");
         await evalApp(`globalThis.acSharePicker.answerDisplayMedia("${tab.id}", ${JSON.stringify(source)}); return true`);
@@ -4449,10 +4449,10 @@ try {
         await closeWindow(priv);
         opened.splice(opened.indexOf(priv), 1);
         await sleep(500);
-        step("Little Ardia appears over the window");
+        step("Little Solstice appears over the window");
         const small = await opens("newLittleArdia", "small", `${base}/marker?other`, [wx + 60, wy + 60, 520, 420]);
         await sleep(900);
-        step("Little Ardia closes");
+        step("Little Solstice closes");
         await closeWindow(small);
         opened.splice(opened.indexOf(small), 1);
         await sleep(400);
@@ -6179,13 +6179,13 @@ try {
   await check("little-ardia", async () => {
     const before = await evalApp(`return Object.keys(ac.store.getState().windows)`);
     await evalApp(`ac.runCommand({ command: "newLittleArdia" }); return true`);
-    const id = await until("a Little Ardia window", async () => {
+    const id = await until("a Little Solstice window", async () => {
       const w = await evalApp(`return Object.values(ac.store.getState().windows).find((w) => w.kind === "small")?.id ?? null`);
       return w;
     });
     const tabId = await until("its tab", async () => evalApp(`return ac.store.getState().windows["${id}"]?.tabIds[0] ?? null`));
     await evalApp(`ac.store.getState().navigate("${tabId}", "${base}/b?small", { userInitiated: true }); return true`);
-    await until("Page B in Little Ardia", async () => evalApp(`return ac.store.getState().tabs["${tabId}"]?.title === "Page B"`));
+    await until("Page B in Little Solstice", async () => evalApp(`return ac.store.getState().tabs["${tabId}"]?.title === "Page B"`));
     return { window: id, tab: tabId };
   });
 
@@ -7155,7 +7155,7 @@ try {
   // MARK: Crash guard (ends the run)
 
   await check("crash-guard", async () => {
-    const reports = () => readdirSync(join(process.env.HOME, "Library/Logs/DiagnosticReports")).filter((f) => f.startsWith("Ardia-"));
+    const reports = () => readdirSync(join(process.env.HOME, "Library/Logs/DiagnosticReports")).filter((f) => f.startsWith("Solstice-"));
     const before = new Set(reports());
     const front = execFileSync("lsappinfo", ["front"]).toString().trim();
     const crashed = pid;
