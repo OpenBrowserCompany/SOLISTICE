@@ -3,17 +3,17 @@ set -uo pipefail
 REPO=$(cd "$(dirname "$0")/../../../.." && pwd)
 export FIXES_SCRATCH=${FIXES_SCRATCH:-/tmp/meetpip-film}
 S=$FIXES_SCRATCH
-BEFORE_SRC=${BEFORE_SRC:-/Applications/Ardia.app}
-AFTER_SRC=${AFTER_SRC:-/tmp/meetpip/film/Ardia-after.app}
+BEFORE_SRC=${BEFORE_SRC:-/Applications/Solstice.app}
+AFTER_SRC=${AFTER_SRC:-/tmp/meetpip/film/Solstice-after.app}
 mkdir -p "$S/before" "$S/after"
 cat >"$S/film.entitlements" <<'EOF'
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version="1.0"><dict><key>com.apple.security.cs.disable-library-validation</key><true/><key>com.apple.security.cs.allow-dyld-environment-variables</key><true/></dict></plist>
 EOF
 for side in before after; do
   src=$([ "$side" = before ] && echo "$BEFORE_SRC" || echo "$AFTER_SRC")
-  if [ ! -d "$S/$side/Ardia.app" ]; then
-    ditto "$src" "$S/$side/Ardia.app"
-    codesign -f -s - --options runtime --entitlements "$S/film.entitlements" "$S/$side/Ardia.app" >/dev/null 2>&1
+  if [ ! -d "$S/$side/Solstice.app" ]; then
+    ditto "$src" "$S/$side/Solstice.app"
+    codesign -f -s - --options runtime --entitlements "$S/film.entitlements" "$S/$side/Solstice.app" >/dev/null 2>&1
   fi
 done
 node "$REPO/apps/videos/scripts/fixes/sessions-meet-auto-pip.mjs" "$S"
@@ -23,6 +23,6 @@ if ! lsof -nP -iTCP:"$FIXES_SITES_PORT" -sTCP:LISTEN >/dev/null 2>&1; then
   SITES=$!
   trap 'kill $SITES 2>/dev/null' EXIT
 fi
-export BEFORE_APP=$S/before/Ardia.app AFTER_APP=$S/after/Ardia.app
+export BEFORE_APP=$S/before/Solstice.app AFTER_APP=$S/after/Solstice.app
 export FIXES_HOVER=1 FIXES_INPUT=1 FIXES_SERIAL=1 FIXES_PORT_BASE=${FIXES_PORT_BASE:-9681}
 node "$REPO/apps/videos/scripts/fixes/run.mjs" meetpip "$@"
