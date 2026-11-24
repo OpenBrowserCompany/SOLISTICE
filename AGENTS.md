@@ -91,7 +91,7 @@ For the architecture and the test tooling, read `docs/agent-brief.md`.
   Keep test data in a scratch dir, not in `~/Documents`.
   You can make exceptions to this rule at your own discretion but dont misuse it. If you can find another way, prefer that and save that strategy for u to reuse later, maintain a skill file for this repo.
 - **Use Dia as reference.** You may take screenshots, read its app bundle and interact with it.
-- **The owner's real browser data is fair game for debugging.** Read the owner's Ardia, Dia and other browser
+- **The owner's real browser data is fair game for debugging.** Read the owner's Solstice, Dia and other browser
   profiles when they help reproduce a bug. Copy what you need into a scratch dir and point a hidden instance's
   `ARDIA_DATA_DIR` at the copy; never write to the live profile or open it in a running app.
 - **AI only through the plugin.** This is the owner's decision. The base browser has no AI feature and runs no AI
@@ -128,7 +128,7 @@ yours: the hidden-instance and focus rules are for the owner's Mac.
   (`engine/ardiacore-linux`, a `linux` line of `engine/patches/series` and its patch) needs a new Linux engine and
   keeps the Mac's, and the reverse; a shared change needs both. CI: `.github/workflows/linux.yml` (`docs/linux-ci.md`); acceptance: `docs/linux-acceptance.md`.
 - **Windows** (`docs/windows.md`): `apps/browser/windows` (React Native Windows) and `packages/expo-windows` host
-  Chromium's `chrome.dll`, renamed Ardia, with each tab's page in its own window under the app's. The engine is
+  Chromium's `chrome.dll`, renamed Solstice, with each tab's page in its own window under the app's. The engine is
   cross-built on a Mac in `~/chromium-build-win` (`docs/engine-build-windows.md`; never `~/chromium-build`), its
   sources and patches live in `scripts/windows/engine/` (never under `engine/`, which would move the Mac's engine
   key), and `scripts/windows/engine/prebuilt.json` pins the release CI fetches. CI: `.github/workflows/windows.yml`
@@ -262,5 +262,5 @@ and `packages/core` holds the omnibox logic and its tests. `packages/demo` is th
 The `ardia` command lives in ardia-browser/plugins (`plugins/cli`, its own CI and releases); this repo bundles the
 version pinned in `apps/browser/official-plugins.json` as the Command Line plugin (`docs/cli.md`, `docs/plugins.md`). `apps/phone` the Expo app for iPhone and Android (its native module is `packages/phone`; `docs/phone.md`) and `apps/dashboard` the telemetry and triage dashboard.
 `apps/site` is ardia.dev and `apps/videos` holds the Remotion videos. `infra/` holds each service's deploy setup and
-`extras/` the add-ons (the Raycast extension). Ardia's own source files are Apache-2.0; the app as distributed is
+`extras/` the add-ons (the Raycast extension). Solstice's own source files are Apache-2.0; the app as distributed is
 GPL-3.0, because its engine carries Helium's patches (`NOTICE`).
