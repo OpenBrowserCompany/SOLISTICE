@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Step 3 (Windows): turn a Chromium $CHROMIUM_VERSION tree into Helium's for Windows, as Ardia takes it.
+"""Step 3 (Windows): turn a Chromium $CHROMIUM_VERSION tree into Helium's for Windows, as Solstice takes it.
 
 The Mac step (engine/patches/build/03-helium.py) with helium-windows in place of helium-macos: helium-chromium $HELIUM_TAG plus
 helium-windows (scripts/windows/engine/helium-pins.ini pins both by commit; the checkouts are $CB/helium and $CB/helium-windows).
@@ -105,7 +105,7 @@ def stage_pins_windows(ctx):
     for section in deps.sections():
         out = deps[section].get('output_path', '').lstrip('./').rstrip('/') + '/'
         if not out.startswith(mac.OMITTED):
-            problems.append(f'deps.ini [{section}] downloads into {out}, which Ardia doesn\'t omit: decide on it')
+            problems.append(f'deps.ini [{section}] downloads into {out}, which Solstice doesn\'t omit: decide on it')
     if problems:
         raise mac.StageError('\n'.join(problems))
     print(f'Helium {config["helium-chromium"]["tag"]} / Windows {config["helium-windows"]["tag"]} on Chromium {chromium}')
@@ -119,7 +119,7 @@ def stage_resources_windows(ctx):
     if ctx.no_brand:
         return
     roots = list(dict.fromkeys([mac.REPO, REPO_ROOT]))
-    print(f'Ardia Windows: {mac.copy_resources(ctx, HERE / "ardia_resources_win.txt", roots)} resources')
+    print(f'Solstice Windows: {mac.copy_resources(ctx, HERE / "ardia_resources_win.txt", roots)} resources')
 
 
 def install():

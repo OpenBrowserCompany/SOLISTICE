@@ -15,9 +15,9 @@ import subprocess
 import sys
 import zipfile
 
-RUN_TXT = """Ardia's engine for Windows ({cpu})
+RUN_TXT = """Solstice's engine for Windows ({cpu})
 
-Chromium {chromium} with Helium {helium} and Ardia's patches, cross-built on {host} on {date}.
+Chromium {chromium} with Helium {helium} and Solstice's patches, cross-built on {host} on {date}.
 Not an official build (no ThinLTO, no PGO). Nothing in it is signed: Windows SmartScreen and Smart App Control may
 warn or block it, and there is no Authenticode signature to check.{emulated}
 
@@ -35,7 +35,7 @@ warn or block it, and there is no Authenticode signature to check.{emulated}
    For a log, add --enable-logging --v=1: it is written to chrome_debug.log in that profile folder.
 4. To throw the profile away, quit it and delete %TEMP%\\ardia-throwaway-profile.
 
-It installs nothing and registers nothing. The product name it shows is "Chromium"; Ardia's app is not in it.
+It installs nothing and registers nothing. The product name it shows is "Chromium"; Solstice's app is not in it.
 """
 
 SKIP_SUFFIXES = ('.pdb', '.lib', '.exp', '.ilk', '.info', '.runtime_deps')

@@ -32,10 +32,10 @@ class AcceptTest(unittest.TestCase):
         shutil.copytree(os.path.join(REPO, 'engine'), os.path.join(self.root, 'engine'), symlinks=True)
         shutil.copytree(HERE, os.path.join(self.root, 'scripts', 'windows', 'engine'), symlinks=True,
                         ignore=shutil.ignore_patterns('__pycache__'))
-        app = os.path.join(self.root, 'apps', 'browser', 'windows', 'Ardia')
+        app = os.path.join(self.root, 'apps', 'browser', 'windows', 'Solstice')
         os.makedirs(app)
         for name in ('EngineApi.h', 'Ardia.ico'):
-            shutil.copyfile(os.path.join(REPO, 'apps', 'browser', 'windows', 'Ardia', name), os.path.join(app, name))
+            shutil.copyfile(os.path.join(REPO, 'apps', 'browser', 'windows', 'Solstice', name), os.path.join(app, name))
         for game in ('offline-game', 'offline-game-pipeline'):
             shutil.copytree(os.path.join(REPO, 'apps', 'browser', 'assets', game),
                             os.path.join(self.root, 'apps', 'browser', 'assets', game))
