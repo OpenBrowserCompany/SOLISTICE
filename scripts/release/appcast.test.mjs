@@ -37,7 +37,7 @@ function item({ version, build, channel, url, length = 100, signature = sig(url)
 
 function feed(items) {
   return (
-    '<?xml version="1.0" standalone="yes"?>\n<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">\n    <channel>\n        <title>Ardia</title>\n' +
+    '<?xml version="1.0" standalone="yes"?>\n<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">\n    <channel>\n        <title>Solstice</title>\n' +
     items.map(item).join("") +
     "    </channel>\n</rss>\n"
   );
@@ -53,13 +53,13 @@ function py(...args) {
 }
 
 const published = [
-  { version: "0.3.1-nightly.2", build: 24, channel: "nightly", url: `${releases}/v0.3.1-nightly.2/Ardia-0.3.1-nightly.2.zip` },
-  { version: "0.3.1-nightly.1", build: 23, channel: "nightly", url: `${releases}/v0.3.1-nightly.1/Ardia-0.3.1-nightly.1.zip` },
-  { version: "0.3.0", build: 22, url: `${releases}/v0.3.0/Ardia-0.3.0.zip`, deltas: [{ from: 20, url: `${releases}/v0.3.0/Ardia22-20.delta`, length: 7, signature: "sig-old-delta" }] },
-  { version: "0.3.0-nightly.1", build: 21, channel: "nightly", url: `${releases}/v0.3.0-nightly.1/Ardia-0.3.0-nightly.1.zip` },
-  { version: "0.2.9", build: 20, url: `${releases}/v0.2.9/Ardia-0.2.9.zip` },
-  { version: "0.2.8", build: 19, url: "https://example.com/elsewhere/Ardia-0.2.8.zip" },
-  { version: "0.2.7", build: 18, url: `${releases}/v0.2.7/Ardia-0.2.7.zip` },
+  { version: "0.3.1-nightly.2", build: 24, channel: "nightly", url: `${releases}/v0.3.1-nightly.2/Solstice-0.3.1-nightly.2.zip` },
+  { version: "0.3.1-nightly.1", build: 23, channel: "nightly", url: `${releases}/v0.3.1-nightly.1/Solstice-0.3.1-nightly.1.zip` },
+  { version: "0.3.0", build: 22, url: `${releases}/v0.3.0/Solstice-0.3.0.zip`, deltas: [{ from: 20, url: `${releases}/v0.3.0/Ardia22-20.delta`, length: 7, signature: "sig-old-delta" }] },
+  { version: "0.3.0-nightly.1", build: 21, channel: "nightly", url: `${releases}/v0.3.0-nightly.1/Solstice-0.3.0-nightly.1.zip` },
+  { version: "0.2.9", build: 20, url: `${releases}/v0.2.9/Solstice-0.2.9.zip` },
+  { version: "0.2.8", build: 19, url: "https://example.com/elsewhere/Solstice-0.2.8.zip" },
+  { version: "0.2.7", build: 18, url: `${releases}/v0.2.7/Solstice-0.2.7.zip` },
 ];
 
 test("enclosure reads the zip's own enclosure, wherever the item lists its deltas", () => {
@@ -67,7 +67,7 @@ test("enclosure reads the zip's own enclosure, wherever the item lists its delta
   const deltas = [{ from: 21, url: `${releases}/v0.3.1/Ardia25-21.delta`, length: 9, signature: "sig-delta" }];
   for (const deltasFirst of [false, true]) {
     const path = join(dir, `feed-${deltasFirst}.xml`);
-    writeFileSync(path, feed([{ version: "0.3.1", build: 25, url: `${releases}/v0.3.1/Ardia-0.3.1.zip`, length: 555, signature: "sig-zip", deltas, deltasFirst }]));
+    writeFileSync(path, feed([{ version: "0.3.1", build: 25, url: `${releases}/v0.3.1/Solstice-0.3.1.zip`, length: 555, signature: "sig-zip", deltas, deltasFirst }]));
     const { status, out, err } = py("enclosure", path, "0.3.1");
     assert.equal(status, 0, err);
     assert.equal(out.trim(), "sig-zip 555");
@@ -82,7 +82,7 @@ test("deltas lists each delta's from-build, url, length and signature, with - fo
       {
         version: "0.3.1",
         build: 25,
-        url: `${releases}/v0.3.1/Ardia-0.3.1.zip`,
+        url: `${releases}/v0.3.1/Solstice-0.3.1.zip`,
         deltas: [
           { from: 24, url: `${releases}/v0.3.1/Ardia25-24.delta`, length: 11, signature: "sig-a" },
           { from: 22, url: `${releases}/v0.3.1/Ardia25-22.delta`, length: 12 },
@@ -104,11 +104,11 @@ test("delta-bases: a stable builds deltas from earlier stables only, a nightly f
   assert.equal(stable.status, 0, stable.err);
   assert.deepEqual(
     stable.out.trim().split("\n").map((line) => line.split(" ").slice(0, 2).join(" ")),
-    [`22 ${releases}/v0.3.0/Ardia-0.3.0.zip`, `20 ${releases}/v0.2.9/Ardia-0.2.9.zip`],
+    [`22 ${releases}/v0.3.0/Solstice-0.3.0.zip`, `20 ${releases}/v0.2.9/Solstice-0.2.9.zip`],
     "the stable skips nightlies and the zip outside GitHub releases, and the cap counts the skipped one",
   );
   assert.match(stable.err, /skipped 0\.2\.8/);
-  assert.ok(stable.out.split("\n")[0].endsWith(` 100 ${sig(`${releases}/v0.3.0/Ardia-0.3.0.zip`)}`), "length and signature come from the main enclosure, not the delta");
+  assert.ok(stable.out.split("\n")[0].endsWith(` 100 ${sig(`${releases}/v0.3.0/Solstice-0.3.0.zip`)}`), "length and signature come from the main enclosure, not the delta");
   const nightly = py("delta-bases", path, "0.3.1-nightly.3", "3");
   assert.deepEqual(
     nightly.out.trim().split("\n").map((line) => line.split(" ")[0]),
@@ -120,7 +120,7 @@ test("delta-bases: a stable builds deltas from earlier stables only, a nightly f
 
 test("delta-bases skips an earlier zip whose signature isn't strict base64 of 64 bytes, so nothing reaches a CLI as an option", () => {
   const path = join(scratch("bases-signature"), "feed.xml");
-  const odd = (version, build, signature) => ({ version, build, url: `${releases}/v${version}/Ardia-${version}.zip`, signature });
+  const odd = (version, build, signature) => ({ version, build, url: `${releases}/v${version}/Solstice-${version}.zip`, signature });
   writeFileSync(path, feed([odd("0.3.0", 22, "-p"), odd("0.2.9", 20, "--ed-key-file=/tmp/k"), odd("0.2.8", 19, `${"A".repeat(86)}=`), odd("0.2.7", 18, `${sig("x").slice(0, 84)}!!==`), odd("0.2.6", 17, sig("ok"))]));
   const { status, out, err } = py("delta-bases", path, "0.3.1", "5");
   assert.equal(status, 0, err);
@@ -135,7 +135,7 @@ test("merge keeps the built item's deltas and every published item's deltas", ()
   const out = join(dir, "out.xml");
   writeFileSync(live, feed(published));
   const deltas = [{ from: 22, url: `${releases}/v0.3.1/Ardia25-22.delta`, length: 9, signature: "sig-new-delta" }];
-  writeFileSync(built, feed([{ version: "0.3.1", build: 25, url: `${releases}/v0.3.1/Ardia-0.3.1.zip`, deltas }]));
+  writeFileSync(built, feed([{ version: "0.3.1", build: 25, url: `${releases}/v0.3.1/Solstice-0.3.1.zip`, deltas }]));
   const merged = py("merge", live, built, "0.3.1", out);
   assert.equal(merged.status, 0, merged.err);
   assert.equal(py("deltas", out, "0.3.1").out.trim(), `22 ${releases}/v0.3.1/Ardia25-22.delta 9 sig-new-delta`);
@@ -146,11 +146,11 @@ test("merge keeps the built item's deltas and every published item's deltas", ()
 test("retarget points the zip's enclosure at the local copy and drops the deltas, which point at the real release", () => {
   const path = join(scratch("retarget"), "feed.xml");
   const deltas = [{ from: 22, url: `${releases}/v0.3.1/Ardia25-22.delta`, length: 9, signature: "sig-delta" }];
-  writeFileSync(path, feed([{ version: "0.3.1", build: 25, url: `${releases}/v0.3.1/Ardia-0.3.1.zip`, length: 555, signature: "sig-zip", deltas, deltasFirst: true }]));
-  const { status, out, err } = py("retarget", path, "0.3.1", "http://127.0.0.1:9/Ardia-0.3.1.zip", "777", "sig-local");
+  writeFileSync(path, feed([{ version: "0.3.1", build: 25, url: `${releases}/v0.3.1/Solstice-0.3.1.zip`, length: 555, signature: "sig-zip", deltas, deltasFirst: true }]));
+  const { status, out, err } = py("retarget", path, "0.3.1", "http://127.0.0.1:9/Solstice-0.3.1.zip", "777", "sig-local");
   assert.equal(status, 0, err);
   assert.doesNotMatch(out, /delta/);
-  assert.match(out, /<enclosure url="http:\/\/127\.0\.0\.1:9\/Ardia-0\.3\.1\.zip" length="777" type="application\/octet-stream" sparkle:edSignature="sig-local"\/>/);
+  assert.match(out, /<enclosure url="http:\/\/127\.0\.0\.1:9\/Solstice-0\.3\.1\.zip" length="777" type="application\/octet-stream" sparkle:edSignature="sig-local"\/>/);
   const local = join(scratch("retarget-out"), "feed.xml");
   writeFileSync(local, out);
   assert.equal(py("enclosure", local, "0.3.1").out.trim(), "sig-local 777");
@@ -192,7 +192,7 @@ for index, (build, version, name) in enumerate(zips):
     deltas = []
     if index == 0 and mode != "none":
         for old, _, _ in zips[1:1 + limit]:
-            delta = f"Ardia{build}-{old}.delta"
+            delta = f"Solstice{build}-{old}.delta"
             open(os.path.join(folder, delta), "w").write("d")
             signature = "" if mode == "unsigned" else f' sparkle:edSignature="{sig(b"forged" if mode == "badsig" else b"d")}"'
             deltas.append(f'<enclosure url="{prefix}{delta}" sparkle:deltaFrom="{old}" length="1" type="application/octet-stream"{signature}/>')
@@ -200,7 +200,7 @@ for index, (build, version, name) in enumerate(zips):
     block = f"<sparkle:deltas>{''.join(deltas)}</sparkle:deltas>" if deltas else ""
     tag = f"<sparkle:channel>{channel}</sparkle:channel>" if channel else ""
     items.append(f'<item><title>{version}</title>{tag}<sparkle:version>{build}</sparkle:version><sparkle:shortVersionString>{version}</sparkle:shortVersionString><enclosure url="{prefix}{name}" length="{size}" type="application/octet-stream" sparkle:edSignature="{sig(open(os.path.join(folder, name), "rb").read())}"/>{block}</item>\\n')
-open(out, "w").write('<?xml version="1.0"?>\\n<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">\\n<channel>\\n<title>Ardia</title>\\n' + "".join(items) + "</channel>\\n</rss>\\n")
+open(out, "w").write('<?xml version="1.0"?>\\n<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">\\n<channel>\\n<title>Solstice</title>\\n' + "".join(items) + "</channel>\\n</rss>\\n")
 `;
 
 const stubEd25519 = `#!/usr/bin/env python3
@@ -253,10 +253,10 @@ function harness({ version, build, base, fixtures = {}, appKey = publicKey }) {
   write(join(bin, "ed25519"), stubEd25519);
   write(join(bin, "curl"), stubCurl);
   for (const [name, text] of Object.entries(fixtures)) writeFileSync(join(served, name), text);
-  writeFileSync(join(dist, `Ardia-${version}.zip`), `build=${build}\n${"x".repeat(200)}`);
-  mkdirSync(join(dist, "export/Ardia.app/Contents"), { recursive: true });
+  writeFileSync(join(dist, `Solstice-${version}.zip`), `build=${build}\n${"x".repeat(200)}`);
+  mkdirSync(join(dist, "export/Solstice.app/Contents"), { recursive: true });
   writeFileSync(
-    join(dist, "export/Ardia.app/Contents/Info.plist"),
+    join(dist, "export/Solstice.app/Contents/Info.plist"),
     `<?xml version="1.0" encoding="UTF-8"?>\n<plist version="1.0"><dict>${appKey ? `<key>SUPublicEDKey</key><string>${appKey}</string>` : ""}</dict></plist>\n`,
   );
   writeFileSync(join(dir, "body.md"), "Notes.\n");
@@ -307,16 +307,16 @@ test("appcast.sh: a stable with earlier stables downloads them, verifies them, a
   const { status, out } = h.run({ GITHUB_ACTIONS: "true" });
   assert.equal(status, 0, out);
   assert.match(out, /PASS {2}2 signed Sparkle delta\(s\) for 0\.3\.1, from build\(s\) 22 20/);
-  assert.deepEqual(zipsIn(h.dist), ["Ardia-0.3.1.zip", "Ardia25-20.delta", "Ardia25-22.delta", "appcast.xml"]);
+  assert.deepEqual(zipsIn(h.dist), ["Solstice-0.3.1.zip", "Ardia25-20.delta", "Ardia25-22.delta", "appcast.xml"]);
   const verified = readFileSync(join(h.dist, "..", "bin", "ed25519.log"), "utf8");
-  assert.match(verified, /Ardia-0\.3\.0\.zip/, "earlier zips are checked with the app's own key");
+  assert.match(verified, /Solstice-0\.3\.0\.zip/, "earlier zips are checked with the app's own key");
   assert.match(verified, /Ardia25-22\.delta/, "and so are the deltas");
   const curled = readFileSync(join(h.log, "curl.log"), "utf8").trim().split("\n");
-  assert.deepEqual(curled, [`${releases}/v0.3.0/Ardia-0.3.0.zip`, `${releases}/v0.2.9/Ardia-0.2.9.zip`]);
+  assert.deepEqual(curled, [`${releases}/v0.3.0/Solstice-0.3.0.zip`, `${releases}/v0.2.9/Solstice-0.2.9.zip`]);
   assert.match(readFileSync(join(h.log, "generate_appcast.args"), "utf8"), /--maximum-deltas\n2\n/);
   const xml = readFileSync(join(h.dist, "appcast.xml"), "utf8");
   assert.equal(xml.match(/<item>/g).length, published.length + 1, "every published item stays");
-  assert.match(xml, new RegExp(`url="${releases}/v0\\.2\\.9/Ardia-0\\.2\\.9\\.zip"`), "earlier items keep their own release's URL");
+  assert.match(xml, new RegExp(`url="${releases}/v0\\.2\\.9/Solstice-0\\.2\\.9\\.zip"`), "earlier items keep their own release's URL");
   assert.match(readFileSync(h.summary, "utf8"), /Sparkle deltas: 2 \(from builds 22 20\)/);
 });
 
@@ -355,7 +355,7 @@ test("appcast.sh: earlier zips that don't download or don't match the feed only 
   assert.ok(existsSync(join(missing.dist, "appcast.xml")));
 
   for (const forged of ["build=22\ntampered\n", "build=27\n"]) {
-    const tampered = harness({ version: "0.3.1", build: 25, base: feed(live), fixtures: { ...servedZips(live), "Ardia-0.3.0.zip": forged } });
+    const tampered = harness({ version: "0.3.1", build: 25, base: feed(live), fixtures: { ...servedZips(live), "Solstice-0.3.0.zip": forged } });
     const partly = tampered.run();
     assert.equal(partly.status, 0, partly.out);
     assert.match(partly.out, /warning: build 22's zip .* doesn't match the length and EdDSA signature .* SUPublicEDKey/);
@@ -374,16 +374,16 @@ test("appcast.sh: without the app's SUPublicEDKey no earlier zip is downloaded o
 });
 
 test("appcast.sh: an earlier zip named like the new one never replaces it", () => {
-  const clash = { version: "0.3.0", build: 22, url: `${releases}/v0.3.0-rebuilt/Ardia-0.3.1.zip` };
+  const clash = { version: "0.3.0", build: 22, url: `${releases}/v0.3.0-rebuilt/Solstice-0.3.1.zip` };
   const live = lengthsMatch([clash, published[4]]);
-  const h = harness({ version: "0.3.1", build: 25, base: feed(live), fixtures: { "Ardia-0.3.1.zip": "build=22\n", "Ardia-0.2.9.zip": "build=20\n" } });
-  const before = readFileSync(join(h.dist, "Ardia-0.3.1.zip"), "utf8");
+  const h = harness({ version: "0.3.1", build: 25, base: feed(live), fixtures: { "Solstice-0.3.1.zip": "build=22\n", "Solstice-0.2.9.zip": "build=20\n" } });
+  const before = readFileSync(join(h.dist, "Solstice-0.3.1.zip"), "utf8");
   const { status, out } = h.run();
   assert.equal(status, 0, out);
-  assert.match(out, /warning: build 22's zip is named Ardia-0\.3\.1\.zip, like a file already staged/);
-  assert.equal(readFileSync(join(h.dist, "Ardia-0.3.1.zip"), "utf8"), before);
+  assert.match(out, /warning: build 22's zip is named Solstice-0\.3\.1\.zip, like a file already staged/);
+  assert.equal(readFileSync(join(h.dist, "Solstice-0.3.1.zip"), "utf8"), before);
   assert.match(out, /from build\(s\) 20$/m);
-  assert.doesNotMatch(readFileSync(join(h.log, "curl.log"), "utf8"), /Ardia-0\.3\.1\.zip/);
+  assert.doesNotMatch(readFileSync(join(h.log, "curl.log"), "utf8"), /Solstice-0\.3\.1\.zip/);
 });
 
 test("appcast.sh: with nothing published there are no deltas to build and nothing to warn about", () => {
@@ -407,7 +407,7 @@ test("appcast.sh: a failed generate_appcast, an unsigned delta or one that doesn
     const { status, out } = h.run({ STUB_DELTAS: mode, GITHUB_ACTIONS: "true" });
     assert.equal(status, 0, `${mode}: ${out}`);
     assert.match(out, new RegExp(`^::warning::${reason.source}: 0\\.3\\.1 ships without deltas`, "m"), mode);
-    assert.deepEqual(zipsIn(h.dist), ["Ardia-0.3.1.zip", "appcast.xml"], mode);
+    assert.deepEqual(zipsIn(h.dist), ["Solstice-0.3.1.zip", "appcast.xml"], mode);
     const runs = readFileSync(join(h.log, "generate_appcast.args"), "utf8").split("--\n").filter(Boolean);
     assert.equal(runs.length, 2, mode);
     assert.match(runs[1], /--maximum-deltas\n0\n/, mode);
