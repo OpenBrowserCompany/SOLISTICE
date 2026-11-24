@@ -65,7 +65,7 @@ internal data class ChatGPTAccountState(
 
 internal class ChatGPTAccount(context: Context) {
     private val app = context.applicationContext
-    private val secrets = KeystoreKeyStore(File(app.noBackupFilesDir, "ChatGPT"), alias = "Ardia ChatGPT Key")
+    private val secrets = KeystoreKeyStore(File(app.noBackupFilesDir, "ChatGPT"), alias = "Solstice ChatGPT Key")
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private val mutableState = MutableStateFlow(ChatGPTAccountState(connection = loadConnection()))
     private var refreshing: Deferred<Unit>? = null
@@ -142,7 +142,7 @@ internal class ChatGPTAccount(context: Context) {
                 refreshing?.let { runCatching { it.await() } }
                 val current = connection ?: original
                 forget()
-                if (!revoke(current)) noteProblem("Disconnected on this phone, but OpenAI didn’t confirm it. You can also remove Ardia in ChatGPT’s settings.")
+                if (!revoke(current)) noteProblem("Disconnected on this phone, but OpenAI didn’t confirm it. You can also remove Solstice in ChatGPT’s settings.")
             } finally {
                 disconnecting = false
             }

@@ -45,7 +45,7 @@ class BrowseForMeModule : Module() {
         AsyncFunction("isConnected") { -> host.account.isConnected }.runOnQueue(Queues.MAIN)
 
         AsyncFunction("open") { query: String ->
-            val activity = appContext.currentActivity ?: throw CodedException("ERR_NO_ACTIVITY", "Ardia isn't on screen", null)
+            val activity = appContext.currentActivity ?: throw CodedException("ERR_NO_ACTIVITY", "Solstice isn't on screen", null)
             host.open(activity, query)
         }.runOnQueue(Queues.MAIN)
 
@@ -53,7 +53,7 @@ class BrowseForMeModule : Module() {
 
         AsyncFunction("connect") Coroutine { ->
             withContext(Dispatchers.Main.immediate) {
-                val activity = appContext.currentActivity ?: throw CodedException("ERR_NO_ACTIVITY", "Ardia isn't on screen", null)
+                val activity = appContext.currentActivity ?: throw CodedException("ERR_NO_ACTIVITY", "Solstice isn't on screen", null)
                 host.account.signIn(activity)
             }
         }

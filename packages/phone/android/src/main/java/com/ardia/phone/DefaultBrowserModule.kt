@@ -38,7 +38,7 @@ class DefaultBrowserModule : Module() {
         }.runOnQueue(Queues.MAIN)
 
         AsyncFunction("openDefaultAppsSettings") { ->
-            val activity = appContext.currentActivity ?: throw CodedException("ERR_NO_ACTIVITY", "Ardia isn't on screen", null)
+            val activity = appContext.currentActivity ?: throw CodedException("ERR_NO_ACTIVITY", "Solstice isn't on screen", null)
             try {
                 activity.startActivity(system.defaultAppsSettings())
             } catch (missing: ActivityNotFoundException) {
