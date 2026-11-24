@@ -27,7 +27,7 @@ enum DocumentStore {
       dir = URL(fileURLWithPath: custom, isDirectory: true)
     } else {
       let base = try FileManager.default.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-      dir = base.appendingPathComponent(Bundle.main.bundleIdentifier ?? "Ardia", isDirectory: true)
+      dir = base.appendingPathComponent(Bundle.main.bundleIdentifier ?? "Solstice", isDirectory: true)
     }
     try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
     return dir.appendingPathComponent((name as NSString).lastPathComponent)
@@ -199,7 +199,7 @@ enum DocumentStore {
     lock.unlock()
     for waiter in waiters { waiter(failure) }
     guard let failure else { return }
-    NSLog("Ardia: saving \(key) failed (try \(attempt + 1)): \(failure.localizedDescription)")
+    NSLog("Solstice: saving \(key) failed (try \(attempt + 1)): \(failure.localizedDescription)")
     let delay = min(60.0, 2.0 * pow(2.0, Double(min(attempt, 5))))
     queue.asyncAfter(deadline: .now() + delay) { land(key, generation, attempt: attempt + 1) }
   }

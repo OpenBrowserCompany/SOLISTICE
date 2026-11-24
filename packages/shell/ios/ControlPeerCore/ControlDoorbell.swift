@@ -231,12 +231,12 @@ public final class ControlDoorbell {
 
   public static func refusal(_ outcome: Outcome) -> String {
     switch outcome {
-    case .deny, .quiet: return "You chose Don't Allow when Ardia asked whether this program may control it."
-    case .timeout: return "Ardia asked whether this program may control it, and nobody answered in time."
-    case .unshown: return "Ardia has to ask before this program may control it, and nobody can see the question (no Ardia window is on screen, or Ardia runs in the background)."
-    case .full: return "Too many programs are connected to Ardia or waiting to be let in. Try again in a minute."
+    case .deny, .quiet: return "You chose Don't Allow when Solstice asked whether this program may control it."
+    case .timeout: return "Solstice asked whether this program may control it, and nobody answered in time."
+    case .unshown: return "Solstice has to ask before this program may control it, and nobody can see the question (no Solstice window is on screen, or Solstice runs in the background)."
+    case .full: return "Too many programs are connected to Solstice or waiting to be let in. Try again in a minute."
     case .stopped: return "Control was turned off before anyone answered."
-    default: return "Ardia didn't let this program control it."
+    default: return "Solstice didn't let this program control it."
     }
   }
 

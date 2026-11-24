@@ -181,7 +181,7 @@ final class ControlSocket {
 
   func approvals(_ done: @escaping ([String: Any]) -> Void) {
     queue.async { [self] in
-      guard let store = approvalStore() else { return done(["approvals": [], "problem": "Ardia has no data folder."]) }
+      guard let store = approvalStore() else { return done(["approvals": [], "problem": "Solstice has no data folder."]) }
       let list = store.load().map(\.dictionary)
       var out: [String: Any] = ["approvals": list, "doorbell": !policy.sameUserIsEnough]
       if let problem = store.problem { out["problem"] = problem }
@@ -262,7 +262,7 @@ final class ControlSocket {
     do {
       dir = try DocumentStore.url(Self.socketName).deletingLastPathComponent().path
     } catch {
-      return refuse("Ardia has no data folder.")
+      return refuse("Solstice has no data folder.")
     }
     let path = (dir as NSString).appendingPathComponent(Self.socketName)
     guard path.utf8.count <= Self.maxPathBytes else {
@@ -277,7 +277,7 @@ final class ControlSocket {
     guard lock >= 0 else { return refuse("Couldn't open the socket's lock file (\(Self.errnoText())).", path: path) }
     guard PrivateFolder.onlyOwnerCanRead(lock), flock(lock, LOCK_EX | LOCK_NB) == 0 else {
       Darwin.close(lock)
-      return refuse("Another Ardia is serving this data folder, or its lock file isn't yours alone.", path: path)
+      return refuse("Another Solstice is serving this data folder, or its lock file isn't yours alone.", path: path)
     }
     var old = stat()
     if fstatat(folder.fd, Self.socketName, &old, AT_SYMLINK_NOFOLLOW) == 0 {
@@ -317,7 +317,7 @@ final class ControlSocket {
     guard (made.st_mode & S_IFMT) == S_IFSOCK, lstat(path, &atPath) == 0, atPath.st_dev == made.st_dev, atPath.st_ino == made.st_ino else {
       Darwin.close(fd)
       Darwin.close(lock)
-      return refuse("The data folder \(dir) changed while Ardia was starting its socket, so it didn't start.", path: path)
+      return refuse("The data folder \(dir) changed while Solstice was starting its socket, so it didn't start.", path: path)
     }
     generation += 1
     listenFd = fd
@@ -412,7 +412,7 @@ final class ControlSocket {
       let until = approvals.first { $0.key == key }?.until.map { Date(timeIntervalSince1970: $0) }
       if !open(id, fd: fd, key: key, until: until) { ControlDoorbell.refuse(fd, .full) }
     case let .ask(key):
-      NSLog("[control] asking whether %@ (%@) may control Ardia", peer.name, peer.signedBy)
+      NSLog("[control] asking whether %@ (%@) may control Solstice", peer.name, peer.signedBy)
       doorbell.ring(connection: id, fd: fd, peer: peer, key: key, token: token)
     }
   }
