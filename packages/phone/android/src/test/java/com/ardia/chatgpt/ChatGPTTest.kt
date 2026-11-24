@@ -60,7 +60,7 @@ class ChatGPTTest {
         val url = ChatGPTAuthorization(51234, null, state = "s 1", nonce = "n1", verifier = "v1").url("https://auth.openai.com/api/accounts/authorize")
         val query = query(url)
         assertEquals("dynamic_agent_client", query["client_id"])
-        assertEquals("Ardia", query["agent_name_hint"])
+        assertEquals("Solstice", query["agent_name_hint"])
         assertEquals("http://127.0.0.1:51234/auth/callback", query["redirect_uri"])
         assertEquals("openid profile email offline_access resource.invoke chatgpt.tokens.use.direct", query["scope"])
         assertEquals("https://api.openai.com/v1", query["resource"])

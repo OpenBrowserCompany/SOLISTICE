@@ -7,7 +7,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class PickedFileRuleTest {
-    private val packageName = "com.ardia.browser.android"
+    private val packageName = "com.openbrowsercompany.solstice.android"
     private val own = setOf("$packageName.browsing.captures", "androidx.startup")
     private val capture = "content://$packageName.browsing.captures/captures/abc.jpg"
 

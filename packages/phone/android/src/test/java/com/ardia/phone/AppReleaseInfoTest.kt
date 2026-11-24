@@ -15,7 +15,7 @@ class AppReleaseInfoTest {
     fun theReleaseHasTheShapeIPhoneGivesTheVersionLabel() {
         val release = AppReleaseInfo.of(RuntimeEnvironment.getApplication())
         assertEquals(setOf("releaseVersion", "build", "receiptName"), release.keys)
-        assertEquals("a library build carries no release version, so the label reads Ardia Dev", "", release["releaseVersion"])
+        assertEquals("a library build carries no release version, so the label reads Solstice Dev", "", release["releaseVersion"])
         assertNull("no store receipt on Android", release["receiptName"])
         assertEquals(true, (release["build"] as String).toLongOrNull() != null)
     }
