@@ -37,10 +37,10 @@ using policy::Source;
 constexpr net::NetworkTrafficAnnotationTag kTrafficAnnotation =
     net::DefineNetworkTrafficAnnotation("ardia_linux_update_check", R"(
       semantics {
-        sender: "Ardia update check"
+        sender: "Solstice update check"
         description:
-          "Reads Ardia's published release list from GitHub to tell the "
-          "user when a newer Linux package exists, and Ardia's remote "
+          "Reads Solstice's published release list from GitHub to tell the "
+          "user when a newer Linux package exists, and Solstice's remote "
           "feature switches from ardia.dev."
         trigger:
           "Check for Updates, and automatic checks 30 seconds after launch "
