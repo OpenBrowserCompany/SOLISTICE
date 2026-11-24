@@ -46,7 +46,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ardia.browser.BrowserUrl
+import com.openbrowsercompany.solstice.BrowserUrl
 import com.ardia.design.ArdiaSymbols
 import com.ardia.design.ArdiaType
 import com.ardia.design.ColorMath

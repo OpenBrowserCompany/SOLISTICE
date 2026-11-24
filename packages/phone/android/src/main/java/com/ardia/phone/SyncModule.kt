@@ -59,7 +59,7 @@ class SyncModule : Module() {
             val sync = try {
                 PhoneSync.controller(context, demo)
             } catch (pending: UpgradeGate.Pending) {
-                throw CodedException("ERR_IMPORT_PENDING", "The import from the previous Ardia app has not finished", null)
+                throw CodedException("ERR_IMPORT_PENDING", "The import from the previous Solstice app has not finished", null)
             }
             if (watched !== sync) watch(sync)
             return sync

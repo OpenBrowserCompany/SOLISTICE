@@ -53,7 +53,7 @@ class SpeechModule : Module() {
 
         AsyncFunction("start") { id: Int ->
             stopRecording()
-            if (!hasMicrophone()) throw CodedException("ERR_NO_MICROPHONE", "Ardia can't use the microphone", null)
+            if (!hasMicrophone()) throw CodedException("ERR_NO_MICROPHONE", "Solstice can't use the microphone", null)
             if (!SpeechRecorder.isAvailable(context)) throw CodedException("ERR_NO_RECOGNIZER", "Speech recognition isn't available on this phone", null)
             session = id
             recorder = SpeechRecorder.start(
