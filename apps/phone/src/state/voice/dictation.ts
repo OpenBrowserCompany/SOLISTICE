@@ -73,5 +73,5 @@ export function pushLevel(levels: readonly number[], level: number): number[] {
 export const PROBLEM_TEXT: Record<DictationProblem, string> = {
   language: "Dictation is unavailable in your language.",
   service: "Speech dictation is unavailable.",
-  heardNothing: "Ardia couldn’t hear anything. Try again.",
+  heardNothing: "Solstice couldn’t hear anything. Try again.",
 };

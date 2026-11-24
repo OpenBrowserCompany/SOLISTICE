@@ -21,7 +21,7 @@ export function legacyRead(): LegacyReadInput {
         savedState: "AAECAw==",
         faviconUrl: "https://en.wikipedia.org/favicon.ico",
         themeColor: "#FFFFFF",
-        snapshotPath: "/data/user/0/com.ardia.browser.android/files/PageSnapshots/otter-1-300x600.jpg",
+        snapshotPath: "/data/user/0/com.openbrowsercompany.solstice.android/files/PageSnapshots/otter-1-300x600.jpg",
       },
       {
         id: EXAMPLE,
@@ -48,7 +48,7 @@ export function legacyRead(): LegacyReadInput {
         origin: "weird",
         archivedAt: T - 7_000,
         savedState: "BAUG",
-        snapshotPath: "/data/user/0/com.ardia.browser.android/files/PageSnapshots/news-1-300x600.jpg",
+        snapshotPath: "/data/user/0/com.openbrowsercompany.solstice.android/files/PageSnapshots/news-1-300x600.jpg",
       },
     ],
     preferences: {
