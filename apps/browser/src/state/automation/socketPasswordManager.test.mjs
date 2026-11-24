@@ -28,7 +28,7 @@ test("passwords.list and passwords.remove refuse, naming the plugin, when a plug
   const profile = S().settings.defaultProfileId;
   const { call, ok } = socketClient(281);
   const before = await ok("passwords.list", {});
-  assert.ok(Array.isArray(before), "Ardia's own store answers while Ardia is the password manager");
+  assert.ok(Array.isArray(before), "Solstice's own store answers while Solstice is the password manager");
 
   startPlugins();
   stub.pluginHost.folders = [{ name: "password-manager", status: "ok", text: MANIFEST }];
@@ -44,12 +44,12 @@ test("passwords.list and passwords.remove refuse, naming the plugin, when a plug
 
   const listed = await call("passwords.list", {});
   assert.equal(listed.error?.code, "password_manager_plugin");
-  assert.equal(listed.error.message, `This profile's passwords are kept by ${title}; Ardia's own password store isn't used.`);
+  assert.equal(listed.error.message, `This profile's passwords are kept by ${title}; Solstice's own password store isn't used.`);
   const removed = await call("passwords.remove", { origin: "https://a.example", username: "me" });
   assert.equal(removed.error?.code, "password_manager_plugin");
   assert.equal(takeCliCounts().cli_socket_password_manager_refusals, 2);
 
   choosePasswordManager(profile, "ardia");
   await settle();
-  assert.ok(Array.isArray(await ok("passwords.list", {})), "back on Ardia, the store answers again");
+  assert.ok(Array.isArray(await ok("passwords.list", {})), "back on Solstice, the store answers again");
 });

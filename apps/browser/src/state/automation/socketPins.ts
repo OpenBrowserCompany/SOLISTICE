@@ -46,7 +46,7 @@ function nameOf(value: unknown): string {
 function sameSpace(tabIds: string[]) {
   const tabs = [...new Set(tabIds)].map(tabOf);
   const first = tabs[0]!;
-  if (eligibleKind(now(), first.windowId) !== "normal") throw new OpError("bad_request", "Tile folders are in a main window's sidebar, not in Little Ardia.");
+  if (eligibleKind(now(), first.windowId) !== "normal") throw new OpError("bad_request", "Tile folders are in a main window's sidebar, not in Little Solstice.");
   if (tabs.some((t) => t.windowId !== first.windowId || t.profileId !== first.profileId)) throw new OpError("bad_request", "Every tab must be in the same window and profile.");
   if (now().windows[first.windowId]!.profileId !== first.profileId) throw new OpError("bad_request", "Those tabs belong to a profile the window isn't showing.");
   return tabs.map((t) => t.id);

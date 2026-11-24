@@ -71,7 +71,7 @@ function setLook(params: Record<string, unknown>) {
     theme = startingTheme(params.theme);
   } else if (params.theme !== undefined) {
     theme = sanitizeTheme(params.theme);
-    if (!theme) throw new OpError("bad_request", "That theme object isn't one Ardia reads (profiles.list shows the shape).");
+    if (!theme) throw new OpError("bad_request", "That theme object isn't one Solstice reads (profiles.list shows the shape).");
   }
   if (params.color === undefined && theme === undefined) throw new OpError("bad_request", "profiles.setLook needs color or theme.");
   const leaveSync = () => {};
@@ -143,7 +143,7 @@ export const PROFILE_METHODS: MethodSpec[] = [
   {
     name: "profiles.delete",
     mutates: true,
-    description: "Delete a profile and its data; Ardia asks the user to confirm first",
+    description: "Delete a profile and its data; Solstice asks the user to confirm first",
     params: obj({ profile: PROFILE }, ["profile"]),
     result: "{deleted}",
     run: remove,
