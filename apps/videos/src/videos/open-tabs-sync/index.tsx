@@ -340,7 +340,7 @@ function Panel({ name, t, cam }: { name: "A" | "B"; t: number; cam: Cam }) {
         ) : null}
         {windowless ? (
           <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <div style={{ ...label, color: "rgba(239,232,220,0.62)", fontSize: 22 }}>No Ardia windows open</div>
+            <div style={{ ...label, color: "rgba(239,232,220,0.62)", fontSize: 22 }}>No Solstice windows open</div>
           </div>
         ) : null}
         {p && main ? (
