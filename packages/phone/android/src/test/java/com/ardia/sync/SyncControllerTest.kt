@@ -177,7 +177,7 @@ class SyncControllerTest {
         assertEquals(ConnectResult.Connected, joined)
         assertEquals(1, h.device.syncs)
         assertTrue(h.controller.state.value.isEnabled)
-        assertEquals("Ardia Sync", h.controller.state.value.folderName)
+        assertEquals("Solstice Sync", h.controller.state.value.folderName)
         h.timers.advance(15_000)
         assertEquals(2, h.device.syncs)
         assertEquals(listOf(false, true), h.background.updates)
@@ -387,7 +387,7 @@ class SyncControllerTest {
         val state = controller.state.value
         assertTrue(state.isDemo)
         assertEquals(SyncPhase.Updated, state.phase)
-        assertEquals("Ardia Sync", state.folderName)
+        assertEquals("Solstice Sync", state.folderName)
         assertEquals("Updated just now", state.words.rowSubtitle.text)
         assertEquals(2, controller.snapshot.value.profiles.size)
         assertEquals(ConnectResult.Connected, runBlocking { controller.connect("anything", SyncFolderPick.Tree("content://x")) })

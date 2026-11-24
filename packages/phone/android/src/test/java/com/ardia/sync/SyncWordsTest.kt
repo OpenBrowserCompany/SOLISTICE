@@ -160,7 +160,7 @@ class SyncWordsTest {
 
     @Test
     fun theFolderLocationSurvivesTheMetaFile() {
-        val meta = SyncMeta(deviceId = "d", folder = SyncFolderLocation.Tree("content://com.example/tree/1", "Ardia Sync", "Ardia Sync"), enabled = true)
+        val meta = SyncMeta(deviceId = "d", folder = SyncFolderLocation.Tree("content://com.example/tree/1", "Solstice Sync", "Solstice Sync"), enabled = true)
         val text = syncJson.encodeToString(meta)
         assertEquals(meta, syncJson.decodeFromString(SyncMeta.serializer(), text))
         val local = meta.copy(folder = SyncFolderLocation.Path("/data/sync", "sync"))
