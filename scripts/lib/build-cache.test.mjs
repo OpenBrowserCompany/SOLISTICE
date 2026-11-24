@@ -154,14 +154,14 @@ test("deps and Pods inputs: a new pod source file or a new-arch flag means a fre
 });
 
 function fakeApp(root, marker = "app") {
-  const app = join(root, "Ardia.app");
-  write(app, "Contents/MacOS/Ardia", marker);
+  const app = join(root, "Solstice.app");
+  write(app, "Contents/MacOS/Solstice", marker);
   return app;
 }
 const one = () => 1;
 const S1 = "1".repeat(32);
 const S2 = "2".repeat(32);
-const appText = (entry) => fs.readFileSync(join(entry.app, "Contents/MacOS/Ardia"), "utf8");
+const appText = (entry) => fs.readFileSync(join(entry.app, "Contents/MacOS/Solstice"), "utf8");
 
 test("the cache is keyed by stamp: a miss, a store, then a hit", () => {
   const cache = scratch();
@@ -188,7 +188,7 @@ test("an entry without its app or digest, or with another stamp, is a miss", () 
   write(cache, `${S1}/meta.json`, JSON.stringify({ stamp: S1, digest: "d" }));
   assert.equal(lib.lookup(cache, S1), null);
   write(cache, `${S2}/meta.json`, JSON.stringify({ stamp: "other", digest: "d" }));
-  write(cache, `${S2}/Ardia.app/Contents/MacOS/Ardia`, "x");
+  write(cache, `${S2}/Solstice.app/Contents/MacOS/Solstice`, "x");
   assert.equal(lib.lookup(cache, S2), null);
   write(cache, `${S2}/meta.json`, JSON.stringify({ stamp: S2 }));
   assert.equal(lib.lookup(cache, S2), null);
@@ -199,11 +199,11 @@ test("a restore snapshot must match the content digest recorded at publish, herm
   const hermesc = write(scratch(), "hermesc", "hermesc v1", 0o755);
   const entry = lib.store(cache, S1, fakeApp(scratch(), "abc"), {}, { measure: one, hermesc });
   const snap = lib.snapshotEntry(entry, join(scratch(), "snap"));
-  assert.equal(fs.readFileSync(join(snap.app, "Contents/MacOS/Ardia"), "utf8"), "abc");
+  assert.equal(fs.readFileSync(join(snap.app, "Contents/MacOS/Solstice"), "utf8"), "abc");
   assert.equal(fs.readFileSync(snap.hermesc, "utf8"), "hermesc v1");
-  fs.writeFileSync(join(entry.app, "Contents/MacOS/Ardia"), "xyz");
+  fs.writeFileSync(join(entry.app, "Contents/MacOS/Solstice"), "xyz");
   assert.equal(lib.snapshotEntry(entry, join(scratch(), "same-size-edit")), null);
-  fs.writeFileSync(join(entry.app, "Contents/MacOS/Ardia"), "abc");
+  fs.writeFileSync(join(entry.app, "Contents/MacOS/Solstice"), "abc");
   assert.ok(lib.snapshotEntry(entry, join(scratch(), "restored")));
   fs.rmSync(join(entry.dir, "hermesc"));
   assert.equal(lib.snapshotEntry(entry, join(scratch(), "no-hermesc")), null);
@@ -572,7 +572,7 @@ test("no wrapped command starts while the slot's recorded process group still ru
 test("publishing over an entry whose bytes no longer match its digest replaces it; an intact one is kept", () => {
   const cache = scratch();
   const first = lib.store(cache, S1, fakeApp(scratch(), "abc"), {}, { measure: one });
-  fs.writeFileSync(join(first.app, "Contents/MacOS/Ardia"), "xyz");
+  fs.writeFileSync(join(first.app, "Contents/MacOS/Solstice"), "xyz");
   assert.equal(lib.snapshotEntry(lib.lookup(cache, S1), join(scratch(), "bad")), null);
   const replaced = lib.store(cache, S1, fakeApp(scratch(), "new"), {}, { measure: one });
   assert.notEqual(replaced.existed, true);
@@ -703,12 +703,12 @@ test("dependency roots under a symlinked apps or packages folder are refused, no
 });
 
 test("an app is runnable only with its bundle executable in place", () => {
-  const app = join(scratch(), "Ardia.app");
-  write(app, "Contents/Info.plist", "<plist><dict><key>CFBundleExecutable</key>\n<string>Ardia</string></dict></plist>");
+  const app = join(scratch(), "Solstice.app");
+  write(app, "Contents/Info.plist", "<plist><dict><key>CFBundleExecutable</key>\n<string>Solstice</string></dict></plist>");
   assert.equal(lib.appRunnable(app), false);
-  write(app, "Contents/MacOS/Ardia", "bin", 0o755);
+  write(app, "Contents/MacOS/Solstice", "bin", 0o755);
   assert.equal(lib.appRunnable(app), true);
-  fs.chmodSync(join(app, "Contents/MacOS/Ardia"), 0o644);
+  fs.chmodSync(join(app, "Contents/MacOS/Solstice"), 0o644);
   assert.equal(lib.appRunnable(app), false);
   assert.equal(lib.appRunnable(join(scratch(), "None.app")), false);
 });
@@ -755,8 +755,8 @@ test("a folder where the slot had a file counts as drift instead of failing the 
 test("a Release restore in a tree without node_modules is a miss, so build-app builds instead", async () => {
   const { spawnSync } = await import("node:child_process");
   const cache = scratch();
-  const app = join(scratch(), "Ardia.app");
-  write(app, "Contents/MacOS/Ardia", "bin", 0o755);
+  const app = join(scratch(), "Solstice.app");
+  write(app, "Contents/MacOS/Solstice", "bin", 0o755);
   lib.store(cache, S1, app, { config: "Release" }, { measure: one });
   const tree = scratch();
   const cli = new URL("../agent/build-cache", import.meta.url).pathname;

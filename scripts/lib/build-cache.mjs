@@ -364,8 +364,8 @@ const ENTRY_META = ["meta.json", ".used"];
 export function lookup(cacheRoot, stamp) {
   const dir = cacheEntryDir(cacheRoot, stamp);
   const meta = readJson(join(dir, "meta.json"));
-  if (!meta || meta.stamp !== stamp || !meta.digest || !fs.existsSync(join(dir, "Ardia.app/Contents/MacOS"))) return null;
-  return { dir, app: join(dir, "Ardia.app"), meta };
+  if (!meta || meta.stamp !== stamp || !meta.digest || !fs.existsSync(join(dir, "Solstice.app/Contents/MacOS"))) return null;
+  return { dir, app: join(dir, "Solstice.app"), meta };
 }
 
 export function touch(dir, now = new Date()) {
@@ -428,7 +428,7 @@ export function store(cacheRoot, stamp, app, meta = {}, { hermesc = null, measur
   const tmp = join(cacheRoot, `.tmp-${process.pid}-${Date.now()}`);
   fs.mkdirSync(tmp);
   try {
-    cloneOrThrow(app, join(tmp, "Ardia.app"));
+    cloneOrThrow(app, join(tmp, "Solstice.app"));
     if (hermesc && fs.existsSync(hermesc)) cloneOrThrow(hermesc, join(tmp, "hermesc"));
     const digest = treeDigest(tmp, undefined, { skipTop: ENTRY_META });
     fs.writeFileSync(join(tmp, "meta.json"), JSON.stringify({ ...meta, stamp, digest, created: new Date().toISOString(), bytes: measure(tmp) }, null, 1));
@@ -457,7 +457,7 @@ export function snapshotEntry(entry, dest) {
     if (!meta || meta.stamp !== entry.meta.stamp || meta.digest !== entry.meta.digest) return null;
     if (treeDigest(dest, undefined, { skipTop: ENTRY_META }) !== meta.digest) return null;
     const hermesc = join(dest, "hermesc");
-    return { app: join(dest, "Ardia.app"), hermesc: fs.existsSync(hermesc) ? hermesc : null, meta };
+    return { app: join(dest, "Solstice.app"), hermesc: fs.existsSync(hermesc) ? hermesc : null, meta };
   } catch {
     return null;
   }

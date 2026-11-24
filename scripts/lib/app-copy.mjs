@@ -59,7 +59,7 @@ export function prepareApp(app, dir, { bundle = null, entitlements: extra = [] }
   if (installed(resolve(app))) throw new Error(`${app} is installed in /Applications: pass a build or a copy`);
   const source = realpathSync(resolve(app));
   if (installed(source)) throw new Error(`${app} is installed in /Applications: pass a build or a copy`);
-  const copy = join(dir, "Ardia.app");
+  const copy = join(dir, "Solstice.app");
   const granted = execFileSync("codesign", ["-d", "--entitlements", "-", "--xml", source], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
   const missing = extra.filter((key) => !granted.includes(`<key>${key}</key>`));
   if (untouchedCopy({ source, bundle, granted, missing })) return reuseOrClone(source, dir, copy, bundle);
