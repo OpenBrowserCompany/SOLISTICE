@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Rename Helium to Ardia in a Chromium tree's strings, after Helium's own name_substitution.py and i18n_apply.py.
+"""Rename Helium to Solstice in a Chromium tree's strings, after Helium's own name_substitution.py and i18n_apply.py.
 
-Runs Helium's name substitution machinery (its utils, unchanged) with Ardia's rules over every .grd, .grdp and
-.xtb: "Helium" becomes "Ardia", helium:// shown to the user becomes ardia://, links inside strings go back to
+Runs Helium's name substitution machinery (its utils, unchanged) with Solstice's rules over every .grd, .grdp and
+.xtb: "Helium" becomes "Solstice", helium:// shown to the user becomes solstice://, links inside strings go back to
 chrome:// so they keep opening inside the engine, and the copyright and company lines that Helium's pass made "The
 Helium Authors" go back to "The Chromium Authors" in every language (first, so a translation like "Die
-Helium-Autoren" becomes "Die Chromium-Autoren", never "Die Ardia-Autoren"). Helium's copyright and licence live
+Helium-Autoren" becomes "Die Chromium-Autoren", never "Die Solstice-Autoren"). Helium's copyright and licence live
 in the credits page's licence data, not in strings. Translation ids are remapped as Helium's pass does, for every
 translation of a changed message. Running it again changes nothing. Exits non-zero if any string, its
 placeholders and link targets included, still says helium or imput in any case.
@@ -19,26 +19,26 @@ import re
 import sys
 import xml.etree.ElementTree as xml
 
-ARDIA_RULES = [
+SOLSTICE_RULES = [
     (r'The Helium Authors', 'The Chromium Authors'),
     (r'''(href\s*=\s*["']?)helium://''', r'\1chrome://'),
-    (r'helium://', 'ardia://'),
-    (r'(?<![/._0-9])Helium(?![A-Z0-9_])', 'Ardia'),
+    (r'helium://', 'solstice://'),
+    (r'(?<![/._0-9])Helium(?![A-Z0-9_])', 'Solstice'),
 ]
 
 SANITY = [
-    ('Helium', 'Ardia'),
-    ('About Helium', 'About Ardia'),
-    ('Helium\'s settings', 'Ardia\'s settings'),
-    ('helium://settings', 'ardia://settings'),
-    ('Type helium://extensions here', 'Type ardia://extensions here'),
-    ('<a href="helium://management">helium://management</a>', '<a href="chrome://management">ardia://management</a>'),
+    ('Helium', 'Solstice'),
+    ('About Helium', 'About Solstice'),
+    ('Helium\'s settings', 'Solstice\'s settings'),
+    ('helium://settings', 'solstice://settings'),
+    ('Type helium://extensions here', 'Type solstice://extensions here'),
+    ('<a href="helium://management">helium://management</a>', '<a href="chrome://management">solstice://management</a>'),
     ('Copyright 2026 The Helium Authors. All rights reserved.',
      'Copyright 2026 The Chromium Authors. All rights reserved.'),
     ('Helium-Einstellungen', 'Ardia-Einstellungen'),
     ('Vula imenyu yeHelium', 'Vula imenyu yeArdia'),
-    ('Heliumin asetukset', 'Ardiain asetukset'),
-    ('ku-Helium', 'ku-Ardia'),
+    ('Heliumin asetukset', 'Solsticein asetukset'),
+    ('ku-Helium', 'ku-Solstice'),
     ('HeliumWidget', 'HeliumWidget'),
     ('https://example.com/Helium/page', 'https://example.com/Helium/page'),
 ]
@@ -57,7 +57,7 @@ def helium_utils(helium):
         sys.path.insert(0, str(utils))
     import name_substitution
     import name_substitution_utils
-    use_rules(name_substitution_utils, ARDIA_RULES)
+    use_rules(name_substitution_utils, SOLSTICE_RULES)
     remap_every_translation(name_substitution_utils)
     return name_substitution, name_substitution_utils
 
@@ -113,7 +113,7 @@ def restore_copyright(namesub, util, tree):
                 t.set('id', fp_map[t.get('id')])
                 translations += 1
         write(path, root)
-    use_rules(util, ARDIA_RULES)
+    use_rules(util, SOLSTICE_RULES)
     return set(fp_map.values()), translations
 
 
@@ -121,12 +121,12 @@ def copyright_claims(namesub, tree, copyright_ids):
     found = []
     for path in namesub.get_substitutable_files(tree, ['xtb', 'grd', 'grdp']):
         raw = path.read_text(encoding='utf-8')
-        if 'Ardia Authors' in raw:
-            found.append(f'{path.relative_to(tree)}: Ardia Authors')
+        if 'Solstice Authors' in raw:
+            found.append(f'{path.relative_to(tree)}: Solstice Authors')
         if path.suffix != '.xtb' or not any(f'id="{i}"' in raw for i in copyright_ids):
             continue
         for t in xml.fromstring(raw.replace('&#36;', '$')).iter('translation'):
-            if t.get('id') in copyright_ids and 'Ardia' in ''.join(t.itertext()):
+            if t.get('id') in copyright_ids and 'Solstice' in ''.join(t.itertext()):
                 found.append(f'{path.relative_to(tree)}: {t.get("id")}: {"".join(t.itertext())[:80]!r}')
     return found
 
@@ -179,7 +179,7 @@ def main():
         namesub.do_substitution(tree, None, args.workers, False)
     claims = copyright_claims(namesub, tree, copyright_ids)
     if claims:
-        print('ardia_namesub: copyright lines that name Ardia:', *claims, sep='\n  ', file=sys.stderr)
+        print('ardia_namesub: copyright lines that name Solstice:', *claims, sep='\n  ', file=sys.stderr)
         sys.exit(1)
     left = leftovers(namesub, tree)
     if left:

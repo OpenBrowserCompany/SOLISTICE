@@ -777,7 +777,7 @@ test(
     git('commit', '-q', '-m', 'no engine api')
     const refused = run(['--platform', 'win'])
     assert.notEqual(refused.status, 0)
-    assert.match(refused.stderr, /keys commits from 991f98e9e on, and HEAD lacks apps\/browser\/windows\/Ardia\/EngineApi\.h/)
+    assert.match(refused.stderr, /keys commits from 991f98e9e on, and HEAD lacks apps\/browser\/windows\/Solstice\/EngineApi\.h/)
     write('apps/browser/windows/Ardia/EngineApi.h', 'engine api\n')
   }),
 )
@@ -870,7 +870,7 @@ test(
     git('commit', '-q', '-m', 'a symlinked icon')
     const refused = run(['--platform', 'win'])
     assert.notEqual(refused.status, 0)
-    assert.match(refused.stderr, /apps\/browser\/windows\/Ardia\/Ardia\.ico are symlinks/)
+    assert.match(refused.stderr, /apps\/browser\/windows\/Solstice\/Solstice\.ico are symlinks/)
   }),
 )
 

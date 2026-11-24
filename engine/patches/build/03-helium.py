@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Step 3: turn a Chromium $CHROMIUM_VERSION tree into Helium's, as Ardia takes it, ready for our series (step 4).
+"""Step 3: turn a Chromium $CHROMIUM_VERSION tree into Helium's, as Solstice takes it, ready for our series (step 4).
 
 Helium is helium-chromium $HELIUM_TAG plus helium-macos $HELIUM_MACOS_TAG (helium-pins.ini pins both by commit).
-Helium's downloads (its uBlock Origin, the onboarding page, the non-free search engine data) stay out of Ardia
+Helium's downloads (its uBlock Origin, the onboarding page, the non-free search engine data) stay out of Solstice
 entirely: no stage fetches them, and the hunks of Helium's patches that edit them are left out. Stages, in order:
 
   pins           the Helium checkouts are at the pinned commits, unmodified, made for this Chromium; deps.ini
-                 downloads nothing Ardia doesn't omit
+                 downloads nothing Solstice doesn't omit
   guard          every skipped patch is still in Helium's series, and no applied patch's added lines touch what a
                  skip protects (Safe Storage, passwords, Sparkle, the product dir, mDNS) beyond the reviewed allowlist
   patches        helium-chromium's series, then helium-macos's, minus SKIP and minus the omitted downloads' files;
@@ -14,7 +14,7 @@ entirely: no stage fetches them, and the hunks of Helium's patches that edit the
   fixups         saving passwords, addresses and cards on by default
   domsub         Helium's domain substitution, minus domsub-keep-store.txt (the Web Store and extension updates)
   namesub        Helium's name_substitution.py --sub and i18n_apply.py
-  brand-namesub  ardia_namesub.py: Helium -> Ardia in the string files
+  brand-namesub  ardia_namesub.py: Helium -> Solstice in the string files
   version        HELIUM_* in chrome/VERSION, equal to Chromium's own version, so Helium's version is never shown
   resources      Helium's icons (its generated ones made with sips), then ardia_resources.txt over them
 
@@ -46,12 +46,12 @@ REPO = pathlib.Path(os.environ.get('AC_REPO') or HERE.parent.parent.parent)
 
 SKIP = {
     'helium/core/disable-password-manager.patch':
-        'forces password saving and passkeys off as managed prefs; Ardia uses Chrome\'s password manager',
+        'forces password saving and passkeys off as managed prefs; Solstice uses Chrome\'s password manager',
     'helium/ui/remove-autofill-link-to-password-manager.patch': 'drops "Manage passwords" from the fill dropdown',
     'ungoogled-chromium/fix-building-without-mdns-and-service-discovery.patch':
         'empties DnsSdDeviceLister; the Cast dialog needs mDNS (enable_mdns stays true)',
     'helium/macos/change-keychain-name.patch':
-        'renames the Safe Storage item; every user\'s passwords and cookies are encrypted with "Ardia Safe Storage"',
+        'renames the Safe Storage item; every user\'s passwords and cookies are encrypted with "Solstice Safe Storage"',
     'helium/macos/change-product-dir-name.patch': 'moves the fallback product dir to net.imput.helium',
     'rebel/macos/sparkle-integration.patch': 'Sparkle inside the framework; the app has its own updater',
     'helium/macos/updater/fixup-sparkle-glue.patch': 'Sparkle inside the framework',
@@ -61,8 +61,8 @@ SKIP = {
     'helium/core/use-system-python3.patch': 'Helium\'s build setup: .gn script_executable (reruns every action)',
     'helium/core/rbe-nativelink-config.patch': 'Helium\'s remote build setup',
     'helium/macos/rbe-linux-clang-wrapper.patch': 'Helium\'s remote build setup',
-    'helium/macos/chromium-signing.patch': 'Helium\'s signing flow; scripts/release.sh signs Ardia',
-    'helium/core/pins/pin-state.patch': 'Helium\'s shared pinned tabs; Ardia keeps its own pins in the sidebar',
+    'helium/macos/chromium-signing.patch': 'Helium\'s signing flow; scripts/release.sh signs Solstice',
+    'helium/core/pins/pin-state.patch': 'Helium\'s shared pinned tabs; Solstice keeps its own pins in the sidebar',
     'helium/core/pins/pin-sync.patch': 'Helium\'s shared pinned tabs: pins mirrored into every window',
     'helium/core/pins/sync-splits.patch': 'Helium\'s shared pinned tabs: pinned splits mirrored into every window',
     'helium/core/pins/sync-drags.patch': 'Helium\'s shared pinned tabs: pin changes applied when a tab drag ends',
@@ -70,12 +70,12 @@ SKIP = {
     'helium/core/pins/pinned-url.patch': 'Helium\'s shared pinned tabs: a pin returns to the URL it was pinned at',
     'helium/core/pins/open-links-outside.patch': 'Helium\'s shared pinned tabs: other sites open from a pin in new tabs',
     'helium/core/pins/migrate-legacy-pins.patch': 'Helium\'s shared pinned tabs: per-window pins merged into one set',
-    'helium/ui/pins-ui.patch': 'Helium\'s tab strip UI for its shared pins; Ardia draws its own sidebar',
+    'helium/ui/pins-ui.patch': 'Helium\'s tab strip UI for its shared pins; Solstice draws its own sidebar',
 }
 
 LINUX_SKIP = {
-    'helium/linux/change-chromium-branding.patch': 'Ardia supplies its own desktop identity and isolated user-data directory',
-    'helium/linux/rename-chrome-binary.patch': 'Ardia packages the chrome executable and Chromium crashpad handler under its own launcher',
+    'helium/linux/change-chromium-branding.patch': 'Solstice supplies its own desktop identity and isolated user-data directory',
+    'helium/linux/rename-chrome-binary.patch': 'Solstice packages the chrome executable and Chromium crashpad handler under its own launcher',
 }
 
 
@@ -191,7 +191,7 @@ def stage_pins(ctx):
     for section in deps.sections():
         out = deps[section].get('output_path', '').lstrip('./').rstrip('/') + '/'
         if not out.startswith(OMITTED):
-            problems.append(f'deps.ini [{section}] downloads into {out}, which Ardia doesn\'t omit: decide on it')
+            problems.append(f'deps.ini [{section}] downloads into {out}, which Solstice doesn\'t omit: decide on it')
     if problems:
         raise StageError('\n'.join(problems))
     print(f'Helium {config["helium-chromium"]["tag"]} / {ctx.platform_repo} {config[ctx.platform_repo]["tag"]} on Chromium {chromium}')
@@ -408,7 +408,7 @@ def stage_brand_namesub(ctx):
         print('skipped (--no-brand)')
         return
     if not script.exists():
-        raise StageError(f'{script} is missing; --no-brand skips the Ardia branding')
+        raise StageError(f'{script} is missing; --no-brand skips the Solstice branding')
     if ctx.platform == 'linux':
         strings = ctx.tree / 'chrome/app/settings_chromium_strings.grdp'
         text = strings.read_text()
@@ -497,12 +497,12 @@ def stage_resources(ctx):
     print(f'Helium: {count} resources')
     listing = HERE / 'ardia_resources.txt'
     if ctx.no_brand:
-        print('Ardia resources skipped (--no-brand)')
+        print('Solstice resources skipped (--no-brand)')
         return
     if not listing.exists():
-        raise StageError(f'{listing} is missing; --no-brand skips the Ardia branding')
+        raise StageError(f'{listing} is missing; --no-brand skips the Solstice branding')
     roots = list(dict.fromkeys([REPO, HERE.parent.parent.parent]))
-    print(f'Ardia: {copy_resources(ctx, listing, roots)} resources')
+    print(f'Solstice: {copy_resources(ctx, listing, roots)} resources')
 
 
 def write_marker(marker, lines):
