@@ -53,7 +53,7 @@ onIos("on iPhone Connect to Your Mac is main's two steps on Expo UI; Enter Words
   const root = renderSurface(<SettingsView />);
   await act(async () => undefined);
   const connect = () => destination(root, "syncConnect");
-  expect(texts(connect())).toEqual(expect.arrayContaining(["Show the code on your Mac", "Choose the Ardia Sync folder"]));
+  expect(texts(connect())).toEqual(expect.arrayContaining(["Show the code on your Mac", "Choose the Solstice Sync folder"]));
   expect(byLabel(connect(), "Scan Code")).toBeTruthy();
   await press(byLabel(connect(), "Enter Recovery Phrase"));
   expect(settingsNav().stack.at(-1)).toEqual({ page: "syncWords" });
@@ -202,7 +202,7 @@ onIos("on iPhone a scanned code sends focus to the phrase it added once the cove
 });
 
 onIos("on iPhone, picking the first folder keeps Choose Folder mounted and named as it was while it connects, locked with Connecting as its value and a hidden spinner beside it", async () => {
-  const session = createConnectSession({ pickFolder: async () => ({ folder: "/sync", name: "Ardia Sync" }), connect: () => new Promise<{ result: string }>(() => undefined), forgetFolder: async () => undefined }, (phrase) => phrase === WORDS);
+  const session = createConnectSession({ pickFolder: async () => ({ folder: "/sync", name: "Solstice Sync" }), connect: () => new Promise<{ result: string }>(() => undefined), forgetFolder: async () => undefined }, (phrase) => phrase === WORDS);
   jest.spyOn(syncActions, "canPickSyncFolderFirst").mockReturnValue(true);
   jest.spyOn(syncActions, "syncConnectSession").mockReturnValue(session as never);
   setConnectPhrase(WORDS);
@@ -232,7 +232,7 @@ onIos("on iPhone, with a folder already chosen, a scanned code connects only aft
   const added = () => within(destination(rendered!, "syncConnect"), (props) => props.title === "Recovery phrase added")[0];
   const session = createConnectSession(
     {
-      pickFolder: async () => ({ folder: "/sync", name: "Ardia Sync" }),
+      pickFolder: async () => ({ folder: "/sync", name: "Solstice Sync" }),
       connect: async () => {
         focusWhenConnecting.push(added() ? focusRequestOf(added()!) : undefined);
         return { result: "connected" };
@@ -249,7 +249,7 @@ onIos("on iPhone, with a folder already chosen, a scanned code connects only aft
   const connect = () => destination(rendered!, "syncConnect");
   await press(byLabel(connect(), "Choose Folder…"));
   await act(async () => undefined);
-  expect(session.state().folder?.name).toBe("Ardia Sync");
+  expect(session.state().folder?.name).toBe("Solstice Sync");
   await press(byLabel(connect(), "Scan Code"));
   await act(async () => scanner(rendered!).props.onScan(WORDS));
   expect(focusWhenConnecting).toEqual([]);

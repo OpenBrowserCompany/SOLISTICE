@@ -9,7 +9,7 @@ import { withMaterialYou } from "../../test/render/harness";
 
 withMaterialYou();
 
-test.each(Object.keys(SYMBOLS) as SymbolName[])("%s uses Material artwork only on Android with Material You on, and keeps Ardia's own artwork", (name) => {
+test.each(Object.keys(SYMBOLS) as SymbolName[])("%s uses Material artwork only on Android with Material You on, and keeps Solstice's own artwork", (name) => {
   let root!: ReactTestRenderer;
   act(() => { root = create(<Symbol name={name} size={22} color="#123456" />); });
   const shared = materialSymbolFor(name);

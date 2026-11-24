@@ -222,7 +222,7 @@ onAndroid("a classic menu closing in a portal keeps the classic design when Mate
   const picker = (open: boolean) =>
     open ? (
       <Portal exitMs={1000}>
-        <Menu items={[{ label: "Ardia", onPress: () => undefined }]} place={{ top: 100, left: 20 }} onDismiss={() => undefined} />
+        <Menu items={[{ label: "Solstice", onPress: () => undefined }]} place={{ top: 100, left: 20 }} onDismiss={() => undefined} />
       </Portal>
     ) : null;
   const root = renderSurface(picker(true), { flushTimers: false });
