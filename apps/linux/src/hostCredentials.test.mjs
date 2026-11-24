@@ -57,7 +57,7 @@ function invoke(method, args) {
       if (args[3] !== null) entry.username = args[3];
       return [true, { ok: true }];
     }
-    case "ArdiaPasswords.export": return native.auth === "unavailable" ? [false, { code: "ERR_REAUTH_UNAVAILABLE", message: "System authentication is off in background instances, so secrets stay hidden" }] : [true, granted ? { status: "succeeded", path: "/tmp/scratch/Ardia Passwords.csv" } : { status: "reauthFailed" }];
+    case "ArdiaPasswords.export": return native.auth === "unavailable" ? [false, { code: "ERR_REAUTH_UNAVAILABLE", message: "System authentication is off in background instances, so secrets stay hidden" }] : [true, granted ? { status: "succeeded", path: "/tmp/scratch/Solstice Passwords.csv" } : { status: "reauthFailed" }];
     case "ArdiaAutofill.saveCard": native.cards.push({ id: "card-2", network: "visa", last4: args[2].slice(-4), number: args[2] }); return [true, { id: "card-2" }];
     case "ArdiaAutofill.cardNumber": return [true, { number: granted ? native.cards.find((c) => c.id === args[1])?.number ?? null : null, authenticated: granted }];
     default: return [false, { code: "ERR_UNKNOWN_CALL", message: "unknown" }];
@@ -127,7 +127,7 @@ test("secret operations travel only through typed native methods and never the g
   assert.equal(revealed(await passwords.getPassword("", "https://example.test", "me")), PASSWORD);
   assert.equal(await passwords.savePassword("", "https://new.test", "you", asSecret("password", NEW_PASSWORD)), true);
   assert.equal(await passwords.updatePassword("", "https://new.test", "you", { password: asSecret("password", `${NEW_PASSWORD}!`) }), true);
-  assert.deepEqual(await passwords.exportPasswords(""), { status: "succeeded", path: "/tmp/scratch/Ardia Passwords.csv" });
+  assert.deepEqual(await passwords.exportPasswords(""), { status: "succeeded", path: "/tmp/scratch/Solstice Passwords.csv" });
   assert.equal(await autofill.saveCard("", { name: "Ada", expMonth: 4, expYear: 2031 }, "4000000000000002"), "card-2");
   assert.equal(await autofill.revealCardNumber("", "card-1"), CARD);
   for (const entry of genericWire()) {
@@ -201,8 +201,8 @@ test("status drives an honest notice", async () => {
   assert.equal(credentialNotice(await autofillStatus(host, ""), "autofill"), null);
   assert.equal(credentialNotice({ passwords: { available: true }, reauth: false, backend: "auto" }, "passwords"),
     "System authentication is unavailable, so saved passwords can't be shown, changed or exported.");
-  assert.equal(credentialNotice({ passwords: { available: true }, reauth: false, reauthReason: "policyMissing", reauthMessage: "Ardia's polkit policy isn't installed, so saved passwords and card numbers can't be shown, changed or exported", backend: "gnome-libsecret" }, "autofill"),
-    "Ardia's polkit policy isn't installed, so saved passwords and card numbers can't be shown, changed or exported.");
+  assert.equal(credentialNotice({ passwords: { available: true }, reauth: false, reauthReason: "policyMissing", reauthMessage: "Solstice's polkit policy isn't installed, so saved passwords and card numbers can't be shown, changed or exported", backend: "gnome-libsecret" }, "autofill"),
+    "Solstice's polkit policy isn't installed, so saved passwords and card numbers can't be shown, changed or exported.");
   assert.equal(credentialNotice(null, "passwords"), null);
 });
 
@@ -230,8 +230,8 @@ test("status names the key provider and warns when a configured keyring silently
   assert.match(credentialStorage({ ...keyring, protection: "none", storage: "no encryption key" }, "passwords"), /no encryption key is available/);
   assert.equal(credentialStorage({ ...keyring, protection: undefined, storage: undefined }, "passwords"), null);
   const unknown = { ...keyring, protection: "unknown", storage: "an unknown key" };
-  assert.equal(credentialStorage(unknown, "passwords"), "Ardia couldn't check which key protects saved passwords, so whether they're encrypted is unknown.");
-  assert.equal(credentialStorage(unknown, "autofill"), "Ardia couldn't check which key protects card numbers, so whether they're encrypted is unknown.");
+  assert.equal(credentialStorage(unknown, "passwords"), "Solstice couldn't check which key protects saved passwords, so whether they're encrypted is unknown.");
+  assert.equal(credentialStorage(unknown, "autofill"), "Solstice couldn't check which key protects card numbers, so whether they're encrypted is unknown.");
   for (const text of [credentialStorage(keyring, "passwords"), credentialStorage(keyring, "autofill"), credentialNotice(fallback, "passwords")]) {
     assert.doesNotMatch(text, /Mac|Keychain|Touch ID/);
   }

@@ -221,7 +221,7 @@ test("a browser crash inside libc, whose frame pointer libc reused, still walks 
   ]);
 });
 
-test("a browser crash carries the Ardia version the engine annotated, and a helper or a malformed version doesn't", () => {
+test("a browser crash carries the Solstice version the engine annotated, and a helper or a malformed version doesn't", () => {
   const browser = linuxCrashReport(parseMinidump(minidump({ ...chainedStack(), ptype: "browser", version: "0.2.47-nightly.3" })), { id: "v", time: 1 });
   assert.equal(browser.appVersion, "0.2.47-nightly.3");
   const helper = linuxCrashReport(parseMinidump(minidump({ ...chainedStack(), version: "0.2.47-nightly.3" })), { id: "h", time: 1 });

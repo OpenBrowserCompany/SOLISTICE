@@ -169,7 +169,7 @@ export function credentialNotice(status: PasswordStatus | AutofillStatus | null 
   if (status.protectionFallback) {
     const secrets = kind === "passwords" ? "new passwords" : "new card numbers";
     parts.push(
-      `Your keyring didn't answer, so Chromium only obfuscates ${secrets} with its built-in key instead of encrypting them. Unlock or start your keyring (Secret Service or KWallet) and restart Ardia.`,
+      `Your keyring didn't answer, so Chromium only obfuscates ${secrets} with its built-in key instead of encrypting them. Unlock or start your keyring (Secret Service or KWallet) and restart Solstice.`,
     );
   }
   if (status.backend === "basic") parts.push("Chromium is using its basic password store, which only obfuscates secrets instead of encrypting them with your keyring.");
@@ -196,6 +196,6 @@ export function credentialStorage(status: PasswordStatus | AutofillStatus | null
     case "none":
       return `${kind === "passwords" ? "Saved passwords" : "Card numbers"} can't be protected: no encryption key is available.`;
     default:
-      return `Ardia couldn't check which key protects ${kind === "passwords" ? "saved passwords" : "card numbers"}, so whether they're encrypted is unknown.`;
+      return `Solstice couldn't check which key protects ${kind === "passwords" ? "saved passwords" : "card numbers"}, so whether they're encrypted is unknown.`;
   }
 }
