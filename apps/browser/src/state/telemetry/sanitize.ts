@@ -245,7 +245,7 @@ export function parseStack(stack: unknown, limit = 50, keep: (file: string) => b
 type NativeFrame = { image: string; symbol?: string; symbolOffset?: number; offset?: number };
 export type NativeImage = { name: string; uuid: string };
 
-const OUR_IMAGES = /^(Ardia|ArdiaCore|ArdiaShell|Chromium Framework|Expo|ExpoModulesCore|React|hermes|RCT|Sparkle|chrome$|chrome_crashpad_handler$|lib(?:EGL|GLESv2|vk_swiftshader|vulkan|qt5_shim|qt6_shim)\.so)/;
+const OUR_IMAGES = /^(Solstice|ArdiaCore|ArdiaShell|Chromium Framework|Expo|ExpoModulesCore|React|hermes|RCT|Sparkle|chrome$|chrome_crashpad_handler$|lib(?:EGL|GLESv2|vk_swiftshader|vulkan|qt5_shim|qt6_shim)\.so)/;
 const STRIPPED_EXPORT = /^(?:ArdiaCoreMain|ChromeMain|ChromeWebAppShortcutCopierMain|ac_[a-z0-9_]+)$/;
 const NEAREST_EXPORT_DISTANCE = 0x4000;
 

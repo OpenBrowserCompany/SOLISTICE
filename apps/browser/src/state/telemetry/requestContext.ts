@@ -14,7 +14,7 @@ export function context(): Record<string, unknown> {
   return {
     $lib: "ardia-telemetry",
     $lib_version: "1",
-    $app_name: "Ardia",
+    $app_name: "Solstice",
     $app_version: info.appVersion,
     $app_build: info.appBuild,
     $os: telemetryHost().os,
