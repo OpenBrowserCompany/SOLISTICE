@@ -1,16 +1,16 @@
 ---
 name: release
-description: Cut and ship an Ardia release end to end, stable or nightly — write the Dia-style release notes from git log, bump the version, build/sign/package with scripts/release.sh, smoke-test the build in a hidden instance, publish the GitHub release (a prerelease for a nightly) + Sparkle appcast, and deploy ardia.dev with the release-notes entry, the new download link and the landing page's claims and screenshots brought up to date. Use this whenever the user asks to ship, release, cut/push a new version, a nightly or an update, publish a build, "ship it as a nightly", "get this to me", bump the version, or write release notes for Ardia — even if they only say "ship it", "nightly" or "new release" after a batch of fixes.
+description: Cut and ship an Solstice release end to end, stable or nightly — write the Dia-style release notes from git log, bump the version, build/sign/package with scripts/release.sh, smoke-test the build in a hidden instance, publish the GitHub release (a prerelease for a nightly) + Sparkle appcast, and deploy ardia.dev with the release-notes entry, the new download link and the landing page's claims and screenshots brought up to date. Use this whenever the user asks to ship, release, cut/push a new version, a nightly or an update, publish a build, "ship it as a nightly", "get this to me", bump the version, or write release notes for Solstice — even if they only say "ship it", "nightly" or "new release" after a batch of fixes.
 ---
 
-# Releasing Ardia
+# Releasing Solstice
 
 A release is: notes → version bump → `scripts/release.sh` → smoke test → GitHub release → site deploy.
 The build and the publishing run in GitHub Actions: the **Release** workflow (`.github/workflows/release.yml`,
 `docs/releasing.md` › CI releases) runs `release.sh`, signs, notarizes and publishes.
 Locally you write the notes, bump the version, publish the engine when `engine/` changed, smoke-test, run the
-stable perf gate and the site's Ardia-only benchmarks, and update the site.
-Users get it through Sparkle (Ardia › Check for Updates…), and the first launch of the new version
+stable perf gate and the site's Solstice-only benchmarks, and update the site.
+Users get it through Sparkle (Solstice › Check for Updates…), and the first launch of the new version
 opens `https://ardia.dev/release-notes#<version>`. So the release isn't done until the site is
 deployed with the new entry — otherwise that tab opens on a page that doesn't mention the update.
 
@@ -56,7 +56,7 @@ For each fix:
      watch it (`gh run watch <id> --exit-status`, in pieces under 10 minutes). It builds, tags, and runs
      `.claude/skills/release/scripts/publish.sh <version>` (a prerelease with the DMG, zip, appcast and CLI
      tarball, plus the Linux and Windows files when their jobs passed; the merged feed onto the latest stable release;
-     `Ardia-Nightly.dmg` behind https://ardia.dev/nightly; it checks all of them), then refreshes the Windows update
+     `Solstice-Nightly.dmg` behind https://ardia.dev/nightly; it checks all of them), then refreshes the Windows update
      feed (step 5e), and the Homebrew tap's `ardia@nightly` cask when the `HOMEBREW_TAP_TOKEN` secret is set
      (otherwise run `update-tap.sh <version>` yourself, step 5c). Locally the same is `git tag v<version> && git push
      origin main v<version>` and `publish.sh <version>` after `release.sh`.
@@ -64,7 +64,7 @@ For each fix:
      entry; check the deploy run finished (no claims or screenshots). The Mac nightly link and the Windows installers
      (`windows-alpha`) never change. The Linux download is versioned: once the release is published, run
      `.claude/skills/release/scripts/site-version.mjs <version>`. It points `release.json`'s `linux` at the nightly when
-     the release carries `Ardia-<version>-linux-x64.tar.xz` and leaves it on the last one that did otherwise; commit it
+     the release carries `Solstice-<version>-linux-x64.tar.xz` and leaves it on the last one that did otherwise; commit it
      as "Site: Linux download <version>" and push (another deploy).
    - Report in two lines: the version, the fix, the smoke result.
 
@@ -81,7 +81,7 @@ everything since the previous stable, nightlies included.
   sources: rebuilding it is an incremental `chrome_framework` build under the chromium lock). Never delete or clean
   `~/chromium-build/chromium_git/chromium/src/out`, run `gclient sync` or `gn clean`: a full Chromium
   rebuild costs ~5 hours and the user has been emphatic about it.
-- **Never launch or touch `/Applications/Ardia.app`** (`Netnyahoo.app` until the owner updates past the rename) —
+- **Never launch or touch `/Applications/Solstice.app`** (`Netnyahoo.app` until the owner updates past the rename) —
   the user is using it. Test only the exported
   build in `dist/`, only hidden (`ARDIA_BACKGROUND=1`, throwaway `ARDIA_DATA_DIR`), never with
   plain `open`. The smoke script does this for you.
@@ -139,12 +139,12 @@ git add packages/ardiacore/scripts/ubol.sh && git commit -m "WebKit content bloc
 ```
 
 WebKit pages block with uBlock Origin Lite's rulesets (its Safari build), which, like uBOL everywhere, change only
-with a new uBOL release, so they are as fresh as the last Ardia release that moved `UBOL_VERSION`.
+with a new uBOL release, so they are as fresh as the last Solstice release that moved `UBOL_VERSION`.
 
 It checks the zip against GitHub's SHA-256 digest and the manifest's version, rewrites the pin in
 `packages/ardiacore/scripts/ubo.sh` and installs it into `packages/ardiacore/vendor/ubo`. Verify after release.sh
 that the export carries it: `python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["version"])'
-dist/<version>/export/Ardia.app/Contents/Resources/Extensions/ublock/manifest.json` prints the
+dist/<version>/export/Solstice.app/Contents/Resources/Extensions/ublock/manifest.json` prints the
 pinned `UBO_VERSION` followed by ubo.sh's patch level as a fourth part (`1.75.0.8`: uBO refreshes its cached
 scriptlets when that version changes, so our patches reach existing profiles), and the smoke test's "uBlock blocks an ad script" check passes. An error means
 the release is odd (no digest, a version mismatch): keep the old pin and say so in the report.
@@ -239,7 +239,7 @@ First it checks the update from `<previous>` (its export in `dist/<previous>/exp
   session ones, localStorage, passwords, bookmarks, history, an address, a site permission, zoom, an extension),
   opens in this build started without `ARDIA_DATA_DIR` (test copies in a fake home; never the real data).
 
-Then it launches `dist/<version>/export/Ardia.app` hidden with a data dir that says `<previous>` ran last,
+Then it launches `dist/<version>/export/Solstice.app` hidden with a data dir that says `<previous>` ran last,
 and a session whose window was left on its second profile, and checks, over CDP and the window list:
 
 - the engine and chrome://version are the Chromium version `engine/patches/build/env.sh` names, and the after-update release-notes tab opened exactly once;
@@ -262,7 +262,7 @@ and a session whose window was left on its second profile, and checks, over CDP 
   every tab it showed, and Chrome ignores hangs while one is attached);
 - quitting the way ⌘Q and Sparkle's update do (the quit Apple event, sent to this instance's pid only) exits
   within 15 s with status 0 and no crash report (0.2.6 and 0.2.7 crashed on every quit, so every update
-  ended in "Ardia quit unexpectedly");
+  ended in "Solstice quit unexpectedly");
 - the bundle's signature is still valid after running (0.1.0 wrote into its own bundle);
 - the feed in the build's Info.plist (`SUFeedURL`, `https://ardia.dev/appcast.xml` since the rename) answers
   with an appcast (`.claude/skills/release/scripts/feed.sh --before-publish`). A 404 means ardia.dev is running a deploy without
@@ -295,7 +295,7 @@ Check the candidate's counts against the ceilings before publishing, beside the 
 with a retry; no perflab lock needed: they are counts, not timings):
 
 ```bash
-node apps/browser/scripts/perf/ratchet.mjs run --own --app dist/<version>-rc/export/Ardia.app   # dist/<version>/export without an rc
+node apps/browser/scripts/perf/ratchet.mjs run --own --app dist/<version>-rc/export/Solstice.app   # dist/<version>/export without an rc
 ```
 
 `--own` runs the app's own `main.jsbundle`, so it checks what ships. It must print `ratchet: ok`. It runs the launch,
@@ -317,7 +317,7 @@ the lowered ceilings, and say which counts dropped. The wall-clock gate is a sep
 ### 4c. Perf gate: the RC against the previous stable release (stable only)
 
 Every stable release is timed against the previous stable one before it publishes (never against a nightly: the
-control is `dist/<previous stable>/export/Ardia.app`), and ships only when every row passes
+control is `dist/<previous stable>/export/Solstice.app`), and ships only when every row passes
 (`docs/perf/README.md` › Gating a release). The copies and both templates were made beside the smoke test (step 4);
 the timed part is two rounds of native-bench on the prepared copies, interleaved, launch x6, session x2 and windows x2
 each, about 19 minutes a round, both run by `gate.sh` (step 4) under its lock. Each round gets a new empty folder, and
@@ -338,10 +338,10 @@ moved (old, new, change) and one sentence naming the biggest win. A release that
 Faster section. (0.2.28 and 0.2.29 were also timed against 0.2.17, the last CEF release, with
 `scripts/release-compare-0.2.17.sh`, now in git history: `docs/perf/README.md`.)
 
-### 4d. The site's benchmarks: Ardia again, rivals kept (stable only)
+### 4d. The site's benchmarks: Solstice again, rivals kept (stable only)
 
 Measure the same build against the stored Dia and Helium rows, so ardia.dev's Benchmarks section and `/benchmarks`
-show this release. Only Ardia runs; the rivals' figures, versions and dates come from `apps/site/src/data/bench.json`
+show this release. Only Solstice runs; the rivals' figures, versions and dates come from `apps/site/src/data/bench.json`
 (`docs/perf/vs-browsers.md` › Running it). Nightlies skip it, as they skip the perf gate.
 
 It never blocks the binary: publishing (step 5) doesn't wait for it. It has to run on the Mac mini, the machine
@@ -353,10 +353,10 @@ deploy ships bench.json with the release notes when it's ready by then; otherwis
 ship it with the next site deploy. Never hold the notes for it.
 
 ```bash
-V=<version>; A=dist/$V-rc/export/Ardia.app   # dist/$V/export without an rc
+V=<version>; A=dist/$V-rc/export/Solstice.app   # dist/$V/export without an rc
 X=$HOME/ardia-scratch/xbench-$V-$(plutil -extract CFBundleVersion raw $A/Contents/Info.plist)-$(codesign -dvvv $A 2>&1 | sed -n 's/^CDHash=//p' | cut -c1-12)
-mkdir -p $X/apps/ardia && { [ -e $X/apps/ardia/Ardia.app ] || cp -Rc $A $X/apps/ardia/; }
-codesign --force --deep --sign - $X/apps/ardia/Ardia.app   # ad hoc, as the stored rows' Ardia and Helium ran
+mkdir -p $X/apps/ardia && { [ -e $X/apps/ardia/Solstice.app ] || cp -Rc $A $X/apps/ardia/; }
+codesign --force --deep --sign - $X/apps/ardia/Solstice.app   # ad hoc, as the stored rows' Solstice and Helium ran
 node apps/browser/scripts/perf/xbench.mjs run --out $X/out --apps $X/apps --browsers ardia --rounds 3 --launches 2 \
   --gate off --deadline 60   # run_in_background, about 35 min; exit 75 means items are left: run it again
 node apps/browser/scripts/perf/xbench.mjs report --out $X/out --apps $X/apps --browsers ardia \
@@ -373,7 +373,7 @@ node apps/browser/scripts/perf/xbench.mjs clean --out $X/out --apps $X/apps --br
   `/Applications` is a new major or minor version (1.53 → 1.54, 0.19 → 0.20). Put the line in the release report so
   the owner can schedule the full rerun (`docs/perf/vs-browsers.md` › Every browser: it needs Dia's sign-in). It
   never blocks the release.
-- Check `git diff apps/site/src/data/bench.json`: Ardia's figures, `date`, `machine` and `best` change; no rival's
+- Check `git diff apps/site/src/data/bench.json`: Solstice's figures, `date`, `machine` and `best` change; no rival's
   figure, version or `measured` date does (the first merge also stamps `measured` on every entry). Read `$X/table.md` against the perf gate's numbers; a row that moved by more than the ranges deserves a look before
   it goes on the site.
 - Commit it as "Site bench: <version> against the stored rivals", and step 6's `pnpm -C apps/site run deploy` ships it
@@ -394,7 +394,7 @@ gh run list -R ardia-browser/ardia -w release.yml -L 1        # its id; then gh 
 onto the published feed, creates the release as latest with the DMG, zip and appcast (the `ardia` command is released from ardia-browser/plugins, `docs/cli.md`), checks
 `releases/latest/download/appcast.xml` and `https://ardia.dev/appcast.xml` list the version, and updates the tap when it has `HOMEBREW_TAP_TOKEN` (else run `update-tap.sh <version>`). Locally:
 `git tag v<version> && git push origin main v<version>`, then `.claude/skills/release/scripts/publish.sh <version>`.
-The release also ships up to three Sparkle deltas (`Ardia<build>-<earlier build>.delta`) that `appcast.sh` builds
+The release also ships up to three Sparkle deltas (`Solstice<build>-<earlier build>.delta`) that `appcast.sh` builds
 from the newest earlier zips; when none come out the sign job warns and the release goes on, so mention it in the
 report (`docs/releasing.md` › Deltas). `publish.sh` stops when the live feed is listed but won't download, and when the
 latest stable has no `appcast.xml` unless `PUBLISH_NEW_FEED=1`. If it stops on a missing feed, re-upload the last good
@@ -415,8 +415,8 @@ on it:
 
 ```bash
 gh run download <id> -R ardia-browser/ardia -n release -D dist/<version>-rc
-mnt="$(mktemp -d)" && hdiutil attach -nobrowse -readonly -mountpoint "$mnt" dist/<version>-rc/Ardia-<version>.dmg
-mkdir -p dist/<version>-rc/export && ditto "$mnt/Ardia.app" dist/<version>-rc/export/Ardia.app && hdiutil detach "$mnt"
+mnt="$(mktemp -d)" && hdiutil attach -nobrowse -readonly -mountpoint "$mnt" dist/<version>-rc/Solstice-<version>.dmg
+mkdir -p dist/<version>-rc/export && ditto "$mnt/Solstice.app" dist/<version>-rc/export/Solstice.app && hdiutil detach "$mnt"
 .claude/skills/release/scripts/smoke.sh <version> <previous> --rc
 ```
 
@@ -481,13 +481,13 @@ sets the matching cask's `version` and `sha256` (GitHub's digest of the publishe
 does nothing when the cask is already there. `publish.sh` runs it for both channels (in CI only with the
 `HOMEBREW_TAP_TOKEN` secret; otherwise run it yourself after the workflow). The casks have `auto_updates true`: Sparkle updates installed copies and `brew upgrade`
 skips them, so a late tap push only delays new installs. Lint after a cask edit by hand (never `brew install` it: that
-writes `/Applications/Ardia.app`): `brew audit --cask --online ardia-browser/tap/ardia` and `brew style ardia-browser/tap`.
+writes `/Applications/Solstice.app`): `brew audit --cask --online ardia-browser/tap/ardia` and `brew style ardia-browser/tap`.
 
 ### 5d. Linux package
 
 The Release workflow builds it in its `linux` job (`scripts/linux/release.sh <version> --engine exact`, smoke gate
 included, then the `.deb` installed and purged on Debian 13 and Ubuntu 24.04), and `publish.sh` attaches
-`Ardia-<version>-linux-x64.tar.xz`, `.deb` and `.AppImage`, `ardia-bin-<version>.src.tar.gz` (the Arch PKGBUILD),
+`Solstice-<version>-linux-x64.tar.xz`, `.deb` and `.AppImage`, `ardia-bin-<version>.src.tar.gz` (the Arch PKGBUILD),
 `ardia-cli-<version>-linux-x64.tar.gz` (the pinned `ardia` command, renamed for this version) and their `.sha256` files to the release, nightly or stable. A `.deb` that
 fails the install test is dropped (`deb dropped` in `provenance.txt`) and the rest still ships. That needs the Linux engine for the release commit's engine
 key (`engine/engine-key.sh --platform linux`) published in ardia-browser/ardia. Without it the `linux` job fails, the Mac release
@@ -518,8 +518,8 @@ run `scripts/linux/release.sh <version>` and the `gh release upload` line it pri
 
 The Release workflow's `windows` job calls `windows.yml` at the release commit with the version: the x64 and arm64
 builds with the engine pinned in `scripts/windows/engine/prebuilt.json` (a draft release in ardia-browser/ardia, read
-with the run's token), the same launch, tour and install checks as CI, and `Ardia-<version>-windows-<cpu>-setup.exe`
-with a `.sha256` for each, and the engine's source `Ardia-<version>-windows-source.tar.xz` with its `.sha256`
+with the run's token), the same launch, tour and install checks as CI, and `Solstice-<version>-windows-<cpu>-setup.exe`
+with a `.sha256` for each, and the engine's source `Solstice-<version>-windows-source.tar.xz` with its `.sha256`
 (`scripts/windows/engine-source.sh`). `publish.sh` attaches the six files to the release, nightly or stable, and
 refuses the installers without their source. After `publish`, the
 `windows-update` job runs `scripts/windows/publish-alpha.sh --installers` on them, which puts them on the
@@ -536,7 +536,7 @@ job alone.
 ## 6. Deploy the site
 
 The download buttons and the root `README.md` (the landing page on GitHub) link the DMG of one tag
-(`releases/download/v<VERSION>/Ardia-<VERSION>.dmg`), so they keep working after a publish and only point at the
+(`releases/download/v<VERSION>/Solstice-<VERSION>.dmg`), so they keep working after a publish and only point at the
 older version until this step. After a stable publish, point both at it:
 
 ```bash
@@ -572,7 +572,7 @@ app (listed in `apps/site/README.md` › Screenshots):
 
 - **When:** if the release visibly changes something a shot shows (the sidebar, the tiles, the New Tab page,
   the logo or mark, the icon, a Settings pane, the window chrome), retake the affected shots from **this
-  release's export** (`dist/<version>/export/Ardia.app`).
+  release's export** (`dist/<version>/export/Solstice.app`).
 - **How:** use a hidden instance with the smoke test's rules (`ARDIA_BACKGROUND=1`, a throwaway
   `ARDIA_DATA_DIR`, never plain `open`, never `/Applications`).
   - Set up the same state as the old shot (the same sites, profiles, light or dark).
@@ -592,7 +592,7 @@ pnpm -C apps/site run deploy   # the upload can drop on a weak connection: rerun
 ```
 
 Then verify live: `https://ardia.dev/release-notes/` contains the new headline, the home page links
-`Ardia-<version>.dmg`, that URL returns 200, and any claim you changed shows. Commit `release.json`, the README
+`Solstice-<version>.dmg`, that URL returns 200, and any claim you changed shows. Commit `release.json`, the README
 and the claim changes ("Site: download <version>", plus what changed) and push.
 
 The SEO data follows `release.json` and the notes by itself, with no extra step; check that it did:
@@ -602,7 +602,7 @@ The SEO data follows `release.json` and the notes by itself, with no extra step;
   headline plus the bold leads, so a clear first line pays off.
 - `https://ardia.dev/sitemap.xml` has today's `lastmod` and lists the new stable page. Nightly pages exist too,
   but stay `noindex` and out of the sitemap.
-- If the release changed what Ardia is (a new headline feature, a new platform), update the home page's
+- If the release changed what Solstice is (a new headline feature, a new platform), update the home page's
   `description` in `src/pages/index.astro`: ~150 characters, and it is also the share text.
 - If `og.png` changes, its URL's `?v=` hash changes with it, so X and others fetch the new card.
 

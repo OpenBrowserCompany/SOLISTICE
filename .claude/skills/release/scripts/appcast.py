@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reads and edits Ardia's Sparkle appcast: the one parser the release scripts share.
+"""Reads and edits Solstice's Sparkle appcast: the one parser the release scripts share.
 
   appcast.py item <feed> <version>                       print the version's item
   appcast.py channel <feed> <version>                    print its channel (stable when it has none)

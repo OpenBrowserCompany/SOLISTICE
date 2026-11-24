@@ -71,7 +71,7 @@ const pid = await start(true, `${phase}.app.log`);
 
 const step = (what) => { if (process.env.CARRYOVER_VERBOSE) console.error(`carryover ${phase}: ${what}`); };
 const legacy = path.basename(execFileSync("/usr/libexec/PlistBuddy", ["-c", "Print :CFBundleExecutable", `${app}/Contents/Info.plist`]).toString().trim()) === "Netnyahoo";
-const inLegacyNames = (body) => `const ac = nn;\n${body.replace(/expo\.modules\.Ardia(\w+)/g, "expo.modules.Netnyahoo$1").replace(/"ac_(\w+)"/g, '"nn_$1"')}`;
+const inLegacyNames = (body) => `const ac = nn;\n${body.replace(/expo\.modules\.Solstice(\w+)/g, "expo.modules.Netnyahoo$1").replace(/"ac_(\w+)"/g, '"nn_$1"')}`;
 async function inApp(body, timeoutMs = 30_000) {
   step(body.trim().split("\n")[0].slice(0, 100));
   return instance.eval(legacy ? inLegacyNames(body) : body, { timeout: timeoutMs });
@@ -264,6 +264,6 @@ for (const [key, was] of Object.entries(created)) {
   const shown = JSON.stringify(now ?? null);
   line(ok, key, ok ? shown.slice(0, 120) : `${JSON.stringify(was).slice(0, 150)} → ${shown.slice(0, 150)}`);
 }
-line(report.realHomeFiles?.length === 0, "nothing opened in the real home's Ardia folders", report.realHomeFiles?.slice(0, 2).join(", "));
+line(report.realHomeFiles?.length === 0, "nothing opened in the real home's Solstice folders", report.realHomeFiles?.slice(0, 2).join(", "));
 line(report.quit, "it quits on the quit Apple event");
 process.exit(failed ? 1 : 0);
