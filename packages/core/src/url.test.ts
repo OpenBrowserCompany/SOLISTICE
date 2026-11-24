@@ -195,19 +195,19 @@ test("cleanUrlReport gives cleanUrl's result and says whether a tracking paramet
   assert.deepEqual(cleanUrlReport("https://example.com/?&&"), { url: "https://example.com/", removedTracker: false });
   assert.deepEqual(cleanUrlReport("https://example.com/?q=abc&&fbclid=1"), { url: "https://example.com/?q=abc", removedTracker: true });
   assert.deepEqual(cleanUrlReport("https://example.com/path"), { url: "https://example.com/path", removedTracker: false });
-  assert.deepEqual(cleanUrlReport("ardia://history/?utm_source=x"), { url: "ardia://history/?utm_source=x", removedTracker: false });
+  assert.deepEqual(cleanUrlReport("solstice://history/?utm_source=x"), { url: "solstice://history/?utm_source=x", removedTracker: false });
   for (const url of ["https://example.com/?q=abc&", "https://x.example/?_hsenc=p2A&_hsmi=1&msclkid=9", "https://user:pw@example.com:8443/p?utm_term=x&k", "not a url?utm_source=x"]) assert.equal(cleanUrlReport(url).url, cleanUrl(url));
 });
 
-test("displayed URLs say ardia://, never chrome://", () => {
-  assert.equal(urlForDisplay("ardia://version/"), "ardia://version");
-  assert.equal(urlForDisplay("chrome://version/"), "ardia://version");
-  assert.equal(urlForDisplay("chrome://settings/languages"), "ardia://settings/languages");
-  assert.equal(urlForDisplay("ardia://history/?q=a"), "ardia://history?q=a");
-  assert.equal(displayUrl("chrome://gpu/"), "ardia://gpu");
-  assert.deepEqual(breadcrumb("ardia://version/", "About Version"), { host: "ardia://version", trail: ["About Version"] });
-  assert.deepEqual(breadcrumb("ardia://history", "History"), { host: "ardia://history", trail: [] });
-  assert.deepEqual(breadcrumb("chrome://flags/", "Experiments"), { host: "ardia://flags", trail: ["Experiments"] });
+test("displayed URLs say solstice://, never chrome://", () => {
+  assert.equal(urlForDisplay("solstice://version/"), "solstice://version");
+  assert.equal(urlForDisplay("chrome://version/"), "solstice://version");
+  assert.equal(urlForDisplay("chrome://settings/languages"), "solstice://settings/languages");
+  assert.equal(urlForDisplay("solstice://history/?q=a"), "solstice://history?q=a");
+  assert.equal(displayUrl("chrome://gpu/"), "solstice://gpu");
+  assert.deepEqual(breadcrumb("solstice://version/", "About Version"), { host: "solstice://version", trail: ["About Version"] });
+  assert.deepEqual(breadcrumb("solstice://history", "History"), { host: "solstice://history", trail: [] });
+  assert.deepEqual(breadcrumb("chrome://flags/", "Experiments"), { host: "solstice://flags", trail: ["Experiments"] });
 });
 
 test("host:port navigates: single-label intranet hosts over http, a number or a time never", () => {
