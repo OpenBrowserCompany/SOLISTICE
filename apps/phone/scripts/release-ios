@@ -9,7 +9,7 @@
 # bundle ids and extensions, same version scheme: the release version is --version (a stable 0.2.47 or a
 # nightly 0.2.47-nightly.2), without it the Mac app's MARKETING_VERSION. Every target's
 # CFBundleShortVersionString is its Apple form and the app's ArdiaReleaseVersion key carries the release
-# version, so the Settings footer reads "Ardia 0.2.47 Nightly 2 (10)" from TestFlight. The build number must
+# version, so the Settings footer reads "Solstice 0.2.47 Nightly 2 (10)" from TestFlight. The build number must
 # be above the highest App Store Connect holds (apps/phone/scripts/asc.mjs next-build).
 #
 # The JavaScript is REV's (default HEAD), from a git export as build-sim-app does, compiled with Hermes with
@@ -86,7 +86,7 @@ hermesc="$phoneIos/Pods/hermes-engine/destroot/bin/hermesc"
 out="${out:-$root/dist/ios-expo/$release_version-$build}"
 mkdir -p "$out"
 out="$(cd "$out" && pwd -P)"
-archive="$out/Ardia.xcarchive"
+archive="$out/Solstice.xcarchive"
 prebuilt="$out/bundle"
 
 auth=()
@@ -124,7 +124,7 @@ exportDir="$(printf '%s' "$made" | node -e 'console.log(JSON.parse(require("fs")
 commit="$(printf '%s' "$made" | node -e 'console.log(JSON.parse(require("fs").readFileSync(0, "utf8")).commit)')"
 bundleSource="export of the commit"
 
-echo "Ardia for iPhone (Expo) $release_version ($channel, version $version, build $build), JS $commit, native $nativeCommit, default browser $default_browser$([ "$unsigned" = 1 ] && echo ', unsigned')"
+echo "Solstice for iPhone (Expo) $release_version ($channel, version $version, build $build), JS $commit, native $nativeCommit, default browser $default_browser$([ "$unsigned" = 1 ] && echo ', unsigned')"
 
 rm -rf "$archive" "$out/export" "$prebuilt" "$out/js"
 mkdir -p "$prebuilt" "$out/js"
@@ -144,7 +144,7 @@ fi
 [ "$unsigned" = 0 ] || signing=(CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO)
 "$root/packages/core-rs/scripts/build-xcframework.sh"
 run_logged archive xcodebuild archive \
-  -workspace "$phoneIos/Ardia.xcworkspace" -scheme Ardia -configuration Release \
+  -workspace "$phoneIos/Ardia.xcworkspace" -scheme Solstice -configuration Release \
   -destination "generic/platform=iOS" \
   -archivePath "$archive" -derivedDataPath "$out/dd" \
   "${signing[@]}" \
@@ -158,16 +158,16 @@ run_logged archive xcodebuild archive \
   COMPILER_INDEX_STORE_ENABLE=NO \
   ${extra_build_settings[@]+"${extra_build_settings[@]}"}
 
-app="$archive/Products/Applications/Ardia.app"
-[ -d "$app" ] || die "the archive has no Ardia.app"
+app="$archive/Products/Applications/Solstice.app"
+[ -d "$app" ] || die "the archive has no Solstice.app"
 plist_value() { /usr/libexec/PlistBuddy -c "Print :$2" "$1/Info.plist" 2>/dev/null; }
-[ "$(plist_value "$app" CFBundleIdentifier)" = com.ardia.browser.ios ] || die "the archive is $(plist_value "$app" CFBundleIdentifier)"
+[ "$(plist_value "$app" CFBundleIdentifier)" = com.openbrowsercompany.solstice.ios ] || die "the archive is $(plist_value "$app" CFBundleIdentifier)"
 for bundle in "$app" "$app"/PlugIns/*.appex; do
   [ "$(plist_value "$bundle" CFBundleVersion)" = "$build" ] || die "$(basename "$bundle") is build $(plist_value "$bundle" CFBundleVersion), not $build"
   [ "$(plist_value "$bundle" CFBundleShortVersionString)" = "$version" ] || die "$(basename "$bundle") is version $(plist_value "$bundle" CFBundleShortVersionString), not $version"
 done
 [ "$(plist_value "$app" ArdiaReleaseVersion)" = "$release_version" ] || die "the app's ArdiaReleaseVersion is $(plist_value "$app" ArdiaReleaseVersion), not $release_version"
-for extension in com.ardia.browser.ios.share com.ardia.browser.ios.widgets com.ardia.browser.ios.open; do
+for extension in com.openbrowsercompany.solstice.ios.share com.openbrowsercompany.solstice.ios.widgets com.openbrowsercompany.solstice.ios.open; do
   found=NO
   for bundle in "$app"/PlugIns/*.appex; do [ "$(plist_value "$bundle" CFBundleIdentifier)" = "$extension" ] && found=YES; done
   [ "$found" = YES ] || die "the archive has no $extension"
@@ -191,14 +191,14 @@ for framework in React hermesvm; do
   [ -f "$binary" ] || die "the archive has no $framework.framework"
   [ "$(nm -a "$binary" 2>/dev/null | grep -c ' - ')" = 0 ] || die "$framework still carries its debug map: the Release strip phase didn't run"
 done
-dsym="$archive/dSYMs/Ardia.app.dSYM"
-[ -d "$dsym" ] || die "the archive keeps no dSYM for Ardia.app"
-appUUID="$(dwarfdump --uuid "$app/Ardia" | awk '{print $2}' | sort)"
+dsym="$archive/dSYMs/Solstice.app.dSYM"
+[ -d "$dsym" ] || die "the archive keeps no dSYM for Solstice.app"
+appUUID="$(dwarfdump --uuid "$app/Solstice" | awk '{print $2}' | sort)"
 dsymUUID="$(dwarfdump --uuid "$dsym" | awk '{print $2}' | sort)"
-[ -n "$appUUID" ] && [ "$appUUID" = "$dsymUUID" ] || die "Ardia.app.dSYM doesn't match the app binary ($dsymUUID against $appUUID)"
+[ -n "$appUUID" ] && [ "$appUUID" = "$dsymUUID" ] || die "Solstice.app.dSYM doesn't match the app binary ($dsymUUID against $appUUID)"
 if [ "$unsigned" = 0 ]; then
   entitlements="$(codesign -d --entitlements - --xml "$app" 2>/dev/null)"
-  plutil -extract 'com\.apple\.security\.application-groups' xml1 -o - - <<<"$entitlements" | grep -q 'group.com.ardia.browser.ios' || die "the app's signature lacks the app group group.com.ardia.browser.ios"
+  plutil -extract 'com\.apple\.security\.application-groups' xml1 -o - - <<<"$entitlements" | grep -q 'group.com.openbrowsercompany.solstice.ios' || die "the app's signature lacks the app group group.com.openbrowsercompany.solstice.ios"
   signed=NO
   if plutil -extract 'com\.apple\.developer\.web-browser' raw -o - - <<<"$entitlements" 2>/dev/null | grep -qx true; then signed=YES; fi
   [ "$signed" = "$default_browser" ] || die "the app's signature carries the default browser entitlement: $signed, expected $default_browser"
@@ -227,4 +227,4 @@ cp "$root/apps/phone/ios/Config/ExportOptions-TestFlight.plist" "$options"
 run_logged upload xcodebuild -exportArchive \
   -archivePath "$archive" -exportOptionsPlist "$options" -exportPath "$out/export" \
   -allowProvisioningUpdates ${auth[@]+"${auth[@]}"}
-echo "Uploaded Ardia for iPhone (Expo) $release_version ($build) to App Store Connect."
+echo "Uploaded Solstice for iPhone (Expo) $release_version ($build) to App Store Connect."

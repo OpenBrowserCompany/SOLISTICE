@@ -12,12 +12,12 @@ work="${TMPDIR:-/tmp}/ardia-swiftui-rebuild/${commit:0:12}"
 rm -rf "$work"
 mkdir -p "$work/src" "$out"
 git -C "$root" archive "$commit" apps/ios packages/sync | tar -x -C "$work/src"
-"$root/scripts/agent/locked" xcodebuild -- xcodebuild -project "$work/src/apps/ios/Ardia.xcodeproj" -scheme Ardia \
+"$root/scripts/agent/locked" xcodebuild -- xcodebuild -project "$work/src/apps/ios/Ardia.xcodeproj" -scheme Solstice \
   -configuration Release -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath "$work/dd" \
   ARCHS=arm64 ONLY_ACTIVE_ARCH=YES CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY=- DEVELOPMENT_TEAM= PROVISIONING_PROFILE_SPECIFIER= \
   COMPILER_INDEX_STORE_ENABLE=NO -quiet build
-app="$work/dd/Build/Products/Release-iphonesimulator/Ardia.app"
-entitled="$(otool -l "$app/Ardia" | grep -c 'sectname __entitlements' || true)"
+app="$work/dd/Build/Products/Release-iphonesimulator/Solstice.app"
+entitled="$(otool -l "$app/Solstice" | grep -c 'sectname __entitlements' || true)"
 [ "$entitled" = 1 ] || { echo "the build carries no entitlements: it would have no Keychain" >&2; exit 1; }
 rm -rf "$out/swiftui-main-rebuilt.app"
 cp -R "$app" "$out/swiftui-main-rebuilt.app"

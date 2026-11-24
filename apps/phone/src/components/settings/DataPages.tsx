@@ -69,12 +69,12 @@ function LinkRow({ title, icon, url, divider }: { title: string; icon: SymbolNam
 export function AboutPage() {
   const theme = useTheme();
   return (
-    <SettingsPage title="About Ardia" onBack={popSettings}>
+    <SettingsPage title="About Solstice" onBack={popSettings}>
       <View style={styles.hero}>
         <AppIcon side={appIconLayout.about} shadow />
         <View style={styles.heroText}>
           <Text accessibilityRole="header" style={[font.title, styles.heavy, styles.rounded, { color: theme.label }]}>
-            Ardia
+            Solstice
           </Text>
           <Text style={[font.subheadline, { color: theme.secondaryLabel }]}>{appVersion()}</Text>
         </View>
@@ -92,7 +92,7 @@ export function AboutPage() {
 }
 
 export const dataCredits = () => [
-  { name: "Ardia", use: copy().ardiaCredit, license: "Apache License 2.0", url: "https://github.com/ardia-browser/ardia" },
+  { name: "Solstice", use: copy().ardiaCredit, license: "Apache License 2.0", url: "https://github.com/ardia-browser/ardia" },
   { name: "EasyList", use: "The list behind Block Ads.", license: "CC BY-SA 3.0 or GPLv3", url: "https://easylist.to" },
   { name: "EasyPrivacy", use: "The list behind Block Trackers.", license: "CC BY-SA 3.0 or GPLv3", url: "https://easylist.to" },
   { name: "Fanboy’s Cookie Monster List", use: "The list behind Block Cookie Banners.", license: "CC BY-SA 3.0 or GPLv3", url: "https://secure.fanboy.co.nz" },
