@@ -30,7 +30,7 @@ struct MacTabsWidget: Widget {
       MacTabsWidgetView(entry: entry)
     }
     .configurationDisplayName("Your Mac’s Tabs")
-    .description("The tabs you have open in Ardia on your Mac.")
+    .description("The tabs you have open in Solstice on your Mac.")
     .supportedFamilies([.systemMedium, .systemLarge])
   }
 }

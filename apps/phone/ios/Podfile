@@ -83,7 +83,7 @@ link_ardia_kit = lambda do |installer|
   end
 end
 
-target 'Ardia' do
+target 'Solstice' do
   use_expo_modules!
 
   config = use_native_modules!([

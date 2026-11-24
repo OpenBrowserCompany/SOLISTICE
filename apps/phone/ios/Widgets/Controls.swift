@@ -30,36 +30,36 @@ nonisolated struct IncognitoControlIntent: ArdiaControlIntent {
 
 struct SearchControl: ControlWidget {
   var body: some ControlWidgetConfiguration {
-    StaticControlConfiguration(kind: "com.ardia.browser.ios.control.search") {
+    StaticControlConfiguration(kind: "com.openbrowsercompany.solstice.ios.control.search") {
       ControlWidgetButton(action: SearchControlIntent()) {
         Label("Search", systemImage: "magnifyingglass")
       }
     }
     .displayName("Search")
-    .description("Start a search in Ardia.")
+    .description("Start a search in Solstice.")
   }
 }
 
 struct VoiceSearchControl: ControlWidget {
   var body: some ControlWidgetConfiguration {
-    StaticControlConfiguration(kind: "com.ardia.browser.ios.control.voice") {
+    StaticControlConfiguration(kind: "com.openbrowsercompany.solstice.ios.control.voice") {
       ControlWidgetButton(action: VoiceSearchControlIntent()) {
         Label("Voice Search", systemImage: "mic.fill")
       }
     }
     .displayName("Voice Search")
-    .description("Search Ardia with your voice.")
+    .description("Search Solstice with your voice.")
   }
 }
 
 struct IncognitoTabControl: ControlWidget {
   var body: some ControlWidgetConfiguration {
-    StaticControlConfiguration(kind: "com.ardia.browser.ios.control.incognito") {
+    StaticControlConfiguration(kind: "com.openbrowsercompany.solstice.ios.control.incognito") {
       ControlWidgetButton(action: IncognitoControlIntent()) {
         Label("Incognito Tab", systemImage: "eyes")
       }
     }
     .displayName("New Incognito Tab")
-    .description("Open a private tab in Ardia.")
+    .description("Open a private tab in Solstice.")
   }
 }
