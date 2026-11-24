@@ -1,12 +1,12 @@
-package com.ardia.browser
+package com.openbrowsercompany.solstice
 
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class UploadCheckTest {
-    private val own = setOf("com.ardia.browser.android.browsing.captures", "com.ardia.browser.android.androidx-startup", "com.ardia.browser.android.files")
-    private val capture = UploadLocation("com.ardia.browser.android.browsing.captures", "/captures/")
+    private val own = setOf("com.openbrowsercompany.solstice.android.browsing.captures", "com.openbrowsercompany.solstice.android.androidx-startup", "com.openbrowsercompany.solstice.android.files")
+    private val capture = UploadLocation("com.openbrowsercompany.solstice.android.browsing.captures", "/captures/")
 
     private fun accepts(uri: String) = UploadCheck.accepts(uri, own, capture)
 
@@ -19,29 +19,29 @@ class UploadCheckTest {
 
     @Test
     fun theCaptureFolderIsTheOnlyOwnPathAllowed() {
-        assertTrue(accepts("content://com.ardia.browser.android.browsing.captures/captures/photo-1.jpg"))
-        assertFalse(accepts("content://com.ardia.browser.android.browsing.captures/captures/"))
-        assertFalse(accepts("content://com.ardia.browser.android.browsing.captures/other/photo.jpg"))
-        assertFalse(accepts("content://com.ardia.browser.android.browsing.captures/captures/../databases/browser.db"))
-        assertFalse(accepts("content://com.ardia.browser.android.browsing.captures/captures/%2E%2E/databases/browser.db"))
-        assertFalse(accepts("content://com.ardia.browser.android.files/browser.db"))
+        assertTrue(accepts("content://com.openbrowsercompany.solstice.android.browsing.captures/captures/photo-1.jpg"))
+        assertFalse(accepts("content://com.openbrowsercompany.solstice.android.browsing.captures/captures/"))
+        assertFalse(accepts("content://com.openbrowsercompany.solstice.android.browsing.captures/other/photo.jpg"))
+        assertFalse(accepts("content://com.openbrowsercompany.solstice.android.browsing.captures/captures/../databases/browser.db"))
+        assertFalse(accepts("content://com.openbrowsercompany.solstice.android.browsing.captures/captures/%2E%2E/databases/browser.db"))
+        assertFalse(accepts("content://com.openbrowsercompany.solstice.android.files/browser.db"))
         assertFalse(accepts("content://COM.ARDIA.BROWSER.ANDROID.FILES/browser.db"))
     }
 
     @Test
     fun ownProvidersCannotBeReachedThroughAUserPrefix() {
-        assertFalse(accepts("content://0@com.ardia.browser.android.files/browser.db"))
+        assertFalse(accepts("content://0@com.openbrowsercompany.solstice.android.files/browser.db"))
         assertFalse(accepts("content://evil@media/external/images/media/1"))
         assertTrue(accepts("content://10@media/external/images/media/1"))
     }
 
     @Test
     fun anythingButContentIsRejected() {
-        assertFalse(accepts("file:///data/user/0/com.ardia.browser.android/databases/browser.db"))
+        assertFalse(accepts("file:///data/user/0/com.openbrowsercompany.solstice.android/databases/browser.db"))
         assertFalse(accepts("FILE:///sdcard/a.jpg"))
         assertFalse(accepts("CONTENT://media/external/images/media/1"))
         assertFalse(accepts("https://example.com/a.jpg"))
-        assertFalse(accepts("android.resource://com.ardia.browser.android/raw/a"))
+        assertFalse(accepts("android.resource://com.openbrowsercompany.solstice.android/raw/a"))
         assertFalse(accepts("content://"))
         assertFalse(accepts("content://media:80/external/images/media/1"))
         assertFalse(accepts("content://media/external/%ZZ"))
@@ -50,7 +50,7 @@ class UploadCheckTest {
 
     @Test
     fun withoutACaptureLocationNoOwnUriPasses() {
-        assertFalse(UploadCheck.accepts("content://com.ardia.browser.android.browsing.captures/captures/a.jpg", own, null))
+        assertFalse(UploadCheck.accepts("content://com.openbrowsercompany.solstice.android.browsing.captures/captures/a.jpg", own, null))
         assertTrue(UploadCheck.accepts("content://media/external/images/media/1", own, null))
     }
 }
