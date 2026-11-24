@@ -274,7 +274,7 @@ const SCENES: Scene[] = [
   {
     group: "New Tab",
     title: "Telemetry ask",
-    body: "Ardia asks once whether to share crash reports. The card and its buttons are flat now. Dia asks nothing like it.",
+    body: "Solstice asks once whether to share crash reports. The card and its buttons are flat now. Dia asks nothing like it.",
     layout: "cols",
     w: 300,
     h: 142,
@@ -302,7 +302,7 @@ const SCENES: Scene[] = [
   {
     group: "New Tab",
     title: "Check-in",
-    body: "“How are you liking Ardia?” after a week. A flat card with a flat close button.",
+    body: "“How are you liking Solstice?” after a week. A flat card with a flat close button.",
     layout: "cols",
     w: 284,
     h: 72,
@@ -345,7 +345,7 @@ const SCENES: Scene[] = [
   {
     group: "Picture in Picture",
     title: "Player window",
-    body: "Ardia's own controls over the video, and the handle when it's tucked into the edge. Dia's rest frame is video edge to edge; its controls never showed for the capture.",
+    body: "Solstice's own controls over the video, and the handle when it's tucked into the edge. Dia's rest frame is video edge to edge; its controls never showed for the capture.",
     layout: "cols",
     w: 501,
     h: 282,
@@ -531,7 +531,7 @@ function SceneView({ scene, index }: { scene: Scene; index: number }) {
   return (
     <AbsoluteFill style={{ opacity: shown }}>
       <div style={{ position: "absolute", left: MARGIN, top: 40, right: MARGIN, display: "flex", justifyContent: "space-between" }}>
-        <div style={{ ...label, color: color.ink }}>Ardia · Dia's flat look · {scene.group}</div>
+        <div style={{ ...label, color: color.ink }}>Solstice · Dia's flat look · {scene.group}</div>
         <div style={{ ...label, color: color.blue }}>{number(index)}</div>
       </div>
       <div
@@ -585,7 +585,7 @@ function Intro() {
         Back to flat
       </div>
       <div style={{ marginTop: 30, maxWidth: 1100, fontFamily: font.serif, fontSize: 40, lineHeight: 1.25, color: color.ink2, ...rise(18) }}>
-        Liquid glass is gone from Ardia. Every surface, at rest, under the pointer and pressed, next to Dia where Dia has one.
+        Liquid glass is gone from Solstice. Every surface, at rest, under the pointer and pressed, next to Dia where Dia has one.
       </div>
       <Img src={staticFile("brand/app-icon.png")} style={{ position: "absolute", right: 170, top: 330, width: 420, height: 420, ...rise(15) }} />
     </AbsoluteFill>
