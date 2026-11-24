@@ -12,7 +12,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "robots", content: "noindex, nofollow" },
       { name: "referrer", content: "no-referrer" },
       { name: "color-scheme", content: "light dark" },
-      { title: "Ardia · Dashboard" },
+      { title: "Solstice · Dashboard" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

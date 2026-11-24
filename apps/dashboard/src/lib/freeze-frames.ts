@@ -1,6 +1,6 @@
 import { imageUuids, nativeFrame, type NativeFrame } from "./native-frames.ts";
 
-const OWN_IMAGE = /^(Ardia|Chromium Framework|hermes)/;
+const OWN_IMAGE = /^(Solstice|Chromium Framework|hermes)/;
 
 export function topOwnFrames(framesJson: string, imagesJson = "", limit = 3): NativeFrame[] {
   try {
