@@ -17,8 +17,8 @@
     },
     {
       "scene": "littlelink",
-      "title": "New-tab links stay in Little Ardia",
-      "body": "Settings › General › “Open new-tab links inside Little Ardia” on, then click a target=_blank link in Little Ardia: the page loads right there, so Back takes you back. 0.2.44-nightly.3 has no such setting and opens the link as a tab in the main window, behind.",
+      "title": "New-tab links stay in Little Solstice",
+      "body": "Settings › General › “Open new-tab links inside Little Solstice” on, then click a target=_blank link in Little Solstice: the page loads right there, so Back takes you back. 0.2.44-nightly.3 has no such setting and opens the link as a tab in the main window, behind.",
       "layout": "side",
       "cam": [
         0,
@@ -31,8 +31,8 @@
     },
     {
       "scene": "movetop",
-      "title": "Open in Ardia lands where new tabs go",
-      "body": "“New tabs open at” is set to Top. Open in Ardia on a Little Ardia page now puts the tab at the top of the list, where ⌘T would. 0.2.44-nightly.3 always put it at the bottom.",
+      "title": "Open in Solstice lands where new tabs go",
+      "body": "“New tabs open at” is set to Top. Open in Solstice on a Little Solstice page now puts the tab at the top of the list, where ⌘T would. 0.2.44-nightly.3 always put it at the bottom.",
       "layout": "side",
       "cam": [
         0,

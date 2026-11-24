@@ -38,7 +38,7 @@
     },
     {
       "scene": "bmfreeze",
-      "title": "A big bookmarks bar no longer freezes Ardia",
+      "title": "A big bookmarks bar no longer freezes Solstice",
       "body": "2,500 bookmarks imported with the bar set to Always. 0.2.44 never drew the bar and ignored a tab switch for 40 s. Now the import takes half a second, tabs switch at once and the » menu opens.",
       "note": "Captured at 1 to 3 fps under load",
       "cam": [
