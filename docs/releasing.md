@@ -5,10 +5,10 @@ release) and **nightly** (`0.2.37-nightly.1`, a GitHub prerelease: one fix, ship
 Since the Release workflow (`.github/workflows/release.yml`, "CI releases" below) a release is built and published in
 GitHub Actions. Each has these assets:
 
-- `Ardia-<version>.dmg`: what people download (the app and an `/Applications` link, in a window with the
+- `Solstice-<version>.dmg`: what people download (the app and an `/Applications` link, in a window with the
   site's poster behind them: `scripts/dmg`, where `render.sh` redraws the picture and `layout.sh` the layout).
-- `Ardia-<version>.zip`: the archive Sparkle installs updates from.
-- `Ardia<build>-<earlier build>.delta`, up to three: Sparkle deltas from the newest earlier builds ("Deltas" below), so
+- `Solstice-<version>.zip`: the archive Sparkle installs updates from.
+- `Solstice<build>-<earlier build>.delta`, up to three: Sparkle deltas from the newest earlier builds ("Deltas" below), so
   an update downloads only what changed. The appcast lists each under the item's `sparkle:deltas`, EdDSA signed.
 - `appcast.xml`: the Sparkle feed, both channels' items in one file. The latest stable release's appcast is the feed
   (a nightly rewrites that asset; "Channels" below). Builds after 0.2.13 poll
@@ -28,9 +28,9 @@ GitHub Actions. Each has these assets:
 - `ArdiaCore-<engine tree:12>-symbols.tar.xz` and `ArdiaCore-<engine tree:12>-uuids.txt`, only on an `engine-<tree:12>`
   prerelease: the dSYMs of the engine's unstripped build and the UUID of each image they name, which
   `scripts/symbolicate-crash.sh` reads to name the frames of a crash in Chromium Framework. See "Engines" below.
-- `Ardia-<version>-symbols.tar.xz` and `Ardia-<version>-uuids.txt`, on every Mac release and nightly: the dSYM of the
-  app's own executable, `Ardia.app.dSYM` from the release's `Ardia.xcarchive`, and the UUID of the `Contents/MacOS/Ardia`
-  it names. `scripts/symbolicate-crash.sh` reads them to name the `Ardia + 0x…` frames of a crash. Unlike the build
+- `Solstice-<version>-symbols.tar.xz` and `Solstice-<version>-uuids.txt`, on every Mac release and nightly: the dSYM of the
+  app's own executable, `Solstice.app.dSYM` from the release's `Solstice.xcarchive`, and the UUID of the `Contents/MacOS/Solstice`
+  it names. `scripts/symbolicate-crash.sh` reads them to name the `Solstice + 0x…` frames of a crash. Unlike the build
   artifact that holds the archive, which expires after 3 days, they stay on the release. See "Engines"
   below.
 
@@ -42,7 +42,7 @@ deployed with the new entry by the time the update reaches people.
 
 ## Channels
 
-Ardia is one app with two Sparkle channels. A stable item in the appcast has no channel; a nightly item carries
+Solstice is one app with two Sparkle channels. A stable item in the appcast has no channel; a nightly item carries
 `<sparkle:channel>nightly</sparkle:channel>` (`generate_appcast --channel nightly`). Sparkle skips items on a channel the
 app doesn't allow, and allows none by default, so every shipped build (all on Sparkle 2.9.6, which has channels) and
 every copy on Stable sees only stable items. A copy on Nightly allows `nightly` (`allowedChannels(for:)` in
@@ -57,7 +57,7 @@ every copy on Stable sees only stable items. A copy on Nightly allows `nightly` 
   every release on either channel; the version string is only shown. A nightly is `<next stable>-nightly.<n>`, so
   0.2.36 (44) < 0.2.37-nightly.1 (45) < 0.2.37-nightly.2 (46) < 0.2.37 (47). Sparkle's comparator can't order the
   strings themselves (it reads `0.2.37-nightly.1` and `0.2.37-nightly.2` as equal), which is why it never sees them.
-  `release.sh` refuses a build number that isn't above every build already in the feed, nightly or stable. About Ardia
+  `release.sh` refuses a build number that isn't above every build already in the feed, nightly or stable. About Solstice
   and Settings show a nightly as "0.2.37 Nightly 1".
 - **The feed.** It stays where every shipped build reads it: `https://ardia.dev/appcast.xml` redirects to
   `releases/latest/download/appcast.xml`, and GitHub's "latest" skips prereleases, so it's always the newest stable
@@ -67,18 +67,18 @@ every copy on Stable sees only stable items. A copy on Nightly allows `nightly` 
   same file. Both flows build on the published feed (`release.sh` fetches it and refuses to go on without it), and
   `appcast.py merge` puts the new item onto the feed as published at that moment, so a nightly that shipped while a
   stable was being tested isn't dropped. `generate_appcast` keeps 3 items per channel.
-- **Downloads.** Stable links one tag's DMG (`releases/download/v<version>/Ardia-<version>.dmg`, from
+- **Downloads.** Stable links one tag's DMG (`releases/download/v<version>/Solstice-<version>.dmg`, from
   `apps/site/src/data/release.json`), so the link never 404s while a newer release waits for the site. Nightly has one fixed link, `https://ardia.dev/nightly` (`infra/site/nginx.conf`),
-  which redirects to the `nightly` prerelease's `Ardia-Nightly.dmg`; each nightly re-uploads that asset, so the site
+  which redirects to the `nightly` prerelease's `Solstice-Nightly.dmg`; each nightly re-uploads that asset, so the site
   never redeploys for a nightly.
-- **Proof.** `.claude/skills/release/scripts/channel-test.sh dist/<stable>/export/Ardia.app` runs that build's own
+- **Proof.** `.claude/skills/release/scripts/channel-test.sh dist/<stable>/export/Solstice.app` runs that build's own
   Sparkle against local feeds made by `generate_appcast`: on stable it isn't offered a nightly, and with a newer
   nightly in the feed it takes the stable; on nightly it takes the nightly, a newer stable, and the newest of both. It
   also checks the build-number order with Sparkle's comparator. `update-test.sh` does the stable-ignores-it half for
   every nightly's own item.
 - **Switching.** Leaving Nightly drops a nightly Sparkle holds (staged for install on quit, downloading, or shown in
   its window) through Sparkle itself: the app answers Skip, and Sparkle's installer cancels and clears its own folder
-  (`ChannelSwitch` in `packages/shell/ios/UpdaterCore`, tested by `swift test` in `packages/shell`). Ardia never moves
+  (`ChannelSwitch` in `packages/shell/ios/UpdaterCore`, tested by `swift test` in `packages/shell`). Solstice never moves
   or deletes anything in Sparkle's folder or its cache. Quit waits for the drop, also while a switch is still in flight
   with Sparkle busy, and for a staged entry it can't read, which it asks Sparkle to resume so a live installer still
   gets the Skip; whatever happens, quit goes by 8 s. A copy nothing drops in time (a leftover with no installer, or
@@ -90,7 +90,7 @@ every copy on Stable sees only stable items. A copy on Nightly allows `nightly` 
 
 ## Every platform
 
-Desktop releases share a version across Mac, Linux and Windows. Ardia uses the Stable and Nightly channels. On the
+Desktop releases share a version across Mac, Linux and Windows. Solstice uses the Stable and Nightly channels. On the
 phones a build that isn't a release says Dev.
 
 - **Mac.** The channels above. Debug builds (local and agent builds) carry their own icon, `AppIcon-Dev.icon` (the sun
@@ -110,12 +110,12 @@ phones a build that isn't a release says Dev.
   2047999; `apps/phone/scripts/android-version.ts`). A build without one is Dev. It ships as an APK on GitHub Releases
   through `android-release.yml`, as a draft prerelease `android-v<version>` that only the owner publishes
   (`docs/phone.md` › Android release). No Play listing.
-- **CLI.** It has its own version and releases in ardia-browser/plugins (`cli-v<version>`). Each Ardia release, nightly
+- **CLI.** It has its own version and releases in ardia-browser/plugins (`cli-v<version>`). Each Solstice release, nightly
   or stable, bundles the version pinned in `apps/browser/official-plugins.json` and signs it with the app
-  (`docs/cli.md`); a new command reaches users when the pin moves and the next Ardia release ships.
+  (`docs/cli.md`); a new command reaches users when the pin moves and the next Solstice release ships.
 - **Windows.** Every release, nightly or stable, builds it in the Release workflow's `windows` job, attaches
-  `Ardia-<version>-windows-<cpu>-setup.exe` for x64 and arm64 with the engine's source
-  `Ardia-<version>-windows-source.tar.xz` (`scripts/windows/engine-source.sh`), and refreshes the one feed its updater reads, on the
+  `Solstice-<version>-windows-<cpu>-setup.exe` for x64 and arm64 with the engine's source
+  `Solstice-<version>-windows-source.tar.xz` (`scripts/windows/engine-source.sh`), and refreshes the one feed its updater reads, on the
   `windows-alpha` prerelease (`docs/windows.md` › Releases). So an installed Windows app takes nightlies and stables
   alike; a feed per channel (the stable one on the latest stable release, the nightly one on the `nightly`
   prerelease, as the Mac's DMG links do) and the same Settings switch are still to come. A failed `windows` job ships
@@ -130,11 +130,11 @@ stays up. That's GPL-3.0 §6(d) for the GPL parts (uBlock Origin today), and it'
   engine's patches, `gn_defines.sh`, the step scripts and this release flow. Once the engine is built on Helium, it
   also links the `ArdiaCore-<tree>-source.tar.xz` asset of the release that carries that engine (the `v<version>` that first shipped it, or its `engine-<tree:12>` prerelease)
   (`packages/ardiacore/prebuilt-engines.tsv`); `release.sh` refuses such an engine when it can't name that release.
-- The `nightly` release's body names the nightly its `Ardia-Nightly.dmg` is and links that release
+- The `nightly` release's body names the nightly its `Solstice-Nightly.dmg` is and links that release
   (`publish.sh` rewrites it each time).
 - Never delete or move a `v*` tag, or a release's source asset, while its release is up. A release can come down;
   its tag stays.
-- About Ardia and Settings › Advanced › "Source and licenses" link the running version's tag. The app carries
+- About Solstice and Settings › Advanced › "Source and licenses" link the running version's tag. The app carries
   `LICENSE*` and `NOTICE` in `Contents/Resources/Licenses`.
 
 ## Once per machine
@@ -194,12 +194,12 @@ stays up. That's GPL-3.0 §6(d) for the GPL parts (uBlock Origin today), and it'
      the archive is signed ad hoc (`AdHoc.xcconfig`) and `scripts/lib/export-developer-id.sh` does the export: it embeds
      that profile and re-signs inside out with Developer ID, the same identifiers, entitlements, flags and designated
      requirements Xcode's export gives (`xcodebuild -exportArchive` refuses an Xcode-managed profile with manual signing),
-   - leaves out what Ardia never loads (`packages/ardiacore/scripts/prune-bundle.sh`, after `strip-engine.sh`): Chrome's
+   - leaves out what Solstice never loads (`packages/ardiacore/scripts/prune-bundle.sh`, after `strip-engine.sh`): Chrome's
      locales other than the ones the app declares (Chrome takes its locale from the app bundle's localizations, so
      `Info.plist`'s `CFBundleLocalizations` lists Chromium's 55 desktop locales, and the script stops when one has no
      `locale.pak`; together with their gendered variants they cost about 50 MB unpacked, 8 MB in the DMG), SwiftShader and its Vulkan
      loader (WebGL and WebGPU run on Metal; Chrome dropped SwiftShader's WebGL fallback), Chrome's first-run sounds
-     and pictures inside `resources.pak` (blanked by hash, `first-run-resources.sha256`; Ardia always passes
+     and pictures inside `resources.pak` (blanked by hash, `first-run-resources.sha256`; Solstice always passes
      `--no-first-run`), uBlock Origin's locales that no declared locale or its language falls back to, React Native's `@3x` images (Macs draw at 1x or 2x) and hermes's
      local symbols. Each step has a kill switch: `ARDIA_PRUNE_LOCALES`, `ARDIA_PRUNE_SWIFTSHADER`,
      `ARDIA_PRUNE_FIRST_RUN`, `ARDIA_PRUNE_UBO_LOCALES`, `ARDIA_PRUNE_RN_3X`, `ARDIA_STRIP_HERMES` (or `ARDIA_PRUNE` for
@@ -213,12 +213,12 @@ stays up. That's GPL-3.0 §6(d) for the GPL parts (uBlock Origin today), and it'
      helpers under the hardened runtime with library validation, except the renderer and GPU ones (Aperitif's too),
      which get `allow-jit` (`packages/ardiacore/scripts/signing`) instead; then the framework, then the app again with
      the entitlements the export gave it,
-   - checks what an in-place update depends on: bundle id `com.ardia.browser`, executable `Ardia`, the
+   - checks what an in-place update depends on: bundle id `com.openbrowsercompany.solstice`, executable `Solstice`, the
      designated requirement (our team), the keychain groups, Sparkle's feed and key and the usage strings in
      `Info.plist`; that every piece of code is Developer ID with a timestamp and no `get-task-allow`; and that the app
      is signed with `com.apple.developer.web-browser.public-key-credential` exactly when its provisioning profile
      grants it. Apple hasn't granted it yet; once it has, a `RELEASE_PROVISIONING_PROFILE` downloaded again carries it
-     and the export signs with `Ardia-ICloudPasskeys.entitlements` on its own (the Xcode-managed export still needs
+     and the export signs with `Solstice-ICloudPasskeys.entitlements` on its own (the Xcode-managed export still needs
      `CODE_SIGN_ENTITLEMENTS` switched to that file),
    - launches the app once in the background (throwaway data dir), waits for uBlock's rulesets to be indexed,
      quits it and checks the signature again: the app must never write into its own bundle,
@@ -244,7 +244,7 @@ stays up. That's GPL-3.0 §6(d) for the GPL parts (uBlock Origin today), and it'
    appcast onto the feed as published right now (`appcast.py merge`), creates the release (a stable one as latest, a
    nightly as a prerelease that's never latest) with the DMG, zip, deltas and appcast,
    and checks the feed lists the version on GitHub and on ardia.dev. A nightly also re-uploads the merged feed onto the
-   latest stable release and `Ardia-Nightly.dmg` onto the `nightly` release. A new engine tree is published before the release
+   latest stable release and `Solstice-Nightly.dmg` onto the `nightly` release. A new engine tree is published before the release
    by `scripts/publish-engine.sh` (`engine-<tree:12>`), never packed by release.sh. Last,
    `update-tap.sh <version>` points the Homebrew tap's `ardia` or `ardia@nightly` cask
    (https://github.com/ardia-browser/homebrew-tap) at the new DMG: it sets `version` and `sha256` from GitHub's
@@ -261,7 +261,7 @@ Before publishing, run the smoke test: `.claude/skills/release/scripts/smoke.sh 
 previous build's designated requirement, a higher build number), the appcast's EdDSA signature of the zip, Gatekeeper
 on the app and the DMG, Sparkle actually updating a copy of the previous build (`update-test.sh`) and the previous
 build's data opening in the new one (`carryover.sh`). By hand, check the build the way the script can't: launch
-`dist/<version>/export/Ardia.app` with `ARDIA_BACKGROUND=1`, a throwaway `ARDIA_DATA_DIR` and
+`dist/<version>/export/Solstice.app` with `ARDIA_BACKGROUND=1`, a throwaway `ARDIA_DATA_DIR` and
 `ARDIA_REMOTE_DEBUGGING_PORT`, and load a page over CDP. Afterwards `codesign --verify --deep --strict` must still
 pass on it.
 
@@ -275,10 +275,10 @@ list one `…/release-notes#<version>` page; a second launch opens none.
 The Linux package ships on the same GitHub release. The Release workflow's `linux` job builds it with
 `scripts/linux/release.sh <version> --engine exact`, and `publish.sh` attaches the assets when it creates the release:
 
-- `Ardia-<version>-linux-x64.tar.xz` and its `.sha256`: the browser, with `lib/ardia/VERSION` and the bundled CLI.
+- `Solstice-<version>-linux-x64.tar.xz` and its `.sha256`: the browser, with `lib/ardia/VERSION` and the bundled CLI.
 - `ardia-cli-<version>-linux-x64.tar.gz` and its `.sha256`: the pinned `ardia` command (its own version inside), named
   for this release as the Linux package bundles it.
-- `Ardia-<version>-linux-x64.deb` and `Ardia-<version>-linux-x64.AppImage`, each with its `.sha256`: the same build
+- `Solstice-<version>-linux-x64.deb` and `Solstice-<version>-linux-x64.AppImage`, each with its `.sha256`: the same build
   as a Debian package (setuid sandbox helper, polkit policy, AppArmor profile, computed `Depends`) and as an AppImage.
   The `.deb` is installed and purged in Debian 13 and Ubuntu 24.04 containers first; one that fails is left out and
   the rest ships ([linux-ci.md](linux-ci.md) › Linux releases).
@@ -341,7 +341,7 @@ the engine if `engine/` changed (below).
   only if every member is the archive, `provenance.txt` or a file or folder under `plugins/<name>/` (no symlinks there;
   `plugins/cli/plugin.json` must be there), with no absolute or `..` path, hard link, device or path through a symlink,
   and every symlink resolving inside its own app or dSYM bundle;
-  the app's bundle id, executable and version must be `com.ardia.browser`, `Ardia` and the input version.
+  the app's bundle id, executable and version must be `com.openbrowsercompany.solstice`, `Solstice` and the input version.
   `release.sh --phase sign` reads it from there (`RELEASE_BUILD_INPUT`) into a `dist` it creates fresh, and the export
   takes the expected bundle id as an argument instead of reading it from the build. It takes Sparkle's tools from Sparkle's own 2.9.6 release (SHA-256 pinned; `SPARKLE_BIN`), sets up
   signing (`.github/release/signing.sh setup`: a temporary keychain with the Developer ID identity, the provisioning
@@ -359,8 +359,8 @@ the engine if `engine/` changed (below).
   (`.github/release/check-sparkle.sh <dist> <version>`, so a `SPARKLE_ED_PRIVATE_KEY` that doesn't match the app
   fails here instead of on every update; it checks each delta's length and signature the same way, and that `dist`
   holds no delta the appcast doesn't list) and uploads the DMG, zip, deltas, appcast, notes and the app's symbols
-  (`Ardia-<version>-symbols.tar.xz` and `-uuids.txt`, which `release.sh --phase sign` packs from the build artifact's
-  `Ardia.xcarchive/dSYMs`). A failed launch check fails the run, so nothing publishes.
+  (`Solstice-<version>-symbols.tar.xz` and `-uuids.txt`, which `release.sh --phase sign` packs from the build artifact's
+  `Solstice.xcarchive/dSYMs`). A failed launch check fails the run, so nothing publishes.
   Every `actions/*` step is pinned by commit SHA.
 - **publish** tags the commit and runs `publish.sh`. Before creating anything, `publish.sh` refuses a build that isn't
   above every other build in the merged feed, and a stable whose version isn't above the
@@ -440,7 +440,7 @@ Secrets (repository secrets, these names):
 |---|---|
 | `MACOS_CERTIFICATE_P12` | base64 of a .p12 with the Developer ID Application certificate and its key |
 | `MACOS_CERTIFICATE_PASSWORD` | that .p12's password |
-| `MACOS_PROVISIONING_PROFILE` | base64 of the Developer ID provisioning profile for `com.ardia.browser` (the keychain groups need it) |
+| `MACOS_PROVISIONING_PROFILE` | base64 of the Developer ID provisioning profile for `com.openbrowsercompany.solstice` (the keychain groups need it) |
 | `NOTARY_KEY_P8` | base64 of the App Store Connect API key `AuthKey_<id>.p8` |
 | `NOTARY_KEY_ID`, `NOTARY_ISSUER` | that key's id and issuer id |
 | `SPARKLE_ED_PRIVATE_KEY` | the file `generate_keys -x` writes (as is) |
@@ -473,19 +473,19 @@ UUID. The framework itself is already stripped, so strip-engine.sh's copies in `
 finds the engine release whose rows hold that UUID, downloads that dSYM into `dist/engine-symbols` and runs
 `atos -arch arm64 -offset` on the offsets. `-offset` reads each one as relative to the image's `__TEXT` segment, which is
 what a crash's `+ 0x…` is: `-l 0x0` only works for an image whose `__TEXT` starts at 0 (Chromium Framework, a dylib)
-and leaves every frame of Ardia, an executable whose `__TEXT` starts at `0x100000000`, unnamed.
+and leaves every frame of Solstice, an executable whose `__TEXT` starts at `0x100000000`, unnamed.
 
-The app's own frames work the same way: a crash's "Ardia + 0x18828" is named with `scripts/symbolicate-crash.sh <Ardia
-image UUID> 0x18828 …`, the UUID being the one the crash's `crash_images` lists for Ardia. The script searches the app
+The app's own frames work the same way: a crash's "Solstice + 0x18828" is named with `scripts/symbolicate-crash.sh <Solstice
+image UUID> 0x18828 …`, the UUID being the one the crash's `crash_images` lists for Solstice. The script searches the app
 releases (`v<version>`, nightlies included) as well as the `engine-*` ones, newest first, and `--tag v<version>` goes
-straight to one. `release.sh` packs `Ardia.app.dSYM` from the archive's `dSYMs` through `scripts/lib/pack-symbols.sh
+straight to one. `release.sh` packs `Solstice.app.dSYM` from the archive's `dSYMs` through `scripts/lib/pack-symbols.sh
 --app` after `verify.sh`, and refuses an app whose executable's UUID no dSYM in the archive carries. `publish.sh`
 uploads the two files and refuses a `dist` that lacks either one, dry runs included. A local release always has them. In
-CI the build job's `build.tar` carries the whole `Ardia.xcarchive`, dSYMs included, `unpack-build.py` keeps them, the
+CI the build job's `build.tar` carries the whole `Solstice.xcarchive`, dSYMs included, `unpack-build.py` keeps them, the
 sign job packs the pair, checks both exist and its `release` artifact lists them, and the publish job checks them again
 after the download, before it tags; `scripts/symbolicate-crash.test.mjs` fails if that chain loses them. Releases from
 before the app's symbols were uploaded have none: the build artifact that held their archive has expired. Their
-`Ardia + 0x…` frames can still be named from the shipped binary with `scripts/symbols/name-stripped-build.mjs`
+`Solstice + 0x…` frames can still be named from the shipped binary with `scripts/symbols/name-stripped-build.mjs`
 (`docs/symbolication.md`). The dashboard names every published frame by itself through `scripts/symbolicate-frames.mjs`.
 
 Engines published before the symbols were uploaded have none: the next build
@@ -509,16 +509,16 @@ macOS keeps its permissions, keychain items and passkeys.
 
 Nothing is migrated. A release build without `ARDIA_DATA_DIR` opens the CEF build's data where it is
 (`InstalledDataDirectory` in `packages/ardiacore/ios/ArdiaProfiles.mm`): Chrome's user data dir
-`~/Library/Application Support/com.ardia.browser/Chromium` (profiles `Default` and `Profile <id>`), with the app's
+`~/Library/Application Support/com.openbrowsercompany.solstice/Chromium` (profiles `Default` and `Profile <id>`), with the app's
 own documents (session, settings) in the folder above. Both engines are Chromium 154.0.8037.58, so every store keeps its
-format, and both read the same "Ardia Safe Storage" keychain item, which trusts the app by its designated
+format, and both read the same "Solstice Safe Storage" keychain item, which trusts the app by its designated
 requirement. Only Developer ID builds use the login keychain; test instances (`ARDIA_DATA_DIR` or
 `ARDIA_BACKGROUND`) and ad hoc builds use Chrome's mock keychain. `carryover.sh` checks it: the previous build makes
 two profiles with tabs, persistent and session cookies, localStorage, saved passwords, bookmarks, history, an address,
 a site permission, a zoom level and an unpacked extension, and the new build, started without `ARDIA_DATA_DIR`,
 must find and read all of it. Saved passwords are shown only after macOS re-authentication, which a hidden instance
 grants only as the `ARDIA_TEST` `reauth=granted` fake, and that counts only in a test instance (a scratch
-`ARDIA_DATA_DIR`), so the new build reveals them in a second launch on the same folder named as `ARDIA_DATA_DIR`. Both run as test copies (bundle id `com.ardia.browser.carryover`, signed ad hoc) in
+`ARDIA_DATA_DIR`), so the new build reveals them in a second launch on the same folder named as `ARDIA_DATA_DIR`. Both run as test copies (bundle id `com.openbrowsercompany.solstice.carryover`, signed ad hoc) in
 a fake home (`HOME` and `CFFIXED_USER_HOME`), so the real app's data, defaults and keychain are never touched.
 `carryover.sh <previous app> <new app> --back` (not part of smoke.sh) checks going back on the same setup: the previous build,
 then the new one adding a second session, then the previous one again must show both sessions' data without crashing
@@ -534,16 +534,16 @@ are involved; the real identity and signature are what smoke.sh's other update c
 The framework and its helpers keep Chrome's names (`Chromium Framework`, `Chromium Helper (Renderer)`): they are
 compiled in from the branding file, so renaming them is a full engine rebuild. Their bundle ids and team are ours,
 and the keychain and macOS permissions belong to the app itself, so only Activity Monitor shows the names. Their
-icon is Ardia's (the Alerts helpers' shows on every notification): `engine/chromium` replaces Chromium's logo.
+icon is Solstice's (the Alerts helpers' shows on every notification): `engine/chromium` replaces Chromium's logo.
 
 ## The rename (0.2.32 → 0.2.33)
 
-Netnyahoo became Ardia. 0.2.32 and earlier are `com.netnyahoo.browser`, executable `Netnyahoo`, polling
-`https://netnyahoo.com/appcast.xml`; 0.2.33 is `com.ardia.browser`, `Ardia` and `https://ardia.dev/appcast.xml`. What
+Netnyahoo became Solstice. 0.2.32 and earlier are `com.netnyahoo.browser`, executable `Netnyahoo`, polling
+`https://netnyahoo.com/appcast.xml`; 0.2.33 is `com.openbrowsercompany.solstice`, `Solstice` and `https://ardia.dev/appcast.xml`. What
 Sparkle still needs stays: the EdDSA key, the Developer ID team and certificate, and a higher build number. The update
 zip's top folder keeps the installed name (`Netnyahoo.app`: Sparkle finds the new app only under it), and at its first
-launch the app renames itself to `Ardia.app` and moves its data, keychain items and settings across
-(`packages/sync/ios/Core/LegacyMigration.swift`, the only Swift file that spells the old names). A Dock tile pinned under the old name is pointed at Ardia.app in place (or dropped when Ardia is pinned too) and the Dock restarted, once, by the installed copy only (`LegacyDockTile.swift` beside it; 0.2.35). `smoke.sh` checks both
+launch the app renames itself to `Solstice.app` and moves its data, keychain items and settings across
+(`packages/sync/ios/Core/LegacyMigration.swift`, the only Swift file that spells the old names). A Dock tile pinned under the old name is pointed at Solstice.app in place (or dropped when Solstice is pinned too) and the Dock restarted, once, by the installed copy only (`LegacyDockTile.swift` beside it; 0.2.35). `smoke.sh` checks both
 feeds lead to the same appcast and the designated requirement holds under the new id; `update-test.sh` keeps the
 bundle ids apart; `carryover.mjs` drives the old build in its own names. netnyahoo.com stays attached to the site for
 good (`infra/site/hexclave.deploy.ts`).
@@ -553,4 +553,4 @@ good (`infra/site/hexclave.deploy.ts`).
 Releases are notarized since 0.2.1 (the `ardia` profile holds an App Store Connect API key; with an
 Apple ID it's `--apple-id … --team-id …` and an app-specific password, which also works but locks the
 Apple ID after repeated failures). If a build ever ships unnotarized, Gatekeeper refuses to open the download. Either open it once from System Settings › Privacy &
-Security › Open Anyway, or run `xattr -dr com.apple.quarantine /Applications/Ardia.app`.
+Security › Open Anyway, or run `xattr -dr com.apple.quarantine /Applications/Solstice.app`.
