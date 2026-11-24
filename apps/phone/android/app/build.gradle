@@ -44,7 +44,7 @@ def ardiaBundleSource = bundleExport ? "export of the commit" : "working tree"
 def ardiaNative = runBundleGuard(["native"])[1]
 def ardiaReleaseVersion = findProperty('ardiaVersionName') ?: ''
 def ardiaVersionCode = (findProperty('ardiaVersionCode') ?: '2') as int
-def ardiaReleasePackage = 'com.ardia.browser.android'
+def ardiaReleasePackage = 'com.openbrowsercompany.solstice.android'
 def ardiaDevBuild = !ardiaReleaseVersion && findProperty('ardiaReleasePackage') != 'true'
 def ardiaPackage = ardiaDevBuild ? "${ardiaReleasePackage}.dev" : ardiaReleasePackage
 def ardiaShortcutsSource = file('src/main/res-shortcuts')
@@ -90,7 +90,7 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.ardia.browser.android'
+    namespace 'com.openbrowsercompany.solstice.android'
     sourceSets.main.res.srcDirs += "src/main/res-system"
     sourceSets.main.res.srcDirs += ardiaShortcuts
     testOptions {
@@ -104,7 +104,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode ardiaVersionCode
         versionName ardiaReleaseVersion ?: "dev"
-        resValue "string", "app_name", ardiaDevBuild ? "Ardia Dev" : "Ardia"
+        resValue "string", "app_name", ardiaDevBuild ? "Solstice Dev" : "Solstice"
         resValue "string", "ardia_release_version", ardiaReleaseVersion
         resValue "string", "ardia_build_commit", ardiaCommit
         resValue "string", "ardia_build_dirty", ardiaDirty
