@@ -13,7 +13,7 @@ $local = Join-Path $run 'local'
 $roaming = Join-Path $run 'roaming'
 $elsewhere = Join-Path $run 'elsewhere'
 New-Item -ItemType Directory $local, $roaming, $elsewhere | Out-Null
-$web = Join-Path $local 'Ardia WebUI'
+$web = Join-Path $local 'Solstice WebUI'
 Log "$Label with $App; run $run"
 
 function Start-Pilot([string[]]$arguments) {
@@ -32,9 +32,9 @@ function Start-Pilot([string[]]$arguments) {
 }
 function Clear-WebUI { if (Test-Path -LiteralPath $web) { cmd /c rmdir /s /q "$web" | Out-Null } }
 
-$policyKey = 'HKCU:\SOFTWARE\Policies\Ardia'
+$policyKey = 'HKCU:\SOFTWARE\Policies\Solstice'
 $existing = (Get-ItemProperty -Path $policyKey -Name UserDataDir -ErrorAction SilentlyContinue).UserDataDir
-$hklm = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Ardia' -Name UserDataDir -ErrorAction SilentlyContinue).UserDataDir
+$hklm = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Solstice' -Name UserDataDir -ErrorAction SilentlyContinue).UserDataDir
 if ($existing -or $hklm) {
   Check 'user-data-dir-policy-refused' $false "this account already has a UserDataDir policy ($existing$hklm); not touching it"
 } else {
@@ -42,11 +42,11 @@ if ($existing -or $hklm) {
   $keyExisted = Test-Path $policyKey
   New-Item -Path $policyKey -Force | Out-Null
   New-ItemProperty -Path $policyKey -Name UserDataDir -Value $policyDir -PropertyType String -Force | Out-Null
-  Log "policy: HKCU\SOFTWARE\Policies\Ardia UserDataDir = $policyDir"
+  Log "policy: HKCU\SOFTWARE\Policies\Solstice UserDataDir = $policyDir"
   try {
     $id = Start-Pilot @('--ardia-shell=webui')
     $code = [Pilot]::WaitExit($id, 30000)
-    $window = -not (Never { [Pilot]::FindShell('Ardia') -ne [IntPtr]::Zero } 3)
+    $window = -not (Never { [Pilot]::FindShell('Solstice') -ne [IntPtr]::Zero } 3)
     Wait-Until { (Engine-Processes).Count -eq 0 } 20 'every process of the refused launch to exit' -NoThrow | Out-Null
     $left = (Engine-Processes).Count
     Stop-Engine
@@ -62,7 +62,7 @@ if ($existing -or $hklm) {
 }
 
 Clear-WebUI
-$churn = Join-Path $web 'Chromium\Default\Ardia Churn'
+$churn = Join-Path $web 'Chromium\Default\Solstice Churn'
 $opened = 0
 $racing = 0
 for ($launch = 1; $launch -le $ChurnLaunches; $launch++) {

@@ -12,8 +12,8 @@ $local = Join-Path $run 'local'
 $roaming = Join-Path $run 'roaming'
 $elsewhere = Join-Path $run 'elsewhere'
 New-Item -ItemType Directory $local, $roaming, $elsewhere, "$elsewhere\unrelated" | Out-Null
-$rn = Join-Path $local 'Ardia'
-$web = Join-Path $local 'Ardia WebUI'
+$rn = Join-Path $local 'Solstice'
+$web = Join-Path $local 'Solstice WebUI'
 $realLocal = [Environment]::GetFolderPath('LocalApplicationData')
 $realBefore = @(Get-ChildItem -Force $realLocal -ErrorAction SilentlyContinue | ForEach-Object Name) -join '|'
 Log "run $run; LOCALAPPDATA and APPDATA for every launch point inside it"
@@ -56,7 +56,7 @@ function Refused([string]$name, [string[]]$arguments, [string]$dataDir = '') {
   $before = Snapshot
   $p = Start-Pilot $arguments $dataDir
   $code = [Pilot]::WaitExit($p.Id, 20000)
-  $window = -not (Never { [Pilot]::FindShell('Ardia') -ne [IntPtr]::Zero } 2)
+  $window = -not (Never { [Pilot]::FindShell('Solstice') -ne [IntPtr]::Zero } 2)
   Wait-Until { (Engine-Processes).Count -eq 0 } 10 'the refused launch to leave no process' -NoThrow | Out-Null
   $now = Snapshot
   $unchanged = $now -eq $before
@@ -73,14 +73,14 @@ function Opens([string]$name, [string[]]$arguments) {
   Wait-Until { Test-Path -LiteralPath (Join-Path $web 'Chromium\Local State') } 30 'the WebUI profile to be written' -NoThrow | Out-Null
   $pinned = $false
   if ($h) {
-    try { Rename-Item -LiteralPath $web -NewName 'Ardia WebUI moved' -ErrorAction Stop } catch { $pinned = $true }
-    if (-not $pinned) { Rename-Item -LiteralPath (Join-Path $local 'Ardia WebUI moved') -NewName 'Ardia WebUI' }
+    try { Rename-Item -LiteralPath $web -NewName 'Solstice WebUI moved' -ErrorAction Stop } catch { $pinned = $true }
+    if (-not $pinned) { Rename-Item -LiteralPath (Join-Path $local 'Solstice WebUI moved') -NewName 'Solstice WebUI' }
   }
   $unchanged = (Snapshot) -eq $before
   $inWebUI = Test-Path -LiteralPath (Join-Path $web 'Chromium\Local State')
   Stop-Engine
   $opened = ($h -ne $null) -and ($h -ne [IntPtr]::Zero)
-  Check $name ($p.ArgvOk -and $opened -and $unchanged -and $inWebUI -and $pinned) "$($p.CommandLine): argv as intended $($p.ArgvOk), window $opened, profile in Ardia WebUI\Chromium $inWebUI, folder pinned against rename $pinned, React Native folders unchanged $unchanged"
+  Check $name ($p.ArgvOk -and $opened -and $unchanged -and $inWebUI -and $pinned) "$($p.CommandLine): argv as intended $($p.ArgvOk), window $opened, profile in Solstice WebUI\Chromium $inWebUI, folder pinned against rename $pinned, React Native folders unchanged $unchanged"
 }
 function Try-Rename([string]$path) {
   $leaf = Split-Path -Leaf $path
@@ -181,7 +181,7 @@ $h = $null
 try { $h = Wait-Shell 60 } catch {}
 $opened = ($h -ne $null) -and ($h -ne [IntPtr]::Zero)
 Stop-Engine
-Check 'pin-alone-blocks-rename' ($p.ArgvOk -and $early.Count -eq 1 -and -not $chromeDll -and $profileRename -eq 'refused' -and $parentRename -eq 'refused' -and $opened -and ((Snapshot) -eq $before)) "paused right after the pin: $($early.Count) engine process, chrome.dll loaded $chromeDll; renaming Ardia WebUI\Chromium $profileRename, renaming Ardia WebUI $parentRename; window after the pause $opened"
+Check 'pin-alone-blocks-rename' ($p.ArgvOk -and $early.Count -eq 1 -and -not $chromeDll -and $profileRename -eq 'refused' -and $parentRename -eq 'refused' -and $opened -and ((Snapshot) -eq $before)) "paused right after the pin: $($early.Count) engine process, chrome.dll loaded $chromeDll; renaming Solstice WebUI\Chromium $profileRename, renaming Solstice WebUI $parentRename; window after the pause $opened"
 Clear-WebUI
 
 Rename-Item -LiteralPath "$rn\User Data" -NewName 'User Data moved'

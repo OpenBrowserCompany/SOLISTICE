@@ -158,7 +158,7 @@ function Shot([string]$path) {
   & C:\tools\ffmpeg.exe -hide_banner -loglevel error -y -f gdigrab -framerate 1 -i desktop -frames:v 1 $path
 }
 
-function Shell-Window { [Pilot]::FindShell('Ardia') }
+function Shell-Window { [Pilot]::FindShell('Solstice') }
 
 function Wait-Shell([int]$seconds = 60) {
   $deadline = (Get-Date).AddSeconds($seconds)
@@ -167,7 +167,7 @@ function Wait-Shell([int]$seconds = 60) {
     if ($h -ne [IntPtr]::Zero) { return $h }
     Start-Sleep -Milliseconds 300
   }
-  throw "no Ardia WebUI window after $seconds s"
+  throw "no Solstice WebUI window after $seconds s"
 }
 
 function Wait-Until([scriptblock]$Condition, [double]$Seconds = 10, [string]$What = 'a condition', [switch]$NoThrow) {
