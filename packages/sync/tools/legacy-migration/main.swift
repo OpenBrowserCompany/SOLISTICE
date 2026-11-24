@@ -12,7 +12,7 @@ case "run":
   }
   let scratch = LegacyMigration.ScratchInstance(
     dataDirectory: data, legacySource: env["ARDIA_LEGACY_SOURCE"], crashAfter: env["ARDIA_LEGACY_CRASH_AFTER"])
-  exit(LegacyMigration.runAtLaunch(scratch: scratch, bundleId: "com.ardia.browser") ? 0 : 3)
+  exit(LegacyMigration.runAtLaunch(scratch: scratch, bundleId: "com.openbrowsercompany.solstice") ? 0 : 3)
 case "move":
   let args = CommandLine.arguments
   if args.count == 4, args[2] == "--wait" {

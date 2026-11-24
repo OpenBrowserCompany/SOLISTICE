@@ -87,10 +87,10 @@ try {
     } else {
       const ps = spawnSync("ps", ["-E", "-ww", "-ax", "-o", "pid=,command="], { encoding: "utf8" }).stdout.split("\n");
       for (const line of ps) {
-        const m = /^\s*(\d+)\s+(\S.*?\/Contents\/MacOS\/Ardia)(?:\s|$)/.exec(line);
+        const m = /^\s*(\d+)\s+(\S.*?\/Contents\/MacOS\/Solstice)(?:\s|$)/.exec(line);
         if (!m || line.includes("--type=")) continue;
         const data = / ARDIA_DATA_DIR=(\S+)/.exec(line)?.[1] ?? "(no data dir: not a test instance)";
-        console.log(`${m[1]}  ${data}  ${m[2].replace(/\/Contents\/MacOS\/Ardia$/, "")}`);
+        console.log(`${m[1]}  ${data}  ${m[2].replace(/\/Contents\/MacOS\/Solstice$/, "")}`);
       }
     }
   } else {
