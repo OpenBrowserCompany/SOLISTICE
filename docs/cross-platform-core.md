@@ -1,6 +1,6 @@
 # One core, two hosts
 
-Ardia runs one browser UI on three platforms today. Below the UI boundary it runs three hosts with three native layers:
+Solstice runs one browser UI on three platforms today. Below the UI boundary it runs three hosts with three native layers:
 
 | | macOS | Linux | Windows |
 | --- | --- | --- | --- |
@@ -154,7 +154,7 @@ Deleted with RNW: `FocusHold`, key holds, text-revert repair, the JS animation d
 
 **Never break current users.** Until the cutover PR, the shipped Windows build is the RNW one, and Bonzai's and the team's RNW fixes keep landing (the Hermes crash fix on `windows-next`, #2540, included). The WebUI build arrives behind `--ardia-shell=webui` with its own profile directory, and a non-blocking CI job runs the Linux acceptance tour over CDP plus the existing Windows real-input tour. CDP covers WebUI flows, not native window behavior.
 
-**Cutover is an upgrade, tested as one.** A restartable one-time migration covers `%LOCALAPPDATA%\Ardia` (session, documents, placement), `%APPDATA%\Ardia` config, `Sync\sync-key-*.dpapi`, and Credential Manager items, which can span several chunks. Chromium's `User Data` and the install identity stay where they are. An installed upgrade from the last RNW alpha with populated data must keep cookies, saved passwords, extensions and the sealed local sync state, and a rollback to the RNW build must still open that data. The existing installer and real-input checks are required before cutover. The deletion PR comes after.
+**Cutover is an upgrade, tested as one.** A restartable one-time migration covers `%LOCALAPPDATA%\Solstice` (session, documents, placement), `%APPDATA%\Solstice` config, `Sync\sync-key-*.dpapi`, and Credential Manager items, which can span several chunks. Chromium's `User Data` and the install identity stay where they are. An installed upgrade from the last RNW alpha with populated data must keep cookies, saved passwords, extensions and the sealed local sync state, and a rollback to the RNW build must still open that data. The existing installer and real-input checks are required before cutover. The deletion PR comes after.
 
 ## Order
 

@@ -4,7 +4,7 @@
 
 The dashboard's `/settings` page, which settings opted-in users change, is described in `docs/dashboard-settings.md`.
 
-The `/health` page's Protected video panel (`server/sections/protected-video.ts`, section `health.protectedVideo`) shows protected video in Chromium tabs (Ardia has no Widevine support; protected video plays in WebKit): the share of installs whose latest `settings_snapshot` reports `setting_widevine_installed = "true"`, then `usage_counts`' `drm_refusals` with its stages (`drm_refusals_access`, `drm_refusals_create_keys`, `drm_refusals_licence`, `drm_refusals_keystatus`), summed per app version. Refusals counted with no stage show as No stage. The same `setting_widevine_installed` also lists on `/settings` like any setting, with default `false`.
+The `/health` page's Protected video panel (`server/sections/protected-video.ts`, section `health.protectedVideo`) shows protected video in Chromium tabs (Solstice has no Widevine support; protected video plays in WebKit): the share of installs whose latest `settings_snapshot` reports `setting_widevine_installed = "true"`, then `usage_counts`' `drm_refusals` with its stages (`drm_refusals_access`, `drm_refusals_create_keys`, `drm_refusals_licence`, `drm_refusals_keystatus`), summed per app version. Refusals counted with no stage show as No stage. The same `setting_widevine_installed` also lists on `/settings` like any setting, with default `false`.
 
 ## Credentials
 
@@ -64,7 +64,7 @@ The data is `sandbox.ardia_leads`, mirrored by `ch_sync.py` from the `leads` tab
 The routine's side lives in ardia-db's `leads.py`:
 
 1. `leads.py videos --verify` indexes the release videos linked from GitHub release notes and computes each chapter's start from its Remotion composition (`apps/videos/src/videos/<id>/index.tsx` timing constants and `segments.json`), checking the total against the mp4's real duration. A video without a composition, or whose length doesn't match, is linked without a timestamp and the lead says so.
-2. The routine searches X with its own X tools, saves each raw search response under `leads-raw/`, and runs `leads.py candidates`, which drops posts already in triage, Ardia mentions, the owner's own posts, other browser makers promoting theirs, and spam, and suggests a feature and video for the rest.
+2. The routine searches X with its own X tools, saves each raw search response under `leads-raw/`, and runs `leads.py candidates`, which drops posts already in triage, Solstice mentions, the owner's own posts, other browser makers promoting theirs, and spam, and suggests a feature and video for the rest.
 3. It writes a short draft for each post worth answering and stores them with `leads.py add picks.json`, then runs `ch_sync.py`.
 
 ## Needs attention: tasks and goals
@@ -126,7 +126,7 @@ The Site page's **Where they clicked Download** panel splits `download_clicked` 
 
 Performance › Freezes reads `app_freeze` over the last 7 days, grouped by `signature`: people (`uniqExact(distinct_id)`),
 freezes (`count()`), time frozen (`sum(freeze_ms)`), the most common thread and job, the latest version, and the top
-three frames from Ardia's own images. Frames read as function names wherever the build's symbols are published; hover
+three frames from Solstice's own images. Frames read as function names wherever the build's symbols are published; hover
 a place to see each name with its raw offset. The summary line says how many places are named. The names come from
 `sandbox.ardia_frame_symbols`, which the hourly frame-naming job fills (`docs/symbolication.md`). Errors names the native
 frames of the crashes it shows the same way, and each crash row says how many native frames were named. Hermes frames
