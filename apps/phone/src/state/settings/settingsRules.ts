@@ -133,7 +133,7 @@ export function listFacts(list: ListLike, now: number): { text: string; isWarnin
     case "failed":
       return { text: "Couldn’t update", isWarning: true };
     case "tooLarge":
-      return { text: "Too large for Ardia to use", isWarning: true };
+      return { text: "Too large for Solstice to use", isWarning: true };
     case "offline":
       return { text: `${rulesText(list.ruleCount)} · Waiting for a connection`, isWarning: false };
     case "ready":
@@ -232,12 +232,12 @@ export function defaultBrowserCopy(status: Status, instructions: DefaultBrowserS
   if (instructions) {
     return { title: instructions.title, subtitle: instructions.subtitle, steps: instructions.steps, action: instructions.action, does: "openDefaultApps", inSettings: true };
   }
-  if (status.isDefault) return { title: "Ardia is your default browser", subtitle: "Links from other apps open in Ardia.", steps: [], action: null, does: null, inSettings: false };
+  if (status.isDefault) return { title: "Solstice is your default browser", subtitle: "Links from other apps open in Solstice.", steps: [], action: null, does: null, inSettings: false };
   const action = status.canAsk ? DEFAULT_BROWSER_ACTION : OPEN_DEFAULT_APPS;
   return {
-    title: "Make Ardia your default browser",
-    subtitle: "Open links from other apps in Ardia.",
-    steps: [`Tap “${action}”`, status.canAsk ? "Select Ardia" : "Choose Browser app"],
+    title: "Make Solstice your default browser",
+    subtitle: "Open links from other apps in Solstice.",
+    steps: [`Tap “${action}”`, status.canAsk ? "Select Solstice" : "Choose Browser app"],
     action,
     does: status.canAsk ? "askForRole" : "openDefaultApps",
     inSettings: false,

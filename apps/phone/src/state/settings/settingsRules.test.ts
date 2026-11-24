@@ -103,7 +103,7 @@ test("Export Open Tabs shares the web addresses of regular tabs only", () => {
   );
 });
 
-test("onboarding asks about the default browser only where the phone can be asked or already has Ardia", () => {
+test("onboarding asks about the default browser only where the phone can be asked or already has Solstice", () => {
   assert.equal(nextStep("blocking", true), "defaultBrowser");
   assert.equal(nextStep("defaultBrowser", true), "sync");
   assert.equal(nextStep("blocking", false), "sync");
@@ -117,18 +117,18 @@ test("onboarding asks about the default browser only where the phone can be aske
   assert.equal(offersDefaultBrowser(null, true), true, "Android shows the step even before its status has loaded, as Compose does");
 });
 
-test("the default browser page has the two steps until Ardia is the default, then says so", () => {
+test("the default browser page has the two steps until Solstice is the default, then says so", () => {
   assert.deepEqual(defaultBrowserCopy({ isDefault: false, canAsk: true }), {
-    title: "Make Ardia your default browser",
-    subtitle: "Open links from other apps in Ardia.",
-    steps: ["Tap “Set as Default Browser”", "Select Ardia"],
+    title: "Make Solstice your default browser",
+    subtitle: "Open links from other apps in Solstice.",
+    steps: ["Tap “Set as Default Browser”", "Select Solstice"],
     action: "Set as Default Browser",
     does: "askForRole",
     inSettings: false,
   });
   assert.deepEqual(defaultBrowserCopy({ isDefault: true, canAsk: false }), {
-    title: "Ardia is your default browser",
-    subtitle: "Links from other apps open in Ardia.",
+    title: "Solstice is your default browser",
+    subtitle: "Links from other apps open in Solstice.",
     steps: [],
     action: null,
     does: null,
@@ -148,7 +148,7 @@ test("on iPhone the page has the three Settings steps and opens the system's def
   const ios = copyTable("ios");
   const copy = defaultBrowserCopy({ isDefault: true, canAsk: false }, ios.defaultBrowserInstructions);
   assert.equal(copy.title, "How to change your default browser");
-  assert.deepEqual(copy.steps, ["Open Ardia in Settings", "Tap on “Default Browser App”", "Select Ardia"]);
+  assert.deepEqual(copy.steps, ["Open Solstice in Settings", "Tap on “Default Browser App”", "Select Solstice"]);
   assert.equal(copy.does, "openDefaultApps");
   assert.equal(copy.inSettings, true);
   assert.equal(offersDefaultBrowser({ isDefault: false, canAsk: false }, ios.offersDefaultBrowserAlways), false);

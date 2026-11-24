@@ -6,7 +6,7 @@ export type { LibraryCredit } from "./portedCredits";
 export const IPHONE_NATIVE_CREDITS: LibraryCredit[] = [
   {
     name: "ArdiaKit and ArdiaSyncCore",
-    detail: "Ardia’s own iPhone code: ArdiaShared, ArdiaSync, ArdiaBrowser, ArdiaDesign, ArdiaTalk, ArdiaSyncCore",
+    detail: "Solstice’s own iPhone code: ArdiaShared, ArdiaSync, ArdiaBrowser, ArdiaDesign, ArdiaTalk, ArdiaSyncCore",
     license: "Apache-2.0",
     url: "https://github.com/ardia-browser/ardia",
   },
