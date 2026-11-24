@@ -14,14 +14,14 @@ const { call, ok } = socketClient(32);
 const item = (path, title, more) => ({ path, title, enabled: true, checked: false, separator: false, ...more });
 
 function trackingMenuBar(windowId) {
-  const quit = item([0, 5], "Quit Ardia", { action: "terminate:", ref: "sel:terminate:@Ardia\u001fQuit Ardia" });
+  const quit = item([0, 5], "Quit Solstice", { action: "terminate:", ref: "sel:terminate:@Solstice\u001fQuit Solstice" });
   const appleEvents = item([3, 7], "Allow JavaScript from Apple Events", {
     command: "toggleJavaScriptFromAppleEvents",
     ref: "cmd:toggleJavaScriptFromAppleEvents@View\u001fDeveloper\u001fAllow JavaScript from Apple Events",
   });
   const selectAll = item([2, 4], "Select All", { action: "selectAll:", ref: "sel:selectAll:@Edit\u001fSelect All" });
   stub.surfaces.bar = [
-    item([0], "Ardia", { submenu: [quit] }),
+    item([0], "Solstice", { submenu: [quit] }),
     item([2], "Edit", { submenu: [selectAll] }),
     item([3], "View", { submenu: [appleEvents] }),
   ];
@@ -42,7 +42,7 @@ test("a tracking menu bar isn't listed, and nothing is chosen from it", async ()
   assert.deepEqual(stub.surfaces.performed, []);
   assert.equal((await call("menus.dismiss", { menu: "bar1" })).error?.code, "no_window");
 });
-test("Ardia's own menus and unknown menus are refused, and runBar needs a ref", async () => {
+test("Solstice's own menus and unknown menus are refused, and runBar needs a ref", async () => {
   const { windowId } = await freshWindow();
   stub.surfaces.open = [
     { id: "app1", kind: "app", window: windowId, items: [item([0], "Copy Recovery Code")] },

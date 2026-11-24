@@ -14,7 +14,7 @@ function unprovenMenus(windowId, tab) {
     { id: "live1", kind: "page", tab, window: windowId, items: [row("Copy")] },
     { id: "sel1", kind: "select", tab, window: windowId, items: [row("apple")] },
     { id: "app1", kind: "app", window: windowId, items: [row("Copy Recovery Code")] },
-    { id: "bar1", kind: "menuBar", window: windowId, items: [row("Quit Ardia")] },
+    { id: "bar1", kind: "menuBar", window: windowId, items: [row("Quit Solstice")] },
     { id: "wk1", kind: "other", window: windowId, items: [row("Look Up")] },
   ];
 }

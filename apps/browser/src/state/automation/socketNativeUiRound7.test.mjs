@@ -32,7 +32,7 @@ test("menus.bar is the native catalog as given, dynamic rows included, and doesn
   assert.equal(JSON.stringify(await ok("menus.bar")), first);
 });
 
-test("an Ardia command from the catalog runs straight through run, with no native validation step", async () => {
+test("an Solstice command from the catalog runs straight through run, with no native validation step", async () => {
   const { windowId } = await freshWindow();
   stub.surfaces.bar = CATALOG;
   const tabsBefore = Object.values(S().tabs).filter((t) => t.windowId === windowId).length;
