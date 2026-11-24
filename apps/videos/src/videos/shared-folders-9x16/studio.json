@@ -562,10 +562,10 @@
     {
       "id": "end-ardia",
       "definition": "type",
-      "label": "end · Ardia",
+      "label": "end · Solstice",
       "parentId": null,
       "values": {
-        "text": "Ardia",
+        "text": "Solstice",
         "size": 112,
         "color": "#1D1D1F",
         "fill": "#00000000",

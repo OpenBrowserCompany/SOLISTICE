@@ -367,14 +367,14 @@ function WindowShot({ t, side }: { t: number; side: Side }) {
 const COPY: Record<Side, { pill: string; version: string; headline: string; first: string; second: string; third?: string }> = {
   before: {
     pill: "Before",
-    version: "Ardia today",
+    version: "Solstice today",
     headline: "A theme stops at colour",
     first: "Saved: the colours change",
     second: "Saved: type, metrics, layout and icons aren't theme keys",
   },
   after: {
     pill: "After",
-    version: "Ardia with theme looks",
+    version: "Solstice with theme looks",
     headline: "The same file sets the whole look",
     first: "Saved: the colours change",
     second: "Saved: new font, roomier rows, rounder tiles, back and forward hidden, address field and New Tab moved, icons swapped",
@@ -466,7 +466,7 @@ function TitleCard() {
   const out = interpolate(t, [TITLE - 0.35, TITLE], [1, 0], clamp);
   return (
     <AbsoluteFill style={{ justifyContent: "center", paddingLeft: 140, opacity: out }}>
-      <div style={{ ...label, fontSize: 26, color: color.blue, ...rise(t, 0.1) }}>Ardia · theme files</div>
+      <div style={{ ...label, fontSize: 26, color: color.blue, ...rise(t, 0.1) }}>Solstice · theme files</div>
       <div
         style={{
           marginTop: 22,
