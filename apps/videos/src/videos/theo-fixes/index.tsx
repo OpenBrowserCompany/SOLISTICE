@@ -74,14 +74,14 @@ const SCENES: Scene[] = [
     quote: [],
     context: "A screenshot of Google's “unusual traffic” page",
     title: "Suggestions use the browser",
-    body: "The likely cause, not proven: Ardia fetched search suggestions outside the browser. Now it fetches them the way Chrome does.",
+    body: "The likely cause, not proven: Solstice fetched search suggestions outside the browser. Now it fetches them the way Chrome does.",
     layout: "side",
     hold: 3.8,
     before: {
       count: "9",
       headline: "requests outside the browser while typing “1password”",
       rows: [
-        ["User agent", "Ardia/114 CFNetwork"],
+        ["User agent", "Solstice/114 CFNetwork"],
         ["Client", "client=firefox"],
         ["Cookies", "its own jar"],
       ],
@@ -126,7 +126,7 @@ const SCENES: Scene[] = [
     id: "channel",
     quote: ["Does switching release channels work", "It did eventually but it wouldn't “check” for a bit"],
     title: "Channel switch checks now",
-    body: "Pick Nightly and Ardia checks right away, says so, and offers the nightly. Before, Check Now stayed dimmed.",
+    body: "Pick Nightly and Solstice checks right away, says so, and offers the nightly. Before, Check Now stayed dimmed.",
     layout: "stack",
     before: { file: "channel-before.mp4", w: 1150, h: 204, frames: 135, caption: "Check Now stays dimmed" },
     after: { file: "channel-after.mp4", w: 1150, h: 204, frames: 135, caption: "Checking Nightly…, then the update" },
@@ -164,10 +164,10 @@ const SCENES: Scene[] = [
   {
     id: "little",
     quote: ["Clicking links in other apps opens little arc even though i have setting off"],
-    title: "One Little Ardia switch",
+    title: "One Little Solstice switch",
     body: "Links went where Settings said; Settings pointed at the wrong switch. Now there's one, and “little arc” finds it.",
     layout: "seq",
-    before: { file: "little-before.mp4", w: 1320, h: 700, frames: 96, caption: "That switch is off; the menu above still says Little Ardia" },
+    before: { file: "little-before.mp4", w: 1320, h: 700, frames: 96, caption: "That switch is off; the menu above still says Little Solstice" },
     after: { file: "little-after.mp4", w: 1320, h: 700, frames: 96, caption: "“little arc” finds the one switch, and off means off" },
   },
 ];
