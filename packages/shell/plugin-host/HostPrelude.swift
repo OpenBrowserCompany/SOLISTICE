@@ -416,7 +416,7 @@ enum HostPrelude {
     const launch = () => {
       if (settled) return;
       try {
-        guard = addTimer(() => { release(); settle((_, no) => no(new TypeError("fetch got no answer from Ardia"))); }, timeoutMs + 5000, [], false);
+        guard = addTimer(() => { release(); settle((_, no) => no(new TypeError("fetch got no answer from Solstice"))); }, timeoutMs + 5000, [], false);
       } catch (error) {
         return settle((_, no) => no(error));
       }

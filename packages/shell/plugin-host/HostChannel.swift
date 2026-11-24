@@ -61,7 +61,7 @@ final class HostChannel {
       if !line.isEmpty { onLine(String(decoding: line, as: UTF8.self)) }
     }
     if incoming.count > Self.maxIncomingLine {
-      FileHandle.standardError.write(Data("[ardia] a line from Ardia was over \(Self.maxIncomingLine >> 20) MB, so the channel closed\n".utf8))
+      FileHandle.standardError.write(Data("[ardia] a line from Solstice was over \(Self.maxIncomingLine >> 20) MB, so the channel closed\n".utf8))
       close()
     }
   }
@@ -70,10 +70,10 @@ final class HostChannel {
     case tooLong, hasNewline, backedUp, closed
     var message: String {
       switch self {
-      case .tooLong: return "a line to Ardia is at most 1 MB"
-      case .hasNewline: return "a line to Ardia can't contain a newline"
-      case .backedUp: return "Ardia isn't reading, so the line was dropped"
-      case .closed: return "the channel to Ardia is closed"
+      case .tooLong: return "a line to Solstice is at most 1 MB"
+      case .hasNewline: return "a line to Solstice can't contain a newline"
+      case .backedUp: return "Solstice isn't reading, so the line was dropped"
+      case .closed: return "the channel to Solstice is closed"
       }
     }
   }

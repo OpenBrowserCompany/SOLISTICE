@@ -88,7 +88,7 @@ final class HostGlobals {
       self?.timers.cancel(id)
     }
     let send: @convention(block) (String) -> Any = { [weak self] line in
-      guard let channel = self?.channel else { return "the channel to Ardia is closed" }
+      guard let channel = self?.channel else { return "the channel to Solstice is closed" }
       return channel.send(line)?.message ?? NSNull()
     }
     let btoa: @convention(block) (String) -> Any = { text in PluginBase64.encode(text) ?? NSNull() }
