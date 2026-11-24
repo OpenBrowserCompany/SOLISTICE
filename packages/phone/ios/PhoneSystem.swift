@@ -10,9 +10,9 @@ public final class PhoneSystemLinks {
   public static let shared = PhoneSystemLinks()
 
   public static let quickActions: [String: SystemLink] = [
-    "com.ardia.browser.ios.search": .search(query: nil),
-    "com.ardia.browser.ios.voice": .voiceSearch,
-    "com.ardia.browser.ios.incognito": .incognito,
+    "com.openbrowsercompany.solstice.ios.search": .search(query: nil),
+    "com.openbrowsercompany.solstice.ios.voice": .voiceSearch,
+    "com.openbrowsercompany.solstice.ios.incognito": .incognito,
   ]
 
   public let defaultBrowser = DefaultBrowserStatus(defaults: .standard, asksSystem: true)
@@ -72,9 +72,9 @@ public final class PhoneSystemLinks {
   public func sceneBecameActive() {
     defaultBrowser.sceneBecameActive()
     UIApplication.shared.shortcutItems = [
-      UIApplicationShortcutItem(type: "com.ardia.browser.ios.search", localizedTitle: String(localized: "Search"), localizedSubtitle: nil, icon: UIApplicationShortcutIcon(systemImageName: "magnifyingglass")),
-      UIApplicationShortcutItem(type: "com.ardia.browser.ios.voice", localizedTitle: String(localized: "Voice Search"), localizedSubtitle: nil, icon: UIApplicationShortcutIcon(systemImageName: "mic")),
-      UIApplicationShortcutItem(type: "com.ardia.browser.ios.incognito", localizedTitle: String(localized: "New Incognito Tab"), localizedSubtitle: nil, icon: UIApplicationShortcutIcon(systemImageName: "eyes")),
+      UIApplicationShortcutItem(type: "com.openbrowsercompany.solstice.ios.search", localizedTitle: String(localized: "Search"), localizedSubtitle: nil, icon: UIApplicationShortcutIcon(systemImageName: "magnifyingglass")),
+      UIApplicationShortcutItem(type: "com.openbrowsercompany.solstice.ios.voice", localizedTitle: String(localized: "Voice Search"), localizedSubtitle: nil, icon: UIApplicationShortcutIcon(systemImageName: "mic")),
+      UIApplicationShortcutItem(type: "com.openbrowsercompany.solstice.ios.incognito", localizedTitle: String(localized: "New Incognito Tab"), localizedSubtitle: nil, icon: UIApplicationShortcutIcon(systemImageName: "eyes")),
     ]
     drainInbox()
   }

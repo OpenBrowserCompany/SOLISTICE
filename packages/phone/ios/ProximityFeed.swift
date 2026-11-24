@@ -6,8 +6,8 @@ import UIKit
 @MainActor
 final class ProximityFeed {
   static let scriptKey = "ArdiaProximity"
-  static let nearNotification = "com.ardia.browser.ios.proximity.near"
-  static let farNotification = "com.ardia.browser.ios.proximity.far"
+  static let nearNotification = "com.openbrowsercompany.solstice.ios.proximity.near"
+  static let farNotification = "com.openbrowsercompany.solstice.ios.proximity.far"
 
   var onChange: ((Bool) -> Void)?
 

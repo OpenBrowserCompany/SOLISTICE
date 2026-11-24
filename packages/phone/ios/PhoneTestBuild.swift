@@ -7,7 +7,7 @@ public enum PhoneTestBuild {
     isOn && UserDefaults.standard.bool(forKey: key)
   }
 
-  static let argumentPrefixes = ["Ardia", "Browse"]
+  static let argumentPrefixes = ["Solstice", "Browse"]
 
   public static var isDemo: Bool { flag("ArdiaDemo") || flag("ArdiaSyncDemo") }
 
