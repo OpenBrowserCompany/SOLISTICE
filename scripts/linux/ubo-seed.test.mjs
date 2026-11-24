@@ -11,7 +11,7 @@ const ASSETS = {
   "public_suffix_list.dat": { content: "internal" },
 };
 const VERSION = "1.76.0b25";
-const SELFIE_KEYS = ["Main", "NetFilteringEngine", "ExtFilteringEngine"].map((component) => `cache/selfie/staticArdia2${component}`);
+const SELFIE_KEYS = ["Main", "NetFilteringEngine", "ExtFilteringEngine"].map((component) => `cache/selfie/staticSolstice-2${component}`);
 const STORAGE_SOURCE = SELFIE_KEYS.map((key) => `io.toCache('${key.slice("cache/".length)}', {});`).join("\n");
 
 function storage(overrides = {}) {
@@ -80,7 +80,7 @@ test("the default selection is user filters and every list not off by default", 
 
 test("the seed discovers the bundled snapshot keys and requires one key per component", () => {
   assert.deepEqual(selfieKeys(STORAGE_SOURCE), SELFIE_KEYS);
-  assert.deepEqual(selfieKeys(STORAGE_SOURCE.replaceAll("Ardia2", "")), SELFIE_KEYS.map((key) => key.replace("Ardia2", "")));
+  assert.deepEqual(selfieKeys(STORAGE_SOURCE.replaceAll("Solstice-2", "")), SELFIE_KEYS.map((key) => key.replace("Solstice-2", "")));
   assert.throws(() => selfieKeys(STORAGE_SOURCE.replace("ExtFilteringEngine", "Other")), /exactly one selfie key for ExtFilteringEngine/);
   assert.throws(() => selfieKeys(STORAGE_SOURCE.repeat(2)), /exactly one selfie key for Main/);
 });

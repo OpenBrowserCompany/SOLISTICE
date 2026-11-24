@@ -18,7 +18,7 @@ wrong key, an older or equal version, checksum and size mismatches,
 symlinked, hard-linked, FIFO and foreign-owned files, a manifest naming
 another version'"'"'s file, a path or shell metacharacters, a bad version
 string, a concurrent run, a relative folder and an AppImage replaced after
-Ardia started, that the reads it makes as the user hold no descriptor to its
+Solstice started, that the reads it makes as the user hold no descriptor to its
 private copies, and that its watchdog stops a stalled step. In archlinux (default) it
 installs the AUR PKGBUILD built from the OLD tarball and checks kind is
 managed.
@@ -73,10 +73,10 @@ printf 'locale\n' > "$stub/engine/locales/en-US.pak"
 build_release() {
   local version=$1 out="$work/pkgs/$1"
   mkdir -p "$out"
-  printf '<html><body>Ardia %s</body></html>\n' "$version" > "$stub/ui/index.html"
+  printf '<html><body>Solstice %s</body></html>\n' "$version" > "$stub/ui/index.html"
   python3 "$root/scripts/linux/package.py" --out "$stub/engine" --ui "$stub/ui" --version "$version" --no-ubo-seed \
-    --destination "$out/Ardia-$version-linux-x64.tar.xz" --deb "$out/Ardia-$version-linux-x64.deb" \
-    --appimage "$out/Ardia-$version-linux-x64.AppImage" >/dev/null
+    --destination "$out/Solstice-$version-linux-x64.tar.xz" --deb "$out/Solstice-$version-linux-x64.deb" \
+    --appimage "$out/Solstice-$version-linux-x64.AppImage" >/dev/null
 }
 echo "==> building $OLD and $NEW with package.py"
 build_release "$OLD"
@@ -93,7 +93,7 @@ sign() { openssl pkeyutl -sign -inkey "${2:-$keys/test.pem}" -rawin -in "$1" -ou
 copy_packages() {
   local from=$1 to=$2 dir=$3 extension
   for extension in deb tar.xz AppImage; do
-    cp "$work/pkgs/$from/Ardia-$from-linux-x64.$extension" "$dir/Ardia-$to-linux-x64.$extension"
+    cp "$work/pkgs/$from/Solstice-$from-linux-x64.$extension" "$dir/Solstice-$to-linux-x64.$extension"
   done
 }
 release_case() {
@@ -101,7 +101,7 @@ release_case() {
   mkdir -p "$cases/$name"
   copy_packages "$from" "$version" "$cases/$name"
   node "$root/scripts/linux/sign-update.mjs" --unsigned --dir "$cases/$name" --version "$version" >/dev/null
-  sign "$cases/$name/Ardia-$version-linux-update.txt" "$key"
+  sign "$cases/$name/Solstice-$version-linux-update.txt" "$key"
 }
 line_for() {
   local format=$1 name=$2 file=$3
@@ -112,7 +112,7 @@ flip_last_byte() { python3 -I -c 'import sys; p = sys.argv[1]; b = bytearray(ope
 echo "==> writing the update folders the helper must accept or refuse"
 release_case valid "$NEW" "$NEW"
 release_case badsig "$NEW" "$NEW"
-flip_last_byte "$cases/badsig/Ardia-$NEW-linux-update.txt.sig"
+flip_last_byte "$cases/badsig/Solstice-$NEW-linux-update.txt.sig"
 release_case wrongkey "$NEW" "$NEW" "$keys/other.pem"
 release_case older "$OLD" "$OLDER"
 release_case equal "$OLD" "$OLD"
@@ -121,9 +121,9 @@ release_case size "$NEW" "$NEW"
 release_case smaller "$NEW" "$NEW"
 release_case symlink "$NEW" "$NEW"
 release_case bigsig "$NEW" "$NEW"
-printf 'x' >> "$cases/bigsig/Ardia-$NEW-linux-update.txt.sig"
+printf 'x' >> "$cases/bigsig/Solstice-$NEW-linux-update.txt.sig"
 for extension in deb tar.xz AppImage; do
-  file="Ardia-$NEW-linux-x64.$extension"
+  file="Solstice-$NEW-linux-x64.$extension"
   flip_last_byte "$cases/checksum/$file"
   printf 'x' >> "$cases/size/$file"
   truncate -s -1 "$cases/smaller/$file"
@@ -134,72 +134,72 @@ done
 forged_case() {
   local name=$1 version=$2
   mkdir -p "$cases/$name"
-  cat > "$cases/$name/Ardia-$version-linux-update.txt"
-  sign "$cases/$name/Ardia-$version-linux-update.txt"
+  cat > "$cases/$name/Solstice-$version-linux-update.txt"
+  sign "$cases/$name/Solstice-$version-linux-update.txt"
 }
-new_pkg() { echo "$work/pkgs/$NEW/Ardia-$NEW-linux-x64.$1"; }
-old_pkg() { echo "$work/pkgs/$OLD/Ardia-$OLD-linux-x64.$1"; }
+new_pkg() { echo "$work/pkgs/$NEW/Solstice-$NEW-linux-x64.$1"; }
+old_pkg() { echo "$work/pkgs/$OLD/Solstice-$OLD-linux-x64.$1"; }
 {
   printf 'ardia-linux-update 1\nversion %s\n' "$NEW"
-  line_for deb "Ardia-$OLD-linux-x64.deb" "$(old_pkg deb)"
-  line_for tarball "Ardia-$OLD-linux-x64.tar.xz" "$(old_pkg tar.xz)"
-  line_for appimage "Ardia-$OLD-linux-x64.AppImage" "$(old_pkg AppImage)"
+  line_for deb "Solstice-$OLD-linux-x64.deb" "$(old_pkg deb)"
+  line_for tarball "Solstice-$OLD-linux-x64.tar.xz" "$(old_pkg tar.xz)"
+  line_for appimage "Solstice-$OLD-linux-x64.AppImage" "$(old_pkg AppImage)"
 } | forged_case othername "$NEW"
 copy_packages "$OLD" "$OLD" "$cases/othername"
 {
   printf 'ardia-linux-update 1\nversion %s\n' 0.2.48-beta.1
-  line_for deb Ardia-0.2.48-beta.1-linux-x64.deb "$(new_pkg deb)"
-  line_for tarball Ardia-0.2.48-beta.1-linux-x64.tar.xz "$(new_pkg tar.xz)"
-  line_for appimage Ardia-0.2.48-beta.1-linux-x64.AppImage "$(new_pkg AppImage)"
+  line_for deb Solstice-0.2.48-beta.1-linux-x64.deb "$(new_pkg deb)"
+  line_for tarball Solstice-0.2.48-beta.1-linux-x64.tar.xz "$(new_pkg tar.xz)"
+  line_for appimage Solstice-0.2.48-beta.1-linux-x64.AppImage "$(new_pkg AppImage)"
 } | forged_case badversion 0.2.48-beta.1
 copy_packages "$NEW" 0.2.48-beta.1 "$cases/badversion"
 {
   printf 'ardia-linux-update 1\nversion %s\n' "$NEW"
-  line_for deb "../Ardia-$NEW-linux-x64.deb" "$(new_pkg deb)"
-  line_for tarball "../Ardia-$NEW-linux-x64.tar.xz" "$(new_pkg tar.xz)"
-  line_for appimage "../Ardia-$NEW-linux-x64.AppImage" "$(new_pkg AppImage)"
+  line_for deb "../Solstice-$NEW-linux-x64.deb" "$(new_pkg deb)"
+  line_for tarball "../Solstice-$NEW-linux-x64.tar.xz" "$(new_pkg tar.xz)"
+  line_for appimage "../Solstice-$NEW-linux-x64.AppImage" "$(new_pkg AppImage)"
 } | forged_case traversal "$NEW"
 copy_packages "$NEW" "$NEW" "$cases/traversal"
 {
   printf 'ardia-linux-update 1\nversion %s\n' "$NEW"
-  line_for deb "Ardia-$NEW-linux-x64.deb\$(touch\${IFS}/tmp/pwned)" "$(new_pkg deb)"
-  line_for tarball "Ardia-$NEW-linux-x64.tar.xz;touch\${IFS}/tmp/pwned" "$(new_pkg tar.xz)"
-  line_for appimage "Ardia-$NEW-linux-x64.AppImage\`touch\${IFS}/tmp/pwned\`" "$(new_pkg AppImage)"
+  line_for deb "Solstice-$NEW-linux-x64.deb\$(touch\${IFS}/tmp/pwned)" "$(new_pkg deb)"
+  line_for tarball "Solstice-$NEW-linux-x64.tar.xz;touch\${IFS}/tmp/pwned" "$(new_pkg tar.xz)"
+  line_for appimage "Solstice-$NEW-linux-x64.AppImage\`touch\${IFS}/tmp/pwned\`" "$(new_pkg AppImage)"
 } | forged_case metachar "$NEW"
 copy_packages "$NEW" "$NEW" "$cases/metachar"
 {
   printf 'ardia-linux-update 1\nversion %s\n' "$NEW"
-  line_for appimage "Ardia-$NEW-linux-x64.AppImage" "$(new_pkg AppImage)"
-  line_for tarball "Ardia-$NEW-linux-x64.tar.xz" "$(new_pkg tar.xz)"
-  line_for deb "Ardia-$NEW-linux-x64.deb" "$(new_pkg deb)"
+  line_for appimage "Solstice-$NEW-linux-x64.AppImage" "$(new_pkg AppImage)"
+  line_for tarball "Solstice-$NEW-linux-x64.tar.xz" "$(new_pkg tar.xz)"
+  line_for deb "Solstice-$NEW-linux-x64.deb" "$(new_pkg deb)"
 } | forged_case outoforder "$NEW"
 copy_packages "$NEW" "$NEW" "$cases/outoforder"
 {
   printf 'ardia-linux-update 1\r\nversion %s\r\n' "$NEW"
-  line_for deb "Ardia-$NEW-linux-x64.deb" "$(new_pkg deb)" | sed 's/$/\r/'
-  line_for tarball "Ardia-$NEW-linux-x64.tar.xz" "$(new_pkg tar.xz)" | sed 's/$/\r/'
-  line_for appimage "Ardia-$NEW-linux-x64.AppImage" "$(new_pkg AppImage)" | sed 's/$/\r/'
+  line_for deb "Solstice-$NEW-linux-x64.deb" "$(new_pkg deb)" | sed 's/$/\r/'
+  line_for tarball "Solstice-$NEW-linux-x64.tar.xz" "$(new_pkg tar.xz)" | sed 's/$/\r/'
+  line_for appimage "Solstice-$NEW-linux-x64.AppImage" "$(new_pkg AppImage)" | sed 's/$/\r/'
 } | forged_case crlf "$NEW"
 copy_packages "$NEW" "$NEW" "$cases/crlf"
 {
   printf 'ardia-linux-update 1\nversion %s\n' 0.2.48
-  line_for deb Ardia-0.2.48-linux-x64.deb "$(new_pkg deb)"
-  line_for tarball Ardia-0.2.48-linux-x64.tar.xz "$(new_pkg tar.xz)"
-  line_for appimage Ardia-0.2.48-linux-x64.AppImage "$(new_pkg AppImage)"
+  line_for deb Solstice-0.2.48-linux-x64.deb "$(new_pkg deb)"
+  line_for tarball Solstice-0.2.48-linux-x64.tar.xz "$(new_pkg tar.xz)"
+  line_for appimage Solstice-0.2.48-linux-x64.AppImage "$(new_pkg AppImage)"
 } | forged_case versionmismatch "$NEW"
 copy_packages "$NEW" 0.2.48 "$cases/versionmismatch"
 {
   printf 'ardia-linux-update 1\nversion %s\n' "$NEW"
-  line_for deb "Ardia-$NEW-linux-x64.deb" "$(new_pkg deb)"
-  line_for tarball "Ardia-$NEW-linux-x64.tar.xz" "$(new_pkg tar.xz)"
-  line_for appimage "Ardia-$NEW-linux-x64.AppImage" "$(new_pkg AppImage)"
+  line_for deb "Solstice-$NEW-linux-x64.deb" "$(new_pkg deb)"
+  line_for tarball "Solstice-$NEW-linux-x64.tar.xz" "$(new_pkg tar.xz)"
+  line_for appimage "Solstice-$NEW-linux-x64.AppImage" "$(new_pkg AppImage)"
   head -c 4096 /dev/zero | tr '\0' 'x'
   printf '\n'
 } | forged_case bigmanifest "$NEW"
 copy_packages "$NEW" "$NEW" "$cases/bigmanifest"
 {
   printf 'ardia-linux-update 1\nversion %s\n' "$NEW"
-  line_for tarball "Ardia-$NEW-linux-x64.tar.xz" "$(new_pkg tar.xz)"
+  line_for tarball "Solstice-$NEW-linux-x64.tar.xz" "$(new_pkg tar.xz)"
 } | forged_case tarballonly "$NEW"
 copy_packages "$NEW" "$NEW" "$cases/tarballonly"
 
@@ -254,21 +254,21 @@ refusals() {
   done
   [[ "$kind" != deb ]] || { stage tarballonly; expect "deb refuses a manifest without a deb line" "failed kind" "$(as_pkexec "$helper" install "$cases/tarballonly")"; }
   stage valid
-  ln "$cases/valid/Ardia-$NEW-linux-x64.deb" "$cases/valid/linked.deb"
-  ln "$cases/valid/Ardia-$NEW-linux-x64.tar.xz" "$cases/valid/linked.tar.xz"
+  ln "$cases/valid/Solstice-$NEW-linux-x64.deb" "$cases/valid/linked.deb"
+  ln "$cases/valid/Solstice-$NEW-linux-x64.tar.xz" "$cases/valid/linked.tar.xz"
   expect "$kind refuses a hard-linked package" "failed missing" "$(as_pkexec "$helper" install "$cases/valid")"
   stage valid
-  for extension in deb tar.xz; do rm "$cases/valid/Ardia-$NEW-linux-x64.$extension"; mkfifo "$cases/valid/Ardia-$NEW-linux-x64.$extension"; done
+  for extension in deb tar.xz; do rm "$cases/valid/Solstice-$NEW-linux-x64.$extension"; mkfifo "$cases/valid/Solstice-$NEW-linux-x64.$extension"; done
   chown -h 1234:1234 "$cases"/valid/*
   expect "$kind refuses a FIFO" "failed missing" "$(as_pkexec "$helper" install "$cases/valid")"
   stage valid
-  chown 0:0 "$cases/valid/Ardia-$NEW-linux-x64.deb" "$cases/valid/Ardia-$NEW-linux-x64.tar.xz"
+  chown 0:0 "$cases/valid/Solstice-$NEW-linux-x64.deb" "$cases/valid/Solstice-$NEW-linux-x64.tar.xz"
   expect "$kind refuses a package the user doesn't own" "failed missing" "$(as_pkexec "$helper" install "$cases/valid")"
   stage valid
-  chmod 0000 "$cases/valid/Ardia-$NEW-linux-x64.deb" "$cases/valid/Ardia-$NEW-linux-x64.tar.xz"
+  chmod 0000 "$cases/valid/Solstice-$NEW-linux-x64.deb" "$cases/valid/Solstice-$NEW-linux-x64.tar.xz"
   expect "$kind reads the user's files as the user (an unreadable package)" "failed missing" "$(as_pkexec "$helper" install "$cases/valid")"
   stage valid
-  chmod 0000 "$cases/valid/Ardia-$NEW-linux-update.txt"
+  chmod 0000 "$cases/valid/Solstice-$NEW-linux-update.txt"
   expect "$kind reads the user's files as the user (an unreadable manifest)" "failed missing" "$(as_pkexec "$helper" install "$cases/valid")"
   stage valid
   chown 0:0 "$cases/valid"
@@ -291,7 +291,7 @@ refusals() {
 }
 
 echo "-- deb"
-apt-get install -y -qq "/work/pkgs/$OLD/Ardia-$OLD-linux-x64.deb" >/tmp/apt.log 2>&1 || { cat /tmp/apt.log; exit 1; }
+apt-get install -y -qq "/work/pkgs/$OLD/Solstice-$OLD-linux-x64.deb" >/tmp/apt.log 2>&1 || { cat /tmp/apt.log; exit 1; }
 expect "deb helper mode and owner" "755 root" "$(stat -c '%a %U' "$helper")"
 expect "deb key mode" "644" "$(stat -c '%a' /usr/lib/ardia/linux-update.pem)"
 swap_key
@@ -344,7 +344,7 @@ apt-get purge -y -qq ardia >/dev/null 2>&1
 
 echo "-- tarball"
 mkdir -p /tmp/old
-tar -xJf "/work/pkgs/$OLD/Ardia-$OLD-linux-x64.tar.xz" -C /tmp/old
+tar -xJf "/work/pkgs/$OLD/Solstice-$OLD-linux-x64.tar.xz" -C /tmp/old
 /tmp/old/ardia/install.sh --prefix /usr
 swap_key
 expect "tarball helper mode and owner" "755 root" "$(stat -c '%a %U' "$helper")"
@@ -409,7 +409,7 @@ echo "-- appimage"
 apps=/home/tester/Apps
 mnt=/home/tester/mnt
 mkdir -p "$apps" "$mnt"
-cp "/work/pkgs/$OLD/Ardia-$OLD-linux-x64.AppImage" "$apps/Ardia.AppImage"
+cp "/work/pkgs/$OLD/Solstice-$OLD-linux-x64.AppImage" "$apps/Ardia.AppImage"
 chmod 0755 "$apps/Ardia.AppImage"
 chown -R 1234:1234 "$apps" "$mnt"
 (cd "$mnt" && as_tester "$apps/Ardia.AppImage" --appimage-extract >/dev/null)
@@ -431,7 +431,7 @@ for entry in badsig:signature wrongkey:signature older:notNewer equal:notNewer c
   expect "appimage refuses $name" "failed $wanted" "$(app_install "$cases/$name")"
 done
 stage valid
-chown 0:0 "$cases/valid/Ardia-$NEW-linux-x64.AppImage"
+chown 0:0 "$cases/valid/Solstice-$NEW-linux-x64.AppImage"
 expect "appimage refuses a package the user doesn't own" "failed missing" "$(app_install "$cases/valid")"
 stage valid
 setpriv --reuid=1234 --regid=1234 --clear-groups flock -o "$apps" sleep 30 &
@@ -444,12 +444,12 @@ stage valid
 replaced_after_launch=$(result_of timeout 300 bash -c 'sleep 5; touch -c "$1"; shift; exec "$@"' _ "$apps/Ardia.AppImage" \
   setpriv --reuid=1234 --regid=1234 --clear-groups env -i HOME=/home/tester PATH=/usr/bin:/bin APPIMAGE="$apps/Ardia.AppImage" \
   APPDIR="$mnt/squashfs-root" "$inner" install "$cases/valid")
-expect "appimage refuses to replace an AppImage that changed after Ardia started" "failed notNewer" "$replaced_after_launch"
+expect "appimage refuses to replace an AppImage that changed after Solstice started" "failed notNewer" "$replaced_after_launch"
 expect "the refusals left the AppImage alone" "$old_sum" "$(sha256sum < "$apps/Ardia.AppImage")"
 expect "the refusals left no staged AppImage" "" "$(find "$apps" -name '.ardia-update-*')"
 stage valid
 expect "appimage upgrade" "installed $NEW" "$(app_install "$cases/valid")"
-expect "the AppImage is the new release" "$(sha256sum < "/work/pkgs/$NEW/Ardia-$NEW-linux-x64.AppImage")" "$(sha256sum < "$apps/Ardia.AppImage")"
+expect "the AppImage is the new release" "$(sha256sum < "/work/pkgs/$NEW/Solstice-$NEW-linux-x64.AppImage")" "$(sha256sum < "$apps/Ardia.AppImage")"
 expect "the new AppImage's mode and owner" "755 tester" "$(stat -c '%a %U' "$apps/Ardia.AppImage")"
 expect "the upgrade left no staged AppImage" "" "$(find "$apps" -name '.ardia-update-*')"
 expect "the upgrade left no private folder" 0 "$(find /tmp -maxdepth 1 -name 'ardia-update.*' | wc -l)"
