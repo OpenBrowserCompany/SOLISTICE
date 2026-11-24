@@ -12,7 +12,7 @@
 #include "Paths.h"
 #include "TestGate.h"
 
-namespace Ardia {
+namespace Solstice {
 
 namespace AppLaunch {
 
@@ -173,7 +173,7 @@ inline std::filesystem::path ChosenConfigDirectory(bool testInstance) noexcept {
     Note(L"ARDIA_CONFIG_DIR ignored: " + clash);
   }
   if (Paths::HasCustomDataDirectory()) return Paths::Ensured(Paths::DataDirectory() / L"config");
-  return Paths::Ensured(Paths::UserFolder(FOLDERID_RoamingAppData, L"APPDATA") / L"Ardia");
+  return Paths::Ensured(Paths::UserFolder(FOLDERID_RoamingAppData, L"APPDATA") / L"Solstice");
 }
 
 inline std::optional<std::wstring> &EngineTestGate() noexcept {

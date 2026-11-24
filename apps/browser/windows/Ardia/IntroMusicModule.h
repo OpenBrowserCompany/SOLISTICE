@@ -5,7 +5,7 @@
 #include "AppModule.h"
 #include "IntroMusic.h"
 
-namespace Ardia {
+namespace Solstice {
 
 REACT_MODULE(IntroMusicModule, L"ArdiaIntroMusic")
 struct IntroMusicModule {
