@@ -221,13 +221,13 @@ test("an Arc import brings its rules, archive, glyph icons and threshold into th
   assert.ok(importNow().step.notes.includes("1 archived tab from spaces that didn't come over stayed in Arc."), "the tab from the deleted space still stays behind");
 });
 
-test("a fallback or Little Ardia choice the person made stays, and the done screen says so", async () => {
+test("a fallback or Little Solstice choice the person made stays, and the done screen says so", async () => {
   begin({ routing: { rules: [], skipped: 0, fallback: { kind: "space", spaceId: "s-home", spaceName: "Home" } } });
   setAirTrafficFallback(null);
   S().updateSettings({ cleanUpInactiveTabsAfterMinutes: 12 * 60 });
   await runImport(new Set(["tabs", "linkRules", "archive"]));
   assert.equal(S().settings.cleanUpInactiveTabsAfterMinutes, 12 * 60);
-  assert.equal(currentAirTraffic().fallback, null, "Ardia's usual routing, chosen on purpose, stays");
+  assert.equal(currentAirTraffic().fallback, null, "Solstice's usual routing, chosen on purpose, stays");
   await settle();
   assert.ok(importNow().step.notes.some((n) => n.startsWith("Arc's choice for links from other apps wasn't imported, because")));
   assert.ok(importNow().step.notes.some((n) => n.startsWith("Arc's archive timing wasn't imported")));
@@ -240,7 +240,7 @@ test("a fallback or Little Ardia choice the person made stays, and the done scre
   begin({ routing: { rules: [], skipped: 0, fallback: { kind: "space", spaceId: "s-home", spaceName: "Home" } } });
   S().updateSettings({ openLinksInLittleArdia: false }, { fromSync: true });
   await runImport(new Set(["tabs", "linkRules"]));
-  assert.equal(currentAirTraffic().fallback, null, "Little Ardia turned off elsewhere counts as a choice");
+  assert.equal(currentAirTraffic().fallback, null, "Little Solstice turned off elsewhere counts as a choice");
 
   begin({ routing: { rules: [], skipped: 0, fallback: { kind: "space", spaceId: "s-home", spaceName: "Home" } } });
   await runImport(new Set(["tabs", "linkRules"]));
@@ -277,7 +277,7 @@ test("the newest archived tabs that have a profile fill Recently Cleaned, and th
   const notes = importNow().step.notes;
   assert.ok(notes.includes("20 archived tabs stayed in Arc: Recently Cleaned keeps the newest 100 for a week."), JSON.stringify(notes));
   assert.ok(notes.includes("10 archived tabs from spaces that didn't come over stayed in Arc."), JSON.stringify(notes));
-  assert.ok(notes.includes("7 older archived tabs weren't read: Ardia reads Arc's newest 1,500."), JSON.stringify(notes));
+  assert.ok(notes.includes("7 older archived tabs weren't read: Solstice reads Arc's newest 1,500."), JSON.stringify(notes));
 
   useBrowser.setState({ cleanedTabs: S().cleanedTabs.slice(-5) });
   await runImport(new Set(["archive"]));

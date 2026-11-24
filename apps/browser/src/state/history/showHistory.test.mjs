@@ -36,7 +36,7 @@ test("⌘Y opens History and asks its search field for focus, which then claims 
   const w = windowOnPage();
   pressCmdY(w, 101);
   const history = activeTab(w);
-  assert.equal(S().tabs[history].url, "ardia://history");
+  assert.equal(S().tabs[history].url, "solstice://history");
   assert.equal(requested(), history);
   assert.deepEqual(sent.cancels, []);
   claimFocusTag(w, historySearchFocus(history), () => 7);
