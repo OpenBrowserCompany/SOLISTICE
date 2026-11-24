@@ -5,9 +5,9 @@ S=${FIXES_SCRATCH:-$HOME/ardia-scratch/release-0244}
 mkdir -p "$S/before" "$S/after" "$S/cli/before" "$S/cli/after"
 for side in before after; do
   v=$([ "$side" = before ] && echo 0.2.43 || echo 0.2.44)
-  if [ ! -d "$S/$side/Ardia.app" ]; then
-    ditto "$REPO/dist/$v/export/Ardia.app" "$S/$side/Ardia.app"
-    codesign --force --deep --sign - "$S/$side/Ardia.app" >/dev/null 2>&1
+  if [ ! -d "$S/$side/Solstice.app" ]; then
+    ditto "$REPO/dist/$v/export/Solstice.app" "$S/$side/Solstice.app"
+    codesign --force --deep --sign - "$S/$side/Solstice.app" >/dev/null 2>&1
   fi
   if [ ! -x "$S/cli/$side/bin/ardia" ]; then
     tar xzf "$REPO/dist/$v/ardia-cli-$v-macos-arm64.tar.gz" -C "$S/cli/$side" --strip-components 1

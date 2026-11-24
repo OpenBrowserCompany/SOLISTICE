@@ -3,7 +3,7 @@ set -euo pipefail
 REPO=$(cd "$(dirname "$0")/../../../.." && pwd)
 S=${FIXES_SCRATCH:-$HOME/ardia-scratch/film-0247n8/film}
 BEFORE_SRC=${BEFORE_SRC:-$HOME/ardia-scratch/nightly8/ardia/dist/0.2.47-nightly.7/export/Netnyahoo.app}
-AFTER_SRC=${AFTER_SRC:-$HOME/ardia-scratch/nightly8/ardia/dist/0.2.47-nightly.8/export/Ardia.app}
+AFTER_SRC=${AFTER_SRC:-$HOME/ardia-scratch/nightly8/ardia/dist/0.2.47-nightly.8/export/Solstice.app}
 PORT=${FIXES_SITES_PORT:-47321}
 mkdir -p "$S"
 cat >"$S/film.entitlements" <<'PLIST'
@@ -11,10 +11,10 @@ cat >"$S/film.entitlements" <<'PLIST'
 PLIST
 for side in before after; do
   src=$([ "$side" = before ] && echo "${BEFORE_SRC:-}" || echo "${AFTER_SRC:-}")
-  if [ ! -d "$S/$side/Ardia.app" ] && [ -n "$src" ]; then
+  if [ ! -d "$S/$side/Solstice.app" ] && [ -n "$src" ]; then
     mkdir -p "$S/$side"
-    ditto "$src" "$S/$side/Ardia.app"
-    codesign -f -s - --options runtime --entitlements "$S/film.entitlements" "$S/$side/Ardia.app" >/dev/null 2>&1
+    ditto "$src" "$S/$side/Solstice.app"
+    codesign -f -s - --options runtime --entitlements "$S/film.entitlements" "$S/$side/Solstice.app" >/dev/null 2>&1
   fi
 done
 node "$REPO/apps/videos/scripts/fixes/sessions-0247n8.mjs" "$S"
