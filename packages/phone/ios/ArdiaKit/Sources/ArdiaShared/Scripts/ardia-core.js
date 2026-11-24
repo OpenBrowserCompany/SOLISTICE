@@ -329,9 +329,9 @@ __define("packages/core/src/appUrls.ts", function (exports, __require) {
   __export(exports, "toEngineUrl", () => toEngineUrl);
   __export(exports, "appUrlOrigin", () => appUrlOrigin);
   __export(exports, "appUrlRoute", () => appUrlRoute);
-const APP_SCHEME = "ardia";
+const APP_SCHEME = "solstice";
 
-const APP_PREFIX = /^(view-source:)?ardia:(?:\/\/)?/i;
+const APP_PREFIX = /^(view-source:)?(?:ardia|solstice):(?:\/\/)?/i;
 const ENGINE_PREFIX = /^(view-source:)?chrome:(?:\/\/)?/i;
 const ABOUT_PAGE = /^about:(blank|srcdoc)([?#]|$)/i;
 const ABOUT_ALIAS = /^about:([a-z][a-z0-9-]*)/i;
@@ -360,7 +360,7 @@ function toEngineUrl(url        )         {
   return parts?.host ? `${parts.viewSource}chrome://${parts.host}${parts.rest}` : url;
 }
 
-const isAppUrl = (url                           ) => !!url && /^ardia:\/\/[^/?#]/i.test(url);
+const isAppUrl = (url                           ) => !!url && /^(?:ardia|solstice):\/\/[^/?#]/i.test(url);
 
 function appUrlParts(url        )                                                                     {
   if (!isAppUrl(url)) return null;
@@ -2110,7 +2110,7 @@ const APP_INGEST_KEY = "ak_app_41b5d0762fd8ade6949ac2ac";
 const CLI_INGEST_KEY = "ak_cli_67adb8ebc49841125eda860e";
 const SITE_INGEST_KEY = "ak_site_6b26588b3764ae7d0f6d63d7";
 
-const INGEST_KEY_HEADER = "X-Ardia-Key";
+const INGEST_KEY_HEADER = "X-Solstice-Key";
 
                                            
 

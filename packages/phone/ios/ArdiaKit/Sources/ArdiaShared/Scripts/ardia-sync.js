@@ -1674,9 +1674,9 @@ __define("packages/sync/src/companion/legacy.ts", function (exports, __require) 
   __export(exports, "fromLegacyUrl", () => fromLegacyUrl);
   __export(exports, "fromLegacy", () => fromLegacy);
 const LEGACY_URLS                     = [
-  ["netnyahoo://yahu", "ardia://game"],
+  ["netnyahoo://yahu", "solstice://game"],
   ["chrome://yahu", "chrome://game"],
-  ["netnyahoo://", "ardia://"],
+  ["netnyahoo://", "solstice://"],
 ];
 
 function fromLegacyUrl(url        )         {
