@@ -42,10 +42,10 @@ test("cancel leaves the setting alone", async () => {
 });
 
 test("a folder the host rejects is reported in the window and never applied", async () => {
-  const error = Object.assign(new Error("Ardia can't save downloads in that folder"), { code: "ERR_FOLDER_NOT_WRITABLE" });
+  const error = Object.assign(new Error("Solstice can't save downloads in that folder"), { code: "ERR_FOLDER_NOT_WRITABLE" });
   const { pick, notices } = fixture(error);
   assert.equal(await quiet(() => pick("/home/me/Downloads", "Use Folder")), null);
-  assert.deepEqual(notices, [["Couldn't Use That Folder", "Ardia can't save downloads in that folder", "Choose Another Folder…"]]);
+  assert.deepEqual(notices, [["Couldn't Use That Folder", "Solstice can't save downloads in that folder", "Choose Another Folder…"]]);
 });
 
 test("choosing another folder after a rejection opens the picker again", async () => {

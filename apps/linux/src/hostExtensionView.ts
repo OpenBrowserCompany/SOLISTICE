@@ -63,7 +63,7 @@ export class HostExtensionView {
     });
     this.ready = this.enqueue(async () => {
       const reply = await invokeHost<{ id: number }>("extensionView.create", { kind: options.kind, url: options.url, profile: hostProfile(options.profile, host) }, host);
-      if (!Number.isInteger(reply?.id) || reply.id <= 0) throw new Error("Invalid Ardia extension view identity");
+      if (!Number.isInteger(reply?.id) || reply.id <= 0) throw new Error("Invalid Solstice extension view identity");
       this.id = reply.id;
       if (!this.disposed) for (const queued of early) if (queued.id === String(reply.id)) deliver(queued.event);
       early.length = 0;
@@ -92,7 +92,7 @@ export class HostExtensionView {
   async command<T = unknown>(command: string, args: unknown[] = []): Promise<T> {
     await this.ready;
     return this.enqueue(async () => {
-      if (this.disposed || this.id === undefined) throw new Error("Ardia extension view released");
+      if (this.disposed || this.id === undefined) throw new Error("Solstice extension view released");
       if (command === "focus" && !this.shown) {
         this.focusWanted = { owner: this.focus.current(), at: this.focus.now() };
         return undefined as T;

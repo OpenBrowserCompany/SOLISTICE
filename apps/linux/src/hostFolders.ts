@@ -8,7 +8,7 @@ const TITLE = "Couldn't Use That Folder";
 export function createFolderPicker(host: ArdiaHost, ask: Ask) {
   return async (current: string | null, prompt: string | null = null): Promise<string | null> => {
     if (!hostSupports("ArdiaShell.pickFolder", host)) {
-      await ask({ title: TITLE, message: "Choosing a folder isn't available in this build of Ardia.", confirmTitle: "OK" }).catch(reportHostError);
+      await ask({ title: TITLE, message: "Choosing a folder isn't available in this build of Solstice.", confirmTitle: "OK" }).catch(reportHostError);
       return null;
     }
     for (;;) {
