@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 
 const pkg = join(dirname(fileURLToPath(import.meta.url)), "..");
 const scratchPath = join(tmpdir(), "ardia-sync-swiftpm");
-const NEW_ID = "com.ardia.browser";
+const NEW_ID = "com.openbrowsercompany.solstice";
 
 function tool() {
   execFileSync(join(pkg, "../core-rs/scripts/build-xcframework.sh"), { stdio: ["ignore", "ignore", "inherit"] });
@@ -73,7 +73,7 @@ const snapshot = (dir) => {
 };
 
 function toOld(text) {
-  let out = text.split("ardia://game").join(oldGame).split("chrome://game").join(oldChromeGame).split("ardia://").join(oldScheme);
+  let out = text.split("solstice://game").join(oldGame).split("chrome://game").join(oldChromeGame).split("solstice://").join(oldScheme);
   for (const [old, now] of Object.entries(names.jsonKeys)) out = out.split(`"${now}"`).join(`"${old}"`);
   return out;
 }
@@ -117,7 +117,7 @@ function seedFrom(instance, home) {
   });
   writeFileSync(join(home, "keychain.json"), JSON.stringify({
     [safeStorage.oldService]: { [safeStorage.oldAccount]: Buffer.from("mock_password").toString("base64") },
-    [oldService("Ardia Connected Accounts")]: { github: Buffer.from("e2e-token").toString("base64") },
+    [oldService("Solstice Connected Accounts")]: { github: Buffer.from("e2e-token").toString("base64") },
   }));
   writeOldDefaultBrowser(home);
   console.log(`old install at ${home} (from ${instance})`);
@@ -154,7 +154,7 @@ function seedSynthetic(home, secret) {
   writeFileSync(join(oldData, oldPath("Chromium/ArdiaPictureInPicture.plist")), '<?xml version="1.0"?><plist version="1.0"><array><real>320</real></array></plist>');
   mkdirSync(join(chromium, "NativeMessagingHosts"));
   writeFileSync(join(oldData, oldPath("Chromium/NativeMessagingHosts/.ardia-managed.json")), "[]");
-  mkdirSync(join(chromium, "Default", oldPath("Chromium/*/Ardia Favicons").split("/").pop()));
+  mkdirSync(join(chromium, "Default", oldPath("Chromium/*/Solstice Favicons").split("/").pop()));
   sqlite(join(chromium, "Default/Login Data"), "CREATE TABLE logins (origin_url TEXT, username_value TEXT, password_value BLOB);");
   sqlite(join(chromium, "Default/Login Data"), `INSERT INTO logins VALUES ('https://example.com/', 'e2e', X'${encrypt(secret, "hunter2-e2e").toString("hex")}');`);
   sqlite(join(chromium, "Default/Cookies"), "CREATE TABLE cookies (host_key TEXT, name TEXT, encrypted_value BLOB);");
@@ -167,8 +167,8 @@ function seedSynthetic(home, secret) {
   });
   writeFileSync(join(home, "keychain.json"), JSON.stringify({
     [safeStorage.oldService]: { [safeStorage.oldAccount]: Buffer.from(secret).toString("base64") },
-    [oldService("Ardia Connected Accounts")]: { github: Buffer.from("gh-e2e").toString("base64") },
-    [oldService("Ardia Sync Key")]: { "device-e2e": randomBytes(32).toString("base64") },
+    [oldService("Solstice Connected Accounts")]: { github: Buffer.from("gh-e2e").toString("base64") },
+    [oldService("Solstice Sync Key")]: { "device-e2e": randomBytes(32).toString("base64") },
   }));
   writeOldDefaultBrowser(home);
   return oldData;
@@ -183,13 +183,13 @@ function run(home, data, crashAfter) {
 
 function verify(label, data, secret) {
   const session = JSON.parse(readFileSync(join(data, "session.json"), "utf8"));
-  check(`${label}: tabs' app URLs`, JSON.stringify(session.tabs.map((t) => t.url)) === JSON.stringify(["ardia://history", "chrome://game", "https://example.com/"]), JSON.stringify(session.tabs.map((t) => t.url)));
+  check(`${label}: tabs' app URLs`, JSON.stringify(session.tabs.map((t) => t.url)) === JSON.stringify(["solstice://history", "chrome://game", "https://example.com/"]), JSON.stringify(session.tabs.map((t) => t.url)));
   check(`${label}: pinned group`, session.groups?.[0]?.pinned === true && session.groups[0].tabIds[0] === "t3");
   check(`${label}: settings`, session.settings.openLinksInLittleArdia === false && session.settings.littleArdiaSize?.[0] === 800 && !(oldKey("openLinksInLittleArdia") in session.settings));
   check(`${label}: shortcuts`, JSON.stringify(session.settings.shortcuts) === JSON.stringify({ newLittleArdia: ["cmd+opt+y"] }));
-  check(`${label}: launch hint`, session.launchTab.url === "ardia://history");
+  check(`${label}: launch hint`, session.launchTab.url === "solstice://history");
   const bookmarks = readFileSync(join(data, "Chromium/Default/Bookmarks"), "utf8");
-  check(`${label}: bookmark URL and sync key`, bookmarks.includes('"url":"ardia://downloads"') && bookmarks.includes('"ac_sync_key":"bm-7"'));
+  check(`${label}: bookmark URL and sync key`, bookmarks.includes('"url":"solstice://downloads"') && bookmarks.includes('"ac_sync_key":"bm-7"'));
   for (const [, now] of names.paths) {
     const p = join(data, now.replace("*", "Default"));
     check(`${label}: ${now}`, existsSync(p));
@@ -265,14 +265,14 @@ for (const crashAfter of [null, "staged", "secrets", "journal", "published", "de
   check("before the offer: an offer already answered stays answered", JSON.parse(readFileSync(join(data, OFFER), "utf8")).askedAt === 1);
 }
 
-const NEW_APP = "Ardia.app";
+const NEW_APP = "Solstice.app";
 function fakeBundle(folder, name = names.appFileName) {
   const bundle = join(folder, name);
   mkdirSync(join(bundle, "Contents/MacOS"), { recursive: true });
-  cpSync(bin, join(bundle, "Contents/MacOS/Ardia"));
+  cpSync(bin, join(bundle, "Contents/MacOS/Solstice"));
   return bundle;
 }
-const exe = (bundle) => join(bundle, "Contents/MacOS/Ardia");
+const exe = (bundle) => join(bundle, "Contents/MacOS/Solstice");
 const moveArgs = (wait) => ["move", ...(wait ? ["--wait", wait] : [])];
 const move = (bundle) => spawnSync(exe(bundle), moveArgs(), { env: { ...process.env, MOVE_MARK: "kept" }, encoding: "utf8" }).stdout.trim();
 const ranFrom = (bundle, wait) => `at ${exe(bundle)}|kept|${moveArgs(wait).join(" ")}`;
@@ -282,7 +282,7 @@ rmSync(moves, { recursive: true, force: true });
   const folder = join(moves, "plain");
   const bundle = fakeBundle(folder);
   const out = move(bundle);
-  check("move: the old name becomes Ardia.app", !existsSync(bundle) && existsSync(join(folder, NEW_APP)), readdirSync(folder).join(", "));
+  check("move: the old name becomes Solstice.app", !existsSync(bundle) && existsSync(join(folder, NEW_APP)), readdirSync(folder).join(", "));
   check("move: it starts over from there, with its arguments and environment", out === ranFrom(join(folder, NEW_APP)), out);
 }
 {
@@ -328,7 +328,7 @@ const stays = (label, folder, bundle) => {
   const folder = join(moves, "clash");
   const bundle = fakeBundle(folder);
   fakeBundle(folder, NEW_APP);
-  stays("beside an Ardia.app", folder, bundle);
+  stays("beside an Solstice.app", folder, bundle);
 }
 {
   const folder = join(moves, "link");
@@ -340,7 +340,7 @@ const stays = (label, folder, bundle) => {
 }
 {
   const folder = join(moves, "other");
-  stays("another name", folder, fakeBundle(folder, "Ardia Beta.app"));
+  stays("another name", folder, fakeBundle(folder, "Solstice Beta.app"));
 }
 {
   const folder = join(moves, "AppTranslocation/ABCD/d");
