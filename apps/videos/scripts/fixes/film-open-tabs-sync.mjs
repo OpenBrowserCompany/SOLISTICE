@@ -7,7 +7,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const repo = join(here, "../../../..");
 const { devtools, launch, session, sleep } = await import(join(repo, "scripts/lib/instance.mjs"));
 
-const APP = process.env.AFTER_APP ?? join(repo, "apps/browser/build-topstrip/Build/Products/Debug/Ardia.app");
+const APP = process.env.AFTER_APP ?? join(repo, "apps/browser/build-topstrip/Build/Products/Debug/Solstice.app");
 const scratch = process.env.FILM_SCRATCH ?? "/tmp/open-tabs-sync-film";
 const footage = join(repo, "apps/videos/public/footage/open-tabs-sync");
 const timelineFile = join(repo, "apps/videos/src/videos/open-tabs-sync/timeline.json");
