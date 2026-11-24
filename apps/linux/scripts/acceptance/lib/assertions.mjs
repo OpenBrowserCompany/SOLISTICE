@@ -98,7 +98,7 @@ export function percentText(zoom) {
 
 export const UNSUPPORTED_SETTINGS = [
   { id: "general.defaultBrowser", text: "Default browser", pane: "General" },
-  { id: "general.openAtLogin", text: "Open Ardia at login", pane: "General" },
+  { id: "general.openAtLogin", text: "Open Solstice at login", pane: "General" },
 ];
 
 export function visibleUnsupported(textByPane) {

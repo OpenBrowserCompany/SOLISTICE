@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Ardia Acceptance Fixture",
+  "name": "Solstice Acceptance Fixture",
   "version": "1.0",
   "description": "Exercises the toolbar action, popup, side panel and omnibox keyword.",
   "icons": { "16": "icon.png", "48": "icon.png", "128": "icon.png" },
