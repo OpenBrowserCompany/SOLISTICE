@@ -6,7 +6,7 @@
   "sync": "a record from another device that holds the sync key",
   "other-app": "another app on this Mac, through an opened URL, an Apple Event or a notification",
   "plugin": "an approved plugin, within its manifest's permissions",
-  "socket": "a same-user process on the control socket while Settings > Advanced > Let programs control Ardia is on",
+  "socket": "a same-user process on the control socket while Settings > Advanced > Let programs control Solstice is on",
   "native": "the browser's own native layer, relaying OS input",
   "import": "a file or browser profile the user chose to import"
  },
@@ -1585,7 +1585,7 @@
   {
    "id": "control-socket:accept",
    "source": "socket",
-   "guard": "AF_UNIX, mode 0600 in a data folder you own that no one else can write, with no macOS access list letting anyone else in and not on a volume that ignores ownership, with no ancestor someone else could swap, held open by descriptor for the lock, cleanup and a post-bind inode check (PrivateFolder); peer UID equal; then the peer's audit token (LOCAL_PEERTOKEN) is resolved with Security.framework: a hardened program signed with Ardia's own Team ID is the owner, anything else waits on the doorbell (Allow Once, 30 minutes, Always, Don't Allow) or a saved approval keyed by Team ID + identifier or path + cdhash, and is refused on a timeout, when its peer leaves or when nobody can see the question. Test instances keep the same-user rule unless ARDIA_TEST controlDoorbell (D3: a same-user process can still exec the bundled ardia or its runtime, and still reads the token connection's ArdiaControl.json). Swift tests in packages/shell/controlpeer-tests",
+   "guard": "AF_UNIX, mode 0600 in a data folder you own that no one else can write, with no macOS access list letting anyone else in and not on a volume that ignores ownership, with no ancestor someone else could swap, held open by descriptor for the lock, cleanup and a post-bind inode check (PrivateFolder); peer UID equal; then the peer's audit token (LOCAL_PEERTOKEN) is resolved with Security.framework: a hardened program signed with Solstice's own Team ID is the owner, anything else waits on the doorbell (Allow Once, 30 minutes, Always, Don't Allow) or a saved approval keyed by Team ID + identifier or path + cdhash, and is refused on a timeout, when its peer leaves or when nobody can see the question. Test instances keep the same-user rule unless ARDIA_TEST controlDoorbell (D3: a same-user process can still exec the bundled ardia or its runtime, and still reads the token connection's ArdiaControl.json). Swift tests in packages/shell/controlpeer-tests",
    "checks": [
     "packages/shell/ios/ControlSocket.swift",
     "packages/shell/ios/ControlPeerCore/ControlPeer.swift",

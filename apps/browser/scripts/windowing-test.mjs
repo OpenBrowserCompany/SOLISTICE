@@ -11,7 +11,7 @@ import { readPng } from "../../../scripts/lib/png.mjs";
 const args = process.argv.slice(2);
 const appArg = args.find((a) => !a.startsWith("--"));
 if (!appArg) {
-  console.error("usage: node windowing-test.mjs <Debug Ardia.app> [--port=<DevTools port>] [--keep-data]");
+  console.error("usage: node windowing-test.mjs <Debug Solstice.app> [--port=<DevTools port>] [--keep-data]");
   process.exit(2);
 }
 const appPath = resolve(appArg);
@@ -299,7 +299,7 @@ try {
     assert.ok(blank.length <= 1, `${blank.length} frames of w1's page blank`);
   });
 
-  await check("window managers float Settings and Little Ardia and keep tiling the main window", async () => {
+  await check("window managers float Settings and Little Solstice and keep tiling the main window", async () => {
     const subroles = () => run(`return win("w1").then((n) => ac.engine.call("windows.dev", { window: n, action: "subroles" })).then((text) => JSON.parse(text));`);
     const until = async (found) => {
       for (let end = Date.now() + 10000; Date.now() < end; await sleep(250)) {
@@ -316,8 +316,8 @@ try {
     assert.equal(list.find((w) => w.title === "Settings")?.subrole, "AXDialog", `Settings: ${JSON.stringify(list)}`);
     await run(`st().createWindow({ kind: "small", url: ${JSON.stringify(`${base}/blue?little`)} }); return true;`);
     list = await until((l) => l.some((w) => w.identifier === "ardia.window.small"));
-    assert.equal(list.find((w) => w.identifier === "ardia.window.small")?.subrole, "AXSystemFloatingWindow", `Little Ardia: ${JSON.stringify(list)}`);
-    assert.equal(list.find((w) => w.number === main)?.subrole, "AXStandardWindow", `main window after Little Ardia: ${JSON.stringify(list)}`);
+    assert.equal(list.find((w) => w.identifier === "ardia.window.small")?.subrole, "AXSystemFloatingWindow", `Little Solstice: ${JSON.stringify(list)}`);
+    assert.equal(list.find((w) => w.number === main)?.subrole, "AXStandardWindow", `main window after Little Solstice: ${JSON.stringify(list)}`);
   });
 } finally {
   await app?.quit();
