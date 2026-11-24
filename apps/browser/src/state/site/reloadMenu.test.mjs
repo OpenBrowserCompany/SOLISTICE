@@ -30,7 +30,7 @@ test("the reload button's menu: Reload and Hard Reload with their keys, the site
 
 test("only web pages have a site to configure", () => {
   assert.equal(siteOrigin("https://a.com/x?y"), "https://a.com");
-  assert.equal(siteOrigin("ardia://newtab"), null);
+  assert.equal(siteOrigin("solstice://newtab"), null);
   assert.equal(siteOrigin("not a url"), null);
 });
 
