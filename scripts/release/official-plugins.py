@@ -23,13 +23,13 @@ VERSION = re.compile(r"^[0-9]{1,4}\.[0-9]{1,4}\.[0-9]{1,4}(-[a-z]{1,16}\.[0-9]{1
 SHA = re.compile(r"^[0-9a-f]{64}$")
 FILE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$")
 RELEASE = re.compile(r"^https://github\.com/[A-Za-z0-9-]+/[A-Za-z0-9._-]+/releases/download/[A-Za-z0-9._-]+$")
-ARTIFACTS = {"macos-arm64": "the plugin folder Ardia fetches on Install on macOS", "linux-x64": "the command's tarball Linux installs", "installer": "install.sh"}
+ARTIFACTS = {"macos-arm64": "the plugin folder Solstice fetches on Install on macOS", "linux-x64": "the command's tarball Linux installs", "installer": "install.sh"}
 LIMIT = 512 * 1024 * 1024
 KNOWN_LEGACY_ROOTS = {"Library/Application Support/Ardia/CLI"}
 COMPONENT = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
 ANCHOR = re.compile(r"^[A-Za-z][A-Za-z0-9]{0,39}$")
 REGISTRY_VERSION = 1
-DESCRIPTION = """Reads and verifies the official plugins pinned in apps/browser/official-plugins.json. Ardia doesn't bundle them:
+DESCRIPTION = """Reads and verifies the official plugins pinned in apps/browser/official-plugins.json. Solstice doesn't bundle them:
 Install fetches the pinned macos-arm64 artifact and checks it against the pin the app is signed with. Every byte a
 script takes from a release goes through fetch(), which refuses an artifact whose SHA-256 isn't the pinned one.
 
