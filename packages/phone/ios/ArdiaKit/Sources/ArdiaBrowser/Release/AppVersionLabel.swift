@@ -5,15 +5,15 @@ public enum AppVersionLabel {
 
   public static func text(releaseVersion: String, build: String, isDebug: Bool, receiptName: String?) -> String {
     guard !isDebug, let release = ReleaseVersion(releaseVersion) else {
-      return String(localized: "Ardia Dev (\(build))")
+      return String(localized: "Solstice Dev (\(build))")
     }
     guard receiptName == testFlightReceiptName else {
-      return String(localized: "Ardia \(release.appleVersion) (\(build))")
+      return String(localized: "Solstice \(release.appleVersion) (\(build))")
     }
     if let nightly = release.nightly {
-      return String(localized: "Ardia \(release.appleVersion) Nightly \(nightly) (\(build))")
+      return String(localized: "Solstice \(release.appleVersion) Nightly \(nightly) (\(build))")
     }
-    return String(localized: "Ardia \(release.appleVersion) Nightly (\(build))")
+    return String(localized: "Solstice \(release.appleVersion) Nightly (\(build))")
   }
 }
 

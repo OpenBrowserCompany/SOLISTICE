@@ -123,7 +123,7 @@ public enum BrowserStoreLocation: Sendable {
 }
 
 public enum BrowserStore {
-  public static let appGroupIdentifier = "group.com.ardia.browser.ios"
+  public static let appGroupIdentifier = "group.com.openbrowsercompany.solstice.ios"
 
   public static func makeContainer(_ location: BrowserStoreLocation) throws -> ModelContainer {
     let schema = Schema(versionedSchema: BrowserSchemaV1.self)
@@ -138,7 +138,7 @@ public enum BrowserStore {
       if FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupIdentifier) != nil {
         configuration = ModelConfiguration("Browser", schema: schema, groupContainer: .identifier(appGroupIdentifier))
       } else {
-        let support = URL.applicationSupportDirectory.appending(path: "Ardia", directoryHint: .isDirectory)
+        let support = URL.applicationSupportDirectory.appending(path: "Solstice", directoryHint: .isDirectory)
         try FileManager.default.createDirectory(at: support, withIntermediateDirectories: true)
         configuration = ModelConfiguration(schema: schema, url: support.appending(path: "Browser.store"))
       }
