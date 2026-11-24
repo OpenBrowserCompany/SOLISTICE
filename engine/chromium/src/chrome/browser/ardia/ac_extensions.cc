@@ -1,4 +1,4 @@
-// Copyright 2026 Ardia. Apache-2.0.
+// Copyright 2026 Solstice. Apache-2.0.
 
 #include "chrome/browser/ardia/ac_engine.h"
 
@@ -387,7 +387,7 @@ AC_PROFILE_CALL(ac_extensions_install) {
                                    extensions::UNINSTALL_REASON_INTERNAL_MANAGEMENT,
                                    &ignored);
           return reply.Error(
-              "Ardia Scripts: Scripts/extension changed while it was "
+              "Solstice Scripts: Scripts/extension changed while it was "
               "installing");
         }
         ardia::LiftPolicyBlockIfAllowed(profile.get(), id);
