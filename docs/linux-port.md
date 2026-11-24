@@ -1,11 +1,11 @@
-# Ardia on Linux
+# Solstice on Linux
 
 The Linux port runs the same browser UI as the Mac app on the same Chromium (158.0.8127.36) and Helium (0.22.2, with
 helium-linux 0.22.2.1) pins. It targets x86-64 Linux on Wayland, with Hyprland and Omarchy as the main desktop; X11
 works, and arm64 builds are configured but untested. It answers upstream issue #1, "Linux Support".
 
 On the Mac, ArdiaCore is a framework that the React Native app hosts. On Linux there is no React Native: Chromium's own
-`chrome` executable is the app. It serves Ardia's UI from `chrome://ardia/` inside each browser window and hands the
+`chrome` executable is the app. It serves Solstice's UI from `chrome://ardia/` inside each browser window and hands the
 UI one privileged bridge, `window.__ardiaHost`. ArdiaCore is linked into `chrome`; there is no separate
 `libardiacore.so`.
 
@@ -45,7 +45,7 @@ The acceptance suite is in [linux-acceptance.md](linux-acceptance.md) and CI in 
   the window's profile, and its address is `http` or `https`. It loads in the strip's blank first tab (Chrome's new
   tab page), or in a new background tab when there is none, and no binding owns it. The shell's first `tab.create`
   for that address takes it instead of opening another, whatever its page has redirected to since. Nothing starts for
-  a utility, Little Ardia or private window, a launch that brought addresses from another app, or an empty session.
+  a utility, Little Solstice or private window, a launch that brought addresses from another app, or an empty session.
   A started page the shell hasn't taken after 30 s is closed, or turned back into a blank page when it is the strip's
   only tab, so the window never closes with it.
 - **CSP.** The shell's policy is `default-src 'none'`, `script-src 'self'`, `connect-src 'none'`, `frame-src 'none'`,
@@ -218,13 +218,13 @@ The acceptance suite is in [linux-acceptance.md](linux-acceptance.md) and CI in 
 - **Window close.** A close request waits until pending writes are sealed on the worker. The 30 s native deadline
   cancels the close; it never forces it. A save failure leaves the window open for a retry. Killing the process
   bypasses all of this.
-- **Little Ardia windows** aren't saved to the session, so the renderer of a new one can't learn its kind from it.
+- **Little Solstice windows** aren't saved to the session, so the renderer of a new one can't learn its kind from it.
   The opener leaves the window and its tab in `localStorage` (`ardia.smallWindow.<id>`, `hostSmallWindows.ts`), which
   every regular shell shares; the new renderer takes it once at startup, within 60 s, and starts as that small
   window, on its command bar when its tab is blank. Once the native window has opened, the opener forgets its copy
   without closing the window, so the window lives in one store only and a tab it moves to the main window
-  (Open in Ardia) arrives through the session like any other. The opener also sends the Mac's frame: the saved
-  Little Ardia size, at least 420 by 300, centred in the work area. With an engine that advertises
+  (Open in Solstice) arrives through the session like any other. The opener also sends the Mac's frame: the saved
+  Little Solstice size, at least 420 by 300, centred in the work area. With an engine that advertises
   `ArdiaShell.smallWindows` the shell does neither: the opener passes the same window and tab as `smallWindow` in the
   `openWindow` options and no frame, and the new renderer reads `windowKind` and `smallWindow` from its bootstrap
   (a relayed window has no 60 s limit). A bootstrap whose `windowKind` isn't `"small"` takes no seed at all. See
@@ -255,7 +255,7 @@ The acceptance suite is in [linux-acceptance.md](linux-acceptance.md) and CI in 
     `readerOpen` and `readerSetLook` pin everything before the look and a fixed suffix after it. The host accepts only
     `{dark, size, font}` with exactly those keys, a boolean, a size index inside `READER_SIZES` and a font from
     `READER_FONTS`, and it writes its own canonical copy of the look into the script.
-  - Every operation runs in the page's Ardia isolated world, so the reader's state on
+  - Every operation runs in the page's Solstice isolated world, so the reader's state on
     `window[Symbol.for("ardia.reader")]` lasts across calls for one document. Its overlay, `inert` and key listeners act
     on the shared DOM.
   - The element picker (Hide Element) uses five. `elementPickerCancel` is the shared text; `elementPickerApply` and
@@ -330,10 +330,10 @@ The acceptance suite is in [linux-acceptance.md](linux-acceptance.md) and CI in 
   companions, drops the profile's first-window keep-alive and answers `released` (the profile is gone) or `pending`,
   with the unloaded tabs' keys in `tabs`. A profile that isn't loaded answers `released`. Test:
   `engine/ardiacore-linux/tests/test_idle_profiles.py`. When the profile opens again, `tab.create` for a tab of a
-  regular profile with no adoption id reads the history the engine kept for its key (`Ardia Tab History/<hex key>`)
+  regular profile with no adoption id reads the history the engine kept for its key (`Solstice Tab History/<hex key>`)
   on a background thread and recreates the tab from it when the file is version 1, its URL or virtual URL is the
   tab's (fragment aside) and its generation is the profile's (`ac_tab_history_generation`, else the
-  `Ardia Tab History Cleared` marker), as macOS's `RestoreSavedHistory` does; otherwise the URL loads. Private
+  `Solstice Tab History Cleared` marker), as macOS's `RestoreSavedHistory` does; otherwise the URL loads. Private
   profiles, temporary views and user navigations never read it (`ac_linux_saved_history.cc`, Chrome glue in
   `ac_linux_saved_history_engine.cc`). Test: `engine/ardiacore-linux/tests/test_saved_history.py`. As macOS's
   `loadURL:` does, the shell drops the first `loadUrl` of the URL a tab was created with when it comes within 2 s
@@ -366,7 +366,7 @@ The acceptance suite is in [linux-acceptance.md](linux-acceptance.md) and CI in 
     every member, so closing the only visible window asks once, in that window, for the whole family.
   - A companion never reaches `TabRestoreService`: neither its window nor the tabs it closes while closing, on a
     window close or on quit, so the profile's recently closed list never holds a hidden window that would reopen as a
-    separate one. Ardia's own closed windows keep every profile's tabs.
+    separate one. Solstice's own closed windows keep every profile's tabs.
 - **Downloaded files.** Opening, showing, status and icons of a download accept a path of any profile the window
   shows; a private window still accepts only its own.
 - **Private ids.** A private window is `incognito:<window>@<original>`, which resolves to the original profile's
@@ -414,7 +414,7 @@ command's token server.
 build (`SignedForDistribution()` is true and `TestInstance()` false), with one exception: `--ardia-test-cast-sink`,
 honoured only by the browser process of an instance started with its own `--user-data-dir`, registers Chromium's
 test media route provider (`ac_test_media_route_provider.cc`, `TestFlag("mediaRouteProvider")`), which offers one
-fake device, "Ardia Test Sink", and records routes without sending anything anywhere.
+fake device, "Solstice Test Sink", and records routes without sending anything anywhere.
 
 ## How macOS stays unchanged
 
@@ -514,11 +514,11 @@ a `.sha256` file beside it (`sha256sum -c <asset>.sha256` checks a download):
 - **Debian 13, Ubuntu 24.04 and later: the `.deb`.**
 
   ```bash
-  sudo apt install ./Ardia-<version>-linux-x64.deb
+  sudo apt install ./Solstice-<version>-linux-x64.deb
   ```
 
-  apt pulls in the libraries Ardia needs (NSS, GTK 3, ALSA, CUPS, libsecret, curl and the rest). The package makes
-  `chrome-sandbox` setuid root, installs the AppArmor profile Chromium's sandbox needs on Ubuntu, and registers Ardia
+  apt pulls in the libraries Solstice needs (NSS, GTK 3, ALSA, CUPS, libsecret, curl and the rest). The package makes
+  `chrome-sandbox` setuid root, installs the AppArmor profile Chromium's sandbox needs on Ubuntu, and registers Solstice
   as an `x-www-browser` alternative. A newer `.deb` installs over an older one, and a nightly's version
   (`0.2.47~nightly.3`) sorts before its stable, so `apt install` of the stable upgrades it. `sudo apt remove ardia`
   removes it and `sudo apt purge ardia` leaves nothing behind outside your home folder, where your profile
@@ -542,8 +542,8 @@ a `.sha256` file beside it (`sha256sum -c <asset>.sha256` checks a download):
 - **Any distribution, no install: the AppImage.**
 
   ```bash
-  chmod +x Ardia-<version>-linux-x64.AppImage
-  ./Ardia-<version>-linux-x64.AppImage
+  chmod +x Solstice-<version>-linux-x64.AppImage
+  ./Solstice-<version>-linux-x64.AppImage
   ```
 
   It needs unprivileged user namespaces, which Ubuntu 24.04 and later restrict: there it refuses to start and says
@@ -551,7 +551,7 @@ a `.sha256` file beside it (`sha256sum -c <asset>.sha256` checks a download):
 - **Any distribution: the tarball.**
 
   ```bash
-  tar xf Ardia-<version>-linux-x64.tar.xz
+  tar xf Solstice-<version>-linux-x64.tar.xz
   sudo ./ardia/install.sh
   ```
 
@@ -581,10 +581,10 @@ python3 scripts/linux/package.py \
 - **Launcher.** Every format starts through `lib/ardia/ardia-launch`, which decides the sandbox before it runs
   `chrome`: user namespaces when the kernel allows them and AppArmor doesn't restrict them (or a profile grants
   `userns` to this `chrome`), else the setuid-root `chrome-sandbox` beside it on a mount without `nosuid`. Otherwise it
-  says why on stderr and exits 1, whatever the format: Ardia never runs without the sandbox on its own. A tarball run
+  says why on stderr and exits 1, whatever the format: Solstice never runs without the sandbox on its own. A tarball run
   in place points at `sudo install.sh` or the `.deb`; an AppImage points at the `.deb` (the sandbox helper and the
   AppArmor profile) or at the `sysctl` that allows user namespaces for the reason it found. Only a user who passes
-  `--no-sandbox` runs without it: the launcher adds `--ardia-sandbox-decision=Ardia was started with --no-sandbox`, and
+  `--no-sandbox` runs without it: the launcher adds `--ardia-sandbox-decision=Solstice was started with --no-sandbox`, and
   the shell says so once per launch and counts `launches_without_sandbox`.
 - **`.deb`.** Installs under `/usr` (`/usr/bin/ardia` links the launcher), with `chrome-sandbox` setuid root, the
   polkit policy and the AppArmor profile; details under Debian package below.
@@ -621,7 +621,7 @@ command ([linux-ci.md](linux-ci.md) › Linux releases).
   - `lib/ardia/chrome` and the Chromium runtime files from the allowlist in `scripts/linux/runtime_files.py`;
   - `lib/ardia/ardia-ui`;
   - `lib/ardia/extensions/ublock`;
-  - `lib/ardia/VERSION` (with `--version`), one line with the Ardia version (`0.2.44`, `0.2.44-nightly.3`);
+  - `lib/ardia/VERSION` (with `--version`), one line with the Solstice version (`0.2.44`, `0.2.44-nightly.3`);
   - `lib/ardia/ardia-update` (mode 0755), the self-update helper, and `lib/ardia/linux-update.pem` (0644), the
     Ed25519 public key it verifies release manifests with;
   - `lib/ardia/cli/` (with `--cli`): `ardia-cli-install.sh` (`apps/cli/install.sh`, the pinned installer from
@@ -642,11 +642,11 @@ command ([linux-ci.md](linux-ci.md) › Linux releases).
   - It copies `lib/ardia` whole, so `VERSION`, `cli/` and the update helper come along. It copies it to
     `<prefix>/lib/ardia.new-<pid>` first, then swaps it in with one atomic `mv --exchange` where coreutils has it
     (9.5 and later), or else two renames (the old tree to `ardia.old-<pid>`, the new one to `ardia`), and deletes the
-    old tree, so a running Ardia keeps the files it has open and a failed copy
+    old tree, so a running Solstice keeps the files it has open and a failed copy
     leaves the old install whole. A failure between the renames puts the old tree back; leftovers of a run that died
     are removed by the next one.
   - It always installs the polkit policy at `<destdir>/usr/share/polkit-1/actions` (mode 0644), whatever the prefix,
-    because polkit reads actions only from there. Without the policy Ardia can't ask for the system password, so saved
+    because polkit reads actions only from there. Without the policy Solstice can't ask for the system password, so saved
     passwords and card numbers stay hidden. The update action's `org.freedesktop.policykit.exec.path` names
     `/usr/lib/ardia/ardia-update`; for another prefix `install.sh` rewrites it to `<prefix>/lib/ardia/ardia-update`.
     Because that action runs the helper as root without a password, `install.sh` keeps it only when every folder from
@@ -659,7 +659,7 @@ command ([linux-ci.md](linux-ci.md) › Linux releases).
   - `/usr/lib/ardia` is the tarball's `lib/ardia`, with `/usr/bin/ardia` a link to its launcher, the desktop entry
     pointed at `/usr/bin/ardia`, the AppArmor profile at `/usr/share/ardia/apparmor/ardia` and
     `/usr/share/doc/ardia` (copyright, changelog). `DEBIAN/md5sums` lists every file;
-  - its version is the Ardia version with `-` turned into `~` (`0.2.47~nightly.3`), so a nightly sorts before its
+  - its version is the Solstice version with `-` turned into `~` (`0.2.47~nightly.3`), so a nightly sorts before its
     stable. A `.deb` needs `--version`;
   - `Depends` comes from the binaries: every `NEEDED` library of the ELF files in `lib/ardia` (the Qt shims excepted:
     Chromium loads them only on Qt desktops) maps to its Debian package with the 64-bit-time name first
@@ -680,7 +680,7 @@ command ([linux-ci.md](linux-ci.md) › Linux releases).
   4.0 ABI, and `apt purge` leaves the file system as it was before the install. apt retries each download and each
   image pull is retried, so a network flake doesn't fail it.
 - **Arch.** `scripts/linux/arch/PKGBUILD` is the AUR package `ardia-bin`: it downloads
-  `Ardia-<version>-linux-x64.tar.xz` from the `v<version>` release, checks its pinned sha256 and installs it with the
+  `Solstice-<version>-linux-x64.tar.xz` from the `v<version>` release, checks its pinned sha256 and installs it with the
   tarball's `install.sh`, then makes `chrome-sandbox` setuid root, as Arch's own `chromium` does, for kernels without
   unprivileged user namespaces. `scripts/linux/arch/update-pkgbuild.sh <version> --package <tarball>` (or `--sha256`) sets
   `pkgver` (`0.2.47-nightly.3` becomes `0.2.47nightly.3`, which pacman sorts before `0.2.47`), resets `pkgrel` and writes the matching `.SRCINFO` without makepkg;
@@ -718,7 +718,7 @@ command ([linux-ci.md](linux-ci.md) › Linux releases).
   never the copy or the lock itself, so a process of the caller that traces it can't change a file after it is
   verified. It verifies them with
   `openssl pkeyutl -verify -rawin` against `lib/ardia/linux-update.pem`, parses the manifest strictly (it must
-  re-serialize byte for byte, and each package name must be exactly `Ardia-<V>-linux-x64.<deb|tar.xz|AppImage>`),
+  re-serialize byte for byte, and each package name must be exactly `Solstice-<V>-linux-x64.<deb|tar.xz|AppImage>`),
   requires `<V>` to be newer than `lib/ardia/VERSION` (a nightly sorts before its stable), then copies its package
   (at most the manifest's size, the same way) and checks size and sha256. Everything from its start to the post-install version check shares
   one 9-minute deadline, enforced with `timeout`, so the helper gives up before the browser's 10-minute deadline. Run
@@ -732,13 +732,13 @@ command ([linux-ci.md](linux-ci.md) › Linux releases).
 - **polkit action `dev.ardia.linux.update`.** `allow_active` is `yes`, so the active local session installs with
   no password. `allow_any` and `allow_inactive` are `auth_self`: polkit counts a remote desktop (xrdp, VNC) as a
   remote session, so there the session's polkit agent asks for the user's password, and where such a session runs
-  no agent (SSH) Ardia's own pkexec fails and it offers the release page. A user there can still run the helper by
+  no agent (SSH) Solstice's own pkexec fails and it offers the release page. A user there can still run the helper by
   hand with pkexec's text agent; an admin who wants less can override the action with a polkit rule or
   local-authority file. `org.freedesktop.policykit.exec.path` limits it to the helper, which only installs a release
-  signed with Ardia's key that is newer than the installed one.
-- **Signed manifest.** Each release carries `Ardia-<V>-linux-update.txt` (`ardia-linux-update 1`, `version <V>`, then
+  signed with Solstice's key that is newer than the installed one.
+- **Signed manifest.** Each release carries `Solstice-<V>-linux-update.txt` (`ardia-linux-update 1`, `version <V>`, then
   `deb`, `tarball` and `appimage` lines with file name, sha256 and size, for the formats on the release) and
-  `Ardia-<V>-linux-update.txt.sig`, the raw Ed25519 signature.
+  `Solstice-<V>-linux-update.txt.sig`, the raw Ed25519 signature.
   `node scripts/linux/sign-update.mjs --key <pem> --dir <assets> --version <V>` writes both, and refuses a key whose
   public half isn't `scripts/linux/linux-update.pem`; `--unsigned` writes only the manifest. `release.sh` writes the
   unsigned manifest unless `--update-key` (or `LINUX_UPDATE_KEY_FILE`) gives it the key. The Release workflow's
@@ -819,7 +819,7 @@ Rust standard library. Nothing in `ac_linux_*` calls it yet.
   the checkout that the GN arg `ardia_core_rs_checkout` names. Without that arg they aren't defined. The first build
   of the targets took 1,083 steps and 57 s on a warm 16-core Boat VM.
 
-  `AC_REPO` must be the absolute path of an Ardia checkout on the builder at the commit being built. On the Boat
+  `AC_REPO` must be the absolute path of an Solstice checkout on the builder at the commit being built. On the Boat
   builder that's `/home/user/ardia`.
 
   ```bash
@@ -851,8 +851,8 @@ Rust standard library. Nothing in `ac_linux_*` calls it yet.
   4 MiB, no redirects, 20 s), and the shell (`hostUpdates.ts`, `updateReleases.ts`) keeps published releases that
   carry a Linux package and a github.com release page, newest per channel (a nightly build follows nightly).
 - **What it does.** An automatic check runs 30 s after launch, then every 6 h, in one window, never in a hidden
-  instance or a build without `lib/ardia/VERSION`. Where Ardia can update itself (below), a newer release is
-  downloaded and installed in the background, with "Automatically update Ardia" on (the default), or on Check Now, the
+  instance or a build without `lib/ardia/VERSION`. Where Solstice can update itself (below), a newer release is
+  downloaded and installed in the background, with "Automatically update Solstice" on (the default), or on Check Now, the
   app menu's Check for Updates or the offer toast's Update when it's off. Then a sticky toast says the release is
   ready, and Check Now and the app menu read Restart to Update. Where it can't (an engine without the methods, or
   `unsupported`), Check Now asks before opening the release page and an automatic check offers it once as a toast, and
@@ -866,16 +866,16 @@ Rust standard library. Nothing in `ac_linux_*` calls it yet.
   - `status()` answers `{phase, version, reason, kind, run}`, phase `idle`, `downloading`, `installing`, `ready` or
     `failed`. `ready` lasts until the restart: no newer run starts after it.
   - `update(version)` starts a run unless one is busy or an update is ready, and answers the status at once. The run
-    downloads `Ardia-<V>-linux-update.txt`, its `.sig` and the package the manifest names for this kind from the `v<V>`
+    downloads `Solstice-<V>-linux-update.txt`, its `.sig` and the package the manifest names for this kind from the `v<V>`
     release into `<user data dir>/Updates/<V>/` (cookieless, no cache, traffic annotation `ardia_linux_update_download`;
     `Updates` must be a real directory, and only version folders in it are pruned). Redirects go only to https on
     github.com, objects.githubusercontent.com and release-assets.githubusercontent.com. Caps: 4096 bytes for the
     manifest, 64 for the signature, the manifest's size (at most 512 MiB) for the package, and the package size plus
     64 MiB free. Then it runs `pkexec --disable-internal-agent <helper> install <dir>` for a `.deb` or tarball, or the
     helper as the user with `APPIMAGE` and `APPDIR` for an AppImage, with a clean environment and a 10 min deadline
-    (the helper's own is 9). Without its text agent, pkexec never prompts on the terminal Ardia was started from (the
+    (the helper's own is 9). Without its text agent, pkexec never prompts on the terminal Solstice was started from (the
     helper's own process group would stop on SIGTTIN there): a session that has to ask for the password and has no
-    polkit agent fails at once with `polkit`, and Ardia offers the release page. The active local session needs no
+    polkit agent fails at once with `polkit`, and Solstice offers the release page. The active local session needs no
     agent.
     Failure reasons: `version`, `kind`, `network`, `manifest`, `tooLarge`, `busy`, `disk`, the helper's, `polkit`,
     `timeout`, `missing`. A successful install deletes the folder, and so does a `signature`, `checksum`, `manifest` or
@@ -906,7 +906,7 @@ Rust standard library. Nothing in `ac_linux_*` calls it yet.
 - **Location.** Sites get positions from GeoClue 2 (`ac_linux_geoclue.cc`, hooked into
   `OverrideSystemLocationProvider` by `chromium-linux-geolocation.patch`): desktop id `ardia`, exact accuracy for
   high-accuracy requests and city level otherwise. Without GeoClue or a fix within 10 s a page gets "position
-  unavailable". `ArdiaLocation.locationPermission` answers `servicesOff` when the desktop refuses Ardia.
+  unavailable". `ArdiaLocation.locationPermission` answers `servicesOff` when the desktop refuses Solstice.
 
 ## Platform notes
 
@@ -915,7 +915,7 @@ Rust standard library. Nothing in `ac_linux_*` calls it yet.
 - **Window controls.** Linux uses the Windows build's caption buttons, by default on the right: `…`, minimize, maximize
   (restore while maximized) and close, drawn by the shared `WindowControls.tsx` in the places Windows puts them (the toolbar
   row, the end of the top strip, a right sidebar's header, atop a left sidebar with the address bar in it, Little
-  Ardia's bar, Settings and Import). They work on decorationless desktops such as Hyprland; Chrome's own caption
+  Solstice's bar, Settings and Import). They work on decorationless desktops such as Hyprland; Chrome's own caption
   buttons are hidden: opacity 0, no input, ignored by accessibility.
   - **The desktop's layout.** The native buttons follow the desktop's GTK button layout (`gtk-decoration-layout`,
     read by the engine as `ArdiaShell.windowButtonLayout` and sent again as its `windowButtonLayout` event when it
@@ -932,7 +932,7 @@ Rust standard library. Nothing in `ac_linux_*` calls it yet.
     room for its own count, and the left group (`LeadingWindowControls.tsx`, swapped in for the shared no-op) sits
     where the traffic lights would, 13 px before their first light's center (12 px from the edge at the default
     place), mirrored in a right sidebar, with the Mac's room after it (the sidebar header's tools, the top strip, Little
-    Ardia's bar, Settings' sidebar). It holds only window buttons. Like the lights it slides away with a hidden sidebar
+    Solstice's bar, Settings' sidebar). It holds only window buttons. Like the lights it slides away with a hidden sidebar
     and hides in full screen. Known limit: with the sidebar hidden, a desktop whose buttons are all at the left shows
     none until the sidebar peeks (the `…` stays at the right); giving the toolbar room at its left for them is a
     follow-up. The same holds for top tabs with auto-hide: the hidden strip parks the lights' place off the window
@@ -968,15 +968,15 @@ Rust standard library. Nothing in `ac_linux_*` calls it yet.
     `state/windows/windowButtons.ts` applies it after hydrate and on every store change, subscribed before anything
     renders, so every window, Settings included, switches at once without a relaunch. Shared code reads the chrome
     when it is used (`useControlsShown`, `profileIndicatorX()`, `HEADER_TOOLS.toggleX`, `layout.trafficLightsWidth`,
-    Little Ardia's bar), and the components that read it subscribe to the setting. `TrafficLights.tsx` draws the
+    Little Solstice's bar), and the components that read it subscribe to the setting. `TrafficLights.tsx` draws the
     lights where shared code places them (`setTrafficLightsCenter` in `shims/web/windowChrome.tsx`) and presses them
     through the same `captionControls.ts` as the native buttons; right-clicking them opens the window menu. The Mac
     and Windows offer no choice and hide the row.
   - **Hidden.** `hidden` draws neither the native buttons nor the traffic lights, on any desktop (#2157). Native
     already draws no window buttons on the tiling desktops it recognises (Tiling desktops above); Hidden is for the
-    rest, such as a tiler Ardia doesn't recognise or anyone who closes, minimizes and tiles windows from the keyboard,
+    rest, such as a tiler Solstice doesn't recognise or anyone who closes, minimizes and tiles windows from the keyboard,
     and it also drops the `…`. Its chrome reserves nothing (`HIDDEN_BUTTONS_CHROME`: leading and trailing widths 0, no
-    title bar band), so the sidebar header's tools, the top strip and Little Ardia's back button start at the leading
+    title bar band), so the sidebar header's tools, the top strip and Little Solstice's back button start at the leading
     edge and nothing is kept clear at the top right. The menu is the header's hamburger, the same one full screen
     uses, and the sidebar header never collapses while it is the menu's only home. Dragging empty chrome and
     double-clicking it work as with the other styles, through the shell's drag regions.
@@ -996,7 +996,7 @@ Rust standard library. Nothing in `ac_linux_*` calls it yet.
     otherwise (window or page full screen, traffic lights or hidden). Linux keeps the sidebar header the Windows rule
     would collapse whenever the hamburger has no other home (`sidebarHeaderLayout.ts`). The hamburger lives in the
     header's profile controls (`ProfileIndicator.tsx`), which the sidebar and the top strip mount even when minimalism
-    or the theme hides the profile, so it stays there too. Little Ardia's bar gets the same hamburger at its trailing
+    or the theme hides the profile, so it stays there too. Little Solstice's bar gets the same hamburger at its trailing
     end (`HeaderAppMenu`, after the profile button) whenever its `…` isn't drawn. Clicking a traffic light leaves
     keyboard focus where it was, as the native buttons do, and lights slid off the window with a hidden sidebar are
     inert, so Tab never lands on them.
@@ -1042,7 +1042,7 @@ Rust standard library. Nothing in `ac_linux_*` calls it yet.
   Double-clicking it runs the desktop's titlebar action.
 - **Outer frame.** The host overlays Chromium's client view, and what happens to Chromium's frame around it depends on
   who decorates the window, decided per window (`CompositorDecorates`, `ac_linux_window_corners.h`). A window's own
-  xdg-decoration answer wins: server-side means the compositor decorates it, client-side means Ardia does. Only with no
+  xdg-decoration answer wins: server-side means the compositor decorates it, client-side means Solstice does. Only with no
   answer (X11, or a compositor without the protocol) does `XDG_CURRENT_DESKTOP` decide: a tiling desktop (hyprland,
   sway, niri, i3, river, dwl, bspwm, awesome, qtile, xmonad, dwm, herbstluftwm, regolith; the window-buttons shell
   change keeps the same list) decorates, any other doesn't. Chromium asks for client-side decorations for these
@@ -1109,13 +1109,13 @@ Rust standard library. Nothing in `ac_linux_*` calls it yet.
     resized, keeps its edges for its content. On X11 Chrome maps its startup window before the host starts and sets
     `_GTK_FRAME_EXTENTS` from the frame insets it had then; the host's `FrameTypeChanged` has X11 rewrite the property
     (`X11Extension::RefreshDecorationInsets`).
-  - Known limits: sway and niri are expected to honour the client-side request (not measured here), so there Ardia
+  - Known limits: sway and niri are expected to honour the client-side request (not measured here), so there Solstice
     keeps Chromium's frame. `windowCornerRadius` and `drawnWindowCornerRadius` still answer a fixed 19 on Linux
     (`apps/linux/src/shellMethods.ts`): the shared page-card geometry reads them synchronously for every window, so the
     settings snapshot's `window_corner_radius` reports that, not the frame's radius.
 - **Menu button.** Linux has no global menu bar, so a menu button stands in for the Mac one: usually the `…` beside the
   window buttons, and a hamburger in the header while they're hidden (full screen or the setting) or the traffic lights
-  are chosen (Window controls above). It lists Ardia,
+  are chosen (Window controls above). It lists Solstice,
   File, Edit, View, Tabs, Bookmarks, History, Extensions, Window and Help as submenus built from the same menu
   state the Mac menu bar uses (checks, disabled commands, dynamic titles, bookmarks, recently closed entries, profiles
   and extensions), labelled with the effective Linux shortcuts (`apps/linux/src/appMenu.ts`). Items run through the
@@ -1154,11 +1154,11 @@ Rust standard library. Nothing in `ac_linux_*` calls it yet.
   the Mac's dominant-hue pick over a 32 px canvas copy of a `data:` or `blob:` favicon (`iconAccent.ts`). Other URLs
   answer no accent.
 - **Settings and Import.** Each opens in its own utility window and reuses an open one. Settings
-  opens from Ardia › Settings… in the menu or Ctrl+comma.
+  opens from Solstice › Settings… in the menu or Ctrl+comma.
   - Settings starts at 820×640 with a 720×480 minimum.
   - Import starts at 640×600 and doesn't resize.
   - They never create browser tabs or windows. A utility close waits for its pending session writes.
-  - Closing the last browser window closes them too, so Ardia quits instead of living on behind a lone Settings
+  - Closing the last browser window closes them too, so Solstice quits instead of living on behind a lone Settings
     window.
 - **Shortcuts.**
   - Linux owns its shortcut catalog (`apps/linux/src/commandCatalog.ts`, `shortcuts.ts`). The same effective bindings
@@ -1270,13 +1270,13 @@ Rust standard library. Nothing in `ac_linux_*` calls it yet.
   - Private windows never enter it.
   - Chromium keeps audio focus, URL safety, permissions and the single PiP owner.
 - **Automatic PiP plays inside the window.** When a playing tab goes to the background (a tab switch, Ctrl+T, a new
-  tab), its video keeps playing in a floating player drawn inside Ardia's window, over the content card. It never
+  tab), its video keeps playing in a floating player drawn inside Solstice's window, over the content card. It never
   maps a toplevel: a Wayland compositor focuses every new toplevel and gives clients no portable way to refuse, so
   Chromium's inactive PiP window used to take the keyboard from the new tab's field. X11 plays it the same way.
   - Engine (`ac_linux_pip_player.{h,cc}`, hooks in `chromium-linux-pip-in-window.patch`): every video PiP window on
     Linux is a `Player`, the controller's `VideoOverlayWindow`. Each session start decides where it plays: in the
     window when the request is automatic (the auto-PiP hook records the intent), otherwise in Chromium's real,
-    Dia-styled window (a page's own PiP button, Ardia's PiP command, site controls). The video is a `PlayerView`
+    Dia-styled window (a page's own PiP button, Solstice's PiP command, site controls). The video is a `PlayerView`
     (`LAYER_SURFACE`, 6 pt corners) above the page views and below the shell; it takes no input, and the host keeps
     its rectangle out of the shell's page pass-through.
   - An automatic request with nowhere to play (the window hidden or minimized, its shell not attached, a site set to
@@ -1337,8 +1337,8 @@ Rust standard library. Nothing in `ac_linux_*` calls it yet.
   reach only tabs of the caller's own kind of session, regular or private. With an older engine the shell refuses
   them as before (`hostCast.ts`). Neither has run against a real capture on Linux yet.
 - **Casting.** Chromium's media router finds Cast devices over mDNS (DIAL discovery is off in Helium). Its device
-  picker is Ardia's own, as on the Mac: `ac_linux_cast.cc` fills `chromium-cast-dialog-hook.patch`'s two hooks, so a
-  cast request from a tab an Ardia window holds (Cast in the menu, a page's `PresentationRequest.start()`, a video's
+  picker is Solstice's own, as on the Mac: `ac_linux_cast.cc` fills `chromium-cast-dialog-hook.patch`'s two hooks, so a
+  cast request from a tab an Solstice window holds (Cast in the menu, a page's `PresentationRequest.start()`, a video's
   remote playback) keeps Chromium's `MediaRouterUI` and its fullscreen blocker and sends `media.castDialog` (id, open,
   header, sinks with their state, modes and route, `tabId`) to the window holding the tab. The host serves the six
   calls: `media.showCastDialog {tabId}`, `media.startCasting {id, sink, mode}`, `media.stopCasting {id, route}`,
@@ -1357,7 +1357,7 @@ Rust standard library. Nothing in `ac_linux_*` calls it yet.
   it then succeeds. Private tabs are refused.
 - `engine.cliOwnsTab` answers from Chromium's own ownership record and shown-slot note, and
   `engine.cliCloseOffscreenTabs` closes every off-screen tab; they also close when the last browser window closes,
-  so they never keep Ardia running.
+  so they never keep Solstice running.
 - `engine.cliTabTargets` answers each regular tab's DevTools target id (`DevToolsAgentHost::GetOrCreateFor`) and a
   page generation that rises when the id changes, as the Mac does; a tab without a committed page answers null.
 - **Unverified.** None of it has run in a built engine. Whether a page in a never-mapped window paints for
@@ -1365,12 +1365,12 @@ Rust standard library. Nothing in `ac_linux_*` calls it yet.
 
 ### Page prompts
 
-- **What reaches Ardia's UI.** Permission requests, password save and update offers, save-address,
+- **What reaches Solstice's UI.** Permission requests, password save and update offers, save-address,
   update-address and local save-card offers, and external-app ("open in app") requests from a tab the window
   shows. A WebContents no window shows keeps Chromium's own UI. `chromium-linux-page-prompts.patch` adds the
   hooks the Mac layer writes in with `engine/ardiacore/apply.sh` (the permission prompt factory, the File System
   Access restore dialog, the external-protocol dialog, PermissionRequestManager's tab activation), forwards each
-  `AutofillBubbleHandlerImpl::Show*Bubble` for those tabs, and tells Ardia when Chromium hides its password
+  `AutofillBubbleHandlerImpl::Show*Bubble` for those tabs, and tells Solstice when Chromium hides its password
   bubble. The engine side is `ac_linux_page_prompts*.cc`, a port of the Mac's `ac_permissions.mm`,
   `ac_password_prompt.mm`, `ac_autofill_prompt.mm` and `ac_external_apps.mm`.
 - **Delivery.** Permission requests go to the window that shows the tab as `permissions.requested` and
@@ -1459,7 +1459,7 @@ Rust standard library. Nothing in `ac_linux_*` calls it yet.
 
 ### Memory Saver
 
-- **Routing.** Chrome's Memory Saver replaces Ardia's own tab sleeping, driven by the shared `ac_memory_saver` call.
+- **Routing.** Chrome's Memory Saver replaces Solstice's own tab sleeping, driven by the shared `ac_memory_saver` call.
   On Linux, `engine.memorySaver` and `engine.validateKeepActiveSite` go through `ac_linux_memory_saver.cc`. Both
   routes are in the bootstrap capabilities.
 - **Validation.** It accepts:
@@ -1515,13 +1515,13 @@ Linux reads calendars from Evolution Data Server, which GNOME Online Accounts, G
   `chromium-linux-settings-overrides.patch` adds Linux, so an extension's `search_provider` reaches `search.engines`
   and can become the default, as on macOS. The key's `homepage` and `startup_pages` stay off on Linux.
 - **The page menu's search item.** Chrome's own page menu searches with Chrome's default engine, so
-  `search.setEngineName` carries Ardia's default engine (`name`, `keyword`, `url`; macOS reads only `name`) and
+  `search.setEngineName` carries Solstice's default engine (`name`, `keyword`, `url`; macOS reads only `name`) and
   `ac_linux_search_engines.cc` makes it Chrome's default in every regular profile, including ones loaded later.
   "Search … for" then names and uses the same engine as the command bar, custom engines included.
   - A Chrome search engine (one with a search-terms placeholder) with the same name and host is selected as is.
-    Otherwise one Ardia-owned engine is added or updated, with `%s` turned into `{searchTerms}`, and it's removed
+    Otherwise one Solstice-owned engine is added or updated, with `%s` turned into `{searchTerms}`, and it's removed
     once another engine is the default. It has a fixed sync GUID and a fixed keyword,
-    `ardia-default-search-engine`: Chrome resolves the default engine's searches by keyword, so Ardia's own shortcut
+    `ardia-default-search-engine`: Chrome resolves the default engine's searches by keyword, so Solstice's own shortcut
     could otherwise send them to another engine that shares it, an extension's say.
   - A default set by policy or by an extension is left alone. The request is checked first (name up to 256
     characters, keyword up to 256, an http or https URL up to 2048 with `%s`, no control characters).
@@ -1536,7 +1536,7 @@ Linux reads calendars from Evolution Data Server, which GNOME Online Accounts, G
 - **Keyboard shortcuts.**
   - Each browser window keeps a `LinuxExtensionKeybindings` registry (`ac_linux_extension_keybindings.cc`), and
     `chromium-linux-extension-keybindings.patch` stops Chromium's own registry from registering accelerators.
-  - Ardia's shortcut table is checked first. A key Ardia binds never reaches an extension, even in text fields.
+  - Solstice's shortcut table is checked first. A key Solstice binds never reaches an extension, even in text fields.
   - `_execute_action` (and the MV2 aliases) sends `extensions.actionShortcut`, and the shared toolbar opens the popup
     or side panel. Named commands fire `chrome.commands.onCommand`, and global commands keep Chromium's listener.
   - In private windows only incognito-allowed extensions are registered.
@@ -1544,10 +1544,10 @@ Linux reads calendars from Evolution Data Server, which GNOME Online Accounts, G
 - **Tabs and windows extensions open.** A tab Chrome inserts by itself (`chrome.tabs.create`, an action's
   `onClicked`, a URL handed to the running instance that the shell didn't take, see Links from other apps) has no
   opener page to report it, so the host does.
-  - Each window notes tabs inserted outside Ardia's own operations (`unclaimed_` in `ac_linux_host.cc`). It also notes
+  - Each window notes tabs inserted outside Solstice's own operations (`unclaimed_` in `ac_linux_host.cc`). It also notes
     tabs already in the window when it attaches, unless they're blank or look restored by Chromium (more than one
     history entry, or an entry marked restored). In a window Chrome made, an `about:blank` tab counts too, so a
-    later `chrome.tabs.update` lands in a tab the sidebar shows; Chrome's New Tab page is left to Ardia's own first
+    later `chrome.tabs.update` lands in a tab the sidebar shows; Chrome's New Tab page is left to Solstice's own first
     tab, which adopts it.
   - A tab a page already reported, or one bound in any window, is left alone. A blank URL gets 20 tries, 25 ms apart,
     to resolve.
@@ -1562,8 +1562,8 @@ Linux reads calendars from Evolution Data Server, which GNOME Online Accounts, G
     any other instead of waiting for an opener to save it.
 - **Install prompts.** These are never auto-accepted. They show in the window of the tab that asked and end with that
   tab. Nothing installs without Add Extension. Popups size between 25×25 and 800×600, within the window.
-- **Native messaging hosts.** Ardia looks for `<name>.json` in this order:
-  1. `<Ardia data dir>/NativeMessagingHosts` (by default `~/.config/ardia/NativeMessagingHosts`);
+- **Native messaging hosts.** Solstice looks for `<name>.json` in this order:
+  1. `<Solstice data dir>/NativeMessagingHosts` (by default `~/.config/ardia/NativeMessagingHosts`);
   2. `~/.config/google-chrome/NativeMessagingHosts` (Helium's base patch; honours `CHROME_CONFIG_HOME`);
   3. `~/.config/chromium/NativeMessagingHosts` (`chromium-linux-native-messaging-hosts.patch`; honours
      `CHROME_CONFIG_HOME`, then `XDG_CONFIG_HOME`);
@@ -1572,8 +1572,8 @@ Linux reads calendars from Evolution Data Server, which GNOME Online Accounts, G
 
   Hosts installed for Chrome or Chromium, such as Bitwarden and KeePassXC, are found without changes, because Web
   Store installs keep their Chrome ids for `allowed_origins`. Two exceptions:
-  - 1Password talks only to browsers it knows, so add Ardia's binary to `/etc/1password/custom_allowed_browsers`;
-  - Flatpak and Snap installs write manifests inside their sandbox, where Ardia doesn't look.
+  - 1Password talks only to browsers it knows, so add Solstice's binary to `/etc/1password/custom_allowed_browsers`;
+  - Flatpak and Snap installs write manifests inside their sandbox, where Solstice doesn't look.
 
 ### Live folders
 
@@ -1589,7 +1589,7 @@ Linux reads calendars from Evolution Data Server, which GNOME Online Accounts, G
   - 8 requests in flight and 256 queued.
   - Confluence sites must be `https://`.
 - **Tokens.** Connect verifies a token with the provider before storing it. Tokens are kept in the Secret Service as
-  "Ardia Live Folder Token" items (schema `dev.ardia.linux.LiveToken`, account = source).
+  "Solstice Live Folder Token" items (schema `dev.ardia.linux.LiveToken`, account = source).
   - Background test instances with an explicit `--user-data-dir` use a 0600 file instead.
   - Tokens are cached natively, wiped when freed and never returned to a renderer.
   - Google Drive tokens are renewed natively, and concurrent renewals share one request.
@@ -1602,7 +1602,7 @@ Linux reads calendars from Evolution Data Server, which GNOME Online Accounts, G
 
 ### Passwords, cards and system authentication
 
-- **Storage.** Ardia stores no secret of its own. Passwords live in Chromium's `Login Data` and card numbers in
+- **Storage.** Solstice stores no secret of its own. Passwords live in Chromium's `Login Data` and card numbers in
   `Web Data`, both encrypted by OSCrypt.
   - The key comes from the Secret Service, KWallet or the secret portal (`--password-store`).
   - `ArdiaPasswords.status` and `ArdiaAutofill.status` report which key encrypts new data. They read the
@@ -1665,9 +1665,9 @@ Linux reads calendars from Evolution Data Server, which GNOME Online Accounts, G
   `renameat2(RENAME_NOREPLACE)`. Everything below the chosen folder is opened with `openat`.
 - **Folder.** Linux has no cloud drive to default to, so Settings › General › Sync › Turn On… asks where the folder goes
   (`PLATFORM_FEATURES.defaultCloudDrive` is false): the chooser opens in the home folder, and the folder picked gets an
-  `Ardia Sync` folder inside it unless it is already named that or already holds sync data
+  `Solstice Sync` folder inside it unless it is already named that or already holds sync data
   (`state/sync/folderMove.ts` `syncFolderAt`). A picked folder that holds sync data goes to Enter Recovery Phrase
-  instead of starting a second chain. The engine still reports `$HOME/Ardia Sync`, or `--ardia-sync-folder`, as
+  instead of starting a second chain. The engine still reports `$HOME/Solstice Sync`, or `--ardia-sync-folder`, as
   `defaultPath`, which the chooser starts beside and nothing creates. Once a folder is chosen, Turn On uses it.
 - **Moving.** While Sync is on, Settings › General › Sync › Sync Folder › Move… (also Advanced… › Move Sync Folder…) moves it
   (`PLATFORM_FEATURES.movesSyncFolder`). The sync window holds its cycles, then: a folder inside the current folder or
@@ -1686,7 +1686,7 @@ Linux reads calendars from Evolution Data Server, which GNOME Online Accounts, G
   stays as it was, because other devices may still sync through it. When the old folder is gone, a folder holding this
   chain with files in it is pointed at and an empty one refused. Pointing at the folder after moving it by hand in a
   file manager is that re-point, so Sync going offline after such a move is fixed from here too.
-- **Key.** The sync key is a Secret Service item, "Ardia Sync Key" (schema `dev.ardia.linux.SyncKey`). Showing,
+- **Key.** The sync key is a Secret Service item, "Solstice Sync Key" (schema `dev.ardia.linux.SyncKey`). Showing,
   copying or saving the recovery words asks polkit, then allows 60 s.
 - **One authority.** Only one browser renderer syncs: it holds a Web Lock plus a native lease that expires 30 s after
   its last renewal. The other windows mirror its state. Utility and private windows are never the authority.
@@ -1784,7 +1784,7 @@ It works as on the Mac ([cli.md](cli.md), [automation.md](automation.md)); what 
     `ARDIA_CLI_HOME` and `ARDIA_CLI_BIN_DIR` set, and reports no installed version without `ARDIA_CLI_HOME`.
 - **Config files** ([config.md](config.md)). `config.json` and `themes/` live in `<user data dir>/config`
   (`~/.config/ardia/config` by default), not beside Chromium's files; the CLI resolves the same folder, so
-  `ardia config set|unset|edit` and `ardia theme new|use` reach a running Ardia. `ArdiaConfig.readFile`, `watch` and
+  `ardia config set|unset|edit` and `ardia theme new|use` reach a running Solstice. `ArdiaConfig.readFile`, `watch` and
   `writeSchemas` are native (`ac_linux_config_core.cc` for the files and the inotify watcher, `ac_linux_config.cc`
   for the threads and the windows), with the Mac's limits; the schemas go to `<user data dir>/config-schema/` and into
   the config folder when it exists. `apps/linux/src/hostConfig.ts` keeps each window's reads so the shared code can
@@ -1824,7 +1824,7 @@ It works as on the Mac ([cli.md](cli.md), [automation.md](automation.md)); what 
   Native crash reports come from Chromium's own crash handler (Crash reports, below); with an engine that doesn't
   list its dumps `ArdiaApp.crashReports` answers an empty list, and "crash reports" there means page-process exits
   and JavaScript errors. The group has no crash-report control of its own to hide.
-- **Crash reports.** `chrome_crashpad_handler` runs beside every Ardia process and writes a minidump for each crash of
+- **Crash reports.** `chrome_crashpad_handler` runs beside every Solstice process and writes a minidump for each crash of
   the browser, page, GPU and helper processes into `~/.config/ardia/Crash Reports` (`pending/<uuid>.dmp`), or `<user
   data dir>/Crash Reports` for an instance started with `--user-data-dir` (`ardia-launch` sets
   `BREAKPAD_DUMP_LOCATION`, which Chromium reads before it starts the handler, so a test instance never leaves its
@@ -1837,7 +1837,7 @@ It works as on the Mac ([cli.md](cli.md), [automation.md](automation.md)); what 
   it's gone or over 8 MiB. Settings and private windows are refused. The shell reads up to the newest 16, parses each
   one (`minidump.ts`) and keeps the newest five of the browser and five of the other processes, as the Mac does. A
   report carries the process kind (from Chromium's `ptype` annotation), the signal and its code (`SIGSEGV`,
-  `SEGV_MAPERR`), the engine version (Ardia's own version for a browser crash, from the `ardia-ver` annotation the
+  `SEGV_MAPERR`), the engine version (Solstice's own version for a browser crash, from the `ardia-ver` annotation the
   engine sets at startup from `VERSION`), the process's uptime, the build IDs of the files beside `chrome`, and the
   crashing thread's frames as file plus offset: a frame-pointer walk from the signal's registers (Linux builds keep
   frame pointers), and when libc reused the frame pointer, from the first frame record on the stack. A dump written
@@ -1865,7 +1865,7 @@ It works as on the Mac ([cli.md](cli.md), [automation.md](automation.md)); what 
   the shell's IndexedDB (`ardia.telemetry-local`, one store of `{day, text}` chunks), which every window of the instance
   shares because every shell runs in the app profile. Only the telemetry owner records, each write, prune and clear is
   one transaction, and a private window never writes. A prune applies the Mac's rules (7 days, 8 MB, oldest first,
-  down to nine tenths) and folds each day into one record. View My Data saves `Ardia data <day>.jsonl` as an ordinary
+  down to nine tenths) and folds each day into one record. View My Data saves `Solstice data <day>.jsonl` as an ordinary
   download of a blob from the shell, so it lands in the Downloads folder (or wherever downloads are set to go, with
   Chromium's ` (1)` suffix for a second file), shows in the downloads list and can be shown in the file manager.
   Before it reads, the exporting window asks the owner to flush its buffer (`ardia.linux.telemetry-local` channel).
@@ -1884,7 +1884,7 @@ It works as on the Mac ([cli.md](cli.md), [automation.md](automation.md)); what 
 `xdg-settings` process and the replies. The file and process work runs on one thread-pool sequence, never on the UI
 thread. The reply shapes are the Mac's (`packages/shell/ios/SystemModule.swift`, `AppModule.swift`).
 
-- **This copy of Ardia.** The launcher is `<prefix>/bin/ardia`, found from the running `chrome`
+- **This copy of Solstice.** The launcher is `<prefix>/bin/ardia`, found from the running `chrome`
   (`<prefix>/lib/ardia/chrome`). A desktop entry counts only when its `Exec` program resolves to that launcher or to
   `chrome` itself (symlinks followed; a bare name is looked up in `PATH`).
 - **The installed entry.** The first `ardia.desktop` in the `applications` folders, in XDG order, the one
@@ -1918,22 +1918,22 @@ thread. The reply shapes are the Mac's (`packages/shell/ios/SystemModule.swift`,
 ### Links from other apps
 
 A link another app opens (`xdg-open`, a mail client, `ardia <url>` in a terminal) reaches the shell as the Mac's
-`ArdiaShell`/`onOpenURLs` event, `{urls}`, so Open links from other apps in Little Ardia, link rules and Put links from
+`ArdiaShell`/`onOpenURLs` event, `{urls}`, so Open links from other apps in Little Solstice, link rules and Put links from
 other apps first apply. The Mac's `source` and `pointer` are left out: Linux can't tell which app sent a link, and the
 Mac leaves `source` out too when it doesn't know.
 
 - **The hook.** `chromium-linux-open-urls.patch` asks `ardia::TakeLinuxLaunchUrls` (`ac_linux_launch_urls.cc`) in the
   two places Chromium turns command-line arguments into tabs: `StartupBrowserCreator::Start` (the launch that starts
-  Ardia) and `ProcessCommandLineWithProfile` (a second launch, handed to the running process through the process
+  Solstice) and `ProcessCommandLineWithProfile` (a second launch, handed to the running process through the process
   singleton). The URLs are the ones Chromium itself would open (`StartupTabProviderImpl::GetCommandLineTabs`).
 - **What the shell takes** (`ShellTakesLaunch` in `ac_linux_open_urls.cc`, no Chromium in it): 1 to 64 valid `http`,
   `https` or `file` URLs of at most 32 KiB each. Anything else stays with Chromium, which opens it as before and the
   window adopts the tab (`unclaimedTabs.ts`): another scheme, a launch with `--incognito`, `--new-window`, `--app`,
   `--app-id`, `--kiosk`, `--guest`, `--headless`, `--no-startup-window`, `--silent-launch`, `--profile-directory` or
-  `--profile-email`, a background instance (`ARDIA_BACKGROUND`), and a running Ardia with no regular browser window
+  `--profile-email`, a background instance (`ARDIA_BACKGROUND`), and a running Solstice with no regular browser window
   (only private or utility windows).
 - **At launch.** The URLs are taken off the command line Chromium starts from (`LinuxLaunchWithoutUrls` keeps the
-  program and every switch), so Ardia starts as it does without a link and restores its windows, then gets the links,
+  program and every switch), so Solstice starts as it does without a link and restores its windows, then gets the links,
   as on the Mac.
 - **Delivery.** Links wait natively (at most 256) until a regular browser window says it listens
   (`ArdiaShell.listenForOpenURLs`, which `openUrls.ts` sends once the shared listener is registered). They go as one
@@ -1955,7 +1955,7 @@ Mac leaves `source` out too when it doesn't know.
   as `tab.edit`.
 - The app menu offers both when the host advertises them (see Windows, focus and input › Menu button).
 
-### Links in pinned tabs and Little Ardia windows
+### Links in pinned tabs and Little Solstice windows
 
 Both are ports of the Mac's native code (`ArdiaWebView+Peek.mm`, `ArdiaWebView+Tab.mm`), with the rules in
 `ac_linux_link_tabs.cc` and `ac_linux_link_gesture.cc` (no Chromium in either) and the same page script.
@@ -1976,7 +1976,7 @@ Both are ports of the Mac's native code (`ArdiaWebView+Peek.mm`, `ArdiaWebView+T
     here runs. Link clicks have their own message allowance per document (64, refilled at 32 a second), so a page
     that floods the channel can't make a held click vanish.
 - **`webView.setLittleArdiaOpensNewTabLinks {enabled}`** (Settings › Tabs › Links › Keep new-tab links inside a Little
-  Ardia window). The setting is one for the whole app, as on the Mac. A window is a Little Ardia window when its
+  Solstice window). The setting is one for the whole app, as on the Mac. A window is a Little Solstice window when its
   shell opened it with `kind: "small"`.
   - The page script notes each link it expects to open a tab (`newTabLink`: a `target` click or a `window.open` with
     user activation). A tab keeps its last four notes for two seconds.
@@ -1987,7 +1987,7 @@ Both are ports of the Mac's native code (`ArdiaWebView+Peek.mm`, `ArdiaWebView+T
   - On a match the opened tab is closed, unless a window has taken it, as soon as Chromium has put it in a tab
     strip (Chromium reports a new tab before it adds it), and the shell gets `openWindow` with the
     noted address, `disposition: "current"`, `userGesture: true` and `linkWait: "matched"`, so the page opens in
-    the Little Ardia window's own tab. Without one the tab is reported as before, with `linkWait` `skipped` or
+    the Little Solstice window's own tab. Without one the tab is reported as before, with `linkWait` `skipped` or
     `timedOut`.
   - With the setting off, or in any other window, a new tab is reported at once, exactly as before.
 
@@ -2038,14 +2038,14 @@ Both are ports of the Mac's native code (`ArdiaWebView+Peek.mm`, `ArdiaWebView+T
 - **Escape a page leaves unhandled.** `chromium-linux-unhandled-key.patch` hands a key a tab's page left unhandled to
   the host before the window gets it. For a key-down of Escape without Ctrl, Alt or Super, in a tab the window
   shows, the host sends that tab's page the Mac's `command` event `{command: "escape", text: ""}`
-  (`ac_linux_page_keys.h`), which closes Peek and a Little Ardia window while the page has focus. Chromium still
+  (`ac_linux_page_keys.h`), which closes Peek and a Little Solstice window while the page has focus. Chromium still
   gets the key afterwards (it stops a loading page). An Escape that leaves full screen or a page that handles Escape
   never gets here. Advertised as `tab.unhandledEscape`.
-- **App activation.** When an Ardia window loses activation and no other Ardia window (a Settings or Import window
+- **App activation.** When an Solstice window loses activation and no other Solstice window (a Settings or Import window
   included) has it 150 ms later, every window's shell gets `ArdiaShell` `onAppEvent` `{type: "resignActive"}`, as
-  the Mac sends from `didResignActive` (`AppActivation`, `ac_linux_app_activation.h`). A switch between Ardia
+  the Mac sends from `didResignActive` (`AppActivation`, `ac_linux_app_activation.h`). A switch between Solstice
   windows sends nothing, and neither does a window closing while another takes over. While a native dialog of
-  Ardia's is open the event is held back, as the Mac holds it during a modal or a sheet. The other half is the
+  Solstice's is open the event is held back, as the Mac holds it during a modal or a sheet. The other half is the
   `focus` window event the host already sends when a browser window becomes active, which is what the shared UI
   listens for. Advertised as `ArdiaShell.resignActive`.
 - **Small windows.** `ArdiaShell.openWindow` with `kind: "small"` and no `frame` now opens at `size` (`[width,
@@ -2088,7 +2088,7 @@ answer at once on the Mac and with a promise here, so the shell has to opt in.
   128 KiB. `upload(id, url, method, headers, path)` sends one draft file with `PUT` to
   `…/<id>/files/<name>`, where the name and its size cap are the service's (`recording.mp4` 100 MiB,
   `trace.json.gz` 50 MiB, `local-events.jsonl.gz`, `crash-<n>.ips` and `attachment-<n>.<ext>` 10 MiB), and
-  reports progress as the `onReport` event `{type: "upload", id, sent, total}`. Only `X-Ardia-Key`,
+  reports progress as the `onReport` event `{type: "upload", id, sent, total}`. Only `X-Solstice-Key`,
   `Authorization: Bearer …` and `Content-Type` are sent. No other URL, method or header is accepted, requests carry
   no cookies and follow no redirect, and at most four run at once. Both answer the Mac's `{status, body, error}`: a
   refusal or a network failure is status 0 with the reason in `error`, and `cancelUploads()` ends every transfer
@@ -2098,10 +2098,10 @@ answer at once on the Mac and with a promise here, so the shell has to opt in.
   dumps (Crash reports). The shell answers an empty sample, so a report's `footprint_mb` and `free_disk_gb` are null: the shell can read neither
   the app's memory footprint nor free disk space (`navigator.storage.estimate()` reports a quota, not free space).
 
-### Ardia's notifications
+### Solstice's notifications
 
 `ArdiaApp.notificationPermission`, `requestNotificationPermission`, `postNotification` and `removeNotifications`
-(`ac_linux_notifications.cc`, with the checks and the ledger in `ac_linux_notifications_core.cc`) show Ardia's own
+(`ac_linux_notifications.cc`, with the checks and the ledger in `ac_linux_notifications_core.cc`) show Solstice's own
 notifications, such as a meeting reminder, through Chromium's Linux notification stack
 (`NotificationDisplayService`, then `org.freedesktop.Notifications`), the one sites' notifications use.
 
@@ -2111,8 +2111,8 @@ notifications, such as a meeting reminder, through Chromium's Linux notification
   `data`); the answer is the id, or null when nothing was shown. `subtitle` becomes the body's first line. The title
   is cut at 1 KiB and the body at 4 KiB, on character boundaries; `data` is at most 16 KiB. `icon` and `origin` are
   ignored. At most 64 are tracked, and the oldest is closed to make room.
-- **Type.** Chromium sends its generic notification type to its own in-app popups, not to the desktop. Ardia's
-  notifications use `NotificationHandler::Type::NEARBY_SHARE`, which has no handler on Linux, and register Ardia's
+- **Type.** Chromium sends its generic notification type to its own in-app popups, not to the desktop. Solstice's
+  notifications use `NotificationHandler::Type::NEARBY_SHARE`, which has no handler on Linux, and register Solstice's
   handler for it on the app profile's display service.
 - **Responses.** A click sends `ArdiaApp`/`onNotificationResponse` (`{id, action: "click", tabId, windowId, data}`),
   closes the notification and activates the window. A close is reported (`action: "close"`) only for a `dismissible`
@@ -2269,7 +2269,7 @@ These were open at the time of the PR.
   - bookmarks HTML export (`bookmarks.exportHtml`). Until an engine advertises it, the shell serves the call itself
     (`hostBookmarksExport.ts`): it builds the file from `bookmarks.tree` and `favicons.get` in Chromium's own
     bookmark-file format (`bookmarksHtml.ts`) and downloads it from the shell page, so it lands in the Downloads
-    folder as `Ardia Bookmarks.html`, follows Ask where to save each file, and shows in the downloads list. There is
+    folder as `Solstice Bookmarks.html`, follows Ask where to save each file, and shows in the downloads list. There is
     no Save dialog of its own, a folder's `LAST_MODIFIED` is its newest child's date (the tree carries no
     modification date), and the downloads list keeps the entry;
   - the `extensions.installFailed` event. The Mac sends it when a `.crx` dropped on the window fails to install
@@ -2282,7 +2282,7 @@ These were open at the time of the PR.
 - **Profiles.** Deleting the data of an engine profile that was loaded in this run waits for the next launch
   (Profiles and private windows › Deleting a profile's data). In a window that shows several engine profiles:
   - a page's own fullscreen in a companion's tab makes only its viewport fullscreen, not the window;
-  - Chrome's own download bubble and other toolbar-anchored bubbles of a companion have no visible anchor (Ardia's
+  - Chrome's own download bubble and other toolbar-anchored bubbles of a companion have no visible anchor (Solstice's
     downloads panel lists them); the downloads list a window loads at start comes from its own profile, while later
     downloads, controls and file operations reach the window from every profile it shows;
   - a window Chrome itself creates for an isolated profile (`chrome.windows.create` from that profile's extension)
@@ -2295,7 +2295,7 @@ These were open at the time of the PR.
   tab dropped on another window is appended rather than placed at the pointer's row.
 - **Wayland focus.** A keyboard switch right after a window maps can be undone. A quit within about 200 ms of moving
   a fullscreen window to another output can save the old output.
-- **Closing the last window during a download** shows Chromium's own download dialog, not an Ardia dialog.
+- **Closing the last window during a download** shows Chromium's own download dialog, not an Solstice dialog.
 - **Window menu.** It has no Arrange in Front, Keep on Top or Profiles submenu.
 - **Window corner radius.** `ArdiaAppWindows.windowCornerRadius` answers a fixed 19 (`shellMethods.ts`), the Mac's
   default, so the page card keeps its 10 pt radius at the default inset. Linux doesn't measure the compositor's
@@ -2310,16 +2310,16 @@ These were open at the time of the PR.
   field journeys send no samples from Linux. UI only; the engine key is unchanged.
 - **Settings rows without a backend are hidden**, each until the host advertises its capability
   (`unavailableSettingIds` in `hostCapabilities.ts`): Zoom with Ctrl and the mouse wheel
-  (`webView.setCommandScrollZoom`), Keep new-tab links inside a Little Ardia window
+  (`webView.setCommandScrollZoom`), Keep new-tab links inside a Little Solstice window
   (`webView.setLittleArdiaOpensNewTabLinks`), Open a Peek window when clicking on links to other sites
   (`webView.setPeekOtherSiteTabs`), Scroll bars (`ArdiaSystem.setThinScrollBars`), all four advertised by the
   current host, Haptic feedback when reordering tabs (`ArdiaSystem.hapticTick`), and the two rows
-  about links from other apps, Open links from other apps in Little Ardia and Put links from other apps first
+  about links from other apps, Open links from other apps in Little Solstice and Put links from other apps first
   (`ArdiaShell.onOpenURLs`, which the host advertises now that it sends that event; an older engine leaves such
   links to Chromium, which opens them as tabs). The command bar's Dictate button follows `ArdiaShell.startDictation`
   the same way. With an older engine the app menu's Open Links from Other Apps entry, its row in Keyboard Shortcuts
   and the sentence about links from other apps under Open new-tab links in are left out too (`unavailableCommands`,
-  `settingsForm.tsx`). Calendar › Show alerts is hidden until a host posts Ardia's own notifications
+  `settingsForm.tsx`). Calendar › Show alerts is hidden until a host posts Solstice's own notifications
   (`ArdiaApp.postNotification`), and the commands that need WebKit or AppleScript (Open Page in WebKit, Allow
   JavaScript from Apple Events) have no menu entry or shortcut row.
 - **Session migrations.** The saved Linux session carries the shared `version`. `linuxSessionShape` runs the shared
@@ -2327,25 +2327,25 @@ These were open at the time of the PR.
   session without the stamp counts as version 9, the last one Linux's own shape checks cover. A migration that changes
   something is saved at launch against what was on disk. A session from a newer build is left as it is, and its stamp
   is written down to this build's on the next save; as on the Mac, downgrades aren't supported.
-- **Default browser.** An Ardia that isn't installed where the desktop looks (an extracted folder, a prefix outside
+- **Default browser.** An Solstice that isn't installed where the desktop looks (an extracted folder, a prefix outside
   `XDG_DATA_DIRS`) still shows the default browser controls, and they answer false; the reason is only in the log.
   `xdg-settings` is the only backend: a desktop without it can't be asked or set.
 - **Links from other apps.** The source app is never known, so link rules that match on the app don't apply, and a
-  Little Ardia window opens where the compositor puts it rather than at the pointer. Whether the window that takes
+  Little Solstice window opens where the compositor puts it rather than at the pointer. Whether the window that takes
   a link comes to the front on Wayland depends on the launch's activation token reaching `ArdiaShell.focusWindow`,
   which hasn't been checked on a real desktop. Links that arrive while a window exists but its shell never listens
   (a shell that failed to load) wait until one does.
 - **Not compiled yet.** The pointer hand-off, the unhandled Escape, app activation, small windows, the extension
-  popup's focus and the problem report calls (the two sections above Ardia's notifications) are written against
+  popup's focus and the problem report calls (the two sections above Solstice's notifications) are written against
   the Chromium 157 headers with fixture tests and have not run in a built engine.
-- **Little Ardia.** With an engine older than `ArdiaShell.smallWindows` the native window has no minimum size of
+- **Little Solstice.** With an engine older than `ArdiaShell.smallWindows` the native window has no minimum size of
   its own, and with one older than `tab.unhandledEscape` Escape closes the window only from its blank command bar
   and when nothing in the shell has focus, not while the page has focus (Peek's Escape too). Pinch
   and swipe to close have no Linux gesture.
-- **Meeting notifications.** Calendar › Show alerts › Always posts only while Ardia isn't active. With an engine
+- **Meeting notifications.** Calendar › Show alerts › Always posts only while Solstice isn't active. With an engine
   older than `ArdiaShell.resignActive` the shell is never told, and only the in-window alert appears. Any focused
-  Ardia toplevel (a browser window, a PiP window, a dialog) counts as Ardia being active. Coming back
-  to Ardia through a Settings or Import window sends no `focus` window event, so the shell counts Ardia as inactive
+  Solstice toplevel (a browser window, a PiP window, a dialog) counts as Solstice being active. Coming back
+  to Solstice through a Settings or Import window sends no `focus` window event, so the shell counts Solstice as inactive
   until a browser window is active again.
 - **Problem reports.** The sheet opens only with an engine that advertises `report.files` and `report.send`, and
   has no recording, trace or crash reports. The engine only accepts `https://ardia.dev/api/feedback`:
@@ -2355,18 +2355,18 @@ These were open at the time of the PR.
   published with (`scripts/linux/symbolize.py`). An engine older than `crash.dumps` answers no crash reports.
 - **Casting.** Real Cast devices haven't been tried: the build network has none, so casting has run against the test
   sink only. Mirroring a tab or the screen to a real device is Chromium's own Cast mirroring service, unchanged.
-- **Ardia's notifications.** A desktop without a notification service falls back to Chromium's own popups, as sites'
+- **Solstice's notifications.** A desktop without a notification service falls back to Chromium's own popups, as sites'
   notifications do. A click activates the window through the same Wayland activation path as above.
-- **Launch at login** starts Ardia as any launch does; it doesn't start hidden. A system-wide
-  `/etc/xdg/autostart/ardia.desktop`, which Ardia doesn't install, is neither read nor overridden.
+- **Launch at login** starts Solstice as any launch does; it doesn't start hidden. A system-wide
+  `/etc/xdg/autostart/ardia.desktop`, which Solstice doesn't install, is neither read nor overridden.
 - **Ctrl-scroll zoom off** (`webView.setCommandScrollZoom`) stops the zoom, and the wheel then does nothing; on the
   Mac the page scrolls instead. A site that handles Ctrl-scroll itself still gets it either way.
-- **Links to other sites and new-tab links** (Links in pinned tabs and Little Ardia windows). None of it has run in
+- **Links to other sites and new-tab links** (Links in pinned tabs and Little Solstice windows). None of it has run in
   a built engine yet. A site click the shell never answers (a shell that hangs after the host sent it `openWindow`)
-  is lost, as on the Mac. A window is a Little Ardia window only once its shell has opened it as one
+  is lost, as on the Mac. A window is a Little Solstice window only once its shell has opened it as one
   (`kind: "small"` in `ArdiaShell.openWindow`); new-tab links there open as tabs until then, and in every other
   window they are reported at once, without the Mac's `fromClick`, `point` or `linkWait`, so Open new-tab links in
-  Peek or Little Ardia still doesn't apply on Linux.
+  Peek or Little Solstice still doesn't apply on Linux.
 - **Link status bubble.** The pointer's place is the last one Chromium saw in this window. With an older engine the
   status carries no `fromBottom` and the bubble stays at the bottom.
 - **Scroll bars.** Follow the system and Thin look the same on a desktop whose GTK setting already prefers overlay
@@ -2383,7 +2383,7 @@ These were open at the time of the PR.
     `stopCasting`, `closeCastDialog`, `watchCastRoutes`, `terminateCastRoute`): Cast shows a toast;
   - translation (Bergamot isn't ported yet);
   - video upscaling;
-  - installing updates with an engine older than `ArdiaUpdates.install`, or an install the helper can't update: Ardia
+  - installing updates with an engine older than `ArdiaUpdates.install`, or an install the helper can't update: Solstice
     checks for them and opens the release page (Updates and kill switches);
   - crash reports with an engine that doesn't advertise `crash.dumps` (see Crash reports);
   - sending problem reports from the sheet with an engine older than `report.files` and `report.send` (see Problem
@@ -2399,7 +2399,7 @@ These were open at the time of the PR.
 - **Packaging.**
   - There is no AUR package yet; the `PKGBUILD` builds from a local tarball.
   - An AppImage can't carry a setuid helper, so where user namespaces are restricted (Ubuntu 24.04 and later
-    without Ardia's AppArmor profile) it refuses to start, like the tarball, and says to install the `.deb` or allow
+    without Solstice's AppArmor profile) it refuses to start, like the tarball, and says to install the `.deb` or allow
     user namespaces. The `.deb` and `install.sh` set the sandbox up.
 - **Sync.** One read has no total size cap (each file is capped at 64 MiB). Linux and macOS sharing a real folder has
   not been run end to end with a Mac.

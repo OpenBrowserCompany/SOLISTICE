@@ -80,7 +80,7 @@ Publishing an engine for the current build:
 source engine/patches/build/env.sh
 scripts/linux/publish-engine.sh \
   --out "$CB/chromium_git/chromium/src/out/$GN_OUT_CONFIGS" \
-  --source <the Ardia checkout the engine was built from> --upload
+  --source <the Solstice checkout the engine was built from> --upload
 git add packages/ardiacore/prebuilt-engines-linux.tsv
 ```
 
@@ -104,7 +104,7 @@ package job red after almost every merge.
 
 - **Nearest.** The workflow defaults to `--nearest`, the same option the Mac fetcher has. It uses the engine of the nearest
   earlier commit that changed the key's paths, within the last 200 such commits. The job warns, the summary names
-  both keys, and the artifact is named `Ardia-linux-x64-<commit12>-engine-<engine12>`.
+  both keys, and the artifact is named `Solstice-linux-x64-<commit12>-engine-<engine12>`.
 - **Exact.** Choose `exact` when a package must match its source. A Linux release requires it, and
   `scripts/linux/release.sh` defaults to it.
 - **Keeping nearest close.** Publishing after each change to the key's paths on the builder keeps nearest builds close.
@@ -173,13 +173,13 @@ It refuses any sandbox-disabling switch. Every check must run and pass:
 11. `cli-control`: a third instance turns `cliControl` on. Then, with `--data-dir <profile>`, `ardia windows` must
     succeed, `ardia browse open <fixture>` (a background tab) then `get title` must read the fixture's title, and
     `ardia windows` must list that tab. Turning control off must make `ardia windows` exit 2. It doesn't use
-    `open --show`: that switches Ardia to the tab, but on Linux the page can stay hidden, so the command fails (see
+    `open --show`: that switches Solstice to the tab, but on Linux the page can stay hidden, so the command fails (see
     [cli.md](cli.md) › Linux).
     The app doesn't start its token server when `--remote-debugging-port` is set, so this instance is driven over
     `--remote-debugging-pipe` instead.
 12. `cli-scripts`: a fourth pipe-driven instance, with extensions on, turns `cliControl` on. `ardia scripts install`
     of a userscript that prefixes the fixture's title must report the profile `loaded`, `ardia scripts list` must show
-    it as reported by Ardia, and the fixture opened with `ardia browse` must read retitled. After
+    it as reported by Solstice, and the fixture opened with `ardia browse` must read retitled. After
     `ardia scripts uninstall` it must report `removed`, and the fixture must open with its own title.
 13. `window-state`: in the first instance, `ArdiaShell.windowButtonLayout` must answer `{ layout, desktop }` (a string
     or `null`, and a string), `ArdiaShell.windowState` for the shell's own window three booleans (`maximized`, `tiled`,
@@ -205,8 +205,8 @@ it:
 1. checks the version's channel, `MARKETING_VERSION`, the notes file and a clean tree;
 2. fetches the exact engine (`--engine nearest`, an engine dir or a Chromium out dir make test builds);
 3. builds `apps/linux/dist`, the CLI and uBlock Origin;
-4. packages `Ardia-<version>-linux-x64.tar.xz` with `--version` and `--cli`, and the same tree as
-   `Ardia-<version>-linux-x64.deb` (which needs `dpkg-deb` and `readelf`) and `Ardia-<version>-linux-x64.AppImage`;
+4. packages `Solstice-<version>-linux-x64.tar.xz` with `--version` and `--cli`, and the same tree as
+   `Solstice-<version>-linux-x64.deb` (which needs `dpkg-deb` and `readelf`) and `Solstice-<version>-linux-x64.AppImage`;
 5. writes `ardia-bin-<version>.src.tar.gz`, the PKGBUILD and `.SRCINFO` pinned to that tarball by
    `scripts/linux/arch/update-pkgbuild.sh`;
 6. writes the `.sha256` files and `provenance.txt` (version, channel, commit, engine key, Chromium version and the
@@ -225,7 +225,7 @@ artifact. When the install test fails (after apt's and the image pulls' retries)
 `.sha256`, adds a `deb dropped` line to `provenance.txt` and warns, and still succeeds: the tarball, AppImage, Arch
 source package and CLI ship without it. Only a `deb dropped` line lets `publish.sh` go on without the `.deb`.
 The `linux-sign` job, the only one that sees the `LINUX_UPDATE_ED_PRIVATE_KEY` secret, downloads that artifact and
-signs `Ardia-<version>-linux-update.txt` with `scripts/linux/sign-update.mjs`, which refuses a key that doesn't match
+signs `Solstice-<version>-linux-update.txt` with `scripts/linux/sign-update.mjs`, which refuses a key that doesn't match
 `scripts/linux/linux-update.pem`; it uploads the manifest and its `.sig` as the `linux-update` artifact. When signing
 fails, `publish` warns and the release ships without them, so installed Linux apps fall back to the release page for it.
 `publish` puts that artifact in `dist/<version>/linux/`, and `publish.sh` attaches the assets to the GitHub release it
