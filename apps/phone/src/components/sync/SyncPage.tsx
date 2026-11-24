@@ -159,7 +159,7 @@ export function SyncPage() {
         </Group>
       ) : null}
       {status.attention === "folder" ? (
-        <Group footer="Choose the Ardia Sync folder again.">
+        <Group footer="Choose the Solstice Sync folder again.">
           <ButtonRow title="Choose Folder…" onPress={() => void chooseFolder()} />
         </Group>
       ) : null}
@@ -184,7 +184,7 @@ export function SyncPage() {
             <ButtonRow title={syncing ? syncWords.syncing : syncWords.syncNow} enabled={!syncing} busy={syncing} onPress={() => void runSyncNow()} />
           </Group>
           {devices.length ? (
-            <Group header="Devices" footer={noReceivers ? "Update Ardia on your Mac to send tabs to it." : null}>
+            <Group header="Devices" footer={noReceivers ? "Update Solstice on your Mac to send tabs to it." : null}>
               {devices.map((device, index) => (
                 <View key={device.id}>
                   <View accessible accessibilityLabel={deviceSeen(device, now) ? `${device.name}, ${deviceSeen(device, now)}` : device.name} style={styles.row}>
@@ -201,7 +201,7 @@ export function SyncPage() {
           ) : null}
           <DeviceName current={status.deviceName} />
           <Group header="Sync Folder" footer={folderError ?? "Encrypted so only your devices can read it."}>
-            <ValueRow title="Folder" value={status.folderName ?? "Ardia Sync"} divider />
+            <ValueRow title="Folder" value={status.folderName ?? "Solstice Sync"} divider />
             <ButtonRow title="Change Folder…" onPress={() => void chooseFolder()} />
           </Group>
           <Group footer={copy().stopSyncingFooter}>

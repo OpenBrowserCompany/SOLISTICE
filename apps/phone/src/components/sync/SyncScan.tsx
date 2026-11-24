@@ -85,7 +85,7 @@ export function SyncScan({ onScan, onEnterWords, onCancel, inline = false, retur
           <Unavailable
             icon="gearshape"
             title="Allow Camera Access"
-            message="Ardia uses the camera only to read the code your Mac shows. You can allow it in Settings, or type the 24 words instead."
+            message="Solstice uses the camera only to read the code your Mac shows. You can allow it in Settings, or type the 24 words instead."
             onSettings={openCameraSettings}
             onEnterWords={onEnterWords}
           />

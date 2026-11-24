@@ -131,7 +131,7 @@ export function SyncConnect({ onClose, onConnected, closes }: FlowProps) {
                 </Animated.View>
               )}
             </Step>
-            <Step number={2} title="Choose the Ardia Sync folder" detail={copy().chooseFolderDetail} done={false} current={hasPhrase}>
+            <Step number={2} title="Choose the Solstice Sync folder" detail={copy().chooseFolderDetail} done={false} current={hasPhrase}>
               {session ? (
                 <>
                   {picked.folder && !picked.connecting ? (
