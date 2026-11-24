@@ -117,6 +117,8 @@ jobs:
           echo "$(brew --prefix coreutils)/libexec/gnubin" >> "$GITHUB_PATH"
           mkdir -p "$HOME/chromium-build"
           touch "$HOME/chromium-build/.metadata_never_index"
+      - name: Install depot_tools
+        run: git clone --depth 1 https://chromium.googlesource.com/chromium/tools/depot_tools.git "$HOME/chromium-build/depot_tools"
       - name: Sync a fresh Chromium tree
         run: scripts/agent/locked chromium --as release --wait 3600 -- engine/patches/build/01-sync.sh --apply
       - name: Helium and its substitutions
