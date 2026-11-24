@@ -61,7 +61,7 @@ export const processSchema = closed(
 export const programsSchema: JsonSchema = {
   type: "array",
   maxItems: LIMITS.programs,
-  description: "Commands Ardia puts on your PATH while the plugin is on",
+  description: "Commands Solstice puts on your PATH while the plugin is on",
   items: closed(
     {
       name: { ...name, description: "The command's name on PATH" },
@@ -70,7 +70,7 @@ export const programsSchema: JsonSchema = {
         type: "array",
         maxItems: LIMITS.afterUpdate[0],
         items: { type: "array", minItems: 1, maxItems: LIMITS.afterUpdate[1], items: argument },
-        description: "Built-in plugins only: argument lists Ardia runs the program with, once per new version",
+        description: "Built-in plugins only: argument lists Solstice runs the program with, once per new version",
       },
     },
     ["name", "path"],
@@ -113,6 +113,6 @@ export const toolsSchema: JsonSchema = {
 
 export const builtInFlags: Record<string, JsonSchema> = {
   alwaysOn: { const: true, description: "Built-in plugins only: once installed, no switch turns it off" },
-  official: { const: true, description: "Built-in plugins only: listed among Ardia's official plugins" },
+  official: { const: true, description: "Built-in plugins only: listed among Solstice's official plugins" },
   autoInstall: { const: true, description: "Built-in plugins only, with alwaysOn: installed on a new profile with no click" },
 };

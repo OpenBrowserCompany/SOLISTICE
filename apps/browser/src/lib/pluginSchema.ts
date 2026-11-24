@@ -22,11 +22,11 @@ const permissions = closed({
   fullUrls: { type: "boolean", description: "See whole addresses, with what follows ? and #" },
   activePage: { type: "boolean", description: "Read the text of the tab you're on, for 30 seconds after you use the plugin" },
   workspace: { type: "boolean", description: "See and rearrange every window, tab and group (needs tabs: write and fullUrls)" },
-  commands: { type: "boolean", description: "Run Ardia commands" },
+  commands: { type: "boolean", description: "Run Solstice commands" },
   storage: { type: "boolean", description: "Keep its own data" },
   secrets: { type: "boolean", description: "Keep secrets in the Keychain" },
   network: { anyOf: [{ const: false }, { const: "*" }, { type: "array", minItems: 1, maxItems: LIMITS.allowedHosts, items: { type: "string", pattern: "^(\\*\\.)?[a-z0-9.-]{1,253}$" } }], description: "false, \"*\" or hosts like api.example.com and *.example.com" },
-  control: { type: "boolean", description: "Let programs you run fully control Ardia, including your signed-in sites" },
+  control: { type: "boolean", description: "Let programs you run fully control Solstice, including your signed-in sites" },
 });
 
 const menuItem = closed({ command: name, title: textOf(LIMITS.title), icon: symbol, when }, ["command"]);
@@ -49,7 +49,7 @@ function contributes(hookNames: readonly string[]): JsonSchema {
     ),
     tools: toolsSchema,
     hooks: list(LIMITS.hooks, { enum: [...hookNames] }),
-    settings: closed({ defaults: { type: "object", description: "Ardia settings, as in config.json" }, rows: list(LIMITS.rows, rowSchema(["toggle", "text", "number", "choice", "secret"])) }),
+    settings: closed({ defaults: { type: "object", description: "Solstice settings, as in config.json" }, rows: list(LIMITS.rows, rowSchema(["toggle", "text", "number", "choice", "secret"])) }),
     programs: programsSchemaV2,
     passwordManager: passwordManagerSchema,
     menus: closed(Object.fromEntries(MENU_SLOTS.map((slot) => [slot, list(LIMITS.menuItems, menuItem)]))),
@@ -77,7 +77,7 @@ function contributes(hookNames: readonly string[]): JsonSchema {
         },
         ["look", "when", "buttons"],
       ),
-      description: "A bar Ardia draws above the pages the plugin's site switch is on for, with buttons that run Ardia's own actions on that tab",
+      description: "A bar Solstice draws above the pages the plugin's site switch is on for, with buttons that run Solstice's own actions on that tab",
     },
   });
 }
@@ -91,7 +91,7 @@ function pluginBody(eventNames: readonly string[], decideEvents: readonly string
       title: textOf(LIMITS.title),
       description: textOf(LIMITS.description),
       version: { type: "string", pattern: VERSION_PATTERN },
-      requires: { type: "string", pattern: VERSION_PATTERN, description: "The first Ardia version the plugin works with" },
+      requires: { type: "string", pattern: VERSION_PATTERN, description: "The first Solstice version the plugin works with" },
       icon: symbol,
       keywords: list(LIMITS.pluginKeywords, textOf(LIMITS.keyword), "Words that find the plugin in Settings"),
       telemetry: closed(
@@ -100,7 +100,7 @@ function pluginBody(eventNames: readonly string[], decideEvents: readonly string
       ),
       main: { ...pluginPath("The plugin's JavaScript, like dist/index.js; a plugin has main or sidecar, not both"), pattern: "^[^/\\\\][^\\\\]*\\.(m?js|cjs)$" },
       memoryMB: { type: "integer", minimum: LIMITS.memoryMB[0], maximum: LIMITS.memoryMB[1], default: DEFAULT_MAIN_MB, description: "main's memory limit" },
-      sidecar: { ...processSchema, description: "A program Ardia runs beside the plugin; a plugin has main or sidecar, not both" },
+      sidecar: { ...processSchema, description: "A program Solstice runs beside the plugin; a plugin has main or sidecar, not both" },
       activationEvents: list(LIMITS.activationEvents, { type: "string", pattern: "^(\\*|onStartupFinished|on(Command|View|Panel|Toolbar|Omnibox|Menu|Event|Url):\\S{1,253})$" }, "When main starts; worked out from contributes when left out"),
       permissions,
       contributes: contributes([...eventNames, ...decideEvents]),
@@ -115,7 +115,7 @@ export function pluginSchema(eventNames: readonly string[], rules: PluginRules):
   const appRules = { untabbedEvents: [...rules.untabbedEvents], approvedSettings: [...rules.approvedSettings], decideEvents: [...decideEvents], reservedPageNames: [...RESERVED_PAGE_NAMES] };
   return {
     $schema: JSON_SCHEMA_DIALECT,
-    title: "Ardia plugin",
+    title: "Solstice plugin",
     type: "object",
     if: { properties: { manifest: { const: MANIFEST_VERSION } }, required: ["manifest"] },
     then: pluginBody(eventNames, decideEvents),
