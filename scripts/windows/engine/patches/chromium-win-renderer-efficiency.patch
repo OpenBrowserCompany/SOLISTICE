@@ -7,7 +7,7 @@
 +#if BUILDFLAG(IS_WIN)
 +#include <atomic>
 +
-+// Ardia: //ardia/win puts a background renderer's memory priority and timer
++// Solstice: //ardia/win puts a background renderer's memory priority and timer
 +// resolution in line with the priority the launcher applies, on this thread.
 +// It installs these after startup, so they are atomic.
 +std::atomic<void (*)(const void* key,

@@ -27,7 +27,7 @@
  
  namespace {
  
-+// Ardia: the app's own timeout for an export is two minutes; a confirmation
++// Solstice: the app's own timeout for an export is two minutes; a confirmation
 +// that arrives after this counts as refused, so nothing is written once the
 +// app has given up.
 +constexpr base::TimeDelta kArdiaConfirmationDeadline = base::Seconds(110);
@@ -81,7 +81,7 @@
  
  void AuthenticateWithLegacyApi(const std::u16string& message,
                                 base::OnceCallback<void(bool)> result_callback) {
-+  // Ardia: the password prompt waits on a pool thread, parented to the app
++  // Solstice: the password prompt waits on a pool thread, parented to the app
 +  // window, so the UI thread keeps answering and quitting doesn't wait on it.
 +  if (HWND parent = ArdiaPromptWindow()) {
 +    if (std::optional<bool> answer =
@@ -226,7 +226,7 @@
                        const std::u16string& password_prompt,
                        PrefService* local_state);
  
-+// Ardia: AuthenticateUser in two parts, so that the prompt can wait on another
++// Solstice: AuthenticateUser in two parts, so that the prompt can wait on another
 +// thread. The answer without a prompt reads prefs and runs on the UI thread.
 +std::optional<bool> AuthenticationAnswerWithoutPrompt(PrefService* local_state);
 +std::u16string CredentialPromptCaption();
