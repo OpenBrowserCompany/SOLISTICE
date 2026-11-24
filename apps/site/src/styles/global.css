@@ -173,9 +173,8 @@ h3 {
 .paint {
   position: relative;
   background-color: var(--bg, var(--paper));
-  background-image: var(--impasto-soft), var(--wash, none);
-  background-size: 640px, 100% 100%;
-  background-blend-mode: soft-light, normal;
+  background-image: var(--wash, none);
+  background-size: 100% 100%;
 }
 
 .paint.edge::before {
@@ -402,3 +401,11 @@ h3 {
     transition: none;
   }
 }
+
+/* Solstice: no painted or starry motion; a quiet silver-on-charcoal treatment. */
+.hero {
+  background-image: radial-gradient(ellipse at 50% 22%, rgb(80 88 104 / 0.45), transparent 62%), linear-gradient(180deg, #15171b 0%, #0b0c0e 100%);
+}
+.hero-poster,
+.meadow-canvas { display: none !important; }
+.hero-title { color: #f5f6f8 !important; }
