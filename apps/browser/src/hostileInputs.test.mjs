@@ -156,15 +156,15 @@ test("A3: a confirmed pick whose selector the page controls still reaches the bl
   }
 });
 
-const ADMITTED_FROM_APPS = /^(?:https?:\/\/[^/?#\\]|file:\/\/|about:blank$|ardia:\/\/)/i;
+const ADMITTED_FROM_APPS = /^(?:https?:\/\/[^/?#\\]|file:\/\/|about:blank$|(?:ardia|solstice):\/\/)/i;
 const NEVER_NAVIGATED = /^\s*(?:javascript|vbscript|data|chrome|chrome-untrusted|chrome-extension|devtools|view-source|blob|filesystem):/i;
 
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 const tabUrls = () => Object.values(S().tabs).map((t) => t.url).filter((u) => u !== undefined && u !== "");
 
-test("D5: a link from another app reaches a tab only as a web, file, blank or listed Ardia address", async () => {
+test("D5: a link from another app reaches a tab only as a web, file, blank or listed Solstice address", async () => {
   S().hydrate({});
-  const given = strings.flatMap((s) => [s, `https://a.test/${s}`, `ardia://${s}`, `arc://${s}`, `${s}https://a.test/`]);
+  const given = strings.flatMap((s) => [s, `https://a.test/${s}`, `solstice://${s}`, `arc://${s}`, `${s}https://a.test/`]);
   const named = ["javascript", "javascriptMixedCase", "data", "dataBase64", "extension", "devtools", "viewSource", "ardiaUnknown", "arcLegacyUnknown", "blob", "filesystem", "vbscript"].map((n) => URL_SCHEMES[n]);
   for (const url of [...given, ...named]) openExternalUrls([url]);
   openExternalUrls(["https://ardia-fixture.test/from-another-app"]);

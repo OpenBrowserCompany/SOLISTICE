@@ -5,7 +5,7 @@ const { DEFAULT_LOOK, parseLookBlocks, resolveLook } = await import("./themeLook
 
 const lookOf = (doc) => resolveLook(parseLookBlocks("themes/t.json", doc, []));
 
-test("the active look starts as Ardia's own, and swapped icons reach symbols and native menus, submenus included", () => {
+test("the active look starts as Solstice's own, and swapped icons reach symbols and native menus, submenus included", () => {
   assert.equal(activeLook(), DEFAULT_LOOK);
   const items = [{ id: "a", title: "A", symbol: "plus" }, { separator: true }, { id: "b", title: "B", children: [{ id: "c", title: "C", symbol: "trash" }] }];
   assert.equal(withIconNames(items), items, "no icons: the same items, no copies");
